@@ -27,6 +27,13 @@ class MSKD_Cron_Handler {
     const PROCESSING_TIMEOUT_MINUTES = 5;
 
     /**
+     * SMTP Mailer instance.
+     *
+     * @var MSKD_SMTP_Mailer|null
+     */
+    private $smtp_mailer = null;
+
+    /**
      * Initialize cron hooks
      */
     public function init() {
@@ -68,6 +75,14 @@ class MSKD_Cron_Handler {
         $from_email = isset( $settings['from_email'] ) ? $settings['from_email'] : get_bloginfo( 'admin_email' );
         $reply_to = isset( $settings['reply_to'] ) ? $settings['reply_to'] : get_bloginfo( 'admin_email' );
 
+        // Initialize SMTP mailer if enabled.
+        $use_smtp = false;
+        if ( ! empty( $settings['smtp_enabled'] ) && ! empty( $settings['smtp_host'] ) ) {
+            require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+            $this->smtp_mailer = new MSKD_SMTP_Mailer( $settings );
+            $use_smtp = $this->smtp_mailer->is_enabled();
+        }
+
         foreach ( $queue_items as $item ) {
             // Mark as processing
             $wpdb->update(
@@ -92,8 +107,18 @@ class MSKD_Cron_Handler {
                 sprintf( 'Reply-To: %s', $reply_to ),
             );
 
-            // Send email
-            $sent = wp_mail( $item->email, $subject, $body, $headers );
+            // Send email using SMTP or wp_mail().
+            $sent         = false;
+            $error_message = '';
+
+            if ( $use_smtp && $this->smtp_mailer ) {
+                $sent = $this->smtp_mailer->send( $item->email, $subject, $body, $headers );
+                if ( ! $sent ) {
+                    $error_message = $this->smtp_mailer->get_last_error();
+                }
+            } else {
+                $sent = wp_mail( $item->email, $subject, $body, $headers );
+            }
 
             if ( $sent ) {
                 // Mark as sent
@@ -110,19 +135,27 @@ class MSKD_Cron_Handler {
             } else {
                 // Check if we should retry or mark as failed
                 $new_attempts = $item->attempts + 1;
+
+                // Build error message with details.
+                $base_error = $use_smtp
+                    ? __( 'SMTP изпращане неуспешно', 'mail-system-by-katsarov-design' )
+                    : __( 'wp_mail() неуспешен', 'mail-system-by-katsarov-design' );
                 
                 if ( $new_attempts < self::MAX_ATTEMPTS ) {
                     // Schedule for retry - set back to pending with delayed schedule
-                    $retry_delay = $new_attempts * 2; // 2, 4 minutes delay
+                    $retry_delay   = $new_attempts * 2; // 2, 4 minutes delay
+                    $retry_message = sprintf(
+                        /* translators: 1: Attempt number, 2: Error details */
+                        __( 'Опит %1$d неуспешен. %2$s Ще се опита отново.', 'mail-system-by-katsarov-design' ),
+                        $new_attempts,
+                        $error_message ? '(' . $error_message . ')' : ''
+                    );
                     $wpdb->update(
                         $wpdb->prefix . 'mskd_queue',
                         array(
                             'status'        => 'pending',
                             'scheduled_at'  => date( 'Y-m-d H:i:s', strtotime( "+{$retry_delay} minutes" ) ),
-                            'error_message' => sprintf(
-                                __( 'Опит %d неуспешен. Ще се опита отново.', 'mail-system-by-katsarov-design' ),
-                                $new_attempts
-                            ),
+                            'error_message' => $retry_message,
                         ),
                         array( 'id' => $item->id ),
                         array( '%s', '%s', '%s' ),
@@ -130,14 +163,18 @@ class MSKD_Cron_Handler {
                     );
                 } else {
                     // Max attempts reached, mark as failed
+                    $fail_message = sprintf(
+                        /* translators: 1: Base error message, 2: Max attempts, 3: Error details */
+                        __( '%1$s след %2$d опита. %3$s', 'mail-system-by-katsarov-design' ),
+                        $base_error,
+                        self::MAX_ATTEMPTS,
+                        $error_message ? '(' . $error_message . ')' : ''
+                    );
                     $wpdb->update(
                         $wpdb->prefix . 'mskd_queue',
                         array(
                             'status'        => 'failed',
-                            'error_message' => sprintf(
-                                __( 'wp_mail() неуспешен след %d опита', 'mail-system-by-katsarov-design' ),
-                                self::MAX_ATTEMPTS
-                            ),
+                            'error_message' => $fail_message,
                         ),
                         array( 'id' => $item->id ),
                         array( '%s', '%s' ),
