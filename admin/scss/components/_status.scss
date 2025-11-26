@@ -33,6 +33,37 @@
   @include status-badge-variant($color-info-bg, $color-info-text);
 }
 
+// External/Automated List Badge
+.mskd-badge {
+  @include status-badge;
+}
+
+.mskd-badge-external {
+  @include status-badge-variant($color-info-bg, $color-info-text);
+  margin-left: $spacing-2;
+  font-size: $font-size-xs;
+}
+
+.mskd-badge-external-small {
+  @include status-badge-variant($color-info-bg, $color-info-text);
+  font-size: $font-size-xs;
+  padding: 2px $spacing-1;
+  margin-left: $spacing-1;
+  margin-right: $spacing-1;
+}
+
+// Read-only text for non-editable items
+.mskd-readonly-text {
+  color: $color-gray-500;
+  font-style: italic;
+  cursor: not-allowed;
+}
+
+// External list row styling
+.mskd-external-list {
+  background-color: rgba($color-info-bg, 0.3);
+}
+
 // Cron Status (text-based)
 .mskd-cron-active,
 .mskd-cron-enabled {

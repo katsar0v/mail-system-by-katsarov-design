@@ -11,8 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wpdb;
 
-// Get all lists
-$lists = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}mskd_lists ORDER BY name ASC" );
+// Load the List Provider service.
+require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
+
+// Get all lists (database + external).
+$lists = MSKD_List_Provider::get_all_lists();
 
 // Get minimum datetime for picker (now + 10 minutes, rounded to nearest 10 min)
 $wp_timezone = wp_timezone();
@@ -45,16 +48,15 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
                         <?php if ( ! empty( $lists ) ) : ?>
                             <?php foreach ( $lists as $list ) : ?>
                                 <?php
-                                $subscriber_count = $wpdb->get_var( $wpdb->prepare(
-                                    "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_subscriber_list sl
-                                    INNER JOIN {$wpdb->prefix}mskd_subscribers s ON sl.subscriber_id = s.id
-                                    WHERE sl.list_id = %d AND s.status = 'active'",
-                                    $list->id
-                                ) );
+                                $subscriber_count = MSKD_List_Provider::get_list_active_subscriber_count( $list );
+                                $is_external      = $list->source === 'external';
                                 ?>
                                 <label style="display: block; margin-bottom: 5px;">
                                     <input type="checkbox" name="lists[]" value="<?php echo esc_attr( $list->id ); ?>">
                                     <?php echo esc_html( $list->name ); ?>
+                                    <?php if ( $is_external ) : ?>
+                                        <span class="mskd-badge mskd-badge-external-small"><?php _e( 'Automated', 'mail-system-by-katsarov-design' ); ?></span>
+                                    <?php endif; ?>
                                     <span class="description">(<?php printf( __( '%d active subscribers', 'mail-system-by-katsarov-design' ), $subscriber_count ); ?>)</span>
                                 </label>
                             <?php endforeach; ?>

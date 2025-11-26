@@ -550,25 +550,28 @@ class MSKD_Admin {
     private function queue_email() {
         global $wpdb;
         
-        $subject = sanitize_text_field( $_POST['subject'] );
-        $body    = wp_kses_post( $_POST['body'] );
-        $lists   = isset( $_POST['lists'] ) ? array_map( 'intval', $_POST['lists'] ) : array();
+        // Load the List Provider service.
+        require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
+        
+        $subject    = sanitize_text_field( $_POST['subject'] );
+        $body       = wp_kses_post( $_POST['body'] );
+        $list_ids   = isset( $_POST['lists'] ) ? array_map( 'sanitize_text_field', $_POST['lists'] ) : array();
 
-        if ( empty( $subject ) || empty( $body ) || empty( $lists ) ) {
+        if ( empty( $subject ) || empty( $body ) || empty( $list_ids ) ) {
             add_settings_error( 'mskd_messages', 'mskd_error', __( 'Please fill in all fields.', 'mail-system-by-katsarov-design' ), 'error' );
             return;
         }
 
-        // Get active subscribers from selected lists
-        $placeholders = implode( ',', array_fill( 0, count( $lists ), '%d' ) );
-        $query = $wpdb->prepare(
-            "SELECT DISTINCT s.id FROM {$wpdb->prefix}mskd_subscribers s
-            INNER JOIN {$wpdb->prefix}mskd_subscriber_list sl ON s.id = sl.subscriber_id
-            WHERE sl.list_id IN ($placeholders) AND s.status = 'active'",
-            $lists
-        );
+        // Get active subscribers from selected lists (supports both database and external lists).
+        $subscribers = array();
         
-        $subscribers = $wpdb->get_col( $query );
+        foreach ( $list_ids as $list_id ) {
+            $list_subscribers = MSKD_List_Provider::get_list_subscriber_ids( $list_id );
+            $subscribers = array_merge( $subscribers, $list_subscribers );
+        }
+        
+        // Remove duplicates.
+        $subscribers = array_unique( $subscribers );
 
         if ( empty( $subscribers ) ) {
             add_settings_error( 'mskd_messages', 'mskd_error', __( 'No active subscribers in the selected lists.', 'mail-system-by-katsarov-design' ), 'error' );
