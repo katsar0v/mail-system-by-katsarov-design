@@ -157,9 +157,11 @@ class OneTimeEmailTest extends TestCase {
             ->with( 'mskd_settings', Mockery::type( 'array' ) )
             ->andReturn(
                 array(
-                    'from_name'  => 'Test Site',
-                    'from_email' => 'noreply@example.com',
-                    'reply_to'   => 'reply@example.com',
+                    'smtp_enabled' => true,
+                    'smtp_host'    => 'smtp.example.com',
+                    'from_name'    => 'Test Site',
+                    'from_email'   => 'noreply@example.com',
+                    'reply_to'     => 'reply@example.com',
                 )
             );
 
@@ -232,7 +234,12 @@ class OneTimeEmailTest extends TestCase {
 
         Functions\expect( 'get_option' )
             ->with( 'mskd_settings', Mockery::type( 'array' ) )
-            ->andReturn( array() );
+            ->andReturn(
+                array(
+                    'smtp_enabled' => true,
+                    'smtp_host'    => 'smtp.example.com',
+                )
+            );
 
         // Mock wp_mail failure.
         Functions\expect( 'wp_mail' )
