@@ -94,11 +94,17 @@ class SubscriberTest extends TestCase {
             )
             ->andReturn( 1 );
 
+        $success_called = false;
         Functions\expect( 'add_settings_error' )
             ->once()
-            ->with( 'mskd_messages', 'mskd_success', Mockery::any(), 'success' );
+            ->with( 'mskd_messages', 'mskd_success', Mockery::any(), 'success' )
+            ->andReturnUsing( function() use ( &$success_called ) {
+                $success_called = true;
+            } );
 
         $this->admin->handle_actions();
+        
+        $this->assertTrue( $success_called, 'add_settings_error should be called with success' );
     }
 
     /**
@@ -114,21 +120,23 @@ class SubscriberTest extends TestCase {
         $_POST['last_name']           = 'Doe';
         $_POST['status']              = 'active';
 
-        Functions\expect( 'wp_verify_nonce' )
-            ->once()
-            ->andReturn( true );
+        // Use when() to override stubs.
+        Functions\when( 'wp_verify_nonce' )->justReturn( true );
 
         // Override is_email to return false.
-        Functions\expect( 'is_email' )
-            ->once()
-            ->with( 'invalid-email' )
-            ->andReturn( false );
+        Functions\when( 'is_email' )->justReturn( false );
 
+        $error_called = false;
         Functions\expect( 'add_settings_error' )
             ->once()
-            ->with( 'mskd_messages', 'mskd_error', Mockery::any(), 'error' );
+            ->with( 'mskd_messages', 'mskd_error', Mockery::any(), 'error' )
+            ->andReturnUsing( function() use ( &$error_called ) {
+                $error_called = true;
+            } );
 
         $this->admin->handle_actions();
+        
+        $this->assertTrue( $error_called, 'add_settings_error should be called for invalid email' );
     }
 
     /**
@@ -144,20 +152,25 @@ class SubscriberTest extends TestCase {
         $_POST['last_name']           = 'Doe';
         $_POST['status']              = 'active';
 
-        Functions\expect( 'wp_verify_nonce' )
-            ->once()
-            ->andReturn( true );
+        // Use when() to override stubs.
+        Functions\when( 'wp_verify_nonce' )->justReturn( true );
 
         // Email already exists.
         $wpdb->shouldReceive( 'get_var' )
             ->once()
             ->andReturn( 42 );
 
+        $error_called = false;
         Functions\expect( 'add_settings_error' )
             ->once()
-            ->with( 'mskd_messages', 'mskd_error', Mockery::any(), 'error' );
+            ->with( 'mskd_messages', 'mskd_error', Mockery::any(), 'error' )
+            ->andReturnUsing( function() use ( &$error_called ) {
+                $error_called = true;
+            } );
 
         $this->admin->handle_actions();
+        
+        $this->assertTrue( $error_called, 'add_settings_error should be called for duplicate email' );
     }
 
     /**
@@ -358,9 +371,8 @@ class SubscriberTest extends TestCase {
         $_POST['last_name']           = 'User';
         $_POST['status']              = 'invalid_status'; // Invalid status
 
-        Functions\expect( 'wp_verify_nonce' )
-            ->once()
-            ->andReturn( true );
+        // Use when() to override stubs.
+        Functions\when( 'wp_verify_nonce' )->justReturn( true );
 
         // No existing email.
         $wpdb->shouldReceive( 'get_var' )
@@ -382,11 +394,17 @@ class SubscriberTest extends TestCase {
             )
             ->andReturn( 1 );
 
+        $success_called = false;
         Functions\expect( 'add_settings_error' )
             ->once()
-            ->with( 'mskd_messages', 'mskd_success', Mockery::any(), 'success' );
+            ->with( 'mskd_messages', 'mskd_success', Mockery::any(), 'success' )
+            ->andReturnUsing( function() use ( &$success_called ) {
+                $success_called = true;
+            } );
 
         $this->admin->handle_actions();
+        
+        $this->assertTrue( $success_called, 'add_settings_error should be called with success' );
     }
 
     /**

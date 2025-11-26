@@ -45,6 +45,9 @@ class UnsubscribeTest extends TestCase {
 
     /**
      * Test valid token unsubscribes user.
+     *
+     * Note: This test verifies the database update is called. We throw an exception
+     * after the update to prevent the code from reaching include/exit.
      */
     public function test_valid_token_unsubscribes_user(): void {
         $wpdb = $this->setup_wpdb_mock();
@@ -73,6 +76,8 @@ class UnsubscribeTest extends TestCase {
             ->andReturn( $subscriber );
 
         // Should update status to unsubscribed.
+        // Throw exception after update to prevent include/exit.
+        $update_called = false;
         $wpdb->shouldReceive( 'update' )
             ->once()
             ->with(
@@ -82,16 +87,20 @@ class UnsubscribeTest extends TestCase {
                 Mockery::type( 'array' ),
                 Mockery::type( 'array' )
             )
-            ->andReturn( 1 );
-
-        // Mock the include and exit.
-        $this->expectOutputRegex( '/.*/' );
-
+            ->andReturnUsing( function() use ( &$update_called ) {
+                $update_called = true;
+                // Throw to prevent reaching include/exit
+                throw new \Exception( 'test_complete' );
+            } );
+        
         try {
             $this->public->handle_unsubscribe();
         } catch ( \Exception $e ) {
-            // Expected - include/exit will cause issues in test.
+            $this->assertEquals( 'test_complete', $e->getMessage() );
         }
+        
+        // Verify the update was called.
+        $this->assertTrue( $update_called, 'Database update should be called to set status to unsubscribed' );
     }
 
     /**
@@ -100,7 +109,7 @@ class UnsubscribeTest extends TestCase {
     public function test_invalid_token_returns_error(): void {
         $wpdb = $this->setup_wpdb_mock();
 
-        $invalid_token = 'validformat12345678901234567890ab'; // 32 chars but not in DB.
+        $invalid_token = 'validformat1234567890123456789ab'; // 32 chars but not in DB.
         $_GET['mskd_unsubscribe'] = $invalid_token;
 
         // Rate limit check.
@@ -290,6 +299,9 @@ class UnsubscribeTest extends TestCase {
 
     /**
      * Test unsubscribe changes status to unsubscribed.
+     *
+     * Note: This test verifies the database update is called with correct data.
+     * We throw an exception after the update to prevent include/exit.
      */
     public function test_unsubscribe_changes_status_to_unsubscribed(): void {
         $wpdb = $this->setup_wpdb_mock();
@@ -316,6 +328,8 @@ class UnsubscribeTest extends TestCase {
             ->andReturn( $subscriber );
 
         // Verify the exact update call.
+        // Throw exception after update to prevent include/exit.
+        $update_called = false;
         $wpdb->shouldReceive( 'update' )
             ->once()
             ->with(
@@ -325,13 +339,20 @@ class UnsubscribeTest extends TestCase {
                 array( '%s' ),
                 array( '%d' )
             )
-            ->andReturn( 1 );
-
+            ->andReturnUsing( function() use ( &$update_called ) {
+                $update_called = true;
+                // Throw to prevent reaching include/exit
+                throw new \Exception( 'test_complete' );
+            } );
+        
         try {
             $this->public->handle_unsubscribe();
         } catch ( \Exception $e ) {
-            // Expected - include/exit will cause issues.
+            $this->assertEquals( 'test_complete', $e->getMessage() );
         }
+        
+        // Verify the update was called.
+        $this->assertTrue( $update_called, 'Status should be updated to unsubscribed' );
     }
 
     /**

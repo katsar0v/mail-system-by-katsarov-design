@@ -32,6 +32,24 @@ if ( ! is_dir( $phpmailer_dir ) ) {
     mkdir( $phpmailer_dir, 0777, true );
 }
 
+// Create mock directory for wp-admin/includes.
+$wp_admin_includes_dir = '/tmp/wordpress/wp-admin/includes';
+if ( ! is_dir( $wp_admin_includes_dir ) ) {
+    mkdir( $wp_admin_includes_dir, 0777, true );
+}
+
+// Create mock upgrade.php with dbDelta function stub.
+if ( ! file_exists( $wp_admin_includes_dir . '/upgrade.php' ) ) {
+    file_put_contents( $wp_admin_includes_dir . '/upgrade.php', '<?php
+// Mock upgrade.php for testing
+if ( ! function_exists( "dbDelta" ) ) {
+    function dbDelta( $queries = "", $execute = true ) {
+        return array();
+    }
+}
+' );
+}
+
 // Create mock PHPMailer classes for testing.
 if ( ! file_exists( $phpmailer_dir . '/PHPMailer.php' ) ) {
     file_put_contents( $phpmailer_dir . '/PHPMailer.php', '<?php
