@@ -50,6 +50,90 @@
             $('#smtp_auth').on('change', toggleSmtpAuthSettings);
         }
 
+        // Schedule Type Toggle
+        function toggleScheduleFields() {
+            var scheduleType = $('#schedule_type').val();
+            var $absoluteFields = $('.mskd-schedule-absolute');
+            var $relativeFields = $('.mskd-schedule-relative');
+            var $submitBtn = $('.mskd-submit-btn');
+
+            // Hide all schedule-specific fields first
+            $absoluteFields.hide();
+            $relativeFields.hide();
+
+            // Show relevant fields based on selection
+            if (scheduleType === 'absolute') {
+                $absoluteFields.show();
+            } else if (scheduleType === 'relative') {
+                $relativeFields.show();
+            }
+
+            // Update button text
+            if ($submitBtn.length && $submitBtn.data('send-now') && $submitBtn.data('schedule')) {
+                if (scheduleType === 'now') {
+                    $submitBtn.val($submitBtn.data('send-now'));
+                } else {
+                    $submitBtn.val($submitBtn.data('schedule'));
+                }
+            }
+        }
+
+        // Initial toggle on page load
+        if ($('#schedule_type').length) {
+            toggleScheduleFields();
+            $('#schedule_type').on('change', toggleScheduleFields);
+        }
+
+        // Datetime picker - enforce 10-minute intervals
+        if ($('.mskd-datetime-picker').length) {
+            $('.mskd-datetime-picker').on('change', function() {
+                var $input = $(this);
+                var value = $input.val();
+                
+                if (value) {
+                    // Parse the datetime
+                    var date = new Date(value);
+                    var minutes = date.getMinutes();
+                    
+                    // Round to nearest 10 minutes
+                    var roundedMinutes = Math.round(minutes / 10) * 10;
+                    if (roundedMinutes >= 60) {
+                        date.setHours(date.getHours() + 1);
+                        roundedMinutes = 0;
+                    }
+                    date.setMinutes(roundedMinutes);
+                    date.setSeconds(0);
+                    
+                    // Format back to datetime-local format (YYYY-MM-DDTHH:MM)
+                    var year = date.getFullYear();
+                    var month = String(date.getMonth() + 1).padStart(2, '0');
+                    var day = String(date.getDate()).padStart(2, '0');
+                    var hours = String(date.getHours()).padStart(2, '0');
+                    var mins = String(date.getMinutes()).padStart(2, '0');
+                    
+                    var formattedDate = year + '-' + month + '-' + day + 'T' + hours + ':' + mins;
+                    $input.val(formattedDate);
+                }
+            });
+
+            // Validate minimum datetime on form submit
+            $('form').on('submit', function() {
+                var $scheduleType = $('#schedule_type');
+                var $datetimePicker = $('.mskd-datetime-picker');
+                
+                if ($scheduleType.length && $scheduleType.val() === 'absolute' && $datetimePicker.length) {
+                    var selectedDate = new Date($datetimePicker.val());
+                    var now = new Date();
+                    
+                    if (selectedDate <= now) {
+                        alert(mskd_admin.strings.datetime_past || 'Моля, изберете бъдеща дата и час.');
+                        return false;
+                    }
+                }
+                return true;
+            });
+        }
+
         // SMTP Test Button
         $(document).on('click', '#mskd-smtp-test', function(e) {
             e.preventDefault();

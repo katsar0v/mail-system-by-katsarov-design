@@ -17,3 +17,36 @@
     margin: 0;
   }
 }
+
+// Scheduled Badge
+.mskd-scheduled-badge {
+  display: inline-block;
+  background: $color-info;
+  color: $color-white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+// Time Remaining
+.mskd-time-remaining {
+  color: $color-info;
+  font-style: italic;
+}
+
+// Cancel Link
+.mskd-cancel-link {
+  color: $color-error !important;
+  
+  &:hover {
+    color: $color-error-text !important;
+  }
+}
+
+// Cancelled Status
+.mskd-status-cancelled {
+  background-color: $color-wp-border;
+  color: $color-wp-text-light;
+}

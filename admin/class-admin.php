@@ -170,6 +170,7 @@ class MSKD_Admin {
                 'success'        => __( 'Успешно!', 'mail-system-by-katsarov-design' ),
                 'error'          => __( 'Грешка!', 'mail-system-by-katsarov-design' ),
                 'timeout'        => __( 'Времето за изчакване изтече. Проверете SMTP настройките.', 'mail-system-by-katsarov-design' ),
+                'datetime_past'  => __( 'Моля, изберете бъдеща дата и час.', 'mail-system-by-katsarov-design' ),
             ),
         ) );
     }
@@ -254,6 +255,13 @@ class MSKD_Admin {
         // Handle one-time email send action
         if ( isset( $_POST['mskd_send_one_time_email'] ) && wp_verify_nonce( $_POST['mskd_nonce'], 'mskd_send_one_time_email' ) ) {
             $this->send_one_time_email();
+        }
+
+        // Handle cancel queue item action
+        if ( isset( $_GET['action'] ) && $_GET['action'] === 'cancel_queue_item' && isset( $_GET['id'] ) ) {
+            if ( wp_verify_nonce( $_GET['_wpnonce'], 'cancel_queue_item_' . $_GET['id'] ) ) {
+                $this->cancel_queue_item( intval( $_GET['id'] ) );
+            }
         }
 
         // Handle settings save
@@ -489,6 +497,54 @@ class MSKD_Admin {
     }
 
     /**
+     * Cancel a queue item
+     *
+     * @param int $id Queue item ID
+     */
+    private function cancel_queue_item( $id ) {
+        global $wpdb;
+
+        // Check if item exists and is cancellable (pending or processing)
+        $item = $wpdb->get_row( $wpdb->prepare(
+            "SELECT id, status FROM {$wpdb->prefix}mskd_queue WHERE id = %d",
+            $id
+        ) );
+
+        if ( ! $item ) {
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Записът не е намерен.', 'mail-system-by-katsarov-design' ), 'error' );
+            wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'queue' ) );
+            exit;
+        }
+
+        if ( ! in_array( $item->status, array( 'pending', 'processing' ), true ) ) {
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Този имейл не може да бъде отменен.', 'mail-system-by-katsarov-design' ), 'error' );
+            wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'queue' ) );
+            exit;
+        }
+
+        // Update status to cancelled
+        $result = $wpdb->update(
+            $wpdb->prefix . 'mskd_queue',
+            array( 
+                'status'        => 'cancelled',
+                'error_message' => __( 'Отменен от администратор', 'mail-system-by-katsarov-design' ),
+            ),
+            array( 'id' => $id ),
+            array( '%s', '%s' ),
+            array( '%d' )
+        );
+
+        if ( $result !== false ) {
+            add_settings_error( 'mskd_messages', 'mskd_success', __( 'Имейлът е отменен успешно.', 'mail-system-by-katsarov-design' ), 'success' );
+        } else {
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Грешка при отмяна на имейла.', 'mail-system-by-katsarov-design' ), 'error' );
+        }
+
+        wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'queue' ) );
+        exit;
+    }
+
+    /**
      * Queue email for sending
      */
     private function queue_email() {
@@ -519,6 +575,10 @@ class MSKD_Admin {
             return;
         }
 
+        // Calculate scheduled time
+        $scheduled_at = $this->calculate_scheduled_time( $_POST );
+        $is_immediate = $this->is_immediate_send( $_POST );
+
         // Add to queue
         $queued = 0;
         foreach ( $subscribers as $subscriber_id ) {
@@ -529,8 +589,9 @@ class MSKD_Admin {
                     'subject'       => $subject,
                     'body'          => $body,
                     'status'        => 'pending',
+                    'scheduled_at'  => $scheduled_at,
                 ),
-                array( '%d', '%s', '%s', '%s' )
+                array( '%d', '%s', '%s', '%s', '%s' )
             );
             
             if ( $result ) {
@@ -538,12 +599,30 @@ class MSKD_Admin {
             }
         }
 
-        add_settings_error( 
-            'mskd_messages', 
-            'mskd_success', 
-            sprintf( __( 'Добавени са %d писма в опашката за изпращане.', 'mail-system-by-katsarov-design' ), $queued ), 
-            'success' 
-        );
+        if ( $is_immediate ) {
+            add_settings_error( 
+                'mskd_messages', 
+                'mskd_success', 
+                sprintf( __( 'Добавени са %d писма в опашката за изпращане.', 'mail-system-by-katsarov-design' ), $queued ), 
+                'success' 
+            );
+        } else {
+            // Format scheduled time for display
+            $wp_timezone = wp_timezone();
+            $scheduled_date = new DateTime( $scheduled_at, $wp_timezone );
+            $formatted_date = $scheduled_date->format( 'd.m.Y H:i' );
+            
+            add_settings_error( 
+                'mskd_messages', 
+                'mskd_success', 
+                sprintf( 
+                    __( 'Насрочени са %1$d писма за изпращане на %2$s.', 'mail-system-by-katsarov-design' ), 
+                    $queued,
+                    esc_html( $formatted_date )
+                ), 
+                'success' 
+            );
+        }
     }
 
     /**
@@ -602,6 +681,86 @@ class MSKD_Admin {
     }
 
     /**
+     * Calculate scheduled time based on user input
+     *
+     * @param array $post_data POST data containing schedule_type, scheduled_datetime, delay_value, delay_unit
+     * @return string MySQL datetime string
+     */
+    private function calculate_scheduled_time( $post_data ) {
+        $schedule_type = isset( $post_data['schedule_type'] ) ? sanitize_text_field( $post_data['schedule_type'] ) : 'now';
+        $wp_timezone   = wp_timezone();
+
+        switch ( $schedule_type ) {
+            case 'absolute':
+                // User picks specific datetime (input is in WP timezone)
+                $scheduled_datetime = isset( $post_data['scheduled_datetime'] ) ? sanitize_text_field( $post_data['scheduled_datetime'] ) : '';
+                if ( ! empty( $scheduled_datetime ) ) {
+                    try {
+                        // Parse the datetime-local input (format: Y-m-d\TH:i)
+                        $date = DateTime::createFromFormat( 'Y-m-d\TH:i', $scheduled_datetime, $wp_timezone );
+                        if ( $date ) {
+                            // Round to nearest 10 minutes
+                            $minutes = (int) $date->format( 'i' );
+                            $rounded_minutes = round( $minutes / 10 ) * 10;
+                            if ( $rounded_minutes >= 60 ) {
+                                $date->modify( '+1 hour' );
+                                $rounded_minutes = 0;
+                            }
+                            $date->setTime( (int) $date->format( 'H' ), $rounded_minutes, 0 );
+                            return $date->format( 'Y-m-d H:i:s' );
+                        }
+                    } catch ( Exception $e ) {
+                        // Fall through to default
+                    }
+                }
+                break;
+
+            case 'relative':
+                // +N minutes/hours/days from now
+                $delay_value = isset( $post_data['delay_value'] ) ? max( 1, intval( $post_data['delay_value'] ) ) : 1;
+                $delay_unit  = isset( $post_data['delay_unit'] ) ? sanitize_text_field( $post_data['delay_unit'] ) : 'hours';
+
+                // Validate unit
+                $allowed_units = array( 'minutes', 'hours', 'days' );
+                if ( ! in_array( $delay_unit, $allowed_units, true ) ) {
+                    $delay_unit = 'hours';
+                }
+
+                $date = new DateTime( 'now', $wp_timezone );
+                $date->modify( "+{$delay_value} {$delay_unit}" );
+
+                // Round to nearest 10 minutes for consistency
+                $minutes = (int) $date->format( 'i' );
+                $rounded_minutes = ceil( $minutes / 10 ) * 10;
+                if ( $rounded_minutes >= 60 ) {
+                    $date->modify( '+1 hour' );
+                    $rounded_minutes = 0;
+                }
+                $date->setTime( (int) $date->format( 'H' ), $rounded_minutes, 0 );
+
+                return $date->format( 'Y-m-d H:i:s' );
+
+            case 'now':
+            default:
+                // Send immediately
+                break;
+        }
+
+        return current_time( 'mysql' );
+    }
+
+    /**
+     * Check if scheduling is set to immediate send
+     *
+     * @param array $post_data POST data
+     * @return bool
+     */
+    private function is_immediate_send( $post_data ) {
+        $schedule_type = isset( $post_data['schedule_type'] ) ? sanitize_text_field( $post_data['schedule_type'] ) : 'now';
+        return $schedule_type === 'now';
+    }
+
+    /**
      * Send one-time email directly to a recipient
      */
     private function send_one_time_email() {
@@ -615,13 +774,18 @@ class MSKD_Admin {
         $recipient_name  = sanitize_text_field( $_POST['recipient_name'] );
         $subject         = sanitize_text_field( $_POST['subject'] );
         $body            = wp_kses_post( $_POST['body'] );
+        $schedule_type   = isset( $_POST['schedule_type'] ) ? sanitize_text_field( $_POST['schedule_type'] ) : 'now';
 
         // Store form data for preservation on error
         $this->one_time_email_form_data = array(
-            'recipient_email' => $recipient_email,
-            'recipient_name'  => $recipient_name,
-            'subject'         => $subject,
-            'body'            => $body,
+            'recipient_email'    => $recipient_email,
+            'recipient_name'     => $recipient_name,
+            'subject'            => $subject,
+            'body'               => $body,
+            'schedule_type'      => $schedule_type,
+            'scheduled_datetime' => isset( $_POST['scheduled_datetime'] ) ? sanitize_text_field( $_POST['scheduled_datetime'] ) : '',
+            'delay_value'        => isset( $_POST['delay_value'] ) ? intval( $_POST['delay_value'] ) : 1,
+            'delay_unit'         => isset( $_POST['delay_unit'] ) ? sanitize_text_field( $_POST['delay_unit'] ) : 'hours',
         );
 
         // Validate required fields
@@ -648,62 +812,113 @@ class MSKD_Admin {
             $subject
         );
 
-        // Load SMTP Mailer and send via SMTP
+        // Calculate scheduled time
+        $scheduled_at  = $this->calculate_scheduled_time( $_POST );
+        $is_immediate  = $this->is_immediate_send( $_POST );
+
+        // Load SMTP Mailer
         require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
         $mailer = new MSKD_SMTP_Mailer();
 
         // Check if SMTP is enabled
         if ( ! $mailer->is_enabled() ) {
             $this->last_mail_error = __( 'SMTP не е конфигуриран. Моля, настройте SMTP в настройките на плъгина.', 'mail-system-by-katsarov-design' );
-            $sent = false;
-        } else {
-            // Send email via SMTP
+            add_settings_error( 'mskd_messages', 'mskd_error', $this->last_mail_error, 'error' );
+            return;
+        }
+
+        if ( $is_immediate ) {
+            // Send immediately via SMTP
             $sent = $mailer->send( $recipient_email, $subject, $body );
             
             if ( ! $sent ) {
                 $this->last_mail_error = $mailer->get_last_error();
             }
-        }
 
-        // Log the one-time email in the queue table for audit purposes
-        $log_status = $sent ? 'sent' : 'failed';
-        $wpdb->insert(
-            $wpdb->prefix . 'mskd_queue',
-            array(
-                'subscriber_id' => self::ONE_TIME_EMAIL_SUBSCRIBER_ID,
-                'subject'       => $subject,
-                'body'          => $body,
-                'status'        => $log_status,
-                'scheduled_at'  => current_time( 'mysql' ),
-                'sent_at'       => $sent ? current_time( 'mysql' ) : null,
-                'attempts'      => 1,
-                'error_message' => $sent ? null : ( $this->last_mail_error ?: __( 'wp_mail() неуспешен за еднократен имейл', 'mail-system-by-katsarov-design' ) ),
-            ),
-            array( '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s' )
-        );
-
-        if ( $sent ) {
-            // Clear form data on success
-            $this->one_time_email_form_data = array();
-            add_settings_error(
-                'mskd_messages',
-                'mskd_success',
-                sprintf( __( 'Еднократният имейл е изпратен успешно до %s.', 'mail-system-by-katsarov-design' ), esc_html( $recipient_email ) ),
-                'success'
+            // Log the one-time email in the queue table for audit purposes
+            $log_status = $sent ? 'sent' : 'failed';
+            $wpdb->insert(
+                $wpdb->prefix . 'mskd_queue',
+                array(
+                    'subscriber_id' => self::ONE_TIME_EMAIL_SUBSCRIBER_ID,
+                    'subject'       => $subject,
+                    'body'          => $body,
+                    'status'        => $log_status,
+                    'scheduled_at'  => current_time( 'mysql' ),
+                    'sent_at'       => $sent ? current_time( 'mysql' ) : null,
+                    'attempts'      => 1,
+                    'error_message' => $sent ? null : ( $this->last_mail_error ?: __( 'wp_mail() неуспешен за еднократен имейл', 'mail-system-by-katsarov-design' ) ),
+                ),
+                array( '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s' )
             );
-        } else {
-            $error_message = __( 'Грешка при изпращане на еднократния имейл.', 'mail-system-by-katsarov-design' );
-            if ( ! empty( $this->last_mail_error ) ) {
-                $error_message .= ' ' . sprintf( __( 'Причина: %s', 'mail-system-by-katsarov-design' ), esc_html( $this->last_mail_error ) );
+
+            if ( $sent ) {
+                // Clear form data on success
+                $this->one_time_email_form_data = array();
+                add_settings_error(
+                    'mskd_messages',
+                    'mskd_success',
+                    sprintf( __( 'Еднократният имейл е изпратен успешно до %s.', 'mail-system-by-katsarov-design' ), esc_html( $recipient_email ) ),
+                    'success'
+                );
             } else {
-                $error_message .= ' ' . __( 'Моля, опитайте отново.', 'mail-system-by-katsarov-design' );
+                $error_message = __( 'Грешка при изпращане на еднократния имейл.', 'mail-system-by-katsarov-design' );
+                if ( ! empty( $this->last_mail_error ) ) {
+                    $error_message .= ' ' . sprintf( __( 'Причина: %s', 'mail-system-by-katsarov-design' ), esc_html( $this->last_mail_error ) );
+                } else {
+                    $error_message .= ' ' . __( 'Моля, опитайте отново.', 'mail-system-by-katsarov-design' );
+                }
+                add_settings_error(
+                    'mskd_messages',
+                    'mskd_error',
+                    $error_message,
+                    'error'
+                );
             }
-            add_settings_error(
-                'mskd_messages',
-                'mskd_error',
-                $error_message,
-                'error'
+        } else {
+            // Schedule for later - add to queue with pending status
+            $result = $wpdb->insert(
+                $wpdb->prefix . 'mskd_queue',
+                array(
+                    'subscriber_id' => self::ONE_TIME_EMAIL_SUBSCRIBER_ID,
+                    'subject'       => $subject,
+                    'body'          => $body,
+                    'status'        => 'pending',
+                    'scheduled_at'  => $scheduled_at,
+                    'sent_at'       => null,
+                    'attempts'      => 0,
+                    'error_message' => null,
+                ),
+                array( '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s' )
             );
+
+            if ( $result ) {
+                // Clear form data on success
+                $this->one_time_email_form_data = array();
+                
+                // Format scheduled time for display
+                $wp_timezone = wp_timezone();
+                $scheduled_date = new DateTime( $scheduled_at, $wp_timezone );
+                $formatted_date = $scheduled_date->format( 'd.m.Y H:i' );
+                
+                add_settings_error(
+                    'mskd_messages',
+                    'mskd_success',
+                    sprintf( 
+                        __( 'Еднократният имейл до %1$s е насрочен за %2$s.', 'mail-system-by-katsarov-design' ), 
+                        esc_html( $recipient_email ),
+                        esc_html( $formatted_date )
+                    ),
+                    'success'
+                );
+            } else {
+                add_settings_error(
+                    'mskd_messages',
+                    'mskd_error',
+                    __( 'Грешка при насрочване на имейла. Моля, опитайте отново.', 'mail-system-by-katsarov-design' ),
+                    'error'
+                );
+            }
         }
     }
 

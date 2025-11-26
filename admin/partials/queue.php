@@ -24,6 +24,8 @@ if ( $status_filter ) {
     $where = $wpdb->prepare( " WHERE q.status = %s", $status_filter );
 } elseif ( $type_filter === 'one-time' ) {
     $where = $wpdb->prepare( " WHERE q.subscriber_id = %d", MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID );
+} elseif ( $type_filter === 'scheduled' ) {
+    $where = $wpdb->prepare( " WHERE q.status = 'pending' AND q.scheduled_at > %s", current_time( 'mysql' ) );
 }
 
 // Get counts in a single query for better performance
@@ -34,16 +36,21 @@ $queue_counts = $wpdb->get_row(
             SUM(CASE WHEN status = 'processing' THEN 1 ELSE 0 END) as processing,
             SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
             SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
-            SUM(CASE WHEN subscriber_id = %d THEN 1 ELSE 0 END) as one_time
+            SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled,
+            SUM(CASE WHEN subscriber_id = %d THEN 1 ELSE 0 END) as one_time,
+            SUM(CASE WHEN status = 'pending' AND scheduled_at > %s THEN 1 ELSE 0 END) as scheduled
         FROM {$wpdb->prefix}mskd_queue",
-        MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID
+        MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID,
+        current_time( 'mysql' )
     )
 );
 $pending_count    = $queue_counts->pending ?? 0;
 $processing_count = $queue_counts->processing ?? 0;
 $sent_count       = $queue_counts->sent ?? 0;
 $failed_count     = $queue_counts->failed ?? 0;
+$cancelled_count  = $queue_counts->cancelled ?? 0;
 $one_time_count   = $queue_counts->one_time ?? 0;
+$scheduled_count  = $queue_counts->scheduled ?? 0;
 
 // Get total count for current filter
 $total_items = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue q" . $where );
@@ -90,7 +97,14 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
             <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue' ) ); ?>" 
                class="<?php echo empty( $status_filter ) && empty( $type_filter ) ? 'current' : ''; ?>">
                 <?php _e( 'Всички', 'mail-system-by-katsarov-design' ); ?>
-                <span class="count">(<?php echo esc_html( $pending_count + $processing_count + $sent_count + $failed_count ); ?>)</span>
+                <span class="count">(<?php echo esc_html( $pending_count + $processing_count + $sent_count + $failed_count + $cancelled_count ); ?>)</span>
+            </a> |
+        </li>
+        <li>
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&type=scheduled' ) ); ?>"
+               class="<?php echo $type_filter === 'scheduled' ? 'current' : ''; ?>">
+                <?php _e( 'Насрочени', 'mail-system-by-katsarov-design' ); ?>
+                <span class="count">(<?php echo esc_html( $scheduled_count ); ?>)</span>
             </a> |
         </li>
         <li>
@@ -122,6 +136,13 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
             </a> |
         </li>
         <li>
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&status=cancelled' ) ); ?>"
+               class="<?php echo $status_filter === 'cancelled' ? 'current' : ''; ?>">
+                <?php _e( 'Отменени', 'mail-system-by-katsarov-design' ); ?>
+                <span class="count">(<?php echo esc_html( $cancelled_count ); ?>)</span>
+            </a> |
+        </li>
+        <li>
             <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&type=one-time' ) ); ?>"
                class="<?php echo $type_filter === 'one-time' ? 'current' : ''; ?>">
                 <?php _e( 'Еднократни', 'mail-system-by-katsarov-design' ); ?>
@@ -140,11 +161,18 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                 <th scope="col" style="width: 80px;"><?php _e( 'Опити', 'mail-system-by-katsarov-design' ); ?></th>
                 <th scope="col"><?php _e( 'Насрочено', 'mail-system-by-katsarov-design' ); ?></th>
                 <th scope="col"><?php _e( 'Изпратено', 'mail-system-by-katsarov-design' ); ?></th>
+                <th scope="col" style="width: 100px;"><?php _e( 'Действия', 'mail-system-by-katsarov-design' ); ?></th>
             </tr>
         </thead>
         <tbody>
             <?php if ( ! empty( $queue_items ) ) : ?>
                 <?php foreach ( $queue_items as $item ) : ?>
+                    <?php
+                    // Check if item is scheduled for the future
+                    $scheduled_timestamp = strtotime( $item->scheduled_at );
+                    $is_future_scheduled = $scheduled_timestamp > current_time( 'timestamp' );
+                    $can_cancel = in_array( $item->status, array( 'pending', 'processing' ), true );
+                    ?>
                     <tr>
                         <td><?php echo esc_html( $item->id ); ?></td>
                         <td>
@@ -168,24 +196,58 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                                     'processing' => __( 'В процес', 'mail-system-by-katsarov-design' ),
                                     'sent'       => __( 'Изпратен', 'mail-system-by-katsarov-design' ),
                                     'failed'     => __( 'Неуспешен', 'mail-system-by-katsarov-design' ),
+                                    'cancelled'  => __( 'Отменен', 'mail-system-by-katsarov-design' ),
                                 );
                                 echo esc_html( $statuses[ $item->status ] ?? $item->status );
                                 ?>
                             </span>
+                            <?php if ( $is_future_scheduled && $item->status === 'pending' ) : ?>
+                                <br><small class="mskd-scheduled-badge"><?php _e( 'Насрочен', 'mail-system-by-katsarov-design' ); ?></small>
+                            <?php endif; ?>
                             <?php if ( $item->status === 'failed' && $item->error_message ) : ?>
                                 <br><small class="mskd-error-msg"><?php echo esc_html( $item->error_message ); ?></small>
                             <?php endif; ?>
                         </td>
                         <td><?php echo esc_html( $item->attempts ); ?></td>
-                        <td><?php echo esc_html( date_i18n( 'd.m.Y H:i', strtotime( $item->scheduled_at ) ) ); ?></td>
+                        <td>
+                            <?php echo esc_html( date_i18n( 'd.m.Y H:i', $scheduled_timestamp ) ); ?>
+                            <?php if ( $is_future_scheduled && $item->status === 'pending' ) : ?>
+                                <br><small class="mskd-time-remaining">
+                                    <?php 
+                                    $diff = $scheduled_timestamp - current_time( 'timestamp' );
+                                    if ( $diff < 3600 ) {
+                                        printf( __( 'след %d мин.', 'mail-system-by-katsarov-design' ), ceil( $diff / 60 ) );
+                                    } elseif ( $diff < 86400 ) {
+                                        printf( __( 'след %d ч.', 'mail-system-by-katsarov-design' ), ceil( $diff / 3600 ) );
+                                    } else {
+                                        printf( __( 'след %d дни', 'mail-system-by-katsarov-design' ), ceil( $diff / 86400 ) );
+                                    }
+                                    ?>
+                                </small>
+                            <?php endif; ?>
+                        </td>
                         <td>
                             <?php echo $item->sent_at ? esc_html( date_i18n( 'd.m.Y H:i', strtotime( $item->sent_at ) ) ) : '—'; ?>
+                        </td>
+                        <td>
+                            <?php if ( $can_cancel ) : ?>
+                                <a href="<?php echo wp_nonce_url( 
+                                    admin_url( 'admin.php?page=mskd-queue&action=cancel_queue_item&id=' . $item->id ), 
+                                    'cancel_queue_item_' . $item->id 
+                                ); ?>" 
+                                   class="mskd-delete-link mskd-cancel-link"
+                                   title="<?php esc_attr_e( 'Отмени изпращането', 'mail-system-by-katsarov-design' ); ?>">
+                                    <?php _e( 'Отмени', 'mail-system-by-katsarov-design' ); ?>
+                                </a>
+                            <?php else : ?>
+                                —
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             <?php else : ?>
                 <tr>
-                    <td colspan="7"><?php _e( 'Няма записи в опашката.', 'mail-system-by-katsarov-design' ); ?></td>
+                    <td colspan="8"><?php _e( 'Няма записи в опашката.', 'mail-system-by-katsarov-design' ); ?></td>
                 </tr>
             <?php endif; ?>
         </tbody>

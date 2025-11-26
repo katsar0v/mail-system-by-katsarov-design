@@ -13,6 +13,18 @@ global $wpdb;
 
 // Get all lists
 $lists = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}mskd_lists ORDER BY name ASC" );
+
+// Get minimum datetime for picker (now + 10 minutes, rounded to nearest 10 min)
+$wp_timezone = wp_timezone();
+$now = new DateTime( 'now', $wp_timezone );
+$minutes = (int) $now->format( 'i' );
+$rounded_minutes = ceil( ( $minutes + 1 ) / 10 ) * 10;
+if ( $rounded_minutes >= 60 ) {
+    $now->modify( '+1 hour' );
+    $rounded_minutes = 0;
+}
+$now->setTime( (int) $now->format( 'H' ), $rounded_minutes, 0 );
+$min_datetime = $now->format( 'Y-m-d\TH:i' );
 ?>
 
 <div class="wrap mskd-wrap">
@@ -84,11 +96,59 @@ $lists = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}mskd_lists ORDER BY n
                         </p>
                     </td>
                 </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="schedule_type"><?php _e( 'Насрочване', 'mail-system-by-katsarov-design' ); ?></label>
+                    </th>
+                    <td>
+                        <select name="schedule_type" id="schedule_type" class="mskd-schedule-type">
+                            <option value="now"><?php _e( 'Изпрати сега', 'mail-system-by-katsarov-design' ); ?></option>
+                            <option value="absolute"><?php _e( 'Конкретна дата и час', 'mail-system-by-katsarov-design' ); ?></option>
+                            <option value="relative"><?php _e( 'След определено време', 'mail-system-by-katsarov-design' ); ?></option>
+                        </select>
+                        
+                        <div class="mskd-schedule-absolute" style="display: none; margin-top: 10px;">
+                            <input type="datetime-local" 
+                                   name="scheduled_datetime" 
+                                   id="scheduled_datetime" 
+                                   class="mskd-datetime-picker"
+                                   value="<?php echo esc_attr( $min_datetime ); ?>"
+                                   min="<?php echo esc_attr( $min_datetime ); ?>"
+                                   step="600">
+                            <p class="description">
+                                <?php 
+                                printf( 
+                                    __( 'Часова зона: %s. Изберете време на всеки 10 минути.', 'mail-system-by-katsarov-design' ), 
+                                    '<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
+                                ); 
+                                ?>
+                            </p>
+                        </div>
+                        
+                        <div class="mskd-schedule-relative" style="display: none; margin-top: 10px;">
+                            <input type="number" 
+                                   name="delay_value" 
+                                   id="delay_value" 
+                                   class="small-text" 
+                                   value="1" 
+                                   min="1" 
+                                   max="999">
+                            <select name="delay_unit" id="delay_unit">
+                                <option value="minutes"><?php _e( 'минути', 'mail-system-by-katsarov-design' ); ?></option>
+                                <option value="hours" selected><?php _e( 'часа', 'mail-system-by-katsarov-design' ); ?></option>
+                                <option value="days"><?php _e( 'дни', 'mail-system-by-katsarov-design' ); ?></option>
+                            </select>
+                            <p class="description"><?php _e( 'Имейлите ще бъдат изпратени след посоченото време.', 'mail-system-by-katsarov-design' ); ?></p>
+                        </div>
+                    </td>
+                </tr>
             </table>
 
             <p class="submit">
-                <input type="submit" name="mskd_send_email" class="button button-primary button-large" 
-                       value="<?php _e( 'Добави в опашката', 'mail-system-by-katsarov-design' ); ?>">
+                <input type="submit" name="mskd_send_email" class="button button-primary button-large mskd-submit-btn" 
+                       value="<?php _e( 'Добави в опашката', 'mail-system-by-katsarov-design' ); ?>"
+                       data-send-now="<?php esc_attr_e( 'Добави в опашката', 'mail-system-by-katsarov-design' ); ?>"
+                       data-schedule="<?php esc_attr_e( 'Насрочи изпращане', 'mail-system-by-katsarov-design' ); ?>">
             </p>
         </form>
     </div>
