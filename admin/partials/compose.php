@@ -28,7 +28,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 ?>
 
 <div class="wrap mskd-wrap">
-    <h1><?php _e( 'Ново писмо', 'mail-system-by-katsarov-design' ); ?></h1>
+    <h1><?php _e( 'New email', 'mail-system-by-katsarov-design' ); ?></h1>
 
     <?php settings_errors( 'mskd_messages' ); ?>
 
@@ -39,7 +39,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
             <table class="form-table">
                 <tr>
                     <th scope="row">
-                        <label><?php _e( 'Изпрати до списъци', 'mail-system-by-katsarov-design' ); ?> *</label>
+                        <label><?php _e( 'Send to lists', 'mail-system-by-katsarov-design' ); ?> *</label>
                     </th>
                     <td>
                         <?php if ( ! empty( $lists ) ) : ?>
@@ -55,14 +55,14 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
                                 <label style="display: block; margin-bottom: 5px;">
                                     <input type="checkbox" name="lists[]" value="<?php echo esc_attr( $list->id ); ?>">
                                     <?php echo esc_html( $list->name ); ?>
-                                    <span class="description">(<?php printf( __( '%d активни абонати', 'mail-system-by-katsarov-design' ), $subscriber_count ); ?>)</span>
+                                    <span class="description">(<?php printf( __( '%d active subscribers', 'mail-system-by-katsarov-design' ), $subscriber_count ); ?>)</span>
                                 </label>
                             <?php endforeach; ?>
                         <?php else : ?>
                             <p class="description">
-                                <?php _e( 'Няма създадени списъци.', 'mail-system-by-katsarov-design' ); ?>
+                                <?php _e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?>
                                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-lists&action=add' ) ); ?>">
-                                    <?php _e( 'Създай списък', 'mail-system-by-katsarov-design' ); ?>
+                                    <?php _e( 'Create list', 'mail-system-by-katsarov-design' ); ?>
                                 </a>
                             </p>
                         <?php endif; ?>
@@ -70,7 +70,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
                 </tr>
                 <tr>
                     <th scope="row">
-                        <label for="subject"><?php _e( 'Тема', 'mail-system-by-katsarov-design' ); ?> *</label>
+                        <label for="subject"><?php _e( 'Subject', 'mail-system-by-katsarov-design' ); ?> *</label>
                     </th>
                     <td>
                         <input type="text" name="subject" id="subject" class="large-text" required>
@@ -78,7 +78,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
                 </tr>
                 <tr>
                     <th scope="row">
-                        <label for="body"><?php _e( 'Съдържание', 'mail-system-by-katsarov-design' ); ?> *</label>
+                        <label for="body"><?php _e( 'Content', 'mail-system-by-katsarov-design' ); ?> *</label>
                     </th>
                     <td>
                         <?php
@@ -91,20 +91,20 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
                         ) );
                         ?>
                         <p class="description">
-                            <?php _e( 'Налични плейсхолдери:', 'mail-system-by-katsarov-design' ); ?>
+                            <?php _e( 'Available placeholders:', 'mail-system-by-katsarov-design' ); ?>
                             <code>{first_name}</code>, <code>{last_name}</code>, <code>{email}</code>, <code>{unsubscribe_link}</code>
                         </p>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">
-                        <label for="schedule_type"><?php _e( 'Насрочване', 'mail-system-by-katsarov-design' ); ?></label>
+                        <label for="schedule_type"><?php _e( 'Scheduling', 'mail-system-by-katsarov-design' ); ?></label>
                     </th>
                     <td>
                         <select name="schedule_type" id="schedule_type" class="mskd-schedule-type">
-                            <option value="now"><?php _e( 'Изпрати сега', 'mail-system-by-katsarov-design' ); ?></option>
-                            <option value="absolute"><?php _e( 'Конкретна дата и час', 'mail-system-by-katsarov-design' ); ?></option>
-                            <option value="relative"><?php _e( 'След определено време', 'mail-system-by-katsarov-design' ); ?></option>
+                            <option value="now"><?php _e( 'Send now', 'mail-system-by-katsarov-design' ); ?></option>
+                            <option value="absolute"><?php _e( 'Specific date and time', 'mail-system-by-katsarov-design' ); ?></option>
+                            <option value="relative"><?php _e( 'After a set time', 'mail-system-by-katsarov-design' ); ?></option>
                         </select>
                         
                         <div class="mskd-schedule-absolute" style="display: none; margin-top: 10px;">
@@ -118,7 +118,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
                             <p class="description">
                                 <?php 
                                 printf( 
-                                    __( 'Часова зона: %s. Изберете време на всеки 10 минути.', 'mail-system-by-katsarov-design' ), 
+                                    __( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ), 
                                     '<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
                                 ); 
                                 ?>
@@ -134,11 +134,11 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
                                    min="1" 
                                    max="999">
                             <select name="delay_unit" id="delay_unit">
-                                <option value="minutes"><?php _e( 'минути', 'mail-system-by-katsarov-design' ); ?></option>
-                                <option value="hours" selected><?php _e( 'часа', 'mail-system-by-katsarov-design' ); ?></option>
-                                <option value="days"><?php _e( 'дни', 'mail-system-by-katsarov-design' ); ?></option>
+                                <option value="minutes"><?php _e( 'minutes', 'mail-system-by-katsarov-design' ); ?></option>
+                                <option value="hours" selected><?php _e( 'hours', 'mail-system-by-katsarov-design' ); ?></option>
+                                <option value="days"><?php _e( 'days', 'mail-system-by-katsarov-design' ); ?></option>
                             </select>
-                            <p class="description"><?php _e( 'Имейлите ще бъдат изпратени след посоченото време.', 'mail-system-by-katsarov-design' ); ?></p>
+                            <p class="description"><?php _e( 'Emails will be sent after the specified time.', 'mail-system-by-katsarov-design' ); ?></p>
                         </div>
                     </td>
                 </tr>
@@ -146,9 +146,9 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 
             <p class="submit">
                 <input type="submit" name="mskd_send_email" class="button button-primary button-large mskd-submit-btn" 
-                       value="<?php _e( 'Добави в опашката', 'mail-system-by-katsarov-design' ); ?>"
-                       data-send-now="<?php esc_attr_e( 'Добави в опашката', 'mail-system-by-katsarov-design' ); ?>"
-                       data-schedule="<?php esc_attr_e( 'Насрочи изпращане', 'mail-system-by-katsarov-design' ); ?>">
+                       value="<?php _e( 'Add to queue', 'mail-system-by-katsarov-design' ); ?>"
+                       data-send-now="<?php esc_attr_e( 'Add to queue', 'mail-system-by-katsarov-design' ); ?>"
+                       data-schedule="<?php esc_attr_e( 'Schedule sending', 'mail-system-by-katsarov-design' ); ?>">
             </p>
         </form>
     </div>

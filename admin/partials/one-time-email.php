@@ -35,12 +35,12 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 ?>
 
 <div class="wrap mskd-wrap">
-    <h1><?php _e( 'Еднократен имейл', 'mail-system-by-katsarov-design' ); ?></h1>
+    <h1><?php _e( 'One-time email', 'mail-system-by-katsarov-design' ); ?></h1>
 
     <?php settings_errors( 'mskd_messages' ); ?>
 
     <p class="description">
-        <?php _e( 'Изпратете еднократен имейл директно до конкретен получател. Имейлът може да бъде изпратен незабавно или насрочен за по-късно.', 'mail-system-by-katsarov-design' ); ?>
+        <?php _e( 'Send a one-time email directly to a specific recipient. The email can be sent immediately or scheduled for later.', 'mail-system-by-katsarov-design' ); ?>
     </p>
 
     <div class="mskd-form-wrap mskd-one-time-email-form">
@@ -50,25 +50,25 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
             <table class="form-table">
                 <tr>
                     <th scope="row">
-                        <label for="recipient_email"><?php _e( 'Имейл на получателя', 'mail-system-by-katsarov-design' ); ?> *</label>
+                        <label for="recipient_email"><?php _e( 'Recipient email', 'mail-system-by-katsarov-design' ); ?> *</label>
                     </th>
                     <td>
                         <input type="email" name="recipient_email" id="recipient_email" class="regular-text" value="<?php echo $recipient_email; ?>" required>
-                        <p class="description"><?php _e( 'Имейл адресът, до който ще бъде изпратено писмото.', 'mail-system-by-katsarov-design' ); ?></p>
+                        <p class="description"><?php _e( 'The email address to which the message will be sent.', 'mail-system-by-katsarov-design' ); ?></p>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">
-                        <label for="recipient_name"><?php _e( 'Име на получателя', 'mail-system-by-katsarov-design' ); ?></label>
+                        <label for="recipient_name"><?php _e( 'Recipient name', 'mail-system-by-katsarov-design' ); ?></label>
                     </th>
                     <td>
                         <input type="text" name="recipient_name" id="recipient_name" class="regular-text" value="<?php echo $recipient_name; ?>">
-                        <p class="description"><?php _e( 'Име на получателя (по избор). Може да се използва в съдържанието с {recipient_name}.', 'mail-system-by-katsarov-design' ); ?></p>
+                        <p class="description"><?php _e( 'Recipient name (optional). Can be used in content with {recipient_name}.', 'mail-system-by-katsarov-design' ); ?></p>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">
-                        <label for="subject"><?php _e( 'Тема', 'mail-system-by-katsarov-design' ); ?> *</label>
+                        <label for="subject"><?php _e( 'Subject', 'mail-system-by-katsarov-design' ); ?> *</label>
                     </th>
                     <td>
                         <input type="text" name="subject" id="subject" class="large-text" value="<?php echo $subject_value; ?>" required>
@@ -76,7 +76,7 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
                 </tr>
                 <tr>
                     <th scope="row">
-                        <label for="body"><?php _e( 'Съдържание', 'mail-system-by-katsarov-design' ); ?> *</label>
+                        <label for="body"><?php _e( 'Content', 'mail-system-by-katsarov-design' ); ?> *</label>
                     </th>
                     <td>
                         <?php
@@ -89,20 +89,20 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
                         ) );
                         ?>
                         <p class="description">
-                            <?php _e( 'Налични плейсхолдери:', 'mail-system-by-katsarov-design' ); ?>
+                            <?php _e( 'Available placeholders:', 'mail-system-by-katsarov-design' ); ?>
                             <code>{recipient_name}</code>, <code>{recipient_email}</code>
                         </p>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">
-                        <label for="schedule_type"><?php _e( 'Насрочване', 'mail-system-by-katsarov-design' ); ?></label>
+                        <label for="schedule_type"><?php _e( 'Scheduling', 'mail-system-by-katsarov-design' ); ?></label>
                     </th>
                     <td>
                         <select name="schedule_type" id="schedule_type" class="mskd-schedule-type">
-                            <option value="now" <?php selected( $schedule_type, 'now' ); ?>><?php _e( 'Изпрати сега', 'mail-system-by-katsarov-design' ); ?></option>
-                            <option value="absolute" <?php selected( $schedule_type, 'absolute' ); ?>><?php _e( 'Конкретна дата и час', 'mail-system-by-katsarov-design' ); ?></option>
-                            <option value="relative" <?php selected( $schedule_type, 'relative' ); ?>><?php _e( 'След определено време', 'mail-system-by-katsarov-design' ); ?></option>
+                            <option value="now" <?php selected( $schedule_type, 'now' ); ?>><?php _e( 'Send now', 'mail-system-by-katsarov-design' ); ?></option>
+                            <option value="absolute" <?php selected( $schedule_type, 'absolute' ); ?>><?php _e( 'Specific date and time', 'mail-system-by-katsarov-design' ); ?></option>
+                            <option value="relative" <?php selected( $schedule_type, 'relative' ); ?>><?php _e( 'After a set time', 'mail-system-by-katsarov-design' ); ?></option>
                         </select>
                         
                         <div class="mskd-schedule-absolute" style="display: none; margin-top: 10px;">
@@ -116,7 +116,7 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
                             <p class="description">
                                 <?php 
                                 printf( 
-                                    __( 'Часова зона: %s. Изберете време на всеки 10 минути.', 'mail-system-by-katsarov-design' ), 
+                                    __( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ), 
                                     '<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
                                 ); 
                                 ?>
@@ -132,11 +132,11 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
                                    min="1" 
                                    max="999">
                             <select name="delay_unit" id="delay_unit">
-                                <option value="minutes" <?php selected( $delay_unit, 'minutes' ); ?>><?php _e( 'минути', 'mail-system-by-katsarov-design' ); ?></option>
-                                <option value="hours" <?php selected( $delay_unit, 'hours' ); ?>><?php _e( 'часа', 'mail-system-by-katsarov-design' ); ?></option>
-                                <option value="days" <?php selected( $delay_unit, 'days' ); ?>><?php _e( 'дни', 'mail-system-by-katsarov-design' ); ?></option>
+                                <option value="minutes" <?php selected( $delay_unit, 'minutes' ); ?>><?php _e( 'minutes', 'mail-system-by-katsarov-design' ); ?></option>
+                                <option value="hours" <?php selected( $delay_unit, 'hours' ); ?>><?php _e( 'hours', 'mail-system-by-katsarov-design' ); ?></option>
+                                <option value="days" <?php selected( $delay_unit, 'days' ); ?>><?php _e( 'days', 'mail-system-by-katsarov-design' ); ?></option>
                             </select>
-                            <p class="description"><?php _e( 'Имейлът ще бъде изпратен след посоченото време.', 'mail-system-by-katsarov-design' ); ?></p>
+                            <p class="description"><?php _e( 'The email will be sent after the specified time.', 'mail-system-by-katsarov-design' ); ?></p>
                         </div>
                     </td>
                 </tr>
@@ -144,21 +144,21 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 
             <p class="submit">
                 <input type="submit" name="mskd_send_one_time_email" class="button button-primary button-large mskd-submit-btn" 
-                       value="<?php _e( 'Изпрати сега', 'mail-system-by-katsarov-design' ); ?>" 
-                       data-send-now="<?php esc_attr_e( 'Изпрати сега', 'mail-system-by-katsarov-design' ); ?>"
-                       data-schedule="<?php esc_attr_e( 'Насрочи изпращане', 'mail-system-by-katsarov-design' ); ?>">
+                       value="<?php _e( 'Send now', 'mail-system-by-katsarov-design' ); ?>" 
+                       data-send-now="<?php esc_attr_e( 'Send now', 'mail-system-by-katsarov-design' ); ?>"
+                       data-schedule="<?php esc_attr_e( 'Schedule sending', 'mail-system-by-katsarov-design' ); ?>">
             </p>
         </form>
     </div>
 
     <div class="mskd-info-box">
-        <h3><?php _e( 'Информация', 'mail-system-by-katsarov-design' ); ?></h3>
+        <h3><?php _e( 'Information', 'mail-system-by-katsarov-design' ); ?></h3>
         <ul>
-            <li><?php _e( 'Еднократните имейли могат да бъдат изпратени незабавно или насрочени за по-късно.', 'mail-system-by-katsarov-design' ); ?></li>
-            <li><?php _e( 'Те не се записват като шаблони и не се повтарят.', 'mail-system-by-katsarov-design' ); ?></li>
-            <li><?php _e( 'Всички изпратени еднократни имейли се записват в историята за одит.', 'mail-system-by-katsarov-design' ); ?></li>
-            <li><?php _e( 'Насрочените имейли могат да бъдат отменени от страницата Опашка.', 'mail-system-by-katsarov-design' ); ?></li>
-            <li><?php _e( 'Подходящи за: активиране на акаунти, уведомления, напомняния за събития.', 'mail-system-by-katsarov-design' ); ?></li>
+            <li><?php _e( 'One-time emails can be sent immediately or scheduled for later.', 'mail-system-by-katsarov-design' ); ?></li>
+            <li><?php _e( 'They are not saved as templates and do not repeat.', 'mail-system-by-katsarov-design' ); ?></li>
+            <li><?php _e( 'All sent one-time emails are logged in the audit history.', 'mail-system-by-katsarov-design' ); ?></li>
+            <li><?php _e( 'Scheduled emails can be cancelled from the Queue page.', 'mail-system-by-katsarov-design' ); ?></li>
+            <li><?php _e( 'Suitable for: account activation, notifications, event reminders.', 'mail-system-by-katsarov-design' ); ?></li>
         </ul>
     </div>
 </div>

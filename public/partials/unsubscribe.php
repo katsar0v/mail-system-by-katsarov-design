@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php _e( 'Отписване', 'mail-system-by-katsarov-design' ); ?> - <?php bloginfo( 'name' ); ?></title>
+    <title><?php _e( 'Unsubscribe', 'mail-system-by-katsarov-design' ); ?> - <?php bloginfo( 'name' ); ?></title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -61,11 +61,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 <body>
     <div class="mskd-unsubscribe-box">
         <div class="mskd-checkmark">✓</div>
-        <h1><?php _e( 'Успешно се отписахте', 'mail-system-by-katsarov-design' ); ?></h1>
-        <p><?php _e( 'Вече няма да получавате имейли от нас.', 'mail-system-by-katsarov-design' ); ?></p>
+        <h1><?php _e( 'Successfully unsubscribed', 'mail-system-by-katsarov-design' ); ?></h1>
+        <p><?php _e( 'You will no longer receive emails from us.', 'mail-system-by-katsarov-design' ); ?></p>
         <p>
             <a href="<?php echo esc_url( home_url() ); ?>">
-                <?php _e( 'Обратно към сайта', 'mail-system-by-katsarov-design' ); ?>
+                <?php _e( 'Back to site', 'mail-system-by-katsarov-design' ); ?>
             </a>
         </p>
     </div>

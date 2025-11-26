@@ -125,14 +125,14 @@ class MSKD_Cron_Handler {
                 $new_attempts = $item->attempts + 1;
 
                 // Build error message with details.
-                $base_error = __( 'SMTP изпращане неуспешно', 'mail-system-by-katsarov-design' );
+                $base_error = __( 'SMTP sending failed', 'mail-system-by-katsarov-design' );
                 
                 if ( $new_attempts < self::MAX_ATTEMPTS ) {
                     // Schedule for retry - set back to pending with delayed schedule
                     $retry_delay   = $new_attempts * 2; // 2, 4 minutes delay
                     $retry_message = sprintf(
                         /* translators: 1: Attempt number, 2: Error details */
-                        __( 'Опит %1$d неуспешен. %2$s Ще се опита отново.', 'mail-system-by-katsarov-design' ),
+                        __( 'Attempt %1$d failed. %2$s Will retry.', 'mail-system-by-katsarov-design' ),
                         $new_attempts,
                         $error_message ? '(' . $error_message . ')' : ''
                     );
@@ -151,7 +151,7 @@ class MSKD_Cron_Handler {
                     // Max attempts reached, mark as failed
                     $fail_message = sprintf(
                         /* translators: 1: Base error message, 2: Max attempts, 3: Error details */
-                        __( '%1$s след %2$d опита. %3$s', 'mail-system-by-katsarov-design' ),
+                        __( '%1$s after %2$d attempts. %3$s', 'mail-system-by-katsarov-design' ),
                         $base_error,
                         self::MAX_ATTEMPTS,
                         $error_message ? '(' . $error_message . ')' : ''
@@ -195,7 +195,7 @@ class MSKD_Cron_Handler {
                     array(
                         'status'        => 'pending',
                         'scheduled_at'  => current_time( 'mysql' ),
-                        'error_message' => __( 'Възстановен след блокиране в обработка', 'mail-system-by-katsarov-design' ),
+                        'error_message' => __( 'Recovered after stuck in processing', 'mail-system-by-katsarov-design' ),
                     ),
                     array( 'id' => $item->id ),
                     array( '%s', '%s', '%s' ),
@@ -207,7 +207,7 @@ class MSKD_Cron_Handler {
                     $wpdb->prefix . 'mskd_queue',
                     array(
                         'status'        => 'failed',
-                        'error_message' => __( 'Неуспешен след максимален брой опити (блокиран)', 'mail-system-by-katsarov-design' ),
+                        'error_message' => __( 'Failed after maximum attempts (stuck)', 'mail-system-by-katsarov-design' ),
                     ),
                     array( 'id' => $item->id ),
                     array( '%s', '%s' ),
@@ -233,7 +233,7 @@ class MSKD_Cron_Handler {
             '{first_name}'       => $subscriber->first_name,
             '{last_name}'        => $subscriber->last_name,
             '{email}'            => $subscriber->email,
-            '{unsubscribe_link}' => '<a href="' . esc_url( $unsubscribe_url ) . '">' . __( 'Отписване', 'mail-system-by-katsarov-design' ) . '</a>',
+            '{unsubscribe_link}' => '<a href="' . esc_url( $unsubscribe_url ) . '">' . __( 'Unsubscribe', 'mail-system-by-katsarov-design' ) . '</a>',
             '{unsubscribe_url}'  => $unsubscribe_url,
         );
 

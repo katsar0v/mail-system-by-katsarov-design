@@ -57,8 +57,8 @@ class MSKD_Admin {
     public function register_menu() {
         // Main menu
         add_menu_page(
-            __( 'Мейл Система', 'mail-system-by-katsarov-design' ),
-            __( 'Имейли', 'mail-system-by-katsarov-design' ),
+            __( 'Mail System', 'mail-system-by-katsarov-design' ),
+            __( 'Emails', 'mail-system-by-katsarov-design' ),
             'manage_options',
             self::PAGE_PREFIX . 'dashboard',
             array( $this, 'render_dashboard' ),
@@ -69,8 +69,8 @@ class MSKD_Admin {
         // Dashboard submenu (same as main)
         add_submenu_page(
             self::PAGE_PREFIX . 'dashboard',
-            __( 'Табло', 'mail-system-by-katsarov-design' ),
-            __( 'Табло', 'mail-system-by-katsarov-design' ),
+            __( 'Dashboard', 'mail-system-by-katsarov-design' ),
+            __( 'Dashboard', 'mail-system-by-katsarov-design' ),
             'manage_options',
             self::PAGE_PREFIX . 'dashboard',
             array( $this, 'render_dashboard' )
@@ -79,8 +79,8 @@ class MSKD_Admin {
         // Subscribers
         add_submenu_page(
             self::PAGE_PREFIX . 'dashboard',
-            __( 'Абонати', 'mail-system-by-katsarov-design' ),
-            __( 'Абонати', 'mail-system-by-katsarov-design' ),
+            __( 'Subscribers', 'mail-system-by-katsarov-design' ),
+            __( 'Subscribers', 'mail-system-by-katsarov-design' ),
             'manage_options',
             self::PAGE_PREFIX . 'subscribers',
             array( $this, 'render_subscribers' )
@@ -89,8 +89,8 @@ class MSKD_Admin {
         // Lists
         add_submenu_page(
             self::PAGE_PREFIX . 'dashboard',
-            __( 'Списъци', 'mail-system-by-katsarov-design' ),
-            __( 'Списъци', 'mail-system-by-katsarov-design' ),
+            __( 'Lists', 'mail-system-by-katsarov-design' ),
+            __( 'Lists', 'mail-system-by-katsarov-design' ),
             'manage_options',
             self::PAGE_PREFIX . 'lists',
             array( $this, 'render_lists' )
@@ -99,8 +99,8 @@ class MSKD_Admin {
         // Compose
         add_submenu_page(
             self::PAGE_PREFIX . 'dashboard',
-            __( 'Ново писмо', 'mail-system-by-katsarov-design' ),
-            __( 'Ново писмо', 'mail-system-by-katsarov-design' ),
+            __( 'New email', 'mail-system-by-katsarov-design' ),
+            __( 'New email', 'mail-system-by-katsarov-design' ),
             'manage_options',
             self::PAGE_PREFIX . 'compose',
             array( $this, 'render_compose' )
@@ -109,8 +109,8 @@ class MSKD_Admin {
         // One-Time Email
         add_submenu_page(
             self::PAGE_PREFIX . 'dashboard',
-            __( 'Еднократен имейл', 'mail-system-by-katsarov-design' ),
-            __( 'Еднократен имейл', 'mail-system-by-katsarov-design' ),
+            __( 'One-time email', 'mail-system-by-katsarov-design' ),
+            __( 'One-time email', 'mail-system-by-katsarov-design' ),
             'manage_options',
             self::PAGE_PREFIX . 'one-time-email',
             array( $this, 'render_one_time_email' )
@@ -119,8 +119,8 @@ class MSKD_Admin {
         // Queue
         add_submenu_page(
             self::PAGE_PREFIX . 'dashboard',
-            __( 'Опашка', 'mail-system-by-katsarov-design' ),
-            __( 'Опашка', 'mail-system-by-katsarov-design' ),
+            __( 'Queue', 'mail-system-by-katsarov-design' ),
+            __( 'Queue', 'mail-system-by-katsarov-design' ),
             'manage_options',
             self::PAGE_PREFIX . 'queue',
             array( $this, 'render_queue' )
@@ -129,8 +129,8 @@ class MSKD_Admin {
         // Settings
         add_submenu_page(
             self::PAGE_PREFIX . 'dashboard',
-            __( 'Настройки', 'mail-system-by-katsarov-design' ),
-            __( 'Настройки', 'mail-system-by-katsarov-design' ),
+            __( 'Settings', 'mail-system-by-katsarov-design' ),
+            __( 'Settings', 'mail-system-by-katsarov-design' ),
             'manage_options',
             self::PAGE_PREFIX . 'settings',
             array( $this, 'render_settings' )
@@ -165,12 +165,12 @@ class MSKD_Admin {
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'nonce'    => wp_create_nonce( 'mskd_admin_nonce' ),
             'strings'  => array(
-                'confirm_delete' => __( 'Сигурни ли сте, че искате да изтриете?', 'mail-system-by-katsarov-design' ),
-                'sending'        => __( 'Изпращане...', 'mail-system-by-katsarov-design' ),
-                'success'        => __( 'Успешно!', 'mail-system-by-katsarov-design' ),
-                'error'          => __( 'Грешка!', 'mail-system-by-katsarov-design' ),
-                'timeout'        => __( 'Времето за изчакване изтече. Проверете SMTP настройките.', 'mail-system-by-katsarov-design' ),
-                'datetime_past'  => __( 'Моля, изберете бъдеща дата и час.', 'mail-system-by-katsarov-design' ),
+                'confirm_delete' => __( 'Are you sure you want to delete?', 'mail-system-by-katsarov-design' ),
+                'sending'        => __( 'Sending...', 'mail-system-by-katsarov-design' ),
+                'success'        => __( 'Success!', 'mail-system-by-katsarov-design' ),
+                'error'          => __( 'Error!', 'mail-system-by-katsarov-design' ),
+                'timeout'        => __( 'Connection timed out. Check SMTP settings.', 'mail-system-by-katsarov-design' ),
+                'datetime_past'  => __( 'Please select a future date and time.', 'mail-system-by-katsarov-design' ),
             ),
         ) );
     }
@@ -194,15 +194,15 @@ class MSKD_Admin {
         ?>
         <div class="notice notice-warning">
             <p>
-                <strong><?php _e( 'Препоръка за Мейл Система:', 'mail-system-by-katsarov-design' ); ?></strong>
-                <?php _e( 'За по-надеждно изпращане на имейли препоръчваме да използвате системен cron вместо WP-Cron.', 'mail-system-by-katsarov-design' ); ?>
+                <strong><?php _e( 'Recommendation for Mail System:', 'mail-system-by-katsarov-design' ); ?></strong>
+                <?php _e( 'For more reliable email sending, we recommend using system cron instead of WP-Cron.', 'mail-system-by-katsarov-design' ); ?>
             </p>
             <p>
-                <?php _e( 'Добавете в wp-config.php:', 'mail-system-by-katsarov-design' ); ?>
+                <?php _e( 'Add to wp-config.php:', 'mail-system-by-katsarov-design' ); ?>
                 <code>define('DISABLE_WP_CRON', true);</code>
             </p>
             <p>
-                <?php _e( 'И настройте системен cron:', 'mail-system-by-katsarov-design' ); ?>
+                <?php _e( 'And set up system cron:', 'mail-system-by-katsarov-design' ); ?>
                 <code>* * * * * php <?php echo esc_html( ABSPATH . 'wp-cron.php' ); ?></code>
             </p>
         </div>
@@ -289,7 +289,7 @@ class MSKD_Admin {
         }
 
         if ( ! is_email( $email ) ) {
-            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Невалиден имейл адрес.', 'mail-system-by-katsarov-design' ), 'error' );
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Invalid email address.', 'mail-system-by-katsarov-design' ), 'error' );
             return;
         }
 
@@ -299,7 +299,7 @@ class MSKD_Admin {
             $email
         ) );
         if ( $existing ) {
-            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Този имейл вече съществува.', 'mail-system-by-katsarov-design' ), 'error' );
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'This email already exists.', 'mail-system-by-katsarov-design' ), 'error' );
             return;
         }
 
@@ -332,9 +332,9 @@ class MSKD_Admin {
                 );
             }
 
-            add_settings_error( 'mskd_messages', 'mskd_success', __( 'Абонатът е добавен успешно.', 'mail-system-by-katsarov-design' ), 'success' );
+            add_settings_error( 'mskd_messages', 'mskd_success', __( 'Subscriber added successfully.', 'mail-system-by-katsarov-design' ), 'success' );
         } else {
-            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Грешка при добавяне на абонат.', 'mail-system-by-katsarov-design' ), 'error' );
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Error adding subscriber.', 'mail-system-by-katsarov-design' ), 'error' );
         }
     }
 
@@ -358,7 +358,7 @@ class MSKD_Admin {
         }
 
         if ( ! is_email( $email ) ) {
-            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Невалиден имейл адрес.', 'mail-system-by-katsarov-design' ), 'error' );
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Invalid email address.', 'mail-system-by-katsarov-design' ), 'error' );
             return;
         }
 
@@ -369,7 +369,7 @@ class MSKD_Admin {
             $id
         ) );
         if ( $existing ) {
-            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Този имейл вече съществува.', 'mail-system-by-katsarov-design' ), 'error' );
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'This email already exists.', 'mail-system-by-katsarov-design' ), 'error' );
             return;
         }
 
@@ -399,7 +399,7 @@ class MSKD_Admin {
             );
         }
 
-        add_settings_error( 'mskd_messages', 'mskd_success', __( 'Абонатът е обновен успешно.', 'mail-system-by-katsarov-design' ), 'success' );
+        add_settings_error( 'mskd_messages', 'mskd_success', __( 'Subscriber updated successfully.', 'mail-system-by-katsarov-design' ), 'success' );
         
         wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'subscribers' ) );
         exit;
@@ -420,7 +420,7 @@ class MSKD_Admin {
         // Delete subscriber
         $wpdb->delete( $wpdb->prefix . 'mskd_subscribers', array( 'id' => $id ), array( '%d' ) );
 
-        add_settings_error( 'mskd_messages', 'mskd_success', __( 'Абонатът е изтрит успешно.', 'mail-system-by-katsarov-design' ), 'success' );
+        add_settings_error( 'mskd_messages', 'mskd_success', __( 'Subscriber deleted successfully.', 'mail-system-by-katsarov-design' ), 'success' );
         
         wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'subscribers' ) );
         exit;
@@ -445,9 +445,9 @@ class MSKD_Admin {
         );
 
         if ( $result ) {
-            add_settings_error( 'mskd_messages', 'mskd_success', __( 'Списъкът е добавен успешно.', 'mail-system-by-katsarov-design' ), 'success' );
+            add_settings_error( 'mskd_messages', 'mskd_success', __( 'List added successfully.', 'mail-system-by-katsarov-design' ), 'success' );
         } else {
-            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Грешка при добавяне на списък.', 'mail-system-by-katsarov-design' ), 'error' );
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Error adding list.', 'mail-system-by-katsarov-design' ), 'error' );
         }
     }
 
@@ -472,7 +472,7 @@ class MSKD_Admin {
             array( '%d' )
         );
 
-        add_settings_error( 'mskd_messages', 'mskd_success', __( 'Списъкът е обновен успешно.', 'mail-system-by-katsarov-design' ), 'success' );
+        add_settings_error( 'mskd_messages', 'mskd_success', __( 'List updated successfully.', 'mail-system-by-katsarov-design' ), 'success' );
         
         wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'lists' ) );
         exit;
@@ -490,7 +490,7 @@ class MSKD_Admin {
         // Delete list
         $wpdb->delete( $wpdb->prefix . 'mskd_lists', array( 'id' => $id ), array( '%d' ) );
 
-        add_settings_error( 'mskd_messages', 'mskd_success', __( 'Списъкът е изтрит успешно.', 'mail-system-by-katsarov-design' ), 'success' );
+        add_settings_error( 'mskd_messages', 'mskd_success', __( 'List deleted successfully.', 'mail-system-by-katsarov-design' ), 'success' );
         
         wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'lists' ) );
         exit;
@@ -511,13 +511,13 @@ class MSKD_Admin {
         ) );
 
         if ( ! $item ) {
-            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Записът не е намерен.', 'mail-system-by-katsarov-design' ), 'error' );
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Record not found.', 'mail-system-by-katsarov-design' ), 'error' );
             wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'queue' ) );
             exit;
         }
 
         if ( ! in_array( $item->status, array( 'pending', 'processing' ), true ) ) {
-            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Този имейл не може да бъде отменен.', 'mail-system-by-katsarov-design' ), 'error' );
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'This email cannot be cancelled.', 'mail-system-by-katsarov-design' ), 'error' );
             wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'queue' ) );
             exit;
         }
@@ -527,7 +527,7 @@ class MSKD_Admin {
             $wpdb->prefix . 'mskd_queue',
             array( 
                 'status'        => 'cancelled',
-                'error_message' => __( 'Отменен от администратор', 'mail-system-by-katsarov-design' ),
+                'error_message' => __( 'Cancelled by administrator', 'mail-system-by-katsarov-design' ),
             ),
             array( 'id' => $id ),
             array( '%s', '%s' ),
@@ -535,9 +535,9 @@ class MSKD_Admin {
         );
 
         if ( $result !== false ) {
-            add_settings_error( 'mskd_messages', 'mskd_success', __( 'Имейлът е отменен успешно.', 'mail-system-by-katsarov-design' ), 'success' );
+            add_settings_error( 'mskd_messages', 'mskd_success', __( 'Email cancelled successfully.', 'mail-system-by-katsarov-design' ), 'success' );
         } else {
-            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Грешка при отмяна на имейла.', 'mail-system-by-katsarov-design' ), 'error' );
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Error cancelling email.', 'mail-system-by-katsarov-design' ), 'error' );
         }
 
         wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'queue' ) );
@@ -555,7 +555,7 @@ class MSKD_Admin {
         $lists   = isset( $_POST['lists'] ) ? array_map( 'intval', $_POST['lists'] ) : array();
 
         if ( empty( $subject ) || empty( $body ) || empty( $lists ) ) {
-            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Моля, попълнете всички полета.', 'mail-system-by-katsarov-design' ), 'error' );
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Please fill in all fields.', 'mail-system-by-katsarov-design' ), 'error' );
             return;
         }
 
@@ -571,7 +571,7 @@ class MSKD_Admin {
         $subscribers = $wpdb->get_col( $query );
 
         if ( empty( $subscribers ) ) {
-            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Няма активни абонати в избраните списъци.', 'mail-system-by-katsarov-design' ), 'error' );
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'No active subscribers in the selected lists.', 'mail-system-by-katsarov-design' ), 'error' );
             return;
         }
 
@@ -603,7 +603,7 @@ class MSKD_Admin {
             add_settings_error( 
                 'mskd_messages', 
                 'mskd_success', 
-                sprintf( __( 'Добавени са %d писма в опашката за изпращане.', 'mail-system-by-katsarov-design' ), $queued ), 
+                sprintf( __( '%d emails have been added to the sending queue.', 'mail-system-by-katsarov-design' ), $queued ), 
                 'success' 
             );
         } else {
@@ -616,7 +616,7 @@ class MSKD_Admin {
                 'mskd_messages', 
                 'mskd_success', 
                 sprintf( 
-                    __( 'Насрочени са %1$d писма за изпращане на %2$s.', 'mail-system-by-katsarov-design' ), 
+                    __( '%1$d emails have been scheduled for %2$s.', 'mail-system-by-katsarov-design' ), 
                     $queued,
                     esc_html( $formatted_date )
                 ), 
@@ -657,7 +657,7 @@ class MSKD_Admin {
         );
 
         update_option( 'mskd_settings', $settings );
-        add_settings_error( 'mskd_messages', 'mskd_success', __( 'Настройките са запазени успешно.', 'mail-system-by-katsarov-design' ), 'success' );
+        add_settings_error( 'mskd_messages', 'mskd_success', __( 'Settings saved successfully.', 'mail-system-by-katsarov-design' ), 'success' );
     }
 
     /**
@@ -790,13 +790,13 @@ class MSKD_Admin {
 
         // Validate required fields
         if ( empty( $recipient_email ) || empty( $subject ) || empty( $body ) ) {
-            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Моля, попълнете всички задължителни полета.', 'mail-system-by-katsarov-design' ), 'error' );
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Please fill in all required fields.', 'mail-system-by-katsarov-design' ), 'error' );
             return;
         }
 
         // Validate email format
         if ( ! is_email( $recipient_email ) ) {
-            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Невалиден имейл адрес на получателя.', 'mail-system-by-katsarov-design' ), 'error' );
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Invalid recipient email address.', 'mail-system-by-katsarov-design' ), 'error' );
             return;
         }
 
@@ -822,7 +822,7 @@ class MSKD_Admin {
 
         // Check if SMTP is enabled
         if ( ! $mailer->is_enabled() ) {
-            $this->last_mail_error = __( 'SMTP не е конфигуриран. Моля, настройте SMTP в настройките на плъгина.', 'mail-system-by-katsarov-design' );
+            $this->last_mail_error = __( 'SMTP is not configured. Please set up SMTP in the plugin settings.', 'mail-system-by-katsarov-design' );
             add_settings_error( 'mskd_messages', 'mskd_error', $this->last_mail_error, 'error' );
             return;
         }
@@ -847,7 +847,7 @@ class MSKD_Admin {
                     'scheduled_at'  => current_time( 'mysql' ),
                     'sent_at'       => $sent ? current_time( 'mysql' ) : null,
                     'attempts'      => 1,
-                    'error_message' => $sent ? null : ( $this->last_mail_error ?: __( 'wp_mail() неуспешен за еднократен имейл', 'mail-system-by-katsarov-design' ) ),
+                    'error_message' => $sent ? null : ( $this->last_mail_error ?: __( 'wp_mail() failed for one-time email', 'mail-system-by-katsarov-design' ) ),
                 ),
                 array( '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s' )
             );
@@ -858,15 +858,15 @@ class MSKD_Admin {
                 add_settings_error(
                     'mskd_messages',
                     'mskd_success',
-                    sprintf( __( 'Еднократният имейл е изпратен успешно до %s.', 'mail-system-by-katsarov-design' ), esc_html( $recipient_email ) ),
+                    sprintf( __( 'One-time email sent successfully to %s.', 'mail-system-by-katsarov-design' ), esc_html( $recipient_email ) ),
                     'success'
                 );
             } else {
-                $error_message = __( 'Грешка при изпращане на еднократния имейл.', 'mail-system-by-katsarov-design' );
+                $error_message = __( 'Error sending one-time email.', 'mail-system-by-katsarov-design' );
                 if ( ! empty( $this->last_mail_error ) ) {
-                    $error_message .= ' ' . sprintf( __( 'Причина: %s', 'mail-system-by-katsarov-design' ), esc_html( $this->last_mail_error ) );
+                    $error_message .= ' ' . sprintf( __( 'Reason: %s', 'mail-system-by-katsarov-design' ), esc_html( $this->last_mail_error ) );
                 } else {
-                    $error_message .= ' ' . __( 'Моля, опитайте отново.', 'mail-system-by-katsarov-design' );
+                    $error_message .= ' ' . __( 'Please try again.', 'mail-system-by-katsarov-design' );
                 }
                 add_settings_error(
                     'mskd_messages',
@@ -905,7 +905,7 @@ class MSKD_Admin {
                     'mskd_messages',
                     'mskd_success',
                     sprintf( 
-                        __( 'Еднократният имейл до %1$s е насрочен за %2$s.', 'mail-system-by-katsarov-design' ), 
+                        __( 'One-time email to %1$s has been scheduled for %2$s.', 'mail-system-by-katsarov-design' ), 
                         esc_html( $recipient_email ),
                         esc_html( $formatted_date )
                     ),
@@ -915,7 +915,7 @@ class MSKD_Admin {
                 add_settings_error(
                     'mskd_messages',
                     'mskd_error',
-                    __( 'Грешка при насрочване на имейла. Моля, опитайте отново.', 'mail-system-by-katsarov-design' ),
+                    __( 'Error scheduling email. Please try again.', 'mail-system-by-katsarov-design' ),
                     'error'
                 );
             }
@@ -971,14 +971,14 @@ class MSKD_Admin {
         // Verify nonce.
         if ( ! check_ajax_referer( 'mskd_admin_nonce', 'nonce', false ) ) {
             wp_send_json_error( array(
-                'message' => __( 'Невалидна заявка. Моля, опреснете страницата.', 'mail-system-by-katsarov-design' ),
+                'message' => __( 'Invalid request. Please refresh the page.', 'mail-system-by-katsarov-design' ),
             ) );
         }
 
         // Check permissions.
         if ( ! current_user_can( 'manage_options' ) ) {
             wp_send_json_error( array(
-                'message' => __( 'Нямате права за тази операция.', 'mail-system-by-katsarov-design' ),
+                'message' => __( 'You do not have permission for this operation.', 'mail-system-by-katsarov-design' ),
             ) );
         }
 

@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name:       Мейл Система от Katsarov Design
+ * Plugin Name:       Mail System by Katsarov Design
  * Plugin URI:        https://katsarov.design/plugins/mail-system
- * Description:       Система за управление на имейл бюлетини с абонати, списъци и опашка за изпращане.
+ * Description:       Email newsletter management system with subscribers, lists, and sending queue.
  * Version:           1.0.0
  * Requires at least: 5.0
  * Requires PHP:      7.4
@@ -26,7 +26,7 @@ define( 'MSKD_VERSION', '1.0.0' );
 define( 'MSKD_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MSKD_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'MSKD_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( 'MSKD_BATCH_SIZE', 10 ); // Брой имейли за изпращане на минута
+define( 'MSKD_BATCH_SIZE', 10 ); // Number of emails to send per minute
 
 /**
  * Autoloader for MSKD_ classes
@@ -113,7 +113,7 @@ add_action( 'plugins_loaded', 'mskd_init' );
 function mskd_cron_schedules( $schedules ) {
     $schedules['mskd_every_minute'] = array(
         'interval' => 60,
-        'display'  => __( 'Всяка минута', 'mail-system-by-katsarov-design' ),
+        'display'  => __( 'Every minute', 'mail-system-by-katsarov-design' ),
     );
     return $schedules;
 }

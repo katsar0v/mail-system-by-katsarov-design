@@ -34,10 +34,10 @@ if ( $action === 'edit' && $subscriber_id ) {
 
 <div class="wrap mskd-wrap">
     <h1>
-        <?php _e( 'Абонати', 'mail-system-by-katsarov-design' ); ?>
+        <?php _e( 'Subscribers', 'mail-system-by-katsarov-design' ); ?>
         <?php if ( $action === 'list' ) : ?>
             <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-subscribers&action=add' ) ); ?>" class="page-title-action">
-                <?php _e( 'Добави нов', 'mail-system-by-katsarov-design' ); ?>
+                <?php _e( 'Add new', 'mail-system-by-katsarov-design' ); ?>
             </a>
         <?php endif; ?>
     </h1>
@@ -47,7 +47,7 @@ if ( $action === 'edit' && $subscriber_id ) {
     <?php if ( $action === 'add' || $action === 'edit' ) : ?>
         <!-- Add/Edit Form -->
         <div class="mskd-form-wrap">
-            <h2><?php echo $action === 'add' ? __( 'Добави абонат', 'mail-system-by-katsarov-design' ) : __( 'Редактирай абонат', 'mail-system-by-katsarov-design' ); ?></h2>
+            <h2><?php echo $action === 'add' ? __( 'Add subscriber', 'mail-system-by-katsarov-design' ) : __( 'Edit subscriber', 'mail-system-by-katsarov-design' ); ?></h2>
             
             <form method="post" action="">
                 <?php wp_nonce_field( $action === 'add' ? 'mskd_add_subscriber' : 'mskd_edit_subscriber', 'mskd_nonce' ); ?>
@@ -59,7 +59,7 @@ if ( $action === 'edit' && $subscriber_id ) {
                 <table class="form-table">
                     <tr>
                         <th scope="row">
-                            <label for="email"><?php _e( 'Имейл', 'mail-system-by-katsarov-design' ); ?> *</label>
+                            <label for="email"><?php _e( 'Email', 'mail-system-by-katsarov-design' ); ?> *</label>
                         </th>
                         <td>
                             <input type="email" name="email" id="email" class="regular-text" required
@@ -68,7 +68,7 @@ if ( $action === 'edit' && $subscriber_id ) {
                     </tr>
                     <tr>
                         <th scope="row">
-                            <label for="first_name"><?php _e( 'Име', 'mail-system-by-katsarov-design' ); ?></label>
+                            <label for="first_name"><?php _e( 'First name', 'mail-system-by-katsarov-design' ); ?></label>
                         </th>
                         <td>
                             <input type="text" name="first_name" id="first_name" class="regular-text"
@@ -77,7 +77,7 @@ if ( $action === 'edit' && $subscriber_id ) {
                     </tr>
                     <tr>
                         <th scope="row">
-                            <label for="last_name"><?php _e( 'Фамилия', 'mail-system-by-katsarov-design' ); ?></label>
+                            <label for="last_name"><?php _e( 'Last name', 'mail-system-by-katsarov-design' ); ?></label>
                         </th>
                         <td>
                             <input type="text" name="last_name" id="last_name" class="regular-text"
@@ -86,25 +86,25 @@ if ( $action === 'edit' && $subscriber_id ) {
                     </tr>
                     <tr>
                         <th scope="row">
-                            <label for="status"><?php _e( 'Статус', 'mail-system-by-katsarov-design' ); ?></label>
+                            <label for="status"><?php _e( 'Status', 'mail-system-by-katsarov-design' ); ?></label>
                         </th>
                         <td>
                             <select name="status" id="status">
                                 <option value="active" <?php selected( $subscriber ? $subscriber->status : 'active', 'active' ); ?>>
-                                    <?php _e( 'Активен', 'mail-system-by-katsarov-design' ); ?>
+                                    <?php _e( 'Active', 'mail-system-by-katsarov-design' ); ?>
                                 </option>
                                 <option value="inactive" <?php selected( $subscriber ? $subscriber->status : '', 'inactive' ); ?>>
-                                    <?php _e( 'Неактивен', 'mail-system-by-katsarov-design' ); ?>
+                                    <?php _e( 'Inactive', 'mail-system-by-katsarov-design' ); ?>
                                 </option>
                                 <option value="unsubscribed" <?php selected( $subscriber ? $subscriber->status : '', 'unsubscribed' ); ?>>
-                                    <?php _e( 'Отписан', 'mail-system-by-katsarov-design' ); ?>
+                                    <?php _e( 'Unsubscribed', 'mail-system-by-katsarov-design' ); ?>
                                 </option>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row">
-                            <label><?php _e( 'Списъци', 'mail-system-by-katsarov-design' ); ?></label>
+                            <label><?php _e( 'Lists', 'mail-system-by-katsarov-design' ); ?></label>
                         </th>
                         <td>
                             <?php if ( ! empty( $lists ) ) : ?>
@@ -116,7 +116,7 @@ if ( $action === 'edit' && $subscriber_id ) {
                                     </label>
                                 <?php endforeach; ?>
                             <?php else : ?>
-                                <p class="description"><?php _e( 'Няма създадени списъци.', 'mail-system-by-katsarov-design' ); ?></p>
+                                <p class="description"><?php _e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?></p>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -125,9 +125,9 @@ if ( $action === 'edit' && $subscriber_id ) {
                 <p class="submit">
                     <input type="submit" name="<?php echo $action === 'add' ? 'mskd_add_subscriber' : 'mskd_edit_subscriber'; ?>" 
                            class="button button-primary" 
-                           value="<?php echo $action === 'add' ? __( 'Добави абонат', 'mail-system-by-katsarov-design' ) : __( 'Запази промените', 'mail-system-by-katsarov-design' ); ?>">
+                           value="<?php echo $action === 'add' ? __( 'Add subscriber', 'mail-system-by-katsarov-design' ) : __( 'Save changes', 'mail-system-by-katsarov-design' ); ?>">
                     <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-subscribers' ) ); ?>" class="button">
-                        <?php _e( 'Отказ', 'mail-system-by-katsarov-design' ); ?>
+                        <?php _e( 'Cancel', 'mail-system-by-katsarov-design' ); ?>
                     </a>
                 </p>
             </form>
@@ -165,25 +165,25 @@ if ( $action === 'edit' && $subscriber_id ) {
             <li>
                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-subscribers' ) ); ?>" 
                    class="<?php echo empty( $status_filter ) ? 'current' : ''; ?>">
-                    <?php _e( 'Всички', 'mail-system-by-katsarov-design' ); ?>
+                    <?php _e( 'All', 'mail-system-by-katsarov-design' ); ?>
                 </a> |
             </li>
             <li>
                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-subscribers&status=active' ) ); ?>"
                    class="<?php echo $status_filter === 'active' ? 'current' : ''; ?>">
-                    <?php _e( 'Активни', 'mail-system-by-katsarov-design' ); ?>
+                    <?php _e( 'Active', 'mail-system-by-katsarov-design' ); ?>
                 </a> |
             </li>
             <li>
                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-subscribers&status=inactive' ) ); ?>"
                    class="<?php echo $status_filter === 'inactive' ? 'current' : ''; ?>">
-                    <?php _e( 'Неактивни', 'mail-system-by-katsarov-design' ); ?>
+                    <?php _e( 'Inactive', 'mail-system-by-katsarov-design' ); ?>
                 </a> |
             </li>
             <li>
                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-subscribers&status=unsubscribed' ) ); ?>"
                    class="<?php echo $status_filter === 'unsubscribed' ? 'current' : ''; ?>">
-                    <?php _e( 'Отписани', 'mail-system-by-katsarov-design' ); ?>
+                    <?php _e( 'Unsubscribed', 'mail-system-by-katsarov-design' ); ?>
                 </a>
             </li>
         </ul>
@@ -191,12 +191,12 @@ if ( $action === 'edit' && $subscriber_id ) {
         <table class="wp-list-table widefat fixed striped">
             <thead>
                 <tr>
-                    <th scope="col"><?php _e( 'Имейл', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Име', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Статус', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Списъци', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Дата', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Действия', 'mail-system-by-katsarov-design' ); ?></th>
+                    <th scope="col"><?php _e( 'Email', 'mail-system-by-katsarov-design' ); ?></th>
+                    <th scope="col"><?php _e( 'Name', 'mail-system-by-katsarov-design' ); ?></th>
+                    <th scope="col"><?php _e( 'Status', 'mail-system-by-katsarov-design' ); ?></th>
+                    <th scope="col"><?php _e( 'Lists', 'mail-system-by-katsarov-design' ); ?></th>
+                    <th scope="col"><?php _e( 'Date', 'mail-system-by-katsarov-design' ); ?></th>
+                    <th scope="col"><?php _e( 'Actions', 'mail-system-by-katsarov-design' ); ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -221,9 +221,9 @@ if ( $action === 'edit' && $subscriber_id ) {
                                 <span class="mskd-status mskd-status-<?php echo esc_attr( $sub->status ); ?>">
                                     <?php
                                     $statuses = array(
-                                        'active'       => __( 'Активен', 'mail-system-by-katsarov-design' ),
-                                        'inactive'     => __( 'Неактивен', 'mail-system-by-katsarov-design' ),
-                                        'unsubscribed' => __( 'Отписан', 'mail-system-by-katsarov-design' ),
+                                        'active'       => __( 'Active', 'mail-system-by-katsarov-design' ),
+                                        'inactive'     => __( 'Inactive', 'mail-system-by-katsarov-design' ),
+                                        'unsubscribed' => __( 'Unsubscribed', 'mail-system-by-katsarov-design' ),
                                     );
                                     echo esc_html( $statuses[ $sub->status ] ?? $sub->status );
                                     ?>
@@ -237,18 +237,18 @@ if ( $action === 'edit' && $subscriber_id ) {
                             </td>
                             <td>
                                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-subscribers&action=edit&id=' . $sub->id ) ); ?>">
-                                    <?php _e( 'Редактирай', 'mail-system-by-katsarov-design' ); ?>
+                                    <?php _e( 'Edit', 'mail-system-by-katsarov-design' ); ?>
                                 </a> |
                                 <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=mskd-subscribers&action=delete_subscriber&id=' . $sub->id ), 'delete_subscriber_' . $sub->id ) ); ?>" 
                                    class="mskd-delete-link" style="color: #a00;">
-                                    <?php _e( 'Изтрий', 'mail-system-by-katsarov-design' ); ?>
+                                    <?php _e( 'Delete', 'mail-system-by-katsarov-design' ); ?>
                                 </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else : ?>
                     <tr>
-                        <td colspan="6"><?php _e( 'Няма намерени абонати.', 'mail-system-by-katsarov-design' ); ?></td>
+                        <td colspan="6"><?php _e( 'No subscribers found.', 'mail-system-by-katsarov-design' ); ?></td>
                     </tr>
                 <?php endif; ?>
             </tbody>
