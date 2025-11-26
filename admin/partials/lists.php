@@ -11,15 +11,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wpdb;
 
-$action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : 'list';
-$list_id = isset( $_GET['id'] ) ? intval( $_GET['id'] ) : 0;
+// Load the List Provider service.
+require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
 
-// Get list for editing
+$action  = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : 'list';
+$list_id = isset( $_GET['id'] ) ? sanitize_text_field( $_GET['id'] ) : '';
+
+// Get list for editing (only database lists are editable).
 $list = null;
 if ( $action === 'edit' && $list_id ) {
+    // Check if this is an external list (not editable).
+    if ( strpos( $list_id, 'ext_' ) === 0 ) {
+        wp_redirect( admin_url( 'admin.php?page=mskd-lists' ) );
+        exit;
+    }
     $list = $wpdb->get_row( $wpdb->prepare( 
         "SELECT * FROM {$wpdb->prefix}mskd_lists WHERE id = %d", 
-        $list_id 
+        intval( $list_id )
     ) );
 }
 ?>
@@ -82,7 +90,8 @@ if ( $action === 'edit' && $list_id ) {
     <?php else : ?>
         <!-- Lists Table -->
         <?php
-        $lists = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}mskd_lists ORDER BY created_at DESC" );
+        // Get all lists (database + external).
+        $all_lists = MSKD_List_Provider::get_all_lists();
         ?>
 
         <table class="wp-list-table widefat fixed striped">
@@ -90,47 +99,68 @@ if ( $action === 'edit' && $list_id ) {
                 <tr>
                     <th scope="col"><?php _e( 'Name', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Description', 'mail-system-by-katsarov-design' ); ?></th>
+                    <th scope="col"><?php _e( 'Source', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Subscribers', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Date', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Actions', 'mail-system-by-katsarov-design' ); ?></th>
                 </tr>
             </thead>
             <tbody>
-                <?php if ( ! empty( $lists ) ) : ?>
-                    <?php foreach ( $lists as $item ) : ?>
+                <?php if ( ! empty( $all_lists ) ) : ?>
+                    <?php foreach ( $all_lists as $item ) : ?>
                         <?php
-                        $subscriber_count = $wpdb->get_var( $wpdb->prepare(
-                            "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_subscriber_list WHERE list_id = %d",
-                            $item->id
-                        ) );
+                        $subscriber_count = MSKD_List_Provider::get_list_subscriber_count( $item );
+                        $is_external      = $item->source === 'external';
                         ?>
-                        <tr>
+                        <tr<?php echo $is_external ? ' class="mskd-external-list"' : ''; ?>>
                             <td>
                                 <strong><?php echo esc_html( $item->name ); ?></strong>
+                                <?php if ( $is_external ) : ?>
+                                    <span class="mskd-badge mskd-badge-external" title="<?php esc_attr_e( 'Automated list from external plugin', 'mail-system-by-katsarov-design' ); ?>">
+                                        <?php _e( 'Automated', 'mail-system-by-katsarov-design' ); ?>
+                                    </span>
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <?php echo esc_html( wp_trim_words( $item->description, 10, '...' ) ); ?>
                             </td>
                             <td>
+                                <?php if ( $is_external ) : ?>
+                                    <?php echo esc_html( $item->provider ); ?>
+                                <?php else : ?>
+                                    <?php _e( 'Local', 'mail-system-by-katsarov-design' ); ?>
+                                <?php endif; ?>
+                            </td>
+                            <td>
                                 <?php echo esc_html( $subscriber_count ); ?>
                             </td>
                             <td>
-                                <?php echo esc_html( date_i18n( 'd.m.Y', strtotime( $item->created_at ) ) ); ?>
+                                <?php if ( $item->created_at ) : ?>
+                                    <?php echo esc_html( date_i18n( 'd.m.Y', strtotime( $item->created_at ) ) ); ?>
+                                <?php else : ?>
+                                    <span class="mskd-readonly-text">—</span>
+                                <?php endif; ?>
                             </td>
                             <td>
-                                <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-lists&action=edit&id=' . $item->id ) ); ?>">
-                                    <?php _e( 'Edit', 'mail-system-by-katsarov-design' ); ?>
-                                </a> |
-                                <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=mskd-lists&action=delete_list&id=' . $item->id ), 'delete_list_' . $item->id ) ); ?>" 
-                                   class="mskd-delete-link" style="color: #a00;">
-                                    <?php _e( 'Delete', 'mail-system-by-katsarov-design' ); ?>
-                                </a>
+                                <?php if ( $item->is_editable ) : ?>
+                                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-lists&action=edit&id=' . $item->id ) ); ?>">
+                                        <?php _e( 'Edit', 'mail-system-by-katsarov-design' ); ?>
+                                    </a> |
+                                    <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=mskd-lists&action=delete_list&id=' . $item->id ), 'delete_list_' . $item->id ) ); ?>" 
+                                       class="mskd-delete-link" style="color: #a00;">
+                                        <?php _e( 'Delete', 'mail-system-by-katsarov-design' ); ?>
+                                    </a>
+                                <?php else : ?>
+                                    <span class="mskd-readonly-text" title="<?php esc_attr_e( 'Automated lists cannot be edited', 'mail-system-by-katsarov-design' ); ?>">
+                                        <?php _e( 'Read-only', 'mail-system-by-katsarov-design' ); ?>
+                                    </span>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else : ?>
                     <tr>
-                        <td colspan="5"><?php _e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?></td>
+                        <td colspan="6"><?php _e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?></td>
                     </tr>
                 <?php endif; ?>
             </tbody>

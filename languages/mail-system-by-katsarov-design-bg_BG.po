@@ -847,3 +847,31 @@ msgstr "Вече няма да получавате имейли от нас."
 #: public/partials/unsubscribe.php
 msgid "Back to site"
 msgstr "Обратно към сайта"
+
+#: includes/services/class-list-provider.php
+msgid "External"
+msgstr "Външен"
+
+#: admin/partials/lists.php
+msgid "Source"
+msgstr "Източник"
+
+#: admin/partials/lists.php
+msgid "Automated list from external plugin"
+msgstr "Автоматичен списък от външен плъгин"
+
+#: admin/partials/lists.php admin/partials/compose.php
+msgid "Automated"
+msgstr "Автоматичен"
+
+#: admin/partials/lists.php
+msgid "Local"
+msgstr "Локален"
+
+#: admin/partials/lists.php
+msgid "Automated lists cannot be edited"
+msgstr "Автоматичните списъци не могат да бъдат редактирани"
+
+#: admin/partials/lists.php
+msgid "Read-only"
+msgstr "Само за четене"
