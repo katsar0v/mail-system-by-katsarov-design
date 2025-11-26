@@ -144,7 +144,7 @@ class MSKD_List_Provider {
 		$list->id                  = 'ext_' . sanitize_key( $list_data['id'] );
 		$list->name                = sanitize_text_field( $list_data['name'] );
 		$list->description         = isset( $list_data['description'] ) ? sanitize_textarea_field( $list_data['description'] ) : '';
-		$list->created_at          = current_time( 'mysql' );
+		$list->created_at          = null; // External lists don't have a creation date.
 		$list->source              = 'external';
 		$list->is_editable         = false;
 		$list->provider            = isset( $list_data['provider'] ) ? sanitize_text_field( $list_data['provider'] ) : __( 'External', 'mail-system-by-katsarov-design' );
@@ -310,7 +310,8 @@ class MSKD_List_Provider {
 			);
 		}
 
-		if ( is_email( $first ) ) {
+		// Check if it's a string containing @ to determine if it's likely an email.
+		if ( is_string( $first ) && strpos( $first, '@' ) !== false ) {
 			// Email addresses - count those that exist and are active.
 			global $wpdb;
 			$placeholders = implode( ',', array_fill( 0, count( $subscribers ), '%s' ) );
@@ -379,7 +380,7 @@ class MSKD_List_Provider {
 
 		$first = reset( $subscribers );
 
-		// If already IDs, filter to active subscribers.
+		// If already IDs (numeric values), filter to active subscribers.
 		if ( is_numeric( $first ) ) {
 			global $wpdb;
 			$placeholders = implode( ',', array_fill( 0, count( $subscribers ), '%d' ) );
@@ -392,8 +393,9 @@ class MSKD_List_Provider {
 			);
 		}
 
-		// If emails, convert to IDs.
-		if ( is_email( $first ) ) {
+		// If strings that look like emails, convert to IDs.
+		// Check if it's a string containing @ to determine if it's likely an email.
+		if ( is_string( $first ) && strpos( $first, '@' ) !== false ) {
 			global $wpdb;
 			$placeholders = implode( ',', array_fill( 0, count( $subscribers ), '%s' ) );
 			return $wpdb->get_col(

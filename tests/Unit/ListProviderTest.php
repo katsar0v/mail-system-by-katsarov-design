@@ -24,7 +24,7 @@ class ListProviderTest extends TestCase {
 		parent::setUp();
 
 		// Load the List Provider class using the global constant.
-		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
+		require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
 	}
 
 	/**

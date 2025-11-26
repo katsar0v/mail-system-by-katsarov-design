@@ -135,7 +135,11 @@ if ( $action === 'edit' && $list_id ) {
                                 <?php echo esc_html( $subscriber_count ); ?>
                             </td>
                             <td>
-                                <?php echo esc_html( date_i18n( 'd.m.Y', strtotime( $item->created_at ) ) ); ?>
+                                <?php if ( $item->created_at ) : ?>
+                                    <?php echo esc_html( date_i18n( 'd.m.Y', strtotime( $item->created_at ) ) ); ?>
+                                <?php else : ?>
+                                    <span class="mskd-readonly-text">—</span>
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <?php if ( $item->is_editable ) : ?>
