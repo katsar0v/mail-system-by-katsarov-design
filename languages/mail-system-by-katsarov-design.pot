@@ -844,3 +844,31 @@ msgstr ""
 #: public/partials/unsubscribe.php
 msgid "Back to site"
 msgstr ""
+
+#: includes/services/class-list-provider.php
+msgid "External"
+msgstr ""
+
+#: admin/partials/lists.php
+msgid "Source"
+msgstr ""
+
+#: admin/partials/lists.php
+msgid "Automated list from external plugin"
+msgstr ""
+
+#: admin/partials/lists.php admin/partials/compose.php
+msgid "Automated"
+msgstr ""
+
+#: admin/partials/lists.php
+msgid "Local"
+msgstr ""
+
+#: admin/partials/lists.php
+msgid "Automated lists cannot be edited"
+msgstr ""
+
+#: admin/partials/lists.php
+msgid "Read only"
+msgstr ""
