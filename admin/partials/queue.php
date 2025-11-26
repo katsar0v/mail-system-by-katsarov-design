@@ -23,7 +23,7 @@ $where = '';
 if ( $status_filter ) {
     $where = $wpdb->prepare( " WHERE q.status = %s", $status_filter );
 } elseif ( $type_filter === 'one-time' ) {
-    $where = " WHERE q.subscriber_id = 0";
+    $where = $wpdb->prepare( " WHERE q.subscriber_id = %d", 0 );
 }
 
 // Get counts
