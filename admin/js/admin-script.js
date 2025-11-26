@@ -78,7 +78,7 @@
                     $result.addClass('mskd-smtp-error').text(mskd_admin.strings.error);
                 },
                 complete: function() {
-                    $button.prop('disabled', false).text($button.data('original-text') || 'Изпрати тестов имейл');
+                    $button.prop('disabled', false).text($button.data('original-text'));
                 }
             });
         });
