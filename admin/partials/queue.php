@@ -16,18 +16,34 @@ $per_page = 50;
 $current_page = isset( $_GET['paged'] ) ? max( 1, intval( $_GET['paged'] ) ) : 1;
 $offset = ( $current_page - 1 ) * $per_page;
 
-// Filter by status
+// Filter by status or type
 $status_filter = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '';
+$type_filter = isset( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : '';
 $where = '';
 if ( $status_filter ) {
     $where = $wpdb->prepare( " WHERE q.status = %s", $status_filter );
+} elseif ( $type_filter === 'one-time' ) {
+    $where = $wpdb->prepare( " WHERE q.subscriber_id = %d", MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID );
 }
 
-// Get counts
-$pending_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'pending'" );
-$processing_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'processing'" );
-$sent_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'sent'" );
-$failed_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'failed'" );
+// Get counts in a single query for better performance
+$queue_counts = $wpdb->get_row(
+    $wpdb->prepare(
+        "SELECT 
+            SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
+            SUM(CASE WHEN status = 'processing' THEN 1 ELSE 0 END) as processing,
+            SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
+            SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
+            SUM(CASE WHEN subscriber_id = %d THEN 1 ELSE 0 END) as one_time
+        FROM {$wpdb->prefix}mskd_queue",
+        MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID
+    )
+);
+$pending_count    = $queue_counts->pending ?? 0;
+$processing_count = $queue_counts->processing ?? 0;
+$sent_count       = $queue_counts->sent ?? 0;
+$failed_count     = $queue_counts->failed ?? 0;
+$one_time_count   = $queue_counts->one_time ?? 0;
 
 // Get total count for current filter
 $total_items = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue q" . $where );
@@ -72,7 +88,7 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
     <ul class="subsubsub">
         <li>
             <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue' ) ); ?>" 
-               class="<?php echo empty( $status_filter ) ? 'current' : ''; ?>">
+               class="<?php echo empty( $status_filter ) && empty( $type_filter ) ? 'current' : ''; ?>">
                 <?php _e( 'Всички', 'mail-system-by-katsarov-design' ); ?>
                 <span class="count">(<?php echo esc_html( $pending_count + $processing_count + $sent_count + $failed_count ); ?>)</span>
             </a> |
@@ -103,6 +119,13 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                class="<?php echo $status_filter === 'failed' ? 'current' : ''; ?>">
                 <?php _e( 'Неуспешни', 'mail-system-by-katsarov-design' ); ?>
                 <span class="count">(<?php echo esc_html( $failed_count ); ?>)</span>
+            </a> |
+        </li>
+        <li>
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&type=one-time' ) ); ?>"
+               class="<?php echo $type_filter === 'one-time' ? 'current' : ''; ?>">
+                <?php _e( 'Еднократни', 'mail-system-by-katsarov-design' ); ?>
+                <span class="count">(<?php echo esc_html( $one_time_count ); ?>)</span>
             </a>
         </li>
     </ul>
@@ -125,7 +148,9 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                     <tr>
                         <td><?php echo esc_html( $item->id ); ?></td>
                         <td>
-                            <?php if ( $item->email ) : ?>
+                            <?php if ( $item->subscriber_id == MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID ) : ?>
+                                <em class="mskd-one-time-email"><?php _e( 'Еднократен имейл', 'mail-system-by-katsarov-design' ); ?></em>
+                            <?php elseif ( $item->email ) : ?>
                                 <?php echo esc_html( $item->email ); ?>
                                 <?php if ( $item->first_name || $item->last_name ) : ?>
                                     <br><small><?php echo esc_html( trim( $item->first_name . ' ' . $item->last_name ) ); ?></small>
