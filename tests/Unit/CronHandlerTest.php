@@ -76,14 +76,16 @@ class CronHandlerTest extends TestCase {
             ->twice() // Once for processing, once for sent
             ->andReturn( 1 );
 
-        // Mock settings.
+        // Mock settings with SMTP enabled.
         Functions\expect( 'get_option' )
             ->with( 'mskd_settings', Mockery::type( 'array' ) )
             ->andReturn(
                 array(
-                    'from_name'  => 'Test Site',
-                    'from_email' => 'noreply@example.com',
-                    'reply_to'   => 'reply@example.com',
+                    'smtp_enabled' => true,
+                    'smtp_host'    => 'smtp.example.com',
+                    'from_name'    => 'Test Site',
+                    'from_email'   => 'noreply@example.com',
+                    'reply_to'     => 'reply@example.com',
                 )
             );
 
@@ -178,6 +180,14 @@ class CronHandlerTest extends TestCase {
             ),
         );
 
+        // First get_results is for recover_stuck_emails (returns empty).
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, "status = 'processing'" ) !== false;
+            } ) )
+            ->andReturn( array() );
+
         $wpdb->shouldReceive( 'get_results' )
             ->once()
             ->andReturn( $queue_items );
@@ -215,10 +225,12 @@ class CronHandlerTest extends TestCase {
             ->andReturn( 1 );
 
         Functions\expect( 'get_option' )
-            ->andReturn( array() );
-
-        Functions\expect( 'wp_mail' )
-            ->once()
+            ->andReturn(
+                array(
+                    'smtp_enabled' => true,
+                    'smtp_host'    => 'smtp.example.com',
+                )
+            );
             ->andReturn( true );
 
         $this->cron_handler->process_queue();
@@ -240,10 +252,18 @@ class CronHandlerTest extends TestCase {
                 'subject'           => 'Subject',
                 'body'              => 'Body',
                 'status'            => 'pending',
-                'attempts'          => 0,
+                'attempts'          => 2, // Already tried twice, this will be the 3rd (final) attempt
                 'unsubscribe_token' => 'abc123def456abc123def456abc12345',
             ),
         );
+
+        // First get_results is for recover_stuck_emails (returns empty).
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, "status = 'processing'" ) !== false;
+            } ) )
+            ->andReturn( array() );
 
         $wpdb->shouldReceive( 'get_results' )
             ->once()
@@ -282,7 +302,12 @@ class CronHandlerTest extends TestCase {
             ->andReturn( 1 );
 
         Functions\expect( 'get_option' )
-            ->andReturn( array() );
+            ->andReturn(
+                array(
+                    'smtp_enabled' => true,
+                    'smtp_host'    => 'smtp.example.com',
+                )
+            );
 
         // wp_mail fails.
         Functions\expect( 'wp_mail' )
@@ -312,6 +337,14 @@ class CronHandlerTest extends TestCase {
                 'unsubscribe_token' => 'testtoken123456789012345678901234',
             ),
         );
+
+        // First get_results is for recover_stuck_emails (returns empty).
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, "status = 'processing'" ) !== false;
+            } ) )
+            ->andReturn( array() );
 
         $wpdb->shouldReceive( 'get_results' )
             ->once()
@@ -375,6 +408,14 @@ class CronHandlerTest extends TestCase {
             ),
         );
 
+        // First get_results is for recover_stuck_emails (returns empty).
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, "status = 'processing'" ) !== false;
+            } ) )
+            ->andReturn( array() );
+
         $wpdb->shouldReceive( 'get_results' )
             ->once()
             ->andReturn( $queue_items );
@@ -410,6 +451,14 @@ class CronHandlerTest extends TestCase {
      */
     public function test_empty_queue_does_nothing(): void {
         $wpdb = $this->setup_wpdb_mock();
+
+        // First get_results is for recover_stuck_emails (returns empty).
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, "status = 'processing'" ) !== false;
+            } ) )
+            ->andReturn( array() );
 
         $wpdb->shouldReceive( 'get_results' )
             ->once()
