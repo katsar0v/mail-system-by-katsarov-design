@@ -303,9 +303,11 @@ class OneTimeEmailTest extends TestCase {
         Functions\expect( 'get_option' )
             ->andReturn(
                 array(
-                    'from_name'  => 'Test',
-                    'from_email' => 'test@example.com',
-                    'reply_to'   => 'reply@example.com',
+                    'smtp_enabled' => true,
+                    'smtp_host'    => 'smtp.example.com',
+                    'from_name'    => 'Test',
+                    'from_email'   => 'test@example.com',
+                    'reply_to'     => 'reply@example.com',
                 )
             );
 
