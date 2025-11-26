@@ -1,72 +1,89 @@
 # Changelog
 
-Всички значими промени в този проект ще бъдат документирани в този файл.
+All notable changes to this project will be documented in this file.
 
-Форматът е базиран на [Keep a Changelog](https://keepachangelog.com/bg/1.0.0/),
-и този проект спазва [Semantic Versioning](https://semver.org/lang/bg/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Планирани
-- CSV импорт на абонати
-- Статистика за отваряния и кликвания
-- Шаблони за имейли
-- A/B тестване
-- Интеграция с популярни SMTP плъгини
+### Planned
+- CSV subscriber import
+- Open and click statistics
+- Email templates
+- A/B testing
+- Integration with popular SMTP plugins
+
+---
+
+## [1.1.0] - 2024-XX-XX
+
+### Added
+- **Multi-language Support**
+  - English as the default/primary language
+  - Bulgarian (bg_BG) translation
+  - German (de_DE) translation
+  - Automatic language detection based on WordPress locale
+  - Documentation for adding new translations
+
+### Changed
+- Source strings changed from Bulgarian to English
+- Updated POT file with all English source strings
+- Updated README with internationalization documentation
 
 ---
 
 ## [1.0.0] - 2024-XX-XX
 
-### Добавено
-- Първоначална версия на плъгина
-- **Абонати**
-  - Добавяне, редактиране и изтриване на абонати
-  - Статуси: активен, неактивен, отписан
-  - Филтриране по статус
-  - Пагинация
-- **Списъци**
-  - Създаване на мейлинг списъци
-  - Добавяне на абонати към множество списъци
-  - Статистика за брой абонати в списък
-- **Опашка за изпращане**
-  - Автоматично добавяне на имейли в опашка
-  - WP-Cron интеграция за изпращане
-  - Скорост: 10 имейла/минута (MSKD_BATCH_SIZE)
-  - Статуси: чакащ, в процес, изпратен, неуспешен
-  - Проследяване на опити за изпращане
-- **Създаване на писма**
-  - WYSIWYG редактор за съдържание
-  - Избор на списъци за изпращане
-  - Плейсхолдери: {first_name}, {last_name}, {email}, {unsubscribe_link}
-- **Настройки**
-  - Име и имейл на подател
-  - Имейл за отговор (Reply-To)
-- **Публична част**
-  - Шорткод за форма за абониране: [mskd_subscribe_form]
-  - AJAX абониране без презареждане
-  - Страница за отписване с уникален токен
-- **Интернационализация**
-  - Пълен български интерфейс
-  - Готовност за превод на други езици (.pot файл)
-- **Администрация**
-  - Табло с обща статистика
-  - Предупреждение за WP-Cron (показва се само в плъгина)
-  - Препоръка за системен cron
+### Added
+- Initial plugin version
+- **Subscribers**
+  - Add, edit, and delete subscribers
+  - Statuses: active, inactive, unsubscribed
+  - Filter by status
+  - Pagination
+- **Lists**
+  - Create mailing lists
+  - Add subscribers to multiple lists
+  - Subscriber count statistics per list
+- **Sending Queue**
+  - Automatic email queuing
+  - WP-Cron integration for sending
+  - Speed: 10 emails/minute (MSKD_BATCH_SIZE)
+  - Statuses: pending, processing, sent, failed
+  - Send attempt tracking
+- **Email Composition**
+  - WYSIWYG editor for content
+  - List selection for sending
+  - Placeholders: {first_name}, {last_name}, {email}, {unsubscribe_link}
+- **Settings**
+  - Sender name and email
+  - Reply-to email
+  - SMTP configuration
+- **Public Features**
+  - Subscription form shortcode: [mskd_subscribe_form]
+  - AJAX subscription without page reload
+  - Unsubscribe page with unique token
+- **Internationalization**
+  - Ready for translation (.pot file)
+- **Administration**
+  - Dashboard with general statistics
+  - WP-Cron warning (shown only within the plugin)
+  - System cron recommendation
 
-### Технически детайли
-- Изисква PHP 7.4+
-- Изисква WordPress 5.0+
-- Използва wp_mail() за изпращане
-- 4 нови таблици в базата данни (mskd_subscribers, mskd_lists, mskd_subscriber_list, mskd_queue)
-- Автоматично създаване на таблици при активиране
-- Автоматично насрочване на cron задача при активиране
-- Автоматично премахване на cron задача при деактивиране
+### Technical Details
+- Requires PHP 7.4+
+- Requires WordPress 5.0+
+- Uses SMTP for sending (configurable)
+- 4 new database tables (mskd_subscribers, mskd_lists, mskd_subscriber_list, mskd_queue)
+- Automatic table creation on activation
+- Automatic cron job scheduling on activation
+- Automatic cron job removal on deactivation
 
 ---
 
-## Версии
+## Versioning
 
-- **Major** (X.0.0) - Несъвместими промени в API
-- **Minor** (0.X.0) - Нови функции, съвместими назад
-- **Patch** (0.0.X) - Поправки на бъгове, съвместими назад
+- **Major** (X.0.0) - Incompatible API changes
+- **Minor** (0.X.0) - New features, backward compatible
+- **Patch** (0.0.X) - Bug fixes, backward compatible
