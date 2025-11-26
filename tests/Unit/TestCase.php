@@ -158,6 +158,12 @@ abstract class TestCase extends PHPUnitTestCase {
                 'wp_timezone_string'   => function () {
                     return 'UTC';
                 },
+                'wp_strip_all_tags'    => function ( $string ) {
+                    return strip_tags( $string );
+                },
+                'language_attributes'  => function () {
+                    echo 'lang="en-US"';
+                },
             )
         );
 
