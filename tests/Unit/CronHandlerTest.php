@@ -58,6 +58,15 @@ class CronHandlerTest extends TestCase {
             ),
         );
 
+        // First get_results is for recover_stuck_emails (returns empty).
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, "status = 'processing'" ) !== false;
+            } ) )
+            ->andReturn( array() );
+
+        // Second get_results is for pending queue items.
         $wpdb->shouldReceive( 'get_results' )
             ->once()
             ->andReturn( $queue_items );
@@ -98,6 +107,14 @@ class CronHandlerTest extends TestCase {
     public function test_process_queue_respects_batch_size(): void {
         $wpdb = $this->setup_wpdb_mock();
 
+        // First get_results is for recover_stuck_emails (returns empty).
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, "status = 'processing'" ) !== false;
+            } ) )
+            ->andReturn( array() );
+
         // Verify the SQL query includes the batch size limit.
         $wpdb->shouldReceive( 'get_results' )
             ->once()
@@ -117,6 +134,14 @@ class CronHandlerTest extends TestCase {
      */
     public function test_process_queue_skips_inactive_subscribers(): void {
         $wpdb = $this->setup_wpdb_mock();
+
+        // First get_results is for recover_stuck_emails (returns empty).
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, "status = 'processing'" ) !== false;
+            } ) )
+            ->andReturn( array() );
 
         // Verify the SQL query filters by active status.
         $wpdb->shouldReceive( 'get_results' )

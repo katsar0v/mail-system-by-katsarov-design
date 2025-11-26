@@ -151,6 +151,23 @@ abstract class TestCase extends PHPUnitTestCase {
                 },
             )
         );
+
+        // Plugin-specific helper functions (with 00 seconds normalization).
+        Functions\stubs(
+            array(
+                'mskd_normalize_timestamp'      => function ( $timestamp = null ) {
+                    if ( null === $timestamp ) {
+                        $timestamp = time();
+                    }
+                    return (int) ( floor( $timestamp / 60 ) * 60 );
+                },
+                'mskd_current_time_normalized' => function () {
+                    $now = new \DateTime( 'now', new \DateTimeZone( 'UTC' ) );
+                    $now->setTime( (int) $now->format( 'H' ), (int) $now->format( 'i' ), 0 );
+                    return $now->format( 'Y-m-d H:i:s' );
+                },
+            )
+        );
     }
 
     /**
