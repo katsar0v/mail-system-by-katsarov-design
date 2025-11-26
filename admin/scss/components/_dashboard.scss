@@ -1,0 +1,119 @@
+// ==========================================================================
+// Dashboard Component
+// ==========================================================================
+// Styles for the main admin dashboard page.
+
+@use '../abstracts' as *;
+
+// Dashboard container
+.mskd-dashboard {
+  margin-top: $spacing-5;
+}
+
+// Stats Grid
+.mskd-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $grid-gap;
+  margin-bottom: $spacing-8;
+}
+
+// Stat Box
+.mskd-stat-box {
+  @include card-padded;
+  @include flex-column;
+  @include hover-shadow;
+  min-height: 200px;
+
+  h3 {
+    @include text-uppercase;
+    margin: 0 0 $spacing-3;
+    font-size: $font-size-base;
+    color: $color-wp-text;
+    font-weight: $font-weight-semibold;
+  }
+
+  .button {
+    align-self: flex-start;
+    margin-top: auto;
+  }
+}
+
+// Stat Number
+.mskd-stat-number {
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  margin-bottom: $spacing-4;
+  line-height: $line-height-tight;
+}
+
+// Stat Details
+.mskd-stat-details {
+  margin-bottom: $spacing-5;
+  flex-grow: 1;
+
+  span {
+    display: block;
+    font-size: $font-size-base;
+    color: $color-wp-text-light;
+    padding: $spacing-2 $spacing-3;
+    margin-bottom: $spacing-2;
+    border-radius: $border-radius;
+  }
+}
+
+// Stat Info
+.mskd-stat-info {
+  p {
+    margin: $spacing-2 0;
+    font-size: $font-size-base;
+    color: $color-wp-text-light;
+  }
+
+  .mskd-cron-active,
+  .mskd-cron-inactive {
+    display: inline-block;
+    padding: $spacing-1 $spacing-3;
+    border-radius: $border-radius;
+    font-size: $font-size-base;
+  }
+
+  .mskd-cron-active {
+    background: $color-success-bg;
+  }
+
+  .mskd-cron-inactive {
+    background: $color-error-bg;
+  }
+}
+
+// Quick Actions
+.mskd-quick-actions {
+  @include card-padded;
+  margin-bottom: $grid-gap;
+
+  h2 {
+    margin: 0 0 $spacing-5;
+    font-size: $font-size-lg;
+  }
+
+  .button {
+    margin-right: $spacing-3;
+  }
+
+  @include mobile {
+    .button {
+      display: block;
+      margin: 0 0 $spacing-3;
+      text-align: center;
+    }
+  }
+}
+
+// Responsive
+@include mobile {
+  .mskd-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

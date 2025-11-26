@@ -1,0 +1,104 @@
+// ==========================================================================
+// MSKD Public Styles - Main Entry Point
+// ==========================================================================
+//
+// This is the main SCSS file for public-facing styles.
+// Compiled to public/css/public-style.css
+//
+// @package MSKD
+//
+// ==========================================================================
+
+// We import the admin abstracts to share variables and mixins
+@use '../../admin/scss/abstracts' as *;
+
+// ==========================================================================
+// SUBSCRIBE FORM
+// ==========================================================================
+
+.mskd-subscribe-form-wrap {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: $spacing-5;
+}
+
+.mskd-form-title {
+  margin: 0 0 $spacing-5;
+  font-size: $font-size-xl;
+  text-align: center;
+}
+
+.mskd-form-row {
+  margin-bottom: $spacing-4;
+}
+
+.mskd-input {
+  width: 100%;
+  padding: $spacing-3 $spacing-4;
+  border: $border-width solid #ddd;
+  border-radius: $border-radius;
+  font-size: $font-size-lg;
+  box-sizing: border-box;
+  @include transition(border-color);
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+.mskd-submit-btn {
+  width: 100%;
+  padding: $spacing-3 $spacing-5;
+  background: $color-primary;
+  color: $color-white;
+  border: none;
+  border-radius: $border-radius;
+  font-size: $font-size-lg;
+  cursor: pointer;
+  @include transition(background-color);
+
+  &:hover {
+    background: $color-primary-hover;
+  }
+
+  &:disabled {
+    background: $color-gray-500;
+    cursor: not-allowed;
+  }
+}
+
+.mskd-form-message {
+  margin-top: $spacing-4;
+  padding: $spacing-3 $spacing-4;
+  border-radius: $border-radius;
+  text-align: center;
+
+  &.success {
+    background: $color-success-bg;
+    color: $color-success-text;
+    border: $border-width solid #c3e6cb;
+  }
+
+  &.error {
+    background: $color-error-bg;
+    color: $color-error-text;
+    border: $border-width solid #f5c6cb;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+@include respond-below(480px) {
+  .mskd-subscribe-form-wrap {
+    padding: $spacing-4;
+  }
+  
+  .mskd-input,
+  .mskd-submit-btn {
+    font-size: $font-size-md;
+    padding: $spacing-3;
+  }
+}

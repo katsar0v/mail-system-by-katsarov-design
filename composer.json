@@ -1,0 +1,70 @@
+{
+    "name": "katsarov-design/mail-system",
+    "description": "Система за управление на имейл бюлетини с абонати, списъци и опашка за изпращане. С пълен български интерфейс.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Katsarov Design",
+            "email": "info@katsarov.design",
+            "homepage": "https://katsarov.design"
+        }
+    ],
+    "homepage": "https://katsarov.design/plugins/mail-system",
+    "keywords": [
+        "wordpress",
+        "plugin",
+        "email",
+        "newsletter",
+        "mailing-list",
+        "subscribers",
+        "bulgarian"
+    ],
+    "require": {
+        "php": ">=7.4",
+        "composer/installers": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0",
+        "wp-coding-standards/wpcs": "^3.0",
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "yoast/phpunit-polyfills": "^2.0",
+        "brain/monkey": "^2.6",
+        "mockery/mockery": "^1.6"
+    },
+    "autoload": {
+        "classmap": [
+            "includes/",
+            "admin/",
+            "public/"
+        ]
+    },
+    "scripts": {
+        "phpcs": "phpcs --standard=WordPress --extensions=php .",
+        "phpcbf": "phpcbf --standard=WordPress --extensions=php .",
+        "test": "phpunit --configuration tests/phpunit.xml",
+        "test:unit": "phpunit --configuration tests/phpunit.xml --testsuite Unit",
+        "build": [
+            "@composer install --no-dev --optimize-autoloader",
+            "echo 'Build complete!'"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "extra": {
+        "installer-name": "mail-system-by-katsarov-design"
+    },
+    "support": {
+        "issues": "https://github.com/katsarov-design/mail-system/issues",
+        "source": "https://github.com/katsarov-design/mail-system"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

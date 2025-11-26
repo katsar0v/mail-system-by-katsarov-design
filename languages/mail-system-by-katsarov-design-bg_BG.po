@@ -1,0 +1,513 @@
+# Bulgarian translations for Мейл Система от Katsarov Design.
+# Copyright (C) 2024 Katsarov Design
+# This file is distributed under the GPL v2 or later.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Мейл Система от Katsarov Design 1.0.0\n"
+"Report-Msgid-Bugs-To: https://katsarov.design/\n"
+"POT-Creation-Date: 2024-01-01T00:00:00+00:00\n"
+"PO-Revision-Date: 2024-01-01 00:00+0200\n"
+"Last-Translator: Katsarov Design <info@katsarov.design>\n"
+"Language-Team: Bulgarian <bg@li.org>\n"
+"Language: bg_BG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: mail-system-by-katsarov-design.php
+msgid "Всяка минута"
+msgstr "Всяка минута"
+
+#: admin/class-admin.php
+msgid "Мейл Система"
+msgstr "Мейл Система"
+
+#: admin/class-admin.php
+msgid "Имейли"
+msgstr "Имейли"
+
+#: admin/class-admin.php
+msgid "Табло"
+msgstr "Табло"
+
+#: admin/class-admin.php
+msgid "Абонати"
+msgstr "Абонати"
+
+#: admin/class-admin.php
+msgid "Списъци"
+msgstr "Списъци"
+
+#: admin/class-admin.php
+msgid "Ново писмо"
+msgstr "Ново писмо"
+
+#: admin/class-admin.php
+msgid "Опашка"
+msgstr "Опашка"
+
+#: admin/class-admin.php
+msgid "Настройки"
+msgstr "Настройки"
+
+#: admin/class-admin.php
+msgid "Сигурни ли сте, че искате да изтриете?"
+msgstr "Сигурни ли сте, че искате да изтриете?"
+
+#: admin/class-admin.php
+msgid "Изпращане..."
+msgstr "Изпращане..."
+
+#: admin/class-admin.php
+msgid "Успешно!"
+msgstr "Успешно!"
+
+#: admin/class-admin.php
+msgid "Грешка!"
+msgstr "Грешка!"
+
+#: admin/class-admin.php
+msgid "Препоръка за Мейл Система:"
+msgstr "Препоръка за Мейл Система:"
+
+#: admin/class-admin.php
+msgid "За по-надеждно изпращане на имейли препоръчваме да използвате системен cron вместо WP-Cron."
+msgstr "За по-надеждно изпращане на имейли препоръчваме да използвате системен cron вместо WP-Cron."
+
+#: admin/class-admin.php
+msgid "Добавете в wp-config.php:"
+msgstr "Добавете в wp-config.php:"
+
+#: admin/class-admin.php
+msgid "И настройте системен cron:"
+msgstr "И настройте системен cron:"
+
+#: admin/class-admin.php
+msgid "Невалиден имейл адрес."
+msgstr "Невалиден имейл адрес."
+
+#: admin/class-admin.php
+msgid "Абонатът е добавен успешно."
+msgstr "Абонатът е добавен успешно."
+
+#: admin/class-admin.php
+msgid "Грешка при добавяне на абонат."
+msgstr "Грешка при добавяне на абонат."
+
+#: admin/class-admin.php
+msgid "Абонатът е обновен успешно."
+msgstr "Абонатът е обновен успешно."
+
+#: admin/class-admin.php
+msgid "Абонатът е изтрит успешно."
+msgstr "Абонатът е изтрит успешно."
+
+#: admin/class-admin.php
+msgid "Списъкът е добавен успешно."
+msgstr "Списъкът е добавен успешно."
+
+#: admin/class-admin.php
+msgid "Грешка при добавяне на списък."
+msgstr "Грешка при добавяне на списък."
+
+#: admin/class-admin.php
+msgid "Списъкът е обновен успешно."
+msgstr "Списъкът е обновен успешно."
+
+#: admin/class-admin.php
+msgid "Списъкът е изтрит успешно."
+msgstr "Списъкът е изтрит успешно."
+
+#: admin/class-admin.php
+msgid "Моля, попълнете всички полета."
+msgstr "Моля, попълнете всички полета."
+
+#: admin/class-admin.php
+msgid "Няма активни абонати в избраните списъци."
+msgstr "Няма активни абонати в избраните списъци."
+
+#: admin/class-admin.php
+msgid "Добавени са %d писма в опашката за изпращане."
+msgstr "Добавени са %d писма в опашката за изпращане."
+
+#: admin/class-admin.php
+msgid "Настройките са запазени успешно."
+msgstr "Настройките са запазени успешно."
+
+#: admin/partials/dashboard.php
+msgid "Табло - Мейл Система"
+msgstr "Табло - Мейл Система"
+
+#: admin/partials/dashboard.php
+msgid "Активни: %d"
+msgstr "Активни: %d"
+
+#: admin/partials/dashboard.php
+msgid "Неактивни: %d"
+msgstr "Неактивни: %d"
+
+#: admin/partials/dashboard.php
+msgid "Отписани: %d"
+msgstr "Отписани: %d"
+
+#: admin/partials/dashboard.php
+msgid "Виж всички"
+msgstr "Виж всички"
+
+#: admin/partials/dashboard.php
+msgid "Управление"
+msgstr "Управление"
+
+#: admin/partials/dashboard.php
+msgid "Чакащи: %d"
+msgstr "Чакащи: %d"
+
+#: admin/partials/dashboard.php
+msgid "Изпратени: %d"
+msgstr "Изпратени: %d"
+
+#: admin/partials/dashboard.php
+msgid "Неуспешни: %d"
+msgstr "Неуспешни: %d"
+
+#: admin/partials/dashboard.php
+msgid "Виж опашка"
+msgstr "Виж опашка"
+
+#: admin/partials/dashboard.php
+msgid "Cron статус"
+msgstr "Cron статус"
+
+#: admin/partials/dashboard.php
+msgid "Активен"
+msgstr "Активен"
+
+#: admin/partials/dashboard.php
+msgid "Следващо изпълнение: %s"
+msgstr "Следващо изпълнение: %s"
+
+#: admin/partials/dashboard.php
+msgid "Неактивен"
+msgstr "Неактивен"
+
+#: admin/partials/dashboard.php
+msgid "Изпращане: %d имейла/мин"
+msgstr "Изпращане: %d имейла/мин"
+
+#: admin/partials/dashboard.php
+msgid "Бързи действия"
+msgstr "Бързи действия"
+
+#: admin/partials/dashboard.php
+msgid "Добави абонат"
+msgstr "Добави абонат"
+
+#: admin/partials/dashboard.php
+msgid "Добави списък"
+msgstr "Добави списък"
+
+#: admin/partials/subscribers.php
+msgid "Добави нов"
+msgstr "Добави нов"
+
+#: admin/partials/subscribers.php
+msgid "Редактирай абонат"
+msgstr "Редактирай абонат"
+
+#: admin/partials/subscribers.php
+msgid "Имейл"
+msgstr "Имейл"
+
+#: admin/partials/subscribers.php
+msgid "Име"
+msgstr "Име"
+
+#: admin/partials/subscribers.php
+msgid "Фамилия"
+msgstr "Фамилия"
+
+#: admin/partials/subscribers.php
+msgid "Статус"
+msgstr "Статус"
+
+#: admin/partials/subscribers.php
+msgid "Отписан"
+msgstr "Отписан"
+
+#: admin/partials/subscribers.php
+msgid "Няма създадени списъци."
+msgstr "Няма създадени списъци."
+
+#: admin/partials/subscribers.php
+msgid "Запази промените"
+msgstr "Запази промените"
+
+#: admin/partials/subscribers.php
+msgid "Отказ"
+msgstr "Отказ"
+
+#: admin/partials/subscribers.php
+msgid "Всички"
+msgstr "Всички"
+
+#: admin/partials/subscribers.php
+msgid "Активни"
+msgstr "Активни"
+
+#: admin/partials/subscribers.php
+msgid "Неактивни"
+msgstr "Неактивни"
+
+#: admin/partials/subscribers.php
+msgid "Дата"
+msgstr "Дата"
+
+#: admin/partials/subscribers.php
+msgid "Действия"
+msgstr "Действия"
+
+#: admin/partials/subscribers.php
+msgid "Редактирай"
+msgstr "Редактирай"
+
+#: admin/partials/subscribers.php
+msgid "Изтрий"
+msgstr "Изтрий"
+
+#: admin/partials/subscribers.php
+msgid "Няма намерени абонати."
+msgstr "Няма намерени абонати."
+
+#: admin/partials/lists.php
+msgid "Име на списъка"
+msgstr "Име на списъка"
+
+#: admin/partials/lists.php
+msgid "Описание"
+msgstr "Описание"
+
+#: admin/partials/compose.php
+msgid "Изпрати до списъци"
+msgstr "Изпрати до списъци"
+
+#: admin/partials/compose.php
+msgid "%d активни абонати"
+msgstr "%d активни абонати"
+
+#: admin/partials/compose.php
+msgid "Създай списък"
+msgstr "Създай списък"
+
+#: admin/partials/compose.php
+msgid "Тема"
+msgstr "Тема"
+
+#: admin/partials/compose.php
+msgid "Съдържание"
+msgstr "Съдържание"
+
+#: admin/partials/compose.php
+msgid "Налични плейсхолдери:"
+msgstr "Налични плейсхолдери:"
+
+#: admin/partials/compose.php
+msgid "Добави в опашката"
+msgstr "Добави в опашката"
+
+#: admin/partials/queue.php
+msgid "Опашка за изпращане"
+msgstr "Опашка за изпращане"
+
+#: admin/partials/queue.php
+msgid "Следващо изпълнение:"
+msgstr "Следващо изпълнение:"
+
+#: admin/partials/queue.php
+msgid "Не е насрочено"
+msgstr "Не е насрочено"
+
+#: admin/partials/queue.php
+msgid "Скорост:"
+msgstr "Скорост:"
+
+#: admin/partials/queue.php
+msgid "%d имейла/мин"
+msgstr "%d имейла/мин"
+
+#: admin/partials/queue.php
+msgid "Чакащи"
+msgstr "Чакащи"
+
+#: admin/partials/queue.php
+msgid "В процес"
+msgstr "В процес"
+
+#: admin/partials/queue.php
+msgid "Изпратени"
+msgstr "Изпратени"
+
+#: admin/partials/queue.php
+msgid "Неуспешни"
+msgstr "Неуспешни"
+
+#: admin/partials/queue.php
+msgid "ID"
+msgstr "ID"
+
+#: admin/partials/queue.php
+msgid "Получател"
+msgstr "Получател"
+
+#: admin/partials/queue.php
+msgid "Опити"
+msgstr "Опити"
+
+#: admin/partials/queue.php
+msgid "Насрочено"
+msgstr "Насрочено"
+
+#: admin/partials/queue.php
+msgid "Изпратено"
+msgstr "Изпратено"
+
+#: admin/partials/queue.php
+msgid "Изтрит абонат"
+msgstr "Изтрит абонат"
+
+#: admin/partials/queue.php
+msgid "Чакащ"
+msgstr "Чакащ"
+
+#: admin/partials/queue.php
+msgid "Изпратен"
+msgstr "Изпратен"
+
+#: admin/partials/queue.php
+msgid "Неуспешен"
+msgstr "Неуспешен"
+
+#: admin/partials/queue.php
+msgid "Няма записи в опашката."
+msgstr "Няма записи в опашката."
+
+#: admin/partials/settings.php
+msgid "Настройки на изпращача"
+msgstr "Настройки на изпращача"
+
+#: admin/partials/settings.php
+msgid "Име на подател"
+msgstr "Име на подател"
+
+#: admin/partials/settings.php
+msgid "Името, което ще се показва като подател."
+msgstr "Името, което ще се показва като подател."
+
+#: admin/partials/settings.php
+msgid "Имейл на подател"
+msgstr "Имейл на подател"
+
+#: admin/partials/settings.php
+msgid "Имейлът, от който ще се изпращат писмата."
+msgstr "Имейлът, от който ще се изпращат писмата."
+
+#: admin/partials/settings.php
+msgid "Отговор до"
+msgstr "Отговор до"
+
+#: admin/partials/settings.php
+msgid "Имейл за отговори от получателите."
+msgstr "Имейл за отговори от получателите."
+
+#: admin/partials/settings.php
+msgid "Информация за системата"
+msgstr "Информация за системата"
+
+#: admin/partials/settings.php
+msgid "Версия на плъгина"
+msgstr "Версия на плъгина"
+
+#: admin/partials/settings.php
+msgid "Скорост на изпращане"
+msgstr "Скорост на изпращане"
+
+#: admin/partials/settings.php
+msgid "имейла/минута"
+msgstr "имейла/минута"
+
+#: admin/partials/settings.php
+msgid "WP-Cron статус"
+msgstr "WP-Cron статус"
+
+#: admin/partials/settings.php
+msgid "Деактивиран (използва се системен cron)"
+msgstr "Деактивиран (използва се системен cron)"
+
+#: admin/partials/settings.php
+msgid "Активен (базиран на посещения)"
+msgstr "Активен (базиран на посещения)"
+
+#: admin/partials/settings.php
+msgid "Запази настройките"
+msgstr "Запази настройките"
+
+#: includes/services/class-cron-handler.php
+msgid "wp_mail() неуспешен"
+msgstr "wp_mail() неуспешен"
+
+#: includes/services/class-cron-handler.php
+msgid "Отписване"
+msgstr "Отписване"
+
+#: public/class-public.php
+msgid "Абониране..."
+msgstr "Абониране..."
+
+#: public/class-public.php
+msgid "Успешно се абонирахте!"
+msgstr "Успешно се абонирахте!"
+
+#: public/class-public.php
+msgid "Възникна грешка. Моля, опитайте отново."
+msgstr "Възникна грешка. Моля, опитайте отново."
+
+#: public/class-public.php
+msgid "Невалиден линк за отписване."
+msgstr "Невалиден линк за отписване."
+
+#: public/class-public.php
+msgid "Абонирайте се"
+msgstr "Абонирайте се"
+
+#: public/class-public.php
+msgid "Моля, въведете валиден имейл адрес."
+msgstr "Моля, въведете валиден имейл адрес."
+
+#: public/partials/subscribe-form.php
+msgid "Имейл *"
+msgstr "Имейл *"
+
+#: public/partials/subscribe-form.php
+msgid "Абонирай се"
+msgstr "Абонирай се"
+
+#: public/partials/unsubscribe.php
+msgid "Успешно се отписахте"
+msgstr "Успешно се отписахте"
+
+#: public/partials/unsubscribe.php
+msgid "Вече няма да получавате имейли от нас."
+msgstr "Вече няма да получавате имейли от нас."
+
+#: public/partials/unsubscribe.php
+msgid "Обратно към сайта"
+msgstr "Обратно към сайта"
+
+#: admin/class-admin.php
+msgid "Този имейл вече съществува."
+msgstr "Този имейл вече съществува."
+
+#: public/class-public.php
+msgid "Твърде много опити. Моля, опитайте отново след 5 минути."
+msgstr "Твърде много опити. Моля, опитайте отново след 5 минути."

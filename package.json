@@ -1,0 +1,26 @@
+{
+  "name": "mail-system-by-katsarov-design",
+  "version": "1.0.0",
+  "description": "WordPress Mail System Plugin by Katsarov Design",
+  "main": "mail-system-by-katsarov-design.php",
+  "scripts": {
+    "sass": "sass --watch admin/scss/main.scss:admin/css/admin-style.css --style compressed",
+    "sass:build": "sass admin/scss/main.scss:admin/css/admin-style.css --style compressed",
+    "sass:dev": "sass --watch admin/scss/main.scss:admin/css/admin-style.css --style expanded --source-map",
+    "sass:public": "sass public/scss/main.scss:public/css/public-style.css --style compressed",
+    "sass:public:dev": "sass --watch public/scss/main.scss:public/css/public-style.css --style expanded --source-map",
+    "build": "npm run sass:build && npm run sass:public",
+    "watch": "sass --watch admin/scss/main.scss:admin/css/admin-style.css public/scss/main.scss:public/css/public-style.css --style expanded --source-map"
+  },
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "mail",
+    "newsletter"
+  ],
+  "author": "Katsarov Design",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "sass": "^1.69.5"
+  }
+}

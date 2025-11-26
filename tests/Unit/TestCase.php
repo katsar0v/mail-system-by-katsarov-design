@@ -1,0 +1,185 @@
+<?php
+/**
+ * Base Test Case
+ *
+ * @package MSKD\Tests\Unit
+ */
+
+namespace MSKD\Tests\Unit;
+
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
+use Mockery;
+
+/**
+ * Class TestCase
+ *
+ * Base test case for all unit tests.
+ */
+abstract class TestCase extends PHPUnitTestCase {
+
+    /**
+     * Mock wpdb object.
+     *
+     * @var \Mockery\MockInterface
+     */
+    protected $wpdb;
+
+    /**
+     * Set up test environment.
+     */
+    protected function setUp(): void {
+        parent::setUp();
+        Monkey\setUp();
+
+        // Set up common WordPress functions.
+        $this->setup_common_wp_functions();
+    }
+
+    /**
+     * Tear down test environment.
+     */
+    protected function tearDown(): void {
+        Monkey\tearDown();
+        Mockery::close();
+        parent::tearDown();
+    }
+
+    /**
+     * Set up commonly used WordPress functions.
+     */
+    protected function setup_common_wp_functions(): void {
+        // Escaping functions - return input as-is.
+        Functions\stubs(
+            array(
+                'esc_html'       => null,
+                'esc_attr'       => null,
+                'esc_url'        => null,
+                'esc_html__'     => null,
+                'esc_attr__'     => null,
+                'wp_kses_post'   => null,
+                'absint'         => function ( $value ) {
+                    return abs( (int) $value );
+                },
+            )
+        );
+
+        // Translation functions.
+        Functions\stubs(
+            array(
+                '__'       => function ( $text, $domain = 'default' ) {
+                    return $text;
+                },
+                '_e'       => function ( $text, $domain = 'default' ) {
+                    echo $text;
+                },
+                'esc_html__' => function ( $text, $domain = 'default' ) {
+                    return $text;
+                },
+                'esc_attr__' => function ( $text, $domain = 'default' ) {
+                    return $text;
+                },
+            )
+        );
+
+        // Sanitization functions.
+        Functions\stubs(
+            array(
+                'sanitize_text_field'     => function ( $str ) {
+                    return trim( strip_tags( $str ) );
+                },
+                'sanitize_email'          => function ( $email ) {
+                    return filter_var( $email, FILTER_SANITIZE_EMAIL );
+                },
+                'sanitize_textarea_field' => function ( $str ) {
+                    return trim( strip_tags( $str ) );
+                },
+                'is_email'                => function ( $email ) {
+                    return filter_var( $email, FILTER_VALIDATE_EMAIL ) !== false;
+                },
+            )
+        );
+
+        // URL functions.
+        Functions\stubs(
+            array(
+                'home_url'      => function ( $path = '' ) {
+                    return 'https://example.com' . $path;
+                },
+                'admin_url'     => function ( $path = '' ) {
+                    return 'https://example.com/wp-admin/' . $path;
+                },
+                'add_query_arg' => function ( $args, $url = '' ) {
+                    return $url . '?' . http_build_query( $args );
+                },
+                'plugin_dir_path' => function ( $file ) {
+                    return dirname( $file ) . '/';
+                },
+                'plugin_dir_url'  => function ( $file ) {
+                    return 'https://example.com/wp-content/plugins/' . basename( dirname( $file ) ) . '/';
+                },
+            )
+        );
+
+        // Option functions (default stubs).
+        Functions\stubs(
+            array(
+                'get_option'    => function ( $option, $default = false ) {
+                    return $default;
+                },
+                'update_option' => '__return_true',
+                'delete_option' => '__return_true',
+            )
+        );
+
+        // Other common functions.
+        Functions\stubs(
+            array(
+                'wp_generate_password' => function ( $length = 12, $special_chars = true ) {
+                    return substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' ), 0, $length );
+                },
+                'current_time'         => function ( $type ) {
+                    return $type === 'mysql' ? gmdate( 'Y-m-d H:i:s' ) : time();
+                },
+                'get_bloginfo'         => function ( $show ) {
+                    $values = array(
+                        'name'        => 'Test Site',
+                        'admin_email' => 'admin@example.com',
+                    );
+                    return $values[ $show ] ?? '';
+                },
+            )
+        );
+    }
+
+    /**
+     * Create a mock wpdb object.
+     *
+     * @return \Mockery\MockInterface
+     */
+    protected function create_wpdb_mock() {
+        $wpdb = Mockery::mock( 'wpdb' );
+        $wpdb->prefix = 'wp_';
+        $wpdb->shouldReceive( 'prepare' )
+            ->andReturnUsing(
+                function ( $query, ...$args ) {
+                    // Simple placeholder replacement for testing.
+                    $query = str_replace( '%s', "'%s'", $query );
+                    return vsprintf( $query, $args );
+                }
+            );
+        return $wpdb;
+    }
+
+    /**
+     * Set up the global $wpdb mock.
+     *
+     * @return \Mockery\MockInterface
+     */
+    protected function setup_wpdb_mock() {
+        $this->wpdb = $this->create_wpdb_mock();
+        $GLOBALS['wpdb'] = $this->wpdb;
+        return $this->wpdb;
+    }
+}

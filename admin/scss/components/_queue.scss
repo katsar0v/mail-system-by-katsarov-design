@@ -1,0 +1,19 @@
+// ==========================================================================
+// Queue Component
+// ==========================================================================
+// Styles for the email queue section.
+
+@use '../abstracts' as *;
+
+// Queue Status Bar
+.mskd-queue-status {
+  background: $color-white;
+  border: $border-width solid $color-wp-border;
+  border-radius: $border-radius;
+  padding: $spacing-3 $spacing-4;
+  margin: $spacing-5 0;
+
+  p {
+    margin: 0;
+  }
+}

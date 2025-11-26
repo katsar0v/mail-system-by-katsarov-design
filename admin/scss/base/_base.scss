@@ -1,0 +1,11 @@
+// ==========================================================================
+// Base Styles
+// ==========================================================================
+// General/base styling for the MSKD admin area.
+
+@use '../abstracts' as *;
+
+// General wrapper
+.mskd-wrap {
+  max-width: $container-max-width;
+}

@@ -1,0 +1,19 @@
+// ==========================================================================
+// Utilities
+// ==========================================================================
+// Utility classes for common patterns.
+
+@use '../abstracts' as *;
+
+// Error Message
+.mskd-error-msg {
+  color: $color-error;
+  font-style: italic;
+}
+
+// Delete Link
+.mskd-delete-link {
+  &:hover {
+    color: $color-error !important;
+  }
+}

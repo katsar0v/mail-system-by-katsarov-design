@@ -1,0 +1,182 @@
+// ==========================================================================
+// MSKD Variables
+// ==========================================================================
+// This file contains all SCSS variables used throughout the plugin styles.
+// Organized by category for easy maintenance and consistency.
+
+// ==========================================================================
+// COLORS
+// ==========================================================================
+
+// Brand Colors
+$color-primary:          #2271b1;
+$color-primary-hover:    #135e96;
+$color-primary-light:    #cce5ff;
+
+// WordPress Admin Colors (for consistency)
+$color-wp-text:          #1d2327;
+$color-wp-text-light:    #50575e;
+$color-wp-border:        #c3c4c7;
+$color-wp-background:    #f0f0f1;
+
+// Status Colors - Success
+$color-success:          #00a32a;
+$color-success-bg:       #d4edda;
+$color-success-text:     #155724;
+
+// Status Colors - Warning
+$color-warning:          #dba617;
+$color-warning-bg:       #fff3cd;
+$color-warning-text:     #856404;
+
+// Status Colors - Error/Danger
+$color-error:            #d63638;
+$color-error-bg:         #f8d7da;
+$color-error-text:       #721c24;
+
+// Status Colors - Info
+$color-info:             #0073aa;
+$color-info-bg:          #cce5ff;
+$color-info-text:        #004085;
+
+// Neutral Colors
+$color-white:            #fff;
+$color-black:            #000;
+$color-gray-100:         #f8f9fa;
+$color-gray-200:         #e9ecef;
+$color-gray-300:         #dee2e6;
+$color-gray-400:         #ced4da;
+$color-gray-500:         #adb5bd;
+$color-gray-600:         #6c757d;
+$color-gray-700:         #495057;
+$color-gray-800:         #343a40;
+$color-gray-900:         #212529;
+
+// ==========================================================================
+// TYPOGRAPHY
+// ==========================================================================
+
+// Font Families
+$font-family-base:       -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+$font-family-code:       Menlo, Consolas, Monaco, "Courier New", monospace;
+
+// Font Sizes
+$font-size-xs:           11px;
+$font-size-sm:           12px;
+$font-size-base:         13px;
+$font-size-md:           14px;
+$font-size-lg:           16px;
+$font-size-xl:           18px;
+$font-size-2xl:          24px;
+$font-size-3xl:          32px;
+$font-size-4xl:          42px;
+
+// Font Weights
+$font-weight-normal:     400;
+$font-weight-medium:     500;
+$font-weight-semibold:   600;
+$font-weight-bold:       700;
+
+// Line Heights
+$line-height-tight:      1;
+$line-height-snug:       1.25;
+$line-height-normal:     1.5;
+$line-height-relaxed:    1.75;
+
+// Letter Spacing
+$letter-spacing-tight:   -0.025em;
+$letter-spacing-normal:  0;
+$letter-spacing-wide:    0.5px;
+
+// ==========================================================================
+// SPACING
+// ==========================================================================
+
+// Base spacing unit (4px grid)
+$spacing-unit:           4px;
+
+$spacing-0:              0;
+$spacing-1:              $spacing-unit;       // 4px
+$spacing-2:              $spacing-unit * 2;   // 8px
+$spacing-3:              $spacing-unit * 3;   // 12px
+$spacing-4:              $spacing-unit * 4;   // 16px
+$spacing-5:              $spacing-unit * 5;   // 20px
+$spacing-6:              $spacing-unit * 6;   // 24px
+$spacing-7:              $spacing-unit * 7;   // 28px
+$spacing-8:              $spacing-unit * 8;   // 32px
+$spacing-10:             $spacing-unit * 10;  // 40px
+$spacing-12:             $spacing-unit * 12;  // 48px
+$spacing-16:             $spacing-unit * 16;  // 64px
+
+// ==========================================================================
+// BORDERS
+// ==========================================================================
+
+$border-width:           1px;
+$border-width-thick:     2px;
+
+$border-radius-sm:       3px;
+$border-radius:          4px;
+$border-radius-md:       6px;
+$border-radius-lg:       8px;
+$border-radius-xl:       12px;
+$border-radius-full:     9999px;
+
+// ==========================================================================
+// SHADOWS
+// ==========================================================================
+
+$shadow-none:            none;
+$shadow-sm:              0 1px 2px rgba($color-black, 0.04);
+$shadow:                 0 1px 3px rgba($color-black, 0.04);
+$shadow-md:              0 3px 8px rgba($color-black, 0.08);
+$shadow-lg:              0 4px 12px rgba($color-black, 0.12);
+$shadow-xl:              0 8px 24px rgba($color-black, 0.16);
+
+// ==========================================================================
+// TRANSITIONS
+// ==========================================================================
+
+$transition-duration-fast:    0.15s;
+$transition-duration:         0.2s;
+$transition-duration-slow:    0.3s;
+
+$transition-timing:           ease;
+$transition-timing-in-out:    ease-in-out;
+
+// ==========================================================================
+// BREAKPOINTS
+// ==========================================================================
+
+$breakpoint-xs:          0;
+$breakpoint-sm:          576px;
+$breakpoint-md:          768px;
+$breakpoint-lg:          992px;
+$breakpoint-xl:          1200px;
+
+// WordPress Admin specific breakpoints
+$breakpoint-wp-mobile:   782px;
+$breakpoint-wp-small:    600px;
+
+// ==========================================================================
+// LAYOUT
+// ==========================================================================
+
+$container-max-width:    1200px;
+$content-max-width:      800px;
+
+// Grid
+$grid-gap:               $spacing-6;  // 24px
+$grid-gap-sm:            $spacing-4;  // 16px
+
+// ==========================================================================
+// Z-INDEX
+// ==========================================================================
+
+$z-index-dropdown:       100;
+$z-index-sticky:         200;
+$z-index-fixed:          300;
+$z-index-modal-backdrop: 400;
+$z-index-modal:          500;
+$z-index-popover:        600;
+$z-index-tooltip:        700;

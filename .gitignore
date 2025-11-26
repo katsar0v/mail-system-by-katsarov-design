@@ -1,0 +1,23 @@
+# Dependencies
+/vendor/
+/node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+/coverage/
+.phpunit.result.cache
+
+# Build artifacts
+*.log
+
+# SCSS source maps (optional - uncomment if you don't want to commit them)
+# *.css.map

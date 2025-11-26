@@ -1,0 +1,22 @@
+// ==========================================================================
+// Forms Component
+// ==========================================================================
+// Styles for form wrappers and compose forms.
+
+@use '../abstracts' as *;
+
+// Form Wrapper
+.mskd-form-wrap {
+  @include form-wrap;
+
+  h2 {
+    margin-top: 0;
+  }
+}
+
+// Compose Form
+.mskd-compose-form {
+  .wp-editor-wrap {
+    max-width: 100%;
+  }
+}

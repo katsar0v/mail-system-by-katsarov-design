@@ -1,0 +1,20 @@
+// ==========================================================================
+// MSKD Admin Styles - Main Entry Point
+// ==========================================================================
+//
+// This is the main SCSS file that imports all partials.
+// Compiled to admin/css/admin-style.css
+//
+// @package MSKD
+//
+// ==========================================================================
+
+// Abstracts (variables, mixins, functions)
+// These don't output any CSS on their own
+@use 'abstracts';
+
+// Base styles (resets, general styles)
+@use 'base';
+
+// Components (reusable UI components)
+@use 'components';

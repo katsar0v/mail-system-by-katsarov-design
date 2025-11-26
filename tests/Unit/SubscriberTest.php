@@ -1,0 +1,411 @@
+<?php
+/**
+ * Subscriber Tests
+ *
+ * @package MSKD\Tests\Unit
+ */
+
+namespace MSKD\Tests\Unit;
+
+use Brain\Monkey\Functions;
+use Brain\Monkey\Actions;
+use Mockery;
+
+/**
+ * Class SubscriberTest
+ *
+ * Tests for subscriber management functionality in MSKD_Admin class.
+ */
+class SubscriberTest extends TestCase {
+
+    /**
+     * Admin instance.
+     *
+     * @var \MSKD_Admin
+     */
+    protected $admin;
+
+    /**
+     * Set up test environment.
+     */
+    protected function setUp(): void {
+        parent::setUp();
+
+        // Stub capability check.
+        Functions\stubs( array( 'current_user_can' => true ) );
+
+        // Load the admin class.
+        require_once MSKD_PLUGIN_DIR . 'admin/class-admin.php';
+
+        $this->admin = new \MSKD_Admin();
+    }
+
+    /**
+     * Test adding a subscriber with valid email.
+     */
+    public function test_add_subscriber_with_valid_email(): void {
+        $wpdb = $this->setup_wpdb_mock();
+
+        // Set up POST data.
+        $_POST['mskd_add_subscriber'] = true;
+        $_POST['mskd_nonce']          = 'valid_nonce';
+        $_POST['email']               = 'test@example.com';
+        $_POST['first_name']          = 'John';
+        $_POST['last_name']           = 'Doe';
+        $_POST['status']              = 'active';
+        $_POST['lists']               = array( 1, 2 );
+
+        Functions\expect( 'wp_verify_nonce' )
+            ->once()
+            ->with( 'valid_nonce', 'mskd_add_subscriber' )
+            ->andReturn( true );
+
+        // Check email doesn't exist.
+        $wpdb->shouldReceive( 'get_var' )
+            ->once()
+            ->andReturn( null );
+
+        // Insert subscriber.
+        $wpdb->insert_id = 123;
+        $wpdb->shouldReceive( 'insert' )
+            ->once()
+            ->with(
+                'wp_mskd_subscribers',
+                Mockery::on(
+                    function ( $data ) {
+                        return $data['email'] === 'test@example.com'
+                            && $data['first_name'] === 'John'
+                            && $data['last_name'] === 'Doe'
+                            && $data['status'] === 'active'
+                            && ! empty( $data['unsubscribe_token'] );
+                    }
+                ),
+                Mockery::type( 'array' )
+            )
+            ->andReturn( 1 );
+
+        // Insert into lists (2 times).
+        $wpdb->shouldReceive( 'insert' )
+            ->twice()
+            ->with(
+                'wp_mskd_subscriber_list',
+                Mockery::type( 'array' ),
+                Mockery::type( 'array' )
+            )
+            ->andReturn( 1 );
+
+        Functions\expect( 'add_settings_error' )
+            ->once()
+            ->with( 'mskd_messages', 'mskd_success', Mockery::any(), 'success' );
+
+        $this->admin->handle_actions();
+    }
+
+    /**
+     * Test that invalid email is rejected.
+     */
+    public function test_add_subscriber_invalid_email_rejected(): void {
+        $this->setup_wpdb_mock();
+
+        $_POST['mskd_add_subscriber'] = true;
+        $_POST['mskd_nonce']          = 'valid_nonce';
+        $_POST['email']               = 'invalid-email';
+        $_POST['first_name']          = 'John';
+        $_POST['last_name']           = 'Doe';
+        $_POST['status']              = 'active';
+
+        Functions\expect( 'wp_verify_nonce' )
+            ->once()
+            ->andReturn( true );
+
+        // Override is_email to return false.
+        Functions\expect( 'is_email' )
+            ->once()
+            ->with( 'invalid-email' )
+            ->andReturn( false );
+
+        Functions\expect( 'add_settings_error' )
+            ->once()
+            ->with( 'mskd_messages', 'mskd_error', Mockery::any(), 'error' );
+
+        $this->admin->handle_actions();
+    }
+
+    /**
+     * Test that duplicate email is rejected.
+     */
+    public function test_add_subscriber_duplicate_email_rejected(): void {
+        $wpdb = $this->setup_wpdb_mock();
+
+        $_POST['mskd_add_subscriber'] = true;
+        $_POST['mskd_nonce']          = 'valid_nonce';
+        $_POST['email']               = 'existing@example.com';
+        $_POST['first_name']          = 'John';
+        $_POST['last_name']           = 'Doe';
+        $_POST['status']              = 'active';
+
+        Functions\expect( 'wp_verify_nonce' )
+            ->once()
+            ->andReturn( true );
+
+        // Email already exists.
+        $wpdb->shouldReceive( 'get_var' )
+            ->once()
+            ->andReturn( 42 );
+
+        Functions\expect( 'add_settings_error' )
+            ->once()
+            ->with( 'mskd_messages', 'mskd_error', Mockery::any(), 'error' );
+
+        $this->admin->handle_actions();
+    }
+
+    /**
+     * Test editing a subscriber updates data correctly.
+     */
+    public function test_edit_subscriber_updates_data(): void {
+        $wpdb = $this->setup_wpdb_mock();
+
+        $_POST['mskd_edit_subscriber'] = true;
+        $_POST['mskd_nonce']           = 'valid_nonce';
+        $_POST['subscriber_id']        = 123;
+        $_POST['email']                = 'updated@example.com';
+        $_POST['first_name']           = 'Jane';
+        $_POST['last_name']            = 'Smith';
+        $_POST['status']               = 'inactive';
+        $_POST['lists']                = array( 3 );
+
+        Functions\expect( 'wp_verify_nonce' )
+            ->once()
+            ->with( 'valid_nonce', 'mskd_edit_subscriber' )
+            ->andReturn( true );
+
+        // No duplicate email.
+        $wpdb->shouldReceive( 'get_var' )
+            ->once()
+            ->andReturn( null );
+
+        // Update subscriber.
+        $wpdb->shouldReceive( 'update' )
+            ->once()
+            ->with(
+                'wp_mskd_subscribers',
+                Mockery::on(
+                    function ( $data ) {
+                        return $data['email'] === 'updated@example.com'
+                            && $data['first_name'] === 'Jane'
+                            && $data['last_name'] === 'Smith'
+                            && $data['status'] === 'inactive';
+                    }
+                ),
+                array( 'id' => 123 ),
+                Mockery::type( 'array' ),
+                Mockery::type( 'array' )
+            )
+            ->andReturn( 1 );
+
+        // Delete old list associations.
+        $wpdb->shouldReceive( 'delete' )
+            ->once()
+            ->with( 'wp_mskd_subscriber_list', array( 'subscriber_id' => 123 ), Mockery::type( 'array' ) )
+            ->andReturn( 1 );
+
+        // Insert new list association.
+        $wpdb->shouldReceive( 'insert' )
+            ->once()
+            ->with( 'wp_mskd_subscriber_list', Mockery::type( 'array' ), Mockery::type( 'array' ) )
+            ->andReturn( 1 );
+
+        Functions\expect( 'add_settings_error' )
+            ->once()
+            ->with( 'mskd_messages', 'mskd_success', Mockery::any(), 'success' );
+
+        Functions\expect( 'wp_redirect' )
+            ->once()
+            ->andReturnUsing(
+                function () {
+                    throw new \Exception( 'redirect_called' );
+                }
+            );
+
+        try {
+            $this->admin->handle_actions();
+        } catch ( \Exception $e ) {
+            $this->assertEquals( 'redirect_called', $e->getMessage() );
+        }
+    }
+
+    /**
+     * Test deleting a subscriber removes from lists.
+     */
+    public function test_delete_subscriber_removes_from_lists(): void {
+        $wpdb = $this->setup_wpdb_mock();
+
+        $_GET['action']   = 'delete_subscriber';
+        $_GET['id']       = 123;
+        $_GET['_wpnonce'] = 'valid_nonce';
+
+        Functions\expect( 'wp_verify_nonce' )
+            ->once()
+            ->with( 'valid_nonce', 'delete_subscriber_123' )
+            ->andReturn( true );
+
+        // Delete from subscriber_list pivot table.
+        $wpdb->shouldReceive( 'delete' )
+            ->once()
+            ->with( 'wp_mskd_subscriber_list', array( 'subscriber_id' => 123 ), Mockery::type( 'array' ) )
+            ->andReturn( 2 );
+
+        // Delete pending queue items.
+        $wpdb->shouldReceive( 'delete' )
+            ->once()
+            ->with( 'wp_mskd_queue', array( 'subscriber_id' => 123, 'status' => 'pending' ), Mockery::type( 'array' ) )
+            ->andReturn( 0 );
+
+        // Delete subscriber.
+        $wpdb->shouldReceive( 'delete' )
+            ->once()
+            ->with( 'wp_mskd_subscribers', array( 'id' => 123 ), Mockery::type( 'array' ) )
+            ->andReturn( 1 );
+
+        Functions\expect( 'add_settings_error' )
+            ->once()
+            ->with( 'mskd_messages', 'mskd_success', Mockery::any(), 'success' );
+
+        Functions\expect( 'wp_redirect' )
+            ->once()
+            ->andReturnUsing(
+                function () {
+                    throw new \Exception( 'redirect_called' );
+                }
+            );
+
+        try {
+            $this->admin->handle_actions();
+        } catch ( \Exception $e ) {
+            $this->assertEquals( 'redirect_called', $e->getMessage() );
+        }
+    }
+
+    /**
+     * Test deleting a subscriber removes pending queue items.
+     */
+    public function test_delete_subscriber_removes_pending_queue(): void {
+        $wpdb = $this->setup_wpdb_mock();
+
+        $_GET['action']   = 'delete_subscriber';
+        $_GET['id']       = 456;
+        $_GET['_wpnonce'] = 'valid_nonce';
+
+        Functions\expect( 'wp_verify_nonce' )
+            ->once()
+            ->with( 'valid_nonce', 'delete_subscriber_456' )
+            ->andReturn( true );
+
+        // Delete from subscriber_list.
+        $wpdb->shouldReceive( 'delete' )
+            ->once()
+            ->with( 'wp_mskd_subscriber_list', array( 'subscriber_id' => 456 ), Mockery::type( 'array' ) )
+            ->andReturn( 0 );
+
+        // Delete pending queue items - this is what we're testing.
+        $wpdb->shouldReceive( 'delete' )
+            ->once()
+            ->with(
+                'wp_mskd_queue',
+                array(
+                    'subscriber_id' => 456,
+                    'status'        => 'pending',
+                ),
+                Mockery::type( 'array' )
+            )
+            ->andReturn( 5 ); // 5 pending items removed
+
+        // Delete subscriber.
+        $wpdb->shouldReceive( 'delete' )
+            ->once()
+            ->with( 'wp_mskd_subscribers', array( 'id' => 456 ), Mockery::type( 'array' ) )
+            ->andReturn( 1 );
+
+        Functions\expect( 'add_settings_error' )
+            ->once();
+
+        Functions\expect( 'wp_redirect' )
+            ->once()
+            ->andReturnUsing(
+                function () {
+                    throw new \Exception( 'redirect_called' );
+                }
+            );
+
+        try {
+            $this->admin->handle_actions();
+        } catch ( \Exception $e ) {
+            $this->assertEquals( 'redirect_called', $e->getMessage() );
+        }
+    }
+
+    /**
+     * Test that invalid status defaults to active.
+     */
+    public function test_subscriber_status_validation(): void {
+        $wpdb = $this->setup_wpdb_mock();
+
+        $_POST['mskd_add_subscriber'] = true;
+        $_POST['mskd_nonce']          = 'valid_nonce';
+        $_POST['email']               = 'test@example.com';
+        $_POST['first_name']          = 'Test';
+        $_POST['last_name']           = 'User';
+        $_POST['status']              = 'invalid_status'; // Invalid status
+
+        Functions\expect( 'wp_verify_nonce' )
+            ->once()
+            ->andReturn( true );
+
+        // No existing email.
+        $wpdb->shouldReceive( 'get_var' )
+            ->once()
+            ->andReturn( null );
+
+        // Verify status defaults to 'active'.
+        $wpdb->insert_id = 1;
+        $wpdb->shouldReceive( 'insert' )
+            ->once()
+            ->with(
+                'wp_mskd_subscribers',
+                Mockery::on(
+                    function ( $data ) {
+                        return $data['status'] === 'active'; // Should default to active
+                    }
+                ),
+                Mockery::type( 'array' )
+            )
+            ->andReturn( 1 );
+
+        Functions\expect( 'add_settings_error' )
+            ->once()
+            ->with( 'mskd_messages', 'mskd_success', Mockery::any(), 'success' );
+
+        $this->admin->handle_actions();
+    }
+
+    /**
+     * Clean up after each test.
+     */
+    protected function tearDown(): void {
+        unset( $_POST['mskd_add_subscriber'] );
+        unset( $_POST['mskd_edit_subscriber'] );
+        unset( $_POST['mskd_nonce'] );
+        unset( $_POST['email'] );
+        unset( $_POST['first_name'] );
+        unset( $_POST['last_name'] );
+        unset( $_POST['status'] );
+        unset( $_POST['lists'] );
+        unset( $_POST['subscriber_id'] );
+        unset( $_GET['action'] );
+        unset( $_GET['id'] );
+        unset( $_GET['_wpnonce'] );
+
+        parent::tearDown();
+    }
+}

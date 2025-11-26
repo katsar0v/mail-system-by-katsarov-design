@@ -1,0 +1,47 @@
+// ==========================================================================
+// Status Badges Component
+// ==========================================================================
+// Styles for status indicators and badges.
+
+@use '../abstracts' as *;
+
+// Base Status Badge
+.mskd-status {
+  @include status-badge;
+}
+
+// Success States
+.mskd-status-active,
+.mskd-status-sent {
+  @include status-badge-variant($color-success-bg, $color-success-text);
+}
+
+// Warning States
+.mskd-status-inactive,
+.mskd-status-pending {
+  @include status-badge-variant($color-warning-bg, $color-warning-text);
+}
+
+// Error States
+.mskd-status-unsubscribed,
+.mskd-status-failed {
+  @include status-badge-variant($color-error-bg, $color-error-text);
+}
+
+// Info States
+.mskd-status-processing {
+  @include status-badge-variant($color-info-bg, $color-info-text);
+}
+
+// Cron Status (text-based)
+.mskd-cron-active,
+.mskd-cron-enabled {
+  color: $color-success;
+  font-weight: $font-weight-medium;
+}
+
+.mskd-cron-inactive,
+.mskd-cron-disabled {
+  color: $color-error;
+  font-weight: $font-weight-medium;
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<phpunit
+    bootstrap="bootstrap.php"
+    backupGlobals="false"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./Unit</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">../includes</directory>
+            <directory suffix=".php">../admin</directory>
+            <directory suffix=".php">../public</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">../admin/partials</directory>
+            <directory suffix=".php">../public/partials</directory>
+        </exclude>
+    </coverage>
+
+    <php>
+        <const name="MSKD_TESTING" value="true"/>
+    </php>
+</phpunit>

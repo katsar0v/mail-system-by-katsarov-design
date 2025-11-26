@@ -1,0 +1,8 @@
+// ==========================================================================
+// Abstracts Index
+// ==========================================================================
+// This file imports all abstract partials (variables, mixins, functions).
+// Order matters: variables should come before mixins that use them.
+
+@forward 'variables';
+@forward 'mixins';
