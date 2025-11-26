@@ -136,11 +136,13 @@ class MSKD_Cron_Handler {
                         $new_attempts,
                         $error_message ? '(' . $error_message . ')' : ''
                     );
+                    // Normalize to 00 seconds
+                    $retry_timestamp = mskd_normalize_timestamp( strtotime( "+{$retry_delay} minutes" ) );
                     $wpdb->update(
                         $wpdb->prefix . 'mskd_queue',
                         array(
                             'status'        => 'pending',
-                            'scheduled_at'  => date( 'Y-m-d H:i:s', strtotime( "+{$retry_delay} minutes" ) ),
+                            'scheduled_at'  => date( 'Y-m-d H:i:s', $retry_timestamp ),
                             'error_message' => $retry_message,
                         ),
                         array( 'id' => $item->id ),
@@ -177,7 +179,9 @@ class MSKD_Cron_Handler {
     private function recover_stuck_emails() {
         global $wpdb;
 
-        $timeout_threshold = date( 'Y-m-d H:i:s', strtotime( '-' . self::PROCESSING_TIMEOUT_MINUTES . ' minutes' ) );
+        // Normalize to 00 seconds
+        $timeout_timestamp = mskd_normalize_timestamp( strtotime( '-' . self::PROCESSING_TIMEOUT_MINUTES . ' minutes' ) );
+        $timeout_threshold = date( 'Y-m-d H:i:s', $timeout_timestamp );
 
         // Find emails stuck in processing status
         $stuck_items = $wpdb->get_results( $wpdb->prepare(
@@ -194,7 +198,7 @@ class MSKD_Cron_Handler {
                     $wpdb->prefix . 'mskd_queue',
                     array(
                         'status'        => 'pending',
-                        'scheduled_at'  => current_time( 'mysql' ),
+                        'scheduled_at'  => mskd_current_time_normalized(),
                         'error_message' => __( 'Recovered after stuck in processing', 'mail-system-by-katsarov-design' ),
                     ),
                     array( 'id' => $item->id ),

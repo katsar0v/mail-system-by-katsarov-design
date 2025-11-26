@@ -116,7 +116,9 @@ class MSKD_Activator {
      */
     private static function schedule_cron() {
         if ( ! wp_next_scheduled( 'mskd_process_queue' ) ) {
-            wp_schedule_event( time(), 'mskd_every_minute', 'mskd_process_queue' );
+            // Schedule at the start of the next minute (00 seconds)
+            $next_minute = mskd_normalize_timestamp( time() + 60 );
+            wp_schedule_event( $next_minute, 'mskd_every_minute', 'mskd_process_queue' );
         }
     }
 

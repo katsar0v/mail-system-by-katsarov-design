@@ -118,3 +118,31 @@ function mskd_cron_schedules( $schedules ) {
     return $schedules;
 }
 add_filter( 'cron_schedules', 'mskd_cron_schedules' );
+
+/**
+ * Normalize a timestamp to have 00 seconds.
+ *
+ * This ensures all scheduled events and times are on clean minute boundaries.
+ *
+ * @param int|null $timestamp Unix timestamp. If null, uses current time.
+ * @return int Unix timestamp with seconds set to 00.
+ */
+function mskd_normalize_timestamp( $timestamp = null ) {
+    if ( null === $timestamp ) {
+        $timestamp = time();
+    }
+    // Round down to the start of the current minute (remove seconds)
+    return (int) ( floor( $timestamp / 60 ) * 60 );
+}
+
+/**
+ * Get current time in MySQL format with seconds set to 00.
+ *
+ * @return string MySQL datetime string with 00 seconds.
+ */
+function mskd_current_time_normalized() {
+    $wp_timezone = wp_timezone();
+    $now         = new DateTime( 'now', $wp_timezone );
+    $now->setTime( (int) $now->format( 'H' ), (int) $now->format( 'i' ), 0 );
+    return $now->format( 'Y-m-d H:i:s' );
+}
