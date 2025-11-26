@@ -53,13 +53,16 @@ abstract class TestCase extends PHPUnitTestCase {
         // Escaping functions - return input as-is.
         Functions\stubs(
             array(
-                'esc_html'       => null,
-                'esc_attr'       => null,
-                'esc_url'        => null,
-                'esc_html__'     => null,
-                'esc_attr__'     => null,
-                'wp_kses_post'   => null,
-                'absint'         => function ( $value ) {
+                'esc_html'          => null,
+                'esc_attr'          => null,
+                'esc_url'           => null,
+                'esc_html__'        => null,
+                'esc_attr__'        => null,
+                'wp_kses_post'      => null,
+                'wp_strip_all_tags' => function ( $string, $remove_breaks = false ) {
+                    return strip_tags( $string );
+                },
+                'absint'            => function ( $value ) {
                     return abs( (int) $value );
                 },
             )
@@ -148,6 +151,12 @@ abstract class TestCase extends PHPUnitTestCase {
                         'admin_email' => 'admin@example.com',
                     );
                     return $values[ $show ] ?? '';
+                },
+                'wp_timezone'          => function () {
+                    return new \DateTimeZone( 'UTC' );
+                },
+                'wp_timezone_string'   => function () {
+                    return 'UTC';
                 },
             )
         );
