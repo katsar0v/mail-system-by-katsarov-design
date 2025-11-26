@@ -26,10 +26,10 @@ if ( $action === 'edit' && $list_id ) {
 
 <div class="wrap mskd-wrap">
     <h1>
-        <?php _e( 'Списъци', 'mail-system-by-katsarov-design' ); ?>
+        <?php _e( 'Lists', 'mail-system-by-katsarov-design' ); ?>
         <?php if ( $action === 'list' ) : ?>
             <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-lists&action=add' ) ); ?>" class="page-title-action">
-                <?php _e( 'Добави нов', 'mail-system-by-katsarov-design' ); ?>
+                <?php _e( 'Add new', 'mail-system-by-katsarov-design' ); ?>
             </a>
         <?php endif; ?>
     </h1>
@@ -39,7 +39,7 @@ if ( $action === 'edit' && $list_id ) {
     <?php if ( $action === 'add' || $action === 'edit' ) : ?>
         <!-- Add/Edit Form -->
         <div class="mskd-form-wrap">
-            <h2><?php echo $action === 'add' ? __( 'Добави списък', 'mail-system-by-katsarov-design' ) : __( 'Редактирай списък', 'mail-system-by-katsarov-design' ); ?></h2>
+            <h2><?php echo $action === 'add' ? __( 'Add list', 'mail-system-by-katsarov-design' ) : __( 'Edit list', 'mail-system-by-katsarov-design' ); ?></h2>
             
             <form method="post" action="">
                 <?php wp_nonce_field( $action === 'add' ? 'mskd_add_list' : 'mskd_edit_list', 'mskd_nonce' ); ?>
@@ -51,7 +51,7 @@ if ( $action === 'edit' && $list_id ) {
                 <table class="form-table">
                     <tr>
                         <th scope="row">
-                            <label for="name"><?php _e( 'Име на списъка', 'mail-system-by-katsarov-design' ); ?> *</label>
+                            <label for="name"><?php _e( 'List name', 'mail-system-by-katsarov-design' ); ?> *</label>
                         </th>
                         <td>
                             <input type="text" name="name" id="name" class="regular-text" required
@@ -60,7 +60,7 @@ if ( $action === 'edit' && $list_id ) {
                     </tr>
                     <tr>
                         <th scope="row">
-                            <label for="description"><?php _e( 'Описание', 'mail-system-by-katsarov-design' ); ?></label>
+                            <label for="description"><?php _e( 'Description', 'mail-system-by-katsarov-design' ); ?></label>
                         </th>
                         <td>
                             <textarea name="description" id="description" class="large-text" rows="4"><?php echo $list ? esc_textarea( $list->description ) : ''; ?></textarea>
@@ -71,9 +71,9 @@ if ( $action === 'edit' && $list_id ) {
                 <p class="submit">
                     <input type="submit" name="<?php echo $action === 'add' ? 'mskd_add_list' : 'mskd_edit_list'; ?>" 
                            class="button button-primary" 
-                           value="<?php echo $action === 'add' ? __( 'Добави списък', 'mail-system-by-katsarov-design' ) : __( 'Запази промените', 'mail-system-by-katsarov-design' ); ?>">
+                           value="<?php echo $action === 'add' ? __( 'Add list', 'mail-system-by-katsarov-design' ) : __( 'Save changes', 'mail-system-by-katsarov-design' ); ?>">
                     <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-lists' ) ); ?>" class="button">
-                        <?php _e( 'Отказ', 'mail-system-by-katsarov-design' ); ?>
+                        <?php _e( 'Cancel', 'mail-system-by-katsarov-design' ); ?>
                     </a>
                 </p>
             </form>
@@ -88,11 +88,11 @@ if ( $action === 'edit' && $list_id ) {
         <table class="wp-list-table widefat fixed striped">
             <thead>
                 <tr>
-                    <th scope="col"><?php _e( 'Име', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Описание', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Абонати', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Дата', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Действия', 'mail-system-by-katsarov-design' ); ?></th>
+                    <th scope="col"><?php _e( 'Name', 'mail-system-by-katsarov-design' ); ?></th>
+                    <th scope="col"><?php _e( 'Description', 'mail-system-by-katsarov-design' ); ?></th>
+                    <th scope="col"><?php _e( 'Subscribers', 'mail-system-by-katsarov-design' ); ?></th>
+                    <th scope="col"><?php _e( 'Date', 'mail-system-by-katsarov-design' ); ?></th>
+                    <th scope="col"><?php _e( 'Actions', 'mail-system-by-katsarov-design' ); ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -119,18 +119,18 @@ if ( $action === 'edit' && $list_id ) {
                             </td>
                             <td>
                                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-lists&action=edit&id=' . $item->id ) ); ?>">
-                                    <?php _e( 'Редактирай', 'mail-system-by-katsarov-design' ); ?>
+                                    <?php _e( 'Edit', 'mail-system-by-katsarov-design' ); ?>
                                 </a> |
                                 <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=mskd-lists&action=delete_list&id=' . $item->id ), 'delete_list_' . $item->id ) ); ?>" 
                                    class="mskd-delete-link" style="color: #a00;">
-                                    <?php _e( 'Изтрий', 'mail-system-by-katsarov-design' ); ?>
+                                    <?php _e( 'Delete', 'mail-system-by-katsarov-design' ); ?>
                                 </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else : ?>
                     <tr>
-                        <td colspan="5"><?php _e( 'Няма създадени списъци.', 'mail-system-by-katsarov-design' ); ?></td>
+                        <td colspan="5"><?php _e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?></td>
                     </tr>
                 <?php endif; ?>
             </tbody>

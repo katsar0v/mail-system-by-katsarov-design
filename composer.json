@@ -1,6 +1,6 @@
 {
     "name": "katsarov-design/mail-system",
-    "description": "Система за управление на имейл бюлетини с абонати, списъци и опашка за изпращане. С пълен български интерфейс.",
+    "description": "Email newsletter management system with subscribers, lists, and sending queue. Supports English (default), Bulgarian, and German.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "authors": [

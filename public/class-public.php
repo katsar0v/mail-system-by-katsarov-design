@@ -49,9 +49,9 @@ class MSKD_Public {
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'nonce'    => wp_create_nonce( 'mskd_public_nonce' ),
             'strings'  => array(
-                'subscribing' => __( 'Абониране...', 'mail-system-by-katsarov-design' ),
-                'success'     => __( 'Успешно се абонирахте!', 'mail-system-by-katsarov-design' ),
-                'error'       => __( 'Възникна грешка. Моля, опитайте отново.', 'mail-system-by-katsarov-design' ),
+                'subscribing' => __( 'Subscribing...', 'mail-system-by-katsarov-design' ),
+                'success'     => __( 'Successfully subscribed!', 'mail-system-by-katsarov-design' ),
+                'error'       => __( 'An error occurred. Please try again.', 'mail-system-by-katsarov-design' ),
             ),
         ) );
     }
@@ -73,8 +73,8 @@ class MSKD_Public {
         // Validate token length (tokens are 32 characters)
         if ( strlen( $token ) !== 32 || ! ctype_alnum( $token ) ) {
             wp_die( 
-                __( 'Невалиден линк за отписване.', 'mail-system-by-katsarov-design' ),
-                __( 'Грешка', 'mail-system-by-katsarov-design' ),
+                __( 'Invalid unsubscribe link.', 'mail-system-by-katsarov-design' ),
+                __( 'Error', 'mail-system-by-katsarov-design' ),
                 array( 'response' => 400 )
             );
         }
@@ -86,8 +86,8 @@ class MSKD_Public {
         
         if ( $attempts !== false && $attempts >= 10 ) {
             wp_die( 
-                __( 'Твърде много опити. Моля, опитайте отново след 5 минути.', 'mail-system-by-katsarov-design' ),
-                __( 'Грешка', 'mail-system-by-katsarov-design' ),
+                __( 'Too many attempts. Please try again in 5 minutes.', 'mail-system-by-katsarov-design' ),
+                __( 'Error', 'mail-system-by-katsarov-design' ),
                 array( 'response' => 429 )
             );
         }
@@ -104,8 +104,8 @@ class MSKD_Public {
 
         if ( ! $subscriber ) {
             wp_die( 
-                __( 'Невалиден линк за отписване.', 'mail-system-by-katsarov-design' ),
-                __( 'Грешка', 'mail-system-by-katsarov-design' ),
+                __( 'Invalid unsubscribe link.', 'mail-system-by-katsarov-design' ),
+                __( 'Error', 'mail-system-by-katsarov-design' ),
                 array( 'response' => 400 )
             );
         }
@@ -136,7 +136,7 @@ class MSKD_Public {
 
         $atts = shortcode_atts( array(
             'list_id' => 0,
-            'title'   => __( 'Абонирайте се', 'mail-system-by-katsarov-design' ),
+            'title'   => __( 'Subscribe', 'mail-system-by-katsarov-design' ),
         ), $atts );
 
         ob_start();
@@ -159,7 +159,7 @@ class MSKD_Public {
 
         if ( ! is_email( $email ) ) {
             wp_send_json_error( array(
-                'message' => __( 'Моля, въведете валиден имейл адрес.', 'mail-system-by-katsarov-design' ),
+                'message' => __( 'Please enter a valid email address.', 'mail-system-by-katsarov-design' ),
             ) );
         }
 
@@ -224,7 +224,7 @@ class MSKD_Public {
         }
 
         wp_send_json_success( array(
-            'message' => __( 'Успешно се абонирахте!', 'mail-system-by-katsarov-design' ),
+            'message' => __( 'Successfully subscribed!', 'mail-system-by-katsarov-design' ),
         ) );
     }
 }

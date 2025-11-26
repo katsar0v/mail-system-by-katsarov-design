@@ -1,10 +1,10 @@
-# Bulgarian translations for Мейл Система от Katsarov Design.
+# Bulgarian translations for Mail System by Katsarov Design.
 # Copyright (C) 2024 Katsarov Design
 # This file is distributed under the GPL v2 or later.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Мейл Система от Katsarov Design 1.0.0\n"
+"Project-Id-Version: Mail System by Katsarov Design 1.0.0\n"
 "Report-Msgid-Bugs-To: https://katsarov.design/\n"
 "POT-Creation-Date: 2024-01-01T00:00:00+00:00\n"
 "PO-Revision-Date: 2024-01-01 00:00+0200\n"
@@ -17,497 +17,833 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: mail-system-by-katsarov-design.php
-msgid "Всяка минута"
+msgid "Every minute"
 msgstr "Всяка минута"
 
 #: admin/class-admin.php
-msgid "Мейл Система"
+msgid "Mail System"
 msgstr "Мейл Система"
 
 #: admin/class-admin.php
-msgid "Имейли"
+msgid "Emails"
 msgstr "Имейли"
 
 #: admin/class-admin.php
-msgid "Табло"
+msgid "Dashboard"
 msgstr "Табло"
 
 #: admin/class-admin.php
-msgid "Абонати"
+msgid "Subscribers"
 msgstr "Абонати"
 
 #: admin/class-admin.php
-msgid "Списъци"
+msgid "Lists"
 msgstr "Списъци"
 
 #: admin/class-admin.php
-msgid "Ново писмо"
+msgid "New email"
 msgstr "Ново писмо"
 
 #: admin/class-admin.php
-msgid "Опашка"
+msgid "One-time email"
+msgstr "Еднократен имейл"
+
+#: admin/class-admin.php
+msgid "Queue"
 msgstr "Опашка"
 
 #: admin/class-admin.php
-msgid "Настройки"
+msgid "Settings"
 msgstr "Настройки"
 
 #: admin/class-admin.php
-msgid "Сигурни ли сте, че искате да изтриете?"
+msgid "Are you sure you want to delete?"
 msgstr "Сигурни ли сте, че искате да изтриете?"
 
 #: admin/class-admin.php
-msgid "Изпращане..."
+msgid "Sending..."
 msgstr "Изпращане..."
 
 #: admin/class-admin.php
-msgid "Успешно!"
+msgid "Success!"
 msgstr "Успешно!"
 
 #: admin/class-admin.php
-msgid "Грешка!"
+msgid "Error!"
 msgstr "Грешка!"
 
 #: admin/class-admin.php
-msgid "Препоръка за Мейл Система:"
+msgid "Connection timed out. Check SMTP settings."
+msgstr "Времето за изчакване изтече. Проверете SMTP настройките."
+
+#: admin/class-admin.php
+msgid "Please select a future date and time."
+msgstr "Моля, изберете бъдеща дата и час."
+
+#: admin/class-admin.php
+msgid "Recommendation for Mail System:"
 msgstr "Препоръка за Мейл Система:"
 
 #: admin/class-admin.php
-msgid "За по-надеждно изпращане на имейли препоръчваме да използвате системен cron вместо WP-Cron."
+msgid "For more reliable email sending, we recommend using system cron instead of WP-Cron."
 msgstr "За по-надеждно изпращане на имейли препоръчваме да използвате системен cron вместо WP-Cron."
 
 #: admin/class-admin.php
-msgid "Добавете в wp-config.php:"
+msgid "Add to wp-config.php:"
 msgstr "Добавете в wp-config.php:"
 
 #: admin/class-admin.php
-msgid "И настройте системен cron:"
+msgid "And set up system cron:"
 msgstr "И настройте системен cron:"
 
 #: admin/class-admin.php
-msgid "Невалиден имейл адрес."
+msgid "Invalid email address."
 msgstr "Невалиден имейл адрес."
 
 #: admin/class-admin.php
-msgid "Абонатът е добавен успешно."
+msgid "This email already exists."
+msgstr "Този имейл вече съществува."
+
+#: admin/class-admin.php
+msgid "Subscriber added successfully."
 msgstr "Абонатът е добавен успешно."
 
 #: admin/class-admin.php
-msgid "Грешка при добавяне на абонат."
+msgid "Error adding subscriber."
 msgstr "Грешка при добавяне на абонат."
 
 #: admin/class-admin.php
-msgid "Абонатът е обновен успешно."
+msgid "Subscriber updated successfully."
 msgstr "Абонатът е обновен успешно."
 
 #: admin/class-admin.php
-msgid "Абонатът е изтрит успешно."
+msgid "Subscriber deleted successfully."
 msgstr "Абонатът е изтрит успешно."
 
 #: admin/class-admin.php
-msgid "Списъкът е добавен успешно."
+msgid "List added successfully."
 msgstr "Списъкът е добавен успешно."
 
 #: admin/class-admin.php
-msgid "Грешка при добавяне на списък."
+msgid "Error adding list."
 msgstr "Грешка при добавяне на списък."
 
 #: admin/class-admin.php
-msgid "Списъкът е обновен успешно."
+msgid "List updated successfully."
 msgstr "Списъкът е обновен успешно."
 
 #: admin/class-admin.php
-msgid "Списъкът е изтрит успешно."
+msgid "List deleted successfully."
 msgstr "Списъкът е изтрит успешно."
 
 #: admin/class-admin.php
-msgid "Моля, попълнете всички полета."
+msgid "Record not found."
+msgstr "Записът не е намерен."
+
+#: admin/class-admin.php
+msgid "This email cannot be cancelled."
+msgstr "Този имейл не може да бъде отменен."
+
+#: admin/class-admin.php
+msgid "Cancelled by administrator"
+msgstr "Отменен от администратор"
+
+#: admin/class-admin.php
+msgid "Email cancelled successfully."
+msgstr "Имейлът е отменен успешно."
+
+#: admin/class-admin.php
+msgid "Error cancelling email."
+msgstr "Грешка при отмяна на имейла."
+
+#: admin/class-admin.php
+msgid "Please fill in all fields."
 msgstr "Моля, попълнете всички полета."
 
 #: admin/class-admin.php
-msgid "Няма активни абонати в избраните списъци."
+msgid "No active subscribers in the selected lists."
 msgstr "Няма активни абонати в избраните списъци."
 
 #: admin/class-admin.php
-msgid "Добавени са %d писма в опашката за изпращане."
+msgid "%d emails have been added to the sending queue."
 msgstr "Добавени са %d писма в опашката за изпращане."
 
 #: admin/class-admin.php
-msgid "Настройките са запазени успешно."
+msgid "%1$d emails have been scheduled for %2$s."
+msgstr "Насрочени са %1$d писма за изпращане на %2$s."
+
+#: admin/class-admin.php
+msgid "Settings saved successfully."
 msgstr "Настройките са запазени успешно."
 
+#: admin/class-admin.php
+msgid "Please fill in all required fields."
+msgstr "Моля, попълнете всички задължителни полета."
+
+#: admin/class-admin.php
+msgid "Invalid recipient email address."
+msgstr "Невалиден имейл адрес на получателя."
+
+#: admin/class-admin.php
+msgid "SMTP is not configured. Please set up SMTP in the plugin settings."
+msgstr "SMTP не е конфигуриран. Моля, настройте SMTP в настройките на плъгина."
+
+#: admin/class-admin.php
+msgid "wp_mail() failed for one-time email"
+msgstr "wp_mail() неуспешен за еднократен имейл"
+
+#: admin/class-admin.php
+msgid "One-time email sent successfully to %s."
+msgstr "Еднократният имейл е изпратен успешно до %s."
+
+#: admin/class-admin.php
+msgid "Error sending one-time email."
+msgstr "Грешка при изпращане на еднократния имейл."
+
+#: admin/class-admin.php
+msgid "Reason: %s"
+msgstr "Причина: %s"
+
+#: admin/class-admin.php
+msgid "Please try again."
+msgstr "Моля, опитайте отново."
+
+#: admin/class-admin.php
+msgid "One-time email to %1$s has been scheduled for %2$s."
+msgstr "Еднократният имейл до %1$s е насрочен за %2$s."
+
+#: admin/class-admin.php
+msgid "Error scheduling email. Please try again."
+msgstr "Грешка при насрочване на имейла. Моля, опитайте отново."
+
+#: admin/class-admin.php
+msgid "Invalid request. Please refresh the page."
+msgstr "Невалидна заявка. Моля, опреснете страницата."
+
+#: admin/class-admin.php
+msgid "You do not have permission for this operation."
+msgstr "Нямате права за тази операция."
+
 #: admin/partials/dashboard.php
-msgid "Табло - Мейл Система"
+msgid "Dashboard - Mail System"
 msgstr "Табло - Мейл Система"
 
 #: admin/partials/dashboard.php
-msgid "Активни: %d"
-msgstr "Активни: %d"
-
-#: admin/partials/dashboard.php
-msgid "Неактивни: %d"
-msgstr "Неактивни: %d"
-
-#: admin/partials/dashboard.php
-msgid "Отписани: %d"
-msgstr "Отписани: %d"
-
-#: admin/partials/dashboard.php
-msgid "Виж всички"
-msgstr "Виж всички"
-
-#: admin/partials/dashboard.php
-msgid "Управление"
-msgstr "Управление"
-
-#: admin/partials/dashboard.php
-msgid "Чакащи: %d"
-msgstr "Чакащи: %d"
-
-#: admin/partials/dashboard.php
-msgid "Изпратени: %d"
-msgstr "Изпратени: %d"
-
-#: admin/partials/dashboard.php
-msgid "Неуспешни: %d"
-msgstr "Неуспешни: %d"
-
-#: admin/partials/dashboard.php
-msgid "Виж опашка"
-msgstr "Виж опашка"
-
-#: admin/partials/dashboard.php
-msgid "Cron статус"
-msgstr "Cron статус"
-
-#: admin/partials/dashboard.php
-msgid "Активен"
-msgstr "Активен"
-
-#: admin/partials/dashboard.php
-msgid "Следващо изпълнение: %s"
-msgstr "Следващо изпълнение: %s"
-
-#: admin/partials/dashboard.php
-msgid "Неактивен"
-msgstr "Неактивен"
-
-#: admin/partials/dashboard.php
-msgid "Изпращане: %d имейла/мин"
-msgstr "Изпращане: %d имейла/мин"
-
-#: admin/partials/dashboard.php
-msgid "Бързи действия"
+msgid "Quick Actions"
 msgstr "Бързи действия"
 
 #: admin/partials/dashboard.php
-msgid "Добави абонат"
+msgid "Add subscriber"
 msgstr "Добави абонат"
 
 #: admin/partials/dashboard.php
-msgid "Добави списък"
+msgid "Add list"
 msgstr "Добави списък"
 
+#: admin/partials/dashboard.php
+msgid "Active: %d"
+msgstr "Активни: %d"
+
+#: admin/partials/dashboard.php
+msgid "Inactive: %d"
+msgstr "Неактивни: %d"
+
+#: admin/partials/dashboard.php
+msgid "Unsubscribed: %d"
+msgstr "Отписани: %d"
+
+#: admin/partials/dashboard.php
+msgid "View all"
+msgstr "Виж всички"
+
+#: admin/partials/dashboard.php
+msgid "Manage"
+msgstr "Управление"
+
+#: admin/partials/dashboard.php
+msgid "Pending: %d"
+msgstr "Чакащи: %d"
+
+#: admin/partials/dashboard.php
+msgid "Sent: %d"
+msgstr "Изпратени: %d"
+
+#: admin/partials/dashboard.php
+msgid "Failed: %d"
+msgstr "Неуспешни: %d"
+
+#: admin/partials/dashboard.php
+msgid "One-time: %d"
+msgstr "Еднократни: %d"
+
+#: admin/partials/dashboard.php
+msgid "View queue"
+msgstr "Виж опашка"
+
+#: admin/partials/dashboard.php
+msgid "Cron status"
+msgstr "Cron статус"
+
+#: admin/partials/dashboard.php
+msgid "Active"
+msgstr "Активен"
+
+#: admin/partials/dashboard.php
+msgid "Next run: %s"
+msgstr "Следващо изпълнение: %s"
+
+#: admin/partials/dashboard.php
+msgid "Inactive"
+msgstr "Неактивен"
+
+#: admin/partials/dashboard.php
+msgid "Sending: %d emails/min"
+msgstr "Изпращане: %d имейла/мин"
+
 #: admin/partials/subscribers.php
-msgid "Добави нов"
+msgid "Add new"
 msgstr "Добави нов"
 
 #: admin/partials/subscribers.php
-msgid "Редактирай абонат"
+msgid "Edit subscriber"
 msgstr "Редактирай абонат"
 
 #: admin/partials/subscribers.php
-msgid "Имейл"
+msgid "Email"
 msgstr "Имейл"
 
 #: admin/partials/subscribers.php
-msgid "Име"
+msgid "First name"
 msgstr "Име"
 
 #: admin/partials/subscribers.php
-msgid "Фамилия"
+msgid "Last name"
 msgstr "Фамилия"
 
 #: admin/partials/subscribers.php
-msgid "Статус"
+msgid "Status"
 msgstr "Статус"
 
 #: admin/partials/subscribers.php
-msgid "Отписан"
+msgid "Unsubscribed"
 msgstr "Отписан"
 
 #: admin/partials/subscribers.php
-msgid "Няма създадени списъци."
+msgid "No lists created."
 msgstr "Няма създадени списъци."
 
 #: admin/partials/subscribers.php
-msgid "Запази промените"
+msgid "Save changes"
 msgstr "Запази промените"
 
 #: admin/partials/subscribers.php
-msgid "Отказ"
+msgid "Cancel"
 msgstr "Отказ"
 
 #: admin/partials/subscribers.php
-msgid "Всички"
+msgid "All"
 msgstr "Всички"
 
 #: admin/partials/subscribers.php
-msgid "Активни"
-msgstr "Активни"
+msgid "Name"
+msgstr "Име"
 
 #: admin/partials/subscribers.php
-msgid "Неактивни"
-msgstr "Неактивни"
-
-#: admin/partials/subscribers.php
-msgid "Дата"
+msgid "Date"
 msgstr "Дата"
 
 #: admin/partials/subscribers.php
-msgid "Действия"
+msgid "Actions"
 msgstr "Действия"
 
 #: admin/partials/subscribers.php
-msgid "Редактирай"
+msgid "Edit"
 msgstr "Редактирай"
 
 #: admin/partials/subscribers.php
-msgid "Изтрий"
+msgid "Delete"
 msgstr "Изтрий"
 
 #: admin/partials/subscribers.php
-msgid "Няма намерени абонати."
+msgid "No subscribers found."
 msgstr "Няма намерени абонати."
 
 #: admin/partials/lists.php
-msgid "Име на списъка"
+msgid "Edit list"
+msgstr "Редактирай списък"
+
+#: admin/partials/lists.php
+msgid "List name"
 msgstr "Име на списъка"
 
 #: admin/partials/lists.php
-msgid "Описание"
+msgid "Description"
 msgstr "Описание"
 
 #: admin/partials/compose.php
-msgid "Изпрати до списъци"
+msgid "Send to lists"
 msgstr "Изпрати до списъци"
 
 #: admin/partials/compose.php
-msgid "%d активни абонати"
+msgid "%d active subscribers"
 msgstr "%d активни абонати"
 
 #: admin/partials/compose.php
-msgid "Създай списък"
+msgid "Create list"
 msgstr "Създай списък"
 
 #: admin/partials/compose.php
-msgid "Тема"
+msgid "Subject"
 msgstr "Тема"
 
 #: admin/partials/compose.php
-msgid "Съдържание"
+msgid "Content"
 msgstr "Съдържание"
 
 #: admin/partials/compose.php
-msgid "Налични плейсхолдери:"
+msgid "Available placeholders:"
 msgstr "Налични плейсхолдери:"
 
 #: admin/partials/compose.php
-msgid "Добави в опашката"
+msgid "Scheduling"
+msgstr "Насрочване"
+
+#: admin/partials/compose.php
+msgid "Send now"
+msgstr "Изпрати сега"
+
+#: admin/partials/compose.php
+msgid "Specific date and time"
+msgstr "Конкретна дата и час"
+
+#: admin/partials/compose.php
+msgid "After a set time"
+msgstr "След определено време"
+
+#: admin/partials/compose.php
+msgid "Timezone: %s. Select time in 10-minute intervals."
+msgstr "Часова зона: %s. Изберете време на всеки 10 минути."
+
+#: admin/partials/compose.php
+msgid "minutes"
+msgstr "минути"
+
+#: admin/partials/compose.php
+msgid "hours"
+msgstr "часа"
+
+#: admin/partials/compose.php
+msgid "days"
+msgstr "дни"
+
+#: admin/partials/compose.php
+msgid "Emails will be sent after the specified time."
+msgstr "Имейлите ще бъдат изпратени след посоченото време."
+
+#: admin/partials/compose.php
+msgid "Add to queue"
 msgstr "Добави в опашката"
 
+#: admin/partials/compose.php
+msgid "Schedule sending"
+msgstr "Насрочи изпращане"
+
 #: admin/partials/queue.php
-msgid "Опашка за изпращане"
+msgid "Sending queue"
 msgstr "Опашка за изпращане"
 
 #: admin/partials/queue.php
-msgid "Следващо изпълнение:"
+msgid "Next run:"
 msgstr "Следващо изпълнение:"
 
 #: admin/partials/queue.php
-msgid "Не е насрочено"
+msgid "Not scheduled"
 msgstr "Не е насрочено"
 
 #: admin/partials/queue.php
-msgid "Скорост:"
+msgid "Speed:"
 msgstr "Скорост:"
 
 #: admin/partials/queue.php
-msgid "%d имейла/мин"
+msgid "%d emails/min"
 msgstr "%d имейла/мин"
 
 #: admin/partials/queue.php
-msgid "Чакащи"
+msgid "Scheduled"
+msgstr "Насрочени"
+
+#: admin/partials/queue.php
+msgid "Pending"
 msgstr "Чакащи"
 
 #: admin/partials/queue.php
-msgid "В процес"
+msgid "Processing"
 msgstr "В процес"
 
 #: admin/partials/queue.php
-msgid "Изпратени"
+msgid "Sent"
 msgstr "Изпратени"
 
 #: admin/partials/queue.php
-msgid "Неуспешни"
+msgid "Failed"
 msgstr "Неуспешни"
+
+#: admin/partials/queue.php
+msgid "Cancelled"
+msgstr "Отменени"
+
+#: admin/partials/queue.php
+msgid "One-time"
+msgstr "Еднократни"
 
 #: admin/partials/queue.php
 msgid "ID"
 msgstr "ID"
 
 #: admin/partials/queue.php
-msgid "Получател"
+msgid "Recipient"
 msgstr "Получател"
 
 #: admin/partials/queue.php
-msgid "Опити"
+msgid "Attempts"
 msgstr "Опити"
 
 #: admin/partials/queue.php
-msgid "Насрочено"
-msgstr "Насрочено"
-
-#: admin/partials/queue.php
-msgid "Изпратено"
-msgstr "Изпратено"
-
-#: admin/partials/queue.php
-msgid "Изтрит абонат"
+msgid "Deleted subscriber"
 msgstr "Изтрит абонат"
 
 #: admin/partials/queue.php
-msgid "Чакащ"
-msgstr "Чакащ"
+msgid "in %d min."
+msgstr "след %d мин."
 
 #: admin/partials/queue.php
-msgid "Изпратен"
-msgstr "Изпратен"
+msgid "in %d h."
+msgstr "след %d ч."
 
 #: admin/partials/queue.php
-msgid "Неуспешен"
-msgstr "Неуспешен"
+msgid "in %d days"
+msgstr "след %d дни"
 
 #: admin/partials/queue.php
-msgid "Няма записи в опашката."
+msgid "Cancel sending"
+msgstr "Отмени изпращането"
+
+#: admin/partials/queue.php
+msgid "No records in queue."
 msgstr "Няма записи в опашката."
 
 #: admin/partials/settings.php
-msgid "Настройки на изпращача"
+msgid "Sender settings"
 msgstr "Настройки на изпращача"
 
 #: admin/partials/settings.php
-msgid "Име на подател"
+msgid "Sender name"
 msgstr "Име на подател"
 
 #: admin/partials/settings.php
-msgid "Името, което ще се показва като подател."
+msgid "The name that will appear as sender."
 msgstr "Името, което ще се показва като подател."
 
 #: admin/partials/settings.php
-msgid "Имейл на подател"
+msgid "Sender email"
 msgstr "Имейл на подател"
 
 #: admin/partials/settings.php
-msgid "Имейлът, от който ще се изпращат писмата."
+msgid "The email from which messages will be sent."
 msgstr "Имейлът, от който ще се изпращат писмата."
 
 #: admin/partials/settings.php
-msgid "Отговор до"
+msgid "Reply to"
 msgstr "Отговор до"
 
 #: admin/partials/settings.php
-msgid "Имейл за отговори от получателите."
+msgid "Email for replies from recipients."
 msgstr "Имейл за отговори от получателите."
 
 #: admin/partials/settings.php
-msgid "Информация за системата"
+msgid "SMTP Settings"
+msgstr "SMTP Настройки"
+
+#: admin/partials/settings.php
+msgid "Configure an SMTP server for more reliable email sending."
+msgstr "Конфигурирайте SMTP сървър за по-надеждно изпращане на имейли."
+
+#: admin/partials/settings.php
+msgid "Enable SMTP"
+msgstr "Активиране на SMTP"
+
+#: admin/partials/settings.php
+msgid "Use SMTP for sending emails"
+msgstr "Използване на SMTP за изпращане на имейли"
+
+#: admin/partials/settings.php
+msgid "When enabled, emails will be sent via the specified SMTP server instead of wp_mail()."
+msgstr "Когато е активирано, имейлите ще се изпращат чрез посочения SMTP сървър вместо wp_mail()."
+
+#: admin/partials/settings.php
+msgid "SMTP Host"
+msgstr "SMTP Хост"
+
+#: admin/partials/settings.php
+msgid "SMTP server address (e.g. smtp.gmail.com, smtp.mailgun.org)."
+msgstr "Адрес на SMTP сървъра (напр. smtp.gmail.com, smtp.mailgun.org)."
+
+#: admin/partials/settings.php
+msgid "SMTP Port"
+msgstr "SMTP Порт"
+
+#: admin/partials/settings.php
+msgid "Standard ports: 25, 465 (SSL), 587 (TLS/StartTLS)."
+msgstr "Стандартни портове: 25, 465 (SSL), 587 (TLS/StartTLS)."
+
+#: admin/partials/settings.php
+msgid "Encryption"
+msgstr "Криптиране"
+
+#: admin/partials/settings.php
+msgid "No encryption"
+msgstr "Без криптиране"
+
+#: admin/partials/settings.php
+msgid "It is recommended to use TLS or SSL for a secure connection."
+msgstr "Препоръчително е да използвате TLS или SSL за сигурна връзка."
+
+#: admin/partials/settings.php
+msgid "SMTP Authentication"
+msgstr "SMTP Удостоверяване"
+
+#: admin/partials/settings.php
+msgid "Use authentication (username and password)"
+msgstr "Използване на удостоверяване (потребителско име и парола)"
+
+#: admin/partials/settings.php
+msgid "SMTP Username"
+msgstr "SMTP Потребителско име"
+
+#: admin/partials/settings.php
+msgid "Usually this is your email address or username."
+msgstr "Обикновено това е вашият имейл адрес или потребителско име."
+
+#: admin/partials/settings.php
+msgid "SMTP Password"
+msgstr "SMTP Парола"
+
+#: admin/partials/settings.php
+msgid "For Gmail, use App Password instead of the regular password."
+msgstr "За Gmail използвайте App Password вместо обичайната парола."
+
+#: admin/partials/settings.php
+msgid "Connection test"
+msgstr "Тест на връзката"
+
+#: admin/partials/settings.php
+msgid "Send test email"
+msgstr "Изпрати тестов имейл"
+
+#: admin/partials/settings.php
+msgid "Sends a test email to the administrator email."
+msgstr "Изпраща тестов имейл до имейла на администратора."
+
+#: admin/partials/settings.php
+msgid "System information"
 msgstr "Информация за системата"
 
 #: admin/partials/settings.php
-msgid "Версия на плъгина"
+msgid "Plugin version"
 msgstr "Версия на плъгина"
 
 #: admin/partials/settings.php
-msgid "Скорост на изпращане"
+msgid "Sending method"
+msgstr "Метод за изпращане"
+
+#: admin/partials/settings.php
+msgid "SMTP"
+msgstr "SMTP"
+
+#: admin/partials/settings.php
+msgid "wp_mail() (default)"
+msgstr "wp_mail() (по подразбиране)"
+
+#: admin/partials/settings.php
+msgid "Sending speed"
 msgstr "Скорост на изпращане"
 
 #: admin/partials/settings.php
-msgid "имейла/минута"
+msgid "emails/minute"
 msgstr "имейла/минута"
 
 #: admin/partials/settings.php
-msgid "WP-Cron статус"
+msgid "WP-Cron status"
 msgstr "WP-Cron статус"
 
 #: admin/partials/settings.php
-msgid "Деактивиран (използва се системен cron)"
+msgid "Disabled (using system cron)"
 msgstr "Деактивиран (използва се системен cron)"
 
 #: admin/partials/settings.php
-msgid "Активен (базиран на посещения)"
+msgid "Active (visitor-based)"
 msgstr "Активен (базиран на посещения)"
 
 #: admin/partials/settings.php
-msgid "Запази настройките"
+msgid "Next run"
+msgstr "Следващо изпълнение"
+
+#: admin/partials/settings.php
+msgid "Save settings"
 msgstr "Запази настройките"
 
-#: includes/services/class-cron-handler.php
-msgid "wp_mail() неуспешен"
-msgstr "wp_mail() неуспешен"
+#: admin/partials/one-time-email.php
+msgid "Send a one-time email directly to a specific recipient. The email can be sent immediately or scheduled for later."
+msgstr "Изпратете еднократен имейл директно до конкретен получател. Имейлът може да бъде изпратен незабавно или насрочен за по-късно."
+
+#: admin/partials/one-time-email.php
+msgid "Recipient email"
+msgstr "Имейл на получателя"
+
+#: admin/partials/one-time-email.php
+msgid "The email address to which the message will be sent."
+msgstr "Имейл адресът, до който ще бъде изпратено писмото."
+
+#: admin/partials/one-time-email.php
+msgid "Recipient name"
+msgstr "Име на получателя"
+
+#: admin/partials/one-time-email.php
+msgid "Recipient name (optional). Can be used in content with {recipient_name}."
+msgstr "Име на получателя (по избор). Може да се използва в съдържанието с {recipient_name}."
+
+#: admin/partials/one-time-email.php
+msgid "The email will be sent after the specified time."
+msgstr "Имейлът ще бъде изпратен след посоченото време."
+
+#: admin/partials/one-time-email.php
+msgid "Information"
+msgstr "Информация"
+
+#: admin/partials/one-time-email.php
+msgid "One-time emails can be sent immediately or scheduled for later."
+msgstr "Еднократните имейли могат да бъдат изпратени незабавно или насрочени за по-късно."
+
+#: admin/partials/one-time-email.php
+msgid "They are not saved as templates and do not repeat."
+msgstr "Те не се записват като шаблони и не се повтарят."
+
+#: admin/partials/one-time-email.php
+msgid "All sent one-time emails are logged in the audit history."
+msgstr "Всички изпратени еднократни имейли се записват в историята за одит."
+
+#: admin/partials/one-time-email.php
+msgid "Scheduled emails can be cancelled from the Queue page."
+msgstr "Насрочените имейли могат да бъдат отменени от страницата Опашка."
+
+#: admin/partials/one-time-email.php
+msgid "Suitable for: account activation, notifications, event reminders."
+msgstr "Подходящи за: активиране на акаунти, уведомления, напомняния за събития."
 
 #: includes/services/class-cron-handler.php
-msgid "Отписване"
+msgid "SMTP sending failed"
+msgstr "SMTP изпращане неуспешно"
+
+#: includes/services/class-cron-handler.php
+msgid "Attempt %1$d failed. %2$s Will retry."
+msgstr "Опит %1$d неуспешен. %2$s Ще се опита отново."
+
+#: includes/services/class-cron-handler.php
+msgid "%1$s after %2$d attempts. %3$s"
+msgstr "%1$s след %2$d опита. %3$s"
+
+#: includes/services/class-cron-handler.php
+msgid "Recovered after stuck in processing"
+msgstr "Възстановен след блокиране в обработка"
+
+#: includes/services/class-cron-handler.php
+msgid "Failed after maximum attempts (stuck)"
+msgstr "Неуспешен след максимален брой опити (блокиран)"
+
+#: includes/services/class-cron-handler.php
+msgid "Unsubscribe"
 msgstr "Отписване"
 
+#: includes/services/class-smtp-mailer.php
+msgid "SMTP is not enabled or configured."
+msgstr "SMTP не е активиран или конфигуриран."
+
+#: includes/services/class-smtp-mailer.php
+msgid "SMTP is not enabled or configured. Please fill in SMTP settings."
+msgstr "SMTP не е активиран или конфигуриран. Моля, попълнете SMTP настройките."
+
+#: includes/services/class-smtp-mailer.php
+msgid "Invalid sender email address."
+msgstr "Невалиден имейл адрес на подателя."
+
+#: includes/services/class-smtp-mailer.php
+msgid "[%s] SMTP Test Email"
+msgstr "[%s] SMTP Тестов имейл"
+
+#: includes/services/class-smtp-mailer.php
+msgid "<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP server:</strong> %2$s:%3$s</p>"
+msgstr "<h2>SMTP Тестов имейл</h2><p>Този имейл потвърждава, че SMTP настройките работят правилно.</p><p><strong>Време:</strong> %1$s</p><p><strong>SMTP сървър:</strong> %2$s:%3$s</p>"
+
+#: includes/services/class-smtp-mailer.php
+msgid "Test email sent successfully to %s!"
+msgstr "Тестовият имейл е изпратен успешно до %s!"
+
+#: includes/services/class-smtp-mailer.php
+msgid "Failed to send test email."
+msgstr "Неуспешно изпращане на тестовия имейл."
+
+#: includes/services/class-smtp-mailer.php
+msgid "SMTP error: %s"
+msgstr "SMTP грешка: %s"
+
+#: includes/services/class-smtp-mailer.php
+msgid "Error: %s"
+msgstr "Грешка: %s"
+
 #: public/class-public.php
-msgid "Абониране..."
+msgid "Subscribing..."
 msgstr "Абониране..."
 
 #: public/class-public.php
-msgid "Успешно се абонирахте!"
+msgid "Successfully subscribed!"
 msgstr "Успешно се абонирахте!"
 
 #: public/class-public.php
-msgid "Възникна грешка. Моля, опитайте отново."
+msgid "An error occurred. Please try again."
 msgstr "Възникна грешка. Моля, опитайте отново."
 
 #: public/class-public.php
-msgid "Невалиден линк за отписване."
+msgid "Invalid unsubscribe link."
 msgstr "Невалиден линк за отписване."
 
 #: public/class-public.php
-msgid "Абонирайте се"
+msgid "Error"
+msgstr "Грешка"
+
+#: public/class-public.php
+msgid "Too many attempts. Please try again in 5 minutes."
+msgstr "Твърде много опити. Моля, опитайте отново след 5 минути."
+
+#: public/class-public.php
+msgid "Subscribe"
 msgstr "Абонирайте се"
 
 #: public/class-public.php
-msgid "Моля, въведете валиден имейл адрес."
+msgid "Please enter a valid email address."
 msgstr "Моля, въведете валиден имейл адрес."
 
 #: public/partials/subscribe-form.php
-msgid "Имейл *"
+msgid "Email *"
 msgstr "Имейл *"
 
-#: public/partials/subscribe-form.php
-msgid "Абонирай се"
-msgstr "Абонирай се"
-
 #: public/partials/unsubscribe.php
-msgid "Успешно се отписахте"
+msgid "Successfully unsubscribed"
 msgstr "Успешно се отписахте"
 
 #: public/partials/unsubscribe.php
-msgid "Вече няма да получавате имейли от нас."
+msgid "You will no longer receive emails from us."
 msgstr "Вече няма да получавате имейли от нас."
 
 #: public/partials/unsubscribe.php
-msgid "Обратно към сайта"
+msgid "Back to site"
 msgstr "Обратно към сайта"
-
-#: admin/class-admin.php
-msgid "Този имейл вече съществува."
-msgstr "Този имейл вече съществува."
-
-#: public/class-public.php
-msgid "Твърде много опити. Моля, опитайте отново след 5 минути."
-msgstr "Твърде много опити. Моля, опитайте отново след 5 минути."

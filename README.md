@@ -1,200 +1,267 @@
-# Мейл Система от Katsarov Design
+# Mail System by Katsarov Design
 
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/License-GPL%20v2-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
-Система за управление на имейл бюлетини с абонати, списъци и опашка за изпращане. С пълен български интерфейс.
+Email newsletter management system with subscribers, lists, and sending queue. Supports English (default), Bulgarian, and German interfaces.
 
-## 📋 Описание
+## 📋 Description
 
-**Мейл Система от Katsarov Design** е WordPress плъгин за управление на имейл бюлетини, създаден с пълен български потребителски интерфейс.
+**Mail System by Katsarov Design** is a WordPress plugin for managing email newsletters with full internationalization support.
 
-### Основни функции
+### Key Features
 
-- **Управление на абонати** - Добавяне, редактиране и изтриване на абонати
-- **Статуси на абонати** - Активен, Неактивен, Отписан
-- **Списъци** - Организирайте абонатите си в различни списъци
-- **Опашка за изпращане** - Имейлите се добавят в опашка и се изпращат автоматично
-- **WP-Cron интеграция** - Автоматично изпращане на имейли през WP-Cron
-- **SMTP поддръжка** - Конфигурирайте външен SMTP сървър за надеждно изпращане
-- **Шорткод за абонаментна форма** - Лесно добавяне на форма за абониране
-- **Линк за отписване** - Автоматично генериране на линк за отписване
+- **Subscriber Management** - Add, edit, and delete subscribers
+- **Subscriber Statuses** - Active, Inactive, Unsubscribed
+- **Lists** - Organize your subscribers into different lists
+- **Sending Queue** - Emails are added to a queue and sent automatically
+- **WP-Cron Integration** - Automatic email sending via WP-Cron
+- **SMTP Support** - Configure an external SMTP server for reliable sending
+- **Shortcode for Subscription Form** - Easily add a subscription form
+- **Unsubscribe Link** - Automatic generation of unsubscribe links
+- **Multi-language Support** - English, Bulgarian, and German interfaces
 
-### Технически характеристики
+### Technical Specifications
 
-| Характеристика | Стойност |
-|----------------|----------|
-| Скорост на изпращане | 10 имейла/минута |
-| Метод за изпращане | `wp_mail()` или SMTP (конфигурируемо) |
-| Поддържани протоколи | SSL, TLS (StartTLS), без криптиране |
-| Минимална PHP версия | 7.4 |
-| Минимална WP версия | 5.0 |
+| Feature | Value |
+|---------|-------|
+| Sending Speed | 10 emails/minute |
+| Sending Method | `wp_mail()` or SMTP (configurable) |
+| Supported Protocols | SSL, TLS (StartTLS), no encryption |
+| Minimum PHP Version | 7.4 |
+| Minimum WP Version | 5.0 |
 
-### Плейсхолдери за имейли
+### Email Placeholders
 
-| Плейсхолдер | Описание |
-|-------------|----------|
-| `{first_name}` | Име на абоната |
-| `{last_name}` | Фамилия на абоната |
-| `{email}` | Имейл на абоната |
-| `{unsubscribe_link}` | Линк за отписване |
-| `{unsubscribe_url}` | URL за отписване (без HTML) |
+| Placeholder | Description |
+|-------------|-------------|
+| `{first_name}` | Subscriber's first name |
+| `{last_name}` | Subscriber's last name |
+| `{email}` | Subscriber's email |
+| `{unsubscribe_link}` | Unsubscribe link |
+| `{unsubscribe_url}` | Unsubscribe URL (without HTML) |
 
-## 🚀 Инсталация
+## 🚀 Installation
 
-### Ръчна инсталация
+### Manual Installation
 
-1. Качете папката `mail-system-by-katsarov-design` в `/wp-content/plugins/`
-2. Активирайте плъгина от меню "Плъгини" в WordPress
-3. Отидете в меню "Имейли" за да започнете да използвате плъгина
+1. Upload the `mail-system-by-katsarov-design` folder to `/wp-content/plugins/`
+2. Activate the plugin from the "Plugins" menu in WordPress
+3. Go to the "Emails" menu to start using the plugin
 
-### Чрез Composer
+### Via Composer
 
 ```bash
 composer require katsarov-design/mail-system
 ```
 
-## ⚙️ Конфигурация
+## 🌍 Internationalization (i18n)
 
-### SMTP Настройки
+### Supported Languages
 
-За по-надеждно изпращане на имейли препоръчваме да конфигурирате SMTP сървър.
+The plugin supports the following languages out of the box:
 
-**Стъпка 1:** Отидете на **Имейли → Настройки**
+| Language | Locale | Status |
+|----------|--------|--------|
+| English | `en_US` | Default (source language) |
+| Bulgarian | `bg_BG` | Fully translated |
+| German | `de_DE` | Fully translated |
 
-**Стъпка 2:** Активирайте SMTP и попълнете настройките:
+### How Language Detection Works
 
-| Настройка | Описание |
-|-----------|----------|
-| **SMTP Хост** | Адрес на SMTP сървъра (напр. `smtp.gmail.com`, `smtp.mailgun.org`) |
-| **SMTP Порт** | Порт на сървъра. Стандартни: 25, 465 (SSL), 587 (TLS) |
-| **Криптиране** | SSL, TLS (StartTLS), или без криптиране |
-| **SMTP Удостоверяване** | Активирайте ако сървърът изисква потребителско име и парола |
-| **SMTP Потребителско име** | Обикновено вашият имейл адрес |
-| **SMTP Парола** | Парола за достъп. За Gmail използвайте App Password |
+The plugin automatically detects and uses the appropriate language based on WordPress settings:
 
-**Стъпка 3:** Използвайте бутона "Изпрати тестов имейл" за да проверите настройките
+1. **User Language** - If a user has set a preferred language in their profile, that language is used
+2. **Site Language** - If no user preference is set, the site's general language setting is used (Settings → General → Site Language)
+3. **Fallback** - If translations for the detected language are not available, English (the source language) is displayed
 
-#### Примерни SMTP настройки
+The plugin uses WordPress's standard `load_plugin_textdomain()` function with the text domain `mail-system-by-katsarov-design`.
+
+### Adding New Translations
+
+To add a new translation:
+
+1. **Copy the POT file** - Copy `languages/mail-system-by-katsarov-design.pot` to a new file named `mail-system-by-katsarov-design-{locale}.po` (e.g., `mail-system-by-katsarov-design-fr_FR.po` for French)
+
+2. **Translate the strings** - Open the PO file with a tool like [Poedit](https://poedit.net/) or a text editor and translate all `msgstr` values
+
+3. **Compile the MO file** - Generate the binary MO file:
+   ```bash
+   msgfmt -o mail-system-by-katsarov-design-{locale}.mo mail-system-by-katsarov-design-{locale}.po
+   ```
+
+4. **Place the files** - Put both the `.po` and `.mo` files in the `languages/` folder
+
+### Example PO File Structure
+
+```po
+# Header
+msgid ""
+msgstr ""
+"Project-Id-Version: Mail System by Katsarov Design 1.0.0\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+# Translation entry
+#: admin/class-admin.php
+msgid "Dashboard"
+msgstr "Tableau de bord"
+```
+
+### Translation Files
+
+| File | Purpose |
+|------|---------|
+| `mail-system-by-katsarov-design.pot` | Template file with all translatable strings |
+| `mail-system-by-katsarov-design-{locale}.po` | Human-readable translation file |
+| `mail-system-by-katsarov-design-{locale}.mo` | Compiled binary file used by WordPress |
+
+## ⚙️ Configuration
+
+### SMTP Settings
+
+For more reliable email sending, we recommend configuring an SMTP server.
+
+**Step 1:** Go to **Emails → Settings**
+
+**Step 2:** Enable SMTP and fill in the settings:
+
+| Setting | Description |
+|---------|-------------|
+| **SMTP Host** | SMTP server address (e.g., `smtp.gmail.com`, `smtp.mailgun.org`) |
+| **SMTP Port** | Server port. Standard: 25, 465 (SSL), 587 (TLS) |
+| **Encryption** | SSL, TLS (StartTLS), or no encryption |
+| **SMTP Authentication** | Enable if the server requires username and password |
+| **SMTP Username** | Usually your email address |
+| **SMTP Password** | Access password. For Gmail, use App Password |
+
+**Step 3:** Use the "Send test email" button to verify settings
+
+#### Example SMTP Settings
 
 **Gmail:**
-- Хост: `smtp.gmail.com`
-- Порт: `587`
-- Криптиране: TLS
-- Забележка: Създайте App Password от настройките на Google акаунта
+- Host: `smtp.gmail.com`
+- Port: `587`
+- Encryption: TLS
+- Note: Create an App Password from Google account settings
 
 **Mailgun:**
-- Хост: `smtp.mailgun.org`
-- Порт: `587`
-- Криптиране: TLS
+- Host: `smtp.mailgun.org`
+- Port: `587`
+- Encryption: TLS
 
 **SendGrid:**
-- Хост: `smtp.sendgrid.net`
-- Порт: `587`
-- Криптиране: TLS
-- Потребителско име: `apikey`
+- Host: `smtp.sendgrid.net`
+- Port: `587`
+- Encryption: TLS
+- Username: `apikey`
 
-### Препоръка за системен Cron
+### System Cron Recommendation
 
-За по-надеждно изпращане на имейли препоръчваме да използвате системен cron вместо WP-Cron.
+For more reliable email sending, we recommend using system cron instead of WP-Cron.
 
-**Стъпка 1:** Добавете в `wp-config.php`:
+**Step 1:** Add to `wp-config.php`:
 
 ```php
 define('DISABLE_WP_CRON', true);
 ```
 
-**Стъпка 2:** Настройте системен cron:
+**Step 2:** Set up system cron:
 
 ```bash
 * * * * * php /path/to/wordpress/wp-cron.php
 ```
 
-## 📖 Използване
+## 📖 Usage
 
-### Шорткод за форма за абониране
+### Subscription Form Shortcode
 
-Основна употреба:
+Basic usage:
 
 ```
 [mskd_subscribe_form]
 ```
 
-С параметри:
+With parameters:
 
 ```
-[mskd_subscribe_form list_id="1" title="Абонирайте се за новини"]
+[mskd_subscribe_form list_id="1" title="Subscribe to news"]
 ```
 
-| Параметър | Описание | По подразбиране |
-|-----------|----------|-----------------|
-| `list_id` | ID на списъка за абониране | 0 (без списък) |
-| `title` | Заглавие на формата | "Абонирайте се" |
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `list_id` | ID of the list to subscribe to | 0 (no list) |
+| `title` | Form title | "Subscribe" |
 
-### Админ менюта
+### Admin Menus
 
-След активиране ще видите ново меню **"Имейли"** с подменюта:
+After activation, you will see a new **"Emails"** menu with submenus:
 
-- **Табло** - Обща статистика
-- **Абонати** - Управление на абонати
-- **Списъци** - Управление на списъци
-- **Ново писмо** - Създаване и изпращане на имейл
-- **Опашка** - Преглед на опашката за изпращане
-- **Настройки** - Конфигурация на плъгина
+- **Dashboard** - General statistics
+- **Subscribers** - Subscriber management
+- **Lists** - List management
+- **New email** - Create and send emails
+- **Queue** - View the sending queue
+- **Settings** - Plugin configuration
 
-## 🗄️ База данни
+## 🗄️ Database
 
-Плъгинът създава 4 таблици:
+The plugin creates 4 tables:
 
-| Таблица | Описание |
-|---------|----------|
-| `{prefix}mskd_subscribers` | Абонати |
-| `{prefix}mskd_lists` | Списъци |
-| `{prefix}mskd_subscriber_list` | Връзка абонат-списък |
-| `{prefix}mskd_queue` | Опашка за изпращане |
+| Table | Description |
+|-------|-------------|
+| `{prefix}mskd_subscribers` | Subscribers |
+| `{prefix}mskd_lists` | Lists |
+| `{prefix}mskd_subscriber_list` | Subscriber-list relationship |
+| `{prefix}mskd_queue` | Sending queue |
 
-## ❓ Често задавани въпроси
+## ❓ FAQ
 
-### Как да добавя форма за абониране?
+### How do I add a subscription form?
 
-Използвайте шорткода `[mskd_subscribe_form]` на страница или публикация.
+Use the shortcode `[mskd_subscribe_form]` on a page or post.
 
-### Колко имейла се изпращат на минута?
+### How many emails are sent per minute?
 
-По подразбиране се изпращат 10 имейла на минута (`MSKD_BATCH_SIZE`). Това е за да се избегнат ограничения на хостинг доставчиците.
+By default, 10 emails are sent per minute (`MSKD_BATCH_SIZE`). This is to avoid hosting provider limitations.
 
-### Защо имейлите не се изпращат?
+### Why aren't emails being sent?
 
-Проверете дали:
+Check if:
 
-1. Има чакащи имейли в опашката
-2. WP-Cron работи правилно
-3. Сайтът ви получава посещения (WP-Cron се изпълнява при посещение)
+1. There are pending emails in the queue
+2. WP-Cron is working correctly
+3. Your site receives visits (WP-Cron runs on visits)
 
-За по-надеждно изпращане, настройте SMTP и/или системен cron.
+For more reliable sending, configure SMTP and/or system cron.
 
-### Как да конфигурирам SMTP?
+### How do I configure SMTP?
 
-Отидете на **Имейли → Настройки** и активирайте SMTP. Попълнете SMTP хост, порт, криптиране и данни за удостоверяване. Използвайте бутона "Изпрати тестов имейл" за да проверите настройките. За повече информация вижте секцията **SMTP Настройки** по-горе.
+Go to **Emails → Settings** and enable SMTP. Fill in the SMTP host, port, encryption, and authentication data. Use the "Send test email" button to verify settings. For more information, see the **SMTP Settings** section above.
 
-### Как да променя скоростта на изпращане?
+### How do I change the sending speed?
 
-Константата `MSKD_BATCH_SIZE` е дефинирана в основния файл на плъгина. За v1.0.0 тя е хардкодирана на 10.
+The `MSKD_BATCH_SIZE` constant is defined in the main plugin file. For v1.0.0 it is hardcoded at 10.
 
-## 🔧 Разработка
+### How do I change the interface language?
 
-### Изисквания за разработка
+The interface language automatically follows your WordPress site language setting. Go to **Settings → General → Site Language** to change it. If translations are available for that language, they will be used automatically.
+
+## 🔧 Development
+
+### Development Requirements
 
 - PHP 7.4+
 - WordPress 5.0+
-- Composer (опционално)
+- Composer (optional)
 
-### Структура на проекта
+### Project Structure
 
 ```
 mail-system-by-katsarov-design/
-├── mail-system-by-katsarov-design.php  # Главен файл
+├── mail-system-by-katsarov-design.php  # Main file
 ├── composer.json
 ├── README.md
 ├── CHANGELOG.md
@@ -203,7 +270,8 @@ mail-system-by-katsarov-design/
 │   ├── class-activator.php
 │   ├── class-deactivator.php
 │   └── services/
-│       └── class-cron-handler.php
+│       ├── class-cron-handler.php
+│       └── class-smtp-mailer.php
 ├── admin/
 │   ├── class-admin.php
 │   ├── css/
@@ -215,48 +283,53 @@ mail-system-by-katsarov-design/
 │   ├── js/
 │   └── partials/
 └── languages/
+    ├── mail-system-by-katsarov-design.pot
+    ├── mail-system-by-katsarov-design-bg_BG.po
+    ├── mail-system-by-katsarov-design-bg_BG.mo
+    ├── mail-system-by-katsarov-design-de_DE.po
+    └── mail-system-by-katsarov-design-de_DE.mo
 ```
 
-### Конвенции за именуване
+### Naming Conventions
 
-| Тип | Префикс | Пример |
-|-----|---------|--------|
-| Константи | `MSKD_` | `MSKD_BATCH_SIZE` |
-| Класове | `MSKD_` | `MSKD_Admin` |
-| Функции | `mskd_` | `mskd_load_textdomain()` |
-| Таблици | `mskd_` | `wp_mskd_subscribers` |
+| Type | Prefix | Example |
+|------|--------|---------|
+| Constants | `MSKD_` | `MSKD_BATCH_SIZE` |
+| Classes | `MSKD_` | `MSKD_Admin` |
+| Functions | `mskd_` | `mskd_load_textdomain()` |
+| Tables | `mskd_` | `wp_mskd_subscribers` |
 | Hooks | `mskd_` | `mskd_process_queue` |
 
 ## 📝 Changelog
 
-Вижте [CHANGELOG.md](CHANGELOG.md) за пълна история на промените.
+See [CHANGELOG.md](CHANGELOG.md) for full change history.
 
-### Версия 1.0.0
+### Version 1.0.0
 
-- Първоначална версия
-- Управление на абонати (активен/неактивен/отписан)
-- Управление на списъци
-- Опашка за изпращане с WP-Cron
-- Форма за абониране (шорткод)
-- Линк за отписване
-- Български интерфейс
+- Initial version
+- Subscriber management (active/inactive/unsubscribed)
+- List management
+- Sending queue with WP-Cron
+- Subscription form (shortcode)
+- Unsubscribe link
+- Multi-language support (English, Bulgarian, German)
 
-## 📄 Лиценз
+## 📄 License
 
-Този плъгин е лицензиран под [GPL v2 или по-нова версия](https://www.gnu.org/licenses/gpl-2.0.html).
+This plugin is licensed under [GPL v2 or later](https://www.gnu.org/licenses/gpl-2.0.html).
 
-## 👤 Автор
+## 👤 Author
 
 **Katsarov Design**
 
-- Уебсайт: [https://katsarov.design](https://katsarov.design)
+- Website: [https://katsarov.design](https://katsarov.design)
 
-## 🤝 Принос
+## 🤝 Contributing
 
-Приносът е добре дошъл! Моля, прочетете насоките за принос преди да изпратите pull request.
+Contributions are welcome! Please read the contribution guidelines before submitting a pull request.
 
-1. Fork-нете репозиторито
-2. Създайте feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit-нете промените (`git commit -m 'Add amazing feature'`)
-4. Push-нете към branch-а (`git push origin feature/amazing-feature`)
-5. Отворете Pull Request
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request

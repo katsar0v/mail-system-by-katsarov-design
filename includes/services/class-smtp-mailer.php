@@ -94,7 +94,7 @@ class MSKD_SMTP_Mailer {
 
         // Check if SMTP is enabled.
         if ( ! $this->is_enabled() ) {
-            $this->log_error( __( 'SMTP не е активиран или конфигуриран.', 'mail-system-by-katsarov-design' ) );
+            $this->log_error( __( 'SMTP is not enabled or configured.', 'mail-system-by-katsarov-design' ) );
             return false;
         }
 
@@ -181,7 +181,7 @@ class MSKD_SMTP_Mailer {
         if ( ! $this->is_enabled() ) {
             return array(
                 'success' => false,
-                'message' => __( 'SMTP не е активиран или конфигуриран. Моля, попълнете SMTP настройките.', 'mail-system-by-katsarov-design' ),
+                'message' => __( 'SMTP is not enabled or configured. Please fill in SMTP settings.', 'mail-system-by-katsarov-design' ),
             );
         }
 
@@ -190,7 +190,7 @@ class MSKD_SMTP_Mailer {
         if ( ! is_email( $from_email ) ) {
             return array(
                 'success' => false,
-                'message' => __( 'Невалиден имейл адрес на подателя.', 'mail-system-by-katsarov-design' ),
+                'message' => __( 'Invalid sender email address.', 'mail-system-by-katsarov-design' ),
             );
         }
 
@@ -228,12 +228,12 @@ class MSKD_SMTP_Mailer {
             $mailer->CharSet = 'UTF-8';
             $mailer->Subject = sprintf(
                 /* translators: %s: Site name */
-                __( '[%s] SMTP Тестов имейл', 'mail-system-by-katsarov-design' ),
+                __( '[%s] SMTP Test Email', 'mail-system-by-katsarov-design' ),
                 get_bloginfo( 'name' )
             );
             $mailer->Body = sprintf(
                 /* translators: %1$s: Current time, %2$s: SMTP host, %3$s: SMTP port */
-                __( '<h2>SMTP Тестов имейл</h2><p>Този имейл потвърждава, че SMTP настройките работят правилно.</p><p><strong>Време:</strong> %1$s</p><p><strong>SMTP сървър:</strong> %2$s:%3$s</p>', 'mail-system-by-katsarov-design' ),
+                __( '<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP server:</strong> %2$s:%3$s</p>', 'mail-system-by-katsarov-design' ),
                 current_time( 'mysql' ),
                 $this->settings['smtp_host'],
                 $this->settings['smtp_port']
@@ -249,7 +249,7 @@ class MSKD_SMTP_Mailer {
                     'success' => true,
                     'message' => sprintf(
                         /* translators: %s: Admin email address */
-                        __( 'Тестовият имейл е изпратен успешно до %s!', 'mail-system-by-katsarov-design' ),
+                        __( 'Test email sent successfully to %s!', 'mail-system-by-katsarov-design' ),
                         $to
                     ),
                 );
@@ -257,7 +257,7 @@ class MSKD_SMTP_Mailer {
 
             return array(
                 'success' => false,
-                'message' => __( 'Неуспешно изпращане на тестовия имейл.', 'mail-system-by-katsarov-design' ),
+                'message' => __( 'Failed to send test email.', 'mail-system-by-katsarov-design' ),
             );
 
         } catch ( PHPMailer\PHPMailer\Exception $e ) {
@@ -266,7 +266,7 @@ class MSKD_SMTP_Mailer {
                 'success' => false,
                 'message' => sprintf(
                     /* translators: %s: Error message */
-                    __( 'SMTP грешка: %s', 'mail-system-by-katsarov-design' ),
+                    __( 'SMTP error: %s', 'mail-system-by-katsarov-design' ),
                     $mailer->ErrorInfo
                 ),
             );
@@ -276,7 +276,7 @@ class MSKD_SMTP_Mailer {
                 'success' => false,
                 'message' => sprintf(
                     /* translators: %s: Error message */
-                    __( 'Грешка: %s', 'mail-system-by-katsarov-design' ),
+                    __( 'Error: %s', 'mail-system-by-katsarov-design' ),
                     $e->getMessage()
                 ),
             );

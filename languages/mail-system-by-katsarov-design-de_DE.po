@@ -1,846 +1,849 @@
+# German translations for Mail System by Katsarov Design.
 # Copyright (C) 2024 Katsarov Design
 # This file is distributed under the GPL v2 or later.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Mail System by Katsarov Design 1.0.0\n"
 "Report-Msgid-Bugs-To: https://katsarov.design/\n"
 "POT-Creation-Date: 2024-01-01T00:00:00+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2024-01-01 00:00+0100\n"
+"Last-Translator: Katsarov Design <info@katsarov.design>\n"
+"Language-Team: German <de@li.org>\n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: mail-system-by-katsarov-design.php
 msgid "Every minute"
-msgstr ""
+msgstr "Jede Minute"
 
 #: admin/class-admin.php
 msgid "Mail System"
-msgstr ""
+msgstr "Mail-System"
 
 #: admin/class-admin.php
 msgid "Emails"
-msgstr ""
+msgstr "E-Mails"
 
 #: admin/class-admin.php
 msgid "Dashboard"
-msgstr ""
+msgstr "Dashboard"
 
 #: admin/class-admin.php
 msgid "Subscribers"
-msgstr ""
+msgstr "Abonnenten"
 
 #: admin/class-admin.php
 msgid "Lists"
-msgstr ""
+msgstr "Listen"
 
 #: admin/class-admin.php
 msgid "New email"
-msgstr ""
+msgstr "Neue E-Mail"
 
 #: admin/class-admin.php
 msgid "One-time email"
-msgstr ""
+msgstr "Einmalige E-Mail"
 
 #: admin/class-admin.php
 msgid "Queue"
-msgstr ""
+msgstr "Warteschlange"
 
 #: admin/class-admin.php
 msgid "Settings"
-msgstr ""
+msgstr "Einstellungen"
 
 #: admin/class-admin.php
 msgid "Are you sure you want to delete?"
-msgstr ""
+msgstr "Sind Sie sicher, dass Sie löschen möchten?"
 
 #: admin/class-admin.php
 msgid "Sending..."
-msgstr ""
+msgstr "Senden..."
 
 #: admin/class-admin.php
 msgid "Success!"
-msgstr ""
+msgstr "Erfolg!"
 
 #: admin/class-admin.php
 msgid "Error!"
-msgstr ""
+msgstr "Fehler!"
 
 #: admin/class-admin.php
 msgid "Connection timed out. Check SMTP settings."
-msgstr ""
+msgstr "Verbindungs-Timeout. Überprüfen Sie die SMTP-Einstellungen."
 
 #: admin/class-admin.php
 msgid "Please select a future date and time."
-msgstr ""
+msgstr "Bitte wählen Sie ein zukünftiges Datum und eine Uhrzeit."
 
 #: admin/class-admin.php
 msgid "Recommendation for Mail System:"
-msgstr ""
+msgstr "Empfehlung für Mail-System:"
 
 #: admin/class-admin.php
 msgid "For more reliable email sending, we recommend using system cron instead of WP-Cron."
-msgstr ""
+msgstr "Für zuverlässigeren E-Mail-Versand empfehlen wir die Verwendung von System-Cron anstelle von WP-Cron."
 
 #: admin/class-admin.php
 msgid "Add to wp-config.php:"
-msgstr ""
+msgstr "Zu wp-config.php hinzufügen:"
 
 #: admin/class-admin.php
 msgid "And set up system cron:"
-msgstr ""
+msgstr "Und System-Cron einrichten:"
 
 #: admin/class-admin.php
 msgid "Invalid email address."
-msgstr ""
+msgstr "Ungültige E-Mail-Adresse."
 
 #: admin/class-admin.php
 msgid "This email already exists."
-msgstr ""
+msgstr "Diese E-Mail existiert bereits."
 
 #: admin/class-admin.php
 msgid "Subscriber added successfully."
-msgstr ""
+msgstr "Abonnent erfolgreich hinzugefügt."
 
 #: admin/class-admin.php
 msgid "Error adding subscriber."
-msgstr ""
+msgstr "Fehler beim Hinzufügen des Abonnenten."
 
 #: admin/class-admin.php
 msgid "Subscriber updated successfully."
-msgstr ""
+msgstr "Abonnent erfolgreich aktualisiert."
 
 #: admin/class-admin.php
 msgid "Subscriber deleted successfully."
-msgstr ""
+msgstr "Abonnent erfolgreich gelöscht."
 
 #: admin/class-admin.php
 msgid "List added successfully."
-msgstr ""
+msgstr "Liste erfolgreich hinzugefügt."
 
 #: admin/class-admin.php
 msgid "Error adding list."
-msgstr ""
+msgstr "Fehler beim Hinzufügen der Liste."
 
 #: admin/class-admin.php
 msgid "List updated successfully."
-msgstr ""
+msgstr "Liste erfolgreich aktualisiert."
 
 #: admin/class-admin.php
 msgid "List deleted successfully."
-msgstr ""
+msgstr "Liste erfolgreich gelöscht."
 
 #: admin/class-admin.php
 msgid "Record not found."
-msgstr ""
+msgstr "Datensatz nicht gefunden."
 
 #: admin/class-admin.php
 msgid "This email cannot be cancelled."
-msgstr ""
+msgstr "Diese E-Mail kann nicht abgebrochen werden."
 
 #: admin/class-admin.php
 msgid "Cancelled by administrator"
-msgstr ""
+msgstr "Vom Administrator abgebrochen"
 
 #: admin/class-admin.php
 msgid "Email cancelled successfully."
-msgstr ""
+msgstr "E-Mail erfolgreich abgebrochen."
 
 #: admin/class-admin.php
 msgid "Error cancelling email."
-msgstr ""
+msgstr "Fehler beim Abbrechen der E-Mail."
 
 #: admin/class-admin.php
 msgid "Please fill in all fields."
-msgstr ""
+msgstr "Bitte füllen Sie alle Felder aus."
 
 #: admin/class-admin.php
 msgid "No active subscribers in the selected lists."
-msgstr ""
+msgstr "Keine aktiven Abonnenten in den ausgewählten Listen."
 
 #: admin/class-admin.php
 msgid "%d emails have been added to the sending queue."
-msgstr ""
+msgstr "%d E-Mails wurden zur Sendewarteschlange hinzugefügt."
 
 #: admin/class-admin.php
-msgid "%1\$d emails have been scheduled for %2\$s."
-msgstr ""
+msgid "%1$d emails have been scheduled for %2$s."
+msgstr "%1$d E-Mails wurden für %2$s geplant."
 
 #: admin/class-admin.php
 msgid "Settings saved successfully."
-msgstr ""
+msgstr "Einstellungen erfolgreich gespeichert."
 
 #: admin/class-admin.php
 msgid "Please fill in all required fields."
-msgstr ""
+msgstr "Bitte füllen Sie alle erforderlichen Felder aus."
 
 #: admin/class-admin.php
 msgid "Invalid recipient email address."
-msgstr ""
+msgstr "Ungültige Empfänger-E-Mail-Adresse."
 
 #: admin/class-admin.php
 msgid "SMTP is not configured. Please set up SMTP in the plugin settings."
-msgstr ""
+msgstr "SMTP ist nicht konfiguriert. Bitte richten Sie SMTP in den Plugin-Einstellungen ein."
 
 #: admin/class-admin.php
 msgid "wp_mail() failed for one-time email"
-msgstr ""
+msgstr "wp_mail() fehlgeschlagen für einmalige E-Mail"
 
 #: admin/class-admin.php
 msgid "One-time email sent successfully to %s."
-msgstr ""
+msgstr "Einmalige E-Mail erfolgreich an %s gesendet."
 
 #: admin/class-admin.php
 msgid "Error sending one-time email."
-msgstr ""
+msgstr "Fehler beim Senden der einmaligen E-Mail."
 
 #: admin/class-admin.php
 msgid "Reason: %s"
-msgstr ""
+msgstr "Grund: %s"
 
 #: admin/class-admin.php
 msgid "Please try again."
-msgstr ""
+msgstr "Bitte versuchen Sie es erneut."
 
 #: admin/class-admin.php
-msgid "One-time email to %1\$s has been scheduled for %2\$s."
-msgstr ""
+msgid "One-time email to %1$s has been scheduled for %2$s."
+msgstr "Einmalige E-Mail an %1$s wurde für %2$s geplant."
 
 #: admin/class-admin.php
 msgid "Error scheduling email. Please try again."
-msgstr ""
+msgstr "Fehler bei der Planung der E-Mail. Bitte versuchen Sie es erneut."
 
 #: admin/class-admin.php
 msgid "Invalid request. Please refresh the page."
-msgstr ""
+msgstr "Ungültige Anfrage. Bitte aktualisieren Sie die Seite."
 
 #: admin/class-admin.php
 msgid "You do not have permission for this operation."
-msgstr ""
+msgstr "Sie haben keine Berechtigung für diese Operation."
 
 #: admin/partials/dashboard.php
 msgid "Dashboard - Mail System"
-msgstr ""
+msgstr "Dashboard - Mail-System"
 
 #: admin/partials/dashboard.php
 msgid "Quick Actions"
-msgstr ""
+msgstr "Schnellaktionen"
 
 #: admin/partials/dashboard.php
 msgid "Add subscriber"
-msgstr ""
+msgstr "Abonnent hinzufügen"
 
 #: admin/partials/dashboard.php
 msgid "Add list"
-msgstr ""
+msgstr "Liste hinzufügen"
 
 #: admin/partials/dashboard.php
 msgid "Active: %d"
-msgstr ""
+msgstr "Aktiv: %d"
 
 #: admin/partials/dashboard.php
 msgid "Inactive: %d"
-msgstr ""
+msgstr "Inaktiv: %d"
 
 #: admin/partials/dashboard.php
 msgid "Unsubscribed: %d"
-msgstr ""
+msgstr "Abgemeldet: %d"
 
 #: admin/partials/dashboard.php
 msgid "View all"
-msgstr ""
+msgstr "Alle anzeigen"
 
 #: admin/partials/dashboard.php
 msgid "Manage"
-msgstr ""
+msgstr "Verwalten"
 
 #: admin/partials/dashboard.php
 msgid "Pending: %d"
-msgstr ""
+msgstr "Ausstehend: %d"
 
 #: admin/partials/dashboard.php
 msgid "Sent: %d"
-msgstr ""
+msgstr "Gesendet: %d"
 
 #: admin/partials/dashboard.php
 msgid "Failed: %d"
-msgstr ""
+msgstr "Fehlgeschlagen: %d"
 
 #: admin/partials/dashboard.php
 msgid "One-time: %d"
-msgstr ""
+msgstr "Einmalig: %d"
 
 #: admin/partials/dashboard.php
 msgid "View queue"
-msgstr ""
+msgstr "Warteschlange anzeigen"
 
 #: admin/partials/dashboard.php
 msgid "Cron status"
-msgstr ""
+msgstr "Cron-Status"
 
 #: admin/partials/dashboard.php
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #: admin/partials/dashboard.php
 msgid "Next run: %s"
-msgstr ""
+msgstr "Nächste Ausführung: %s"
 
 #: admin/partials/dashboard.php
 msgid "Inactive"
-msgstr ""
+msgstr "Inaktiv"
 
 #: admin/partials/dashboard.php
 msgid "Sending: %d emails/min"
-msgstr ""
+msgstr "Versand: %d E-Mails/Min"
 
 #: admin/partials/subscribers.php
 msgid "Add new"
-msgstr ""
+msgstr "Neu hinzufügen"
 
 #: admin/partials/subscribers.php
 msgid "Edit subscriber"
-msgstr ""
+msgstr "Abonnent bearbeiten"
 
 #: admin/partials/subscribers.php
 msgid "Email"
-msgstr ""
+msgstr "E-Mail"
 
 #: admin/partials/subscribers.php
 msgid "First name"
-msgstr ""
+msgstr "Vorname"
 
 #: admin/partials/subscribers.php
 msgid "Last name"
-msgstr ""
+msgstr "Nachname"
 
 #: admin/partials/subscribers.php
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: admin/partials/subscribers.php
 msgid "Unsubscribed"
-msgstr ""
+msgstr "Abgemeldet"
 
 #: admin/partials/subscribers.php
 msgid "No lists created."
-msgstr ""
+msgstr "Keine Listen erstellt."
 
 #: admin/partials/subscribers.php
 msgid "Save changes"
-msgstr ""
+msgstr "Änderungen speichern"
 
 #: admin/partials/subscribers.php
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #: admin/partials/subscribers.php
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: admin/partials/subscribers.php
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: admin/partials/subscribers.php
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: admin/partials/subscribers.php
 msgid "Actions"
-msgstr ""
+msgstr "Aktionen"
 
 #: admin/partials/subscribers.php
 msgid "Edit"
-msgstr ""
+msgstr "Bearbeiten"
 
 #: admin/partials/subscribers.php
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 #: admin/partials/subscribers.php
 msgid "No subscribers found."
-msgstr ""
+msgstr "Keine Abonnenten gefunden."
 
 #: admin/partials/lists.php
 msgid "Edit list"
-msgstr ""
+msgstr "Liste bearbeiten"
 
 #: admin/partials/lists.php
 msgid "List name"
-msgstr ""
+msgstr "Listenname"
 
 #: admin/partials/lists.php
 msgid "Description"
-msgstr ""
+msgstr "Beschreibung"
 
 #: admin/partials/compose.php
 msgid "Send to lists"
-msgstr ""
+msgstr "An Listen senden"
 
 #: admin/partials/compose.php
 msgid "%d active subscribers"
-msgstr ""
+msgstr "%d aktive Abonnenten"
 
 #: admin/partials/compose.php
 msgid "Create list"
-msgstr ""
+msgstr "Liste erstellen"
 
 #: admin/partials/compose.php
 msgid "Subject"
-msgstr ""
+msgstr "Betreff"
 
 #: admin/partials/compose.php
 msgid "Content"
-msgstr ""
+msgstr "Inhalt"
 
 #: admin/partials/compose.php
 msgid "Available placeholders:"
-msgstr ""
+msgstr "Verfügbare Platzhalter:"
 
 #: admin/partials/compose.php
 msgid "Scheduling"
-msgstr ""
+msgstr "Planung"
 
 #: admin/partials/compose.php
 msgid "Send now"
-msgstr ""
+msgstr "Jetzt senden"
 
 #: admin/partials/compose.php
 msgid "Specific date and time"
-msgstr ""
+msgstr "Bestimmtes Datum und Uhrzeit"
 
 #: admin/partials/compose.php
 msgid "After a set time"
-msgstr ""
+msgstr "Nach einer festgelegten Zeit"
 
 #: admin/partials/compose.php
 msgid "Timezone: %s. Select time in 10-minute intervals."
-msgstr ""
+msgstr "Zeitzone: %s. Wählen Sie die Zeit in 10-Minuten-Intervallen."
 
 #: admin/partials/compose.php
 msgid "minutes"
-msgstr ""
+msgstr "Minuten"
 
 #: admin/partials/compose.php
 msgid "hours"
-msgstr ""
+msgstr "Stunden"
 
 #: admin/partials/compose.php
 msgid "days"
-msgstr ""
+msgstr "Tage"
 
 #: admin/partials/compose.php
 msgid "Emails will be sent after the specified time."
-msgstr ""
+msgstr "E-Mails werden nach der angegebenen Zeit gesendet."
 
 #: admin/partials/compose.php
 msgid "Add to queue"
-msgstr ""
+msgstr "Zur Warteschlange hinzufügen"
 
 #: admin/partials/compose.php
 msgid "Schedule sending"
-msgstr ""
+msgstr "Versand planen"
 
 #: admin/partials/queue.php
 msgid "Sending queue"
-msgstr ""
+msgstr "Sendewarteschlange"
 
 #: admin/partials/queue.php
 msgid "Next run:"
-msgstr ""
+msgstr "Nächste Ausführung:"
 
 #: admin/partials/queue.php
 msgid "Not scheduled"
-msgstr ""
+msgstr "Nicht geplant"
 
 #: admin/partials/queue.php
 msgid "Speed:"
-msgstr ""
+msgstr "Geschwindigkeit:"
 
 #: admin/partials/queue.php
 msgid "%d emails/min"
-msgstr ""
+msgstr "%d E-Mails/Min"
 
 #: admin/partials/queue.php
 msgid "Scheduled"
-msgstr ""
+msgstr "Geplant"
 
 #: admin/partials/queue.php
 msgid "Pending"
-msgstr ""
+msgstr "Ausstehend"
 
 #: admin/partials/queue.php
 msgid "Processing"
-msgstr ""
+msgstr "In Bearbeitung"
 
 #: admin/partials/queue.php
 msgid "Sent"
-msgstr ""
+msgstr "Gesendet"
 
 #: admin/partials/queue.php
 msgid "Failed"
-msgstr ""
+msgstr "Fehlgeschlagen"
 
 #: admin/partials/queue.php
 msgid "Cancelled"
-msgstr ""
+msgstr "Abgebrochen"
 
 #: admin/partials/queue.php
 msgid "One-time"
-msgstr ""
+msgstr "Einmalig"
 
 #: admin/partials/queue.php
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: admin/partials/queue.php
 msgid "Recipient"
-msgstr ""
+msgstr "Empfänger"
 
 #: admin/partials/queue.php
 msgid "Attempts"
-msgstr ""
+msgstr "Versuche"
 
 #: admin/partials/queue.php
 msgid "Deleted subscriber"
-msgstr ""
+msgstr "Gelöschter Abonnent"
 
 #: admin/partials/queue.php
 msgid "in %d min."
-msgstr ""
+msgstr "in %d Min."
 
 #: admin/partials/queue.php
 msgid "in %d h."
-msgstr ""
+msgstr "in %d Std."
 
 #: admin/partials/queue.php
 msgid "in %d days"
-msgstr ""
+msgstr "in %d Tagen"
 
 #: admin/partials/queue.php
 msgid "Cancel sending"
-msgstr ""
+msgstr "Versand abbrechen"
 
 #: admin/partials/queue.php
 msgid "No records in queue."
-msgstr ""
+msgstr "Keine Einträge in der Warteschlange."
 
 #: admin/partials/settings.php
 msgid "Sender settings"
-msgstr ""
+msgstr "Absendereinstellungen"
 
 #: admin/partials/settings.php
 msgid "Sender name"
-msgstr ""
+msgstr "Absendername"
 
 #: admin/partials/settings.php
 msgid "The name that will appear as sender."
-msgstr ""
+msgstr "Der Name, der als Absender angezeigt wird."
 
 #: admin/partials/settings.php
 msgid "Sender email"
-msgstr ""
+msgstr "Absender-E-Mail"
 
 #: admin/partials/settings.php
 msgid "The email from which messages will be sent."
-msgstr ""
+msgstr "Die E-Mail-Adresse, von der Nachrichten gesendet werden."
 
 #: admin/partials/settings.php
 msgid "Reply to"
-msgstr ""
+msgstr "Antwort an"
 
 #: admin/partials/settings.php
 msgid "Email for replies from recipients."
-msgstr ""
+msgstr "E-Mail für Antworten von Empfängern."
 
 #: admin/partials/settings.php
 msgid "SMTP Settings"
-msgstr ""
+msgstr "SMTP-Einstellungen"
 
 #: admin/partials/settings.php
 msgid "Configure an SMTP server for more reliable email sending."
-msgstr ""
+msgstr "Konfigurieren Sie einen SMTP-Server für zuverlässigeren E-Mail-Versand."
 
 #: admin/partials/settings.php
 msgid "Enable SMTP"
-msgstr ""
+msgstr "SMTP aktivieren"
 
 #: admin/partials/settings.php
 msgid "Use SMTP for sending emails"
-msgstr ""
+msgstr "SMTP für den E-Mail-Versand verwenden"
 
 #: admin/partials/settings.php
 msgid "When enabled, emails will be sent via the specified SMTP server instead of wp_mail()."
-msgstr ""
+msgstr "Wenn aktiviert, werden E-Mails über den angegebenen SMTP-Server anstelle von wp_mail() gesendet."
 
 #: admin/partials/settings.php
 msgid "SMTP Host"
-msgstr ""
+msgstr "SMTP-Host"
 
 #: admin/partials/settings.php
 msgid "SMTP server address (e.g. smtp.gmail.com, smtp.mailgun.org)."
-msgstr ""
+msgstr "SMTP-Serveradresse (z.B. smtp.gmail.com, smtp.mailgun.org)."
 
 #: admin/partials/settings.php
 msgid "SMTP Port"
-msgstr ""
+msgstr "SMTP-Port"
 
 #: admin/partials/settings.php
 msgid "Standard ports: 25, 465 (SSL), 587 (TLS/StartTLS)."
-msgstr ""
+msgstr "Standardports: 25, 465 (SSL), 587 (TLS/StartTLS)."
 
 #: admin/partials/settings.php
 msgid "Encryption"
-msgstr ""
+msgstr "Verschlüsselung"
 
 #: admin/partials/settings.php
 msgid "No encryption"
-msgstr ""
+msgstr "Keine Verschlüsselung"
 
 #: admin/partials/settings.php
 msgid "It is recommended to use TLS or SSL for a secure connection."
-msgstr ""
+msgstr "Es wird empfohlen, TLS oder SSL für eine sichere Verbindung zu verwenden."
 
 #: admin/partials/settings.php
 msgid "SMTP Authentication"
-msgstr ""
+msgstr "SMTP-Authentifizierung"
 
 #: admin/partials/settings.php
 msgid "Use authentication (username and password)"
-msgstr ""
+msgstr "Authentifizierung verwenden (Benutzername und Passwort)"
 
 #: admin/partials/settings.php
 msgid "SMTP Username"
-msgstr ""
+msgstr "SMTP-Benutzername"
 
 #: admin/partials/settings.php
 msgid "Usually this is your email address or username."
-msgstr ""
+msgstr "Normalerweise ist dies Ihre E-Mail-Adresse oder Ihr Benutzername."
 
 #: admin/partials/settings.php
 msgid "SMTP Password"
-msgstr ""
+msgstr "SMTP-Passwort"
 
 #: admin/partials/settings.php
 msgid "For Gmail, use App Password instead of the regular password."
-msgstr ""
+msgstr "Für Gmail verwenden Sie ein App-Passwort anstelle des normalen Passworts."
 
 #: admin/partials/settings.php
 msgid "Connection test"
-msgstr ""
+msgstr "Verbindungstest"
 
 #: admin/partials/settings.php
 msgid "Send test email"
-msgstr ""
+msgstr "Test-E-Mail senden"
 
 #: admin/partials/settings.php
 msgid "Sends a test email to the administrator email."
-msgstr ""
+msgstr "Sendet eine Test-E-Mail an die Administrator-E-Mail."
 
 #: admin/partials/settings.php
 msgid "System information"
-msgstr ""
+msgstr "Systeminformationen"
 
 #: admin/partials/settings.php
 msgid "Plugin version"
-msgstr ""
+msgstr "Plugin-Version"
 
 #: admin/partials/settings.php
 msgid "Sending method"
-msgstr ""
+msgstr "Versandmethode"
 
 #: admin/partials/settings.php
 msgid "SMTP"
-msgstr ""
+msgstr "SMTP"
 
 #: admin/partials/settings.php
 msgid "wp_mail() (default)"
-msgstr ""
+msgstr "wp_mail() (Standard)"
 
 #: admin/partials/settings.php
 msgid "Sending speed"
-msgstr ""
+msgstr "Versandgeschwindigkeit"
 
 #: admin/partials/settings.php
 msgid "emails/minute"
-msgstr ""
+msgstr "E-Mails/Minute"
 
 #: admin/partials/settings.php
 msgid "WP-Cron status"
-msgstr ""
+msgstr "WP-Cron-Status"
 
 #: admin/partials/settings.php
 msgid "Disabled (using system cron)"
-msgstr ""
+msgstr "Deaktiviert (verwendet System-Cron)"
 
 #: admin/partials/settings.php
 msgid "Active (visitor-based)"
-msgstr ""
+msgstr "Aktiv (besucherbasiert)"
 
 #: admin/partials/settings.php
 msgid "Next run"
-msgstr ""
+msgstr "Nächste Ausführung"
 
 #: admin/partials/settings.php
 msgid "Save settings"
-msgstr ""
+msgstr "Einstellungen speichern"
 
 #: admin/partials/one-time-email.php
 msgid "Send a one-time email directly to a specific recipient. The email can be sent immediately or scheduled for later."
-msgstr ""
+msgstr "Senden Sie eine einmalige E-Mail direkt an einen bestimmten Empfänger. Die E-Mail kann sofort gesendet oder für später geplant werden."
 
 #: admin/partials/one-time-email.php
 msgid "Recipient email"
-msgstr ""
+msgstr "Empfänger-E-Mail"
 
 #: admin/partials/one-time-email.php
 msgid "The email address to which the message will be sent."
-msgstr ""
+msgstr "Die E-Mail-Adresse, an die die Nachricht gesendet wird."
 
 #: admin/partials/one-time-email.php
 msgid "Recipient name"
-msgstr ""
+msgstr "Empfängername"
 
 #: admin/partials/one-time-email.php
 msgid "Recipient name (optional). Can be used in content with {recipient_name}."
-msgstr ""
+msgstr "Empfängername (optional). Kann im Inhalt mit {recipient_name} verwendet werden."
 
 #: admin/partials/one-time-email.php
 msgid "The email will be sent after the specified time."
-msgstr ""
+msgstr "Die E-Mail wird nach der angegebenen Zeit gesendet."
 
 #: admin/partials/one-time-email.php
 msgid "Information"
-msgstr ""
+msgstr "Informationen"
 
 #: admin/partials/one-time-email.php
 msgid "One-time emails can be sent immediately or scheduled for later."
-msgstr ""
+msgstr "Einmalige E-Mails können sofort gesendet oder für später geplant werden."
 
 #: admin/partials/one-time-email.php
 msgid "They are not saved as templates and do not repeat."
-msgstr ""
+msgstr "Sie werden nicht als Vorlagen gespeichert und wiederholen sich nicht."
 
 #: admin/partials/one-time-email.php
 msgid "All sent one-time emails are logged in the audit history."
-msgstr ""
+msgstr "Alle gesendeten einmaligen E-Mails werden im Audit-Verlauf protokolliert."
 
 #: admin/partials/one-time-email.php
 msgid "Scheduled emails can be cancelled from the Queue page."
-msgstr ""
+msgstr "Geplante E-Mails können von der Warteschlangenseite abgebrochen werden."
 
 #: admin/partials/one-time-email.php
 msgid "Suitable for: account activation, notifications, event reminders."
-msgstr ""
+msgstr "Geeignet für: Kontoaktivierung, Benachrichtigungen, Veranstaltungserinnerungen."
 
 #: includes/services/class-cron-handler.php
 msgid "SMTP sending failed"
-msgstr ""
+msgstr "SMTP-Versand fehlgeschlagen"
 
 #: includes/services/class-cron-handler.php
-msgid "Attempt %1\$d failed. %2\$s Will retry."
-msgstr ""
+msgid "Attempt %1$d failed. %2$s Will retry."
+msgstr "Versuch %1$d fehlgeschlagen. %2$s Erneuter Versuch."
 
 #: includes/services/class-cron-handler.php
-msgid "%1\$s after %2\$d attempts. %3\$s"
-msgstr ""
+msgid "%1$s after %2$d attempts. %3$s"
+msgstr "%1$s nach %2$d Versuchen. %3$s"
 
 #: includes/services/class-cron-handler.php
 msgid "Recovered after stuck in processing"
-msgstr ""
+msgstr "Wiederhergestellt nach Hängenbleiben in Verarbeitung"
 
 #: includes/services/class-cron-handler.php
 msgid "Failed after maximum attempts (stuck)"
-msgstr ""
+msgstr "Fehlgeschlagen nach maximalen Versuchen (hängengeblieben)"
 
 #: includes/services/class-cron-handler.php
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Abmelden"
 
 #: includes/services/class-smtp-mailer.php
 msgid "SMTP is not enabled or configured."
-msgstr ""
+msgstr "SMTP ist nicht aktiviert oder konfiguriert."
 
 #: includes/services/class-smtp-mailer.php
 msgid "SMTP is not enabled or configured. Please fill in SMTP settings."
-msgstr ""
+msgstr "SMTP ist nicht aktiviert oder konfiguriert. Bitte füllen Sie die SMTP-Einstellungen aus."
 
 #: includes/services/class-smtp-mailer.php
 msgid "Invalid sender email address."
-msgstr ""
+msgstr "Ungültige Absender-E-Mail-Adresse."
 
 #: includes/services/class-smtp-mailer.php
 msgid "[%s] SMTP Test Email"
-msgstr ""
+msgstr "[%s] SMTP-Test-E-Mail"
 
 #: includes/services/class-smtp-mailer.php
-msgid "<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are working correctly.</p><p><strong>Time:</strong> %1\$s</p><p><strong>SMTP server:</strong> %2\$s:%3\$s</p>"
-msgstr ""
+msgid "<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP server:</strong> %2$s:%3$s</p>"
+msgstr "<h2>SMTP-Test-E-Mail</h2><p>Diese E-Mail bestätigt, dass die SMTP-Einstellungen korrekt funktionieren.</p><p><strong>Zeit:</strong> %1$s</p><p><strong>SMTP-Server:</strong> %2$s:%3$s</p>"
 
 #: includes/services/class-smtp-mailer.php
 msgid "Test email sent successfully to %s!"
-msgstr ""
+msgstr "Test-E-Mail erfolgreich an %s gesendet!"
 
 #: includes/services/class-smtp-mailer.php
 msgid "Failed to send test email."
-msgstr ""
+msgstr "Senden der Test-E-Mail fehlgeschlagen."
 
 #: includes/services/class-smtp-mailer.php
 msgid "SMTP error: %s"
-msgstr ""
+msgstr "SMTP-Fehler: %s"
 
 #: includes/services/class-smtp-mailer.php
 msgid "Error: %s"
-msgstr ""
+msgstr "Fehler: %s"
 
 #: public/class-public.php
 msgid "Subscribing..."
-msgstr ""
+msgstr "Abonnieren..."
 
 #: public/class-public.php
 msgid "Successfully subscribed!"
-msgstr ""
+msgstr "Erfolgreich abonniert!"
 
 #: public/class-public.php
 msgid "An error occurred. Please try again."
-msgstr ""
+msgstr "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
 
 #: public/class-public.php
 msgid "Invalid unsubscribe link."
-msgstr ""
+msgstr "Ungültiger Abmeldelink."
 
 #: public/class-public.php
 msgid "Error"
-msgstr ""
+msgstr "Fehler"
 
 #: public/class-public.php
 msgid "Too many attempts. Please try again in 5 minutes."
-msgstr ""
+msgstr "Zu viele Versuche. Bitte versuchen Sie es in 5 Minuten erneut."
 
 #: public/class-public.php
 msgid "Subscribe"
-msgstr ""
+msgstr "Abonnieren"
 
 #: public/class-public.php
 msgid "Please enter a valid email address."
-msgstr ""
+msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 
 #: public/partials/subscribe-form.php
 msgid "Email *"
-msgstr ""
+msgstr "E-Mail *"
 
 #: public/partials/unsubscribe.php
 msgid "Successfully unsubscribed"
-msgstr ""
+msgstr "Erfolgreich abgemeldet"
 
 #: public/partials/unsubscribe.php
 msgid "You will no longer receive emails from us."
-msgstr ""
+msgstr "Sie werden keine E-Mails mehr von uns erhalten."
 
 #: public/partials/unsubscribe.php
 msgid "Back to site"
-msgstr ""
+msgstr "Zurück zur Website"
