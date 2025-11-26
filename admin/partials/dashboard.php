@@ -20,6 +20,7 @@ $total_lists = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_lists" 
 $pending_emails = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'pending'" );
 $sent_emails = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'sent'" );
 $failed_emails = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'failed'" );
+$one_time_emails = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE subscriber_id = 0" );
 
 // Get next cron run
 $next_cron = wp_next_scheduled( 'mskd_process_queue' );
@@ -42,6 +43,9 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
             </a>
             <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose' ) ); ?>" class="button button-primary">
                 <?php _e( 'Ново писмо', 'mail-system-by-katsarov-design' ); ?>
+            </a>
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-one-time-email' ) ); ?>" class="button button-secondary">
+                <?php _e( 'Еднократен имейл', 'mail-system-by-katsarov-design' ); ?>
             </a>
         </div>
 
@@ -77,6 +81,7 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                     <span class="mskd-status-pending"><?php printf( __( 'Чакащи: %d', 'mail-system-by-katsarov-design' ), $pending_emails ); ?></span>
                     <span class="mskd-status-sent"><?php printf( __( 'Изпратени: %d', 'mail-system-by-katsarov-design' ), $sent_emails ); ?></span>
                     <span class="mskd-status-failed"><?php printf( __( 'Неуспешни: %d', 'mail-system-by-katsarov-design' ), $failed_emails ); ?></span>
+                    <span class="mskd-status-one-time"><?php printf( __( 'Еднократни: %d', 'mail-system-by-katsarov-design' ), $one_time_emails ); ?></span>
                 </div>
                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue' ) ); ?>" class="button">
                     <?php _e( 'Виж опашка', 'mail-system-by-katsarov-design' ); ?>

@@ -16,11 +16,14 @@ $per_page = 50;
 $current_page = isset( $_GET['paged'] ) ? max( 1, intval( $_GET['paged'] ) ) : 1;
 $offset = ( $current_page - 1 ) * $per_page;
 
-// Filter by status
+// Filter by status or type
 $status_filter = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '';
+$type_filter = isset( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : '';
 $where = '';
 if ( $status_filter ) {
     $where = $wpdb->prepare( " WHERE q.status = %s", $status_filter );
+} elseif ( $type_filter === 'one-time' ) {
+    $where = " WHERE q.subscriber_id = 0";
 }
 
 // Get counts
@@ -28,6 +31,7 @@ $pending_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue
 $processing_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'processing'" );
 $sent_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'sent'" );
 $failed_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'failed'" );
+$one_time_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE subscriber_id = 0" );
 
 // Get total count for current filter
 $total_items = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue q" . $where );
@@ -72,7 +76,7 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
     <ul class="subsubsub">
         <li>
             <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue' ) ); ?>" 
-               class="<?php echo empty( $status_filter ) ? 'current' : ''; ?>">
+               class="<?php echo empty( $status_filter ) && empty( $type_filter ) ? 'current' : ''; ?>">
                 <?php _e( 'Всички', 'mail-system-by-katsarov-design' ); ?>
                 <span class="count">(<?php echo esc_html( $pending_count + $processing_count + $sent_count + $failed_count ); ?>)</span>
             </a> |
@@ -103,6 +107,13 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                class="<?php echo $status_filter === 'failed' ? 'current' : ''; ?>">
                 <?php _e( 'Неуспешни', 'mail-system-by-katsarov-design' ); ?>
                 <span class="count">(<?php echo esc_html( $failed_count ); ?>)</span>
+            </a> |
+        </li>
+        <li>
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&type=one-time' ) ); ?>"
+               class="<?php echo $type_filter === 'one-time' ? 'current' : ''; ?>">
+                <?php _e( 'Еднократни', 'mail-system-by-katsarov-design' ); ?>
+                <span class="count">(<?php echo esc_html( $one_time_count ); ?>)</span>
             </a>
         </li>
     </ul>
@@ -125,7 +136,9 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                     <tr>
                         <td><?php echo esc_html( $item->id ); ?></td>
                         <td>
-                            <?php if ( $item->email ) : ?>
+                            <?php if ( $item->subscriber_id == 0 ) : ?>
+                                <em class="mskd-one-time-email"><?php _e( 'Еднократен имейл', 'mail-system-by-katsarov-design' ); ?></em>
+                            <?php elseif ( $item->email ) : ?>
                                 <?php echo esc_html( $item->email ); ?>
                                 <?php if ( $item->first_name || $item->last_name ) : ?>
                                     <br><small><?php echo esc_html( trim( $item->first_name . ' ' . $item->last_name ) ); ?></small>
