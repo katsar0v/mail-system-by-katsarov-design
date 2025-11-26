@@ -749,7 +749,7 @@ class MSKD_Admin {
                 break;
         }
 
-        return current_time( 'mysql' );
+        return mskd_current_time_normalized();
     }
 
     /**
@@ -847,8 +847,8 @@ class MSKD_Admin {
                     'subject'       => $subject,
                     'body'          => $body,
                     'status'        => $log_status,
-                    'scheduled_at'  => current_time( 'mysql' ),
-                    'sent_at'       => $sent ? current_time( 'mysql' ) : null,
+                    'scheduled_at'  => mskd_current_time_normalized(),
+                    'sent_at'       => $sent ? mskd_current_time_normalized() : null,
                     'attempts'      => 1,
                     'error_message' => $sent ? null : ( $this->last_mail_error ?: __( 'wp_mail() failed for one-time email', 'mail-system-by-katsarov-design' ) ),
                 ),
