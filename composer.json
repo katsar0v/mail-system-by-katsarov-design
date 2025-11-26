@@ -40,6 +40,11 @@
             "public/"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "MSKD\\Tests\\": "tests/"
+        }
+    },
     "scripts": {
         "phpcs": "phpcs --standard=WordPress --extensions=php .",
         "phpcbf": "phpcbf --standard=WordPress --extensions=php .",
