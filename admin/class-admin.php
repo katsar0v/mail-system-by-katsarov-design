@@ -22,6 +22,11 @@ class MSKD_Admin {
     const PAGE_PREFIX = 'mskd-';
 
     /**
+     * Subscriber ID used to identify one-time emails (not associated with any subscriber)
+     */
+    const ONE_TIME_EMAIL_SUBSCRIBER_ID = 0;
+
+    /**
      * Initialize admin hooks
      */
     public function init() {
@@ -85,6 +90,16 @@ class MSKD_Admin {
             'manage_options',
             self::PAGE_PREFIX . 'compose',
             array( $this, 'render_compose' )
+        );
+
+        // One-Time Email
+        add_submenu_page(
+            self::PAGE_PREFIX . 'dashboard',
+            __( 'Еднократен имейл', 'mail-system-by-katsarov-design' ),
+            __( 'Еднократен имейл', 'mail-system-by-katsarov-design' ),
+            'manage_options',
+            self::PAGE_PREFIX . 'one-time-email',
+            array( $this, 'render_one_time_email' )
         );
 
         // Queue
@@ -219,6 +234,11 @@ class MSKD_Admin {
         // Handle compose/send action
         if ( isset( $_POST['mskd_send_email'] ) && wp_verify_nonce( $_POST['mskd_nonce'], 'mskd_send_email' ) ) {
             $this->queue_email();
+        }
+
+        // Handle one-time email send action
+        if ( isset( $_POST['mskd_send_one_time_email'] ) && wp_verify_nonce( $_POST['mskd_nonce'], 'mskd_send_one_time_email' ) ) {
+            $this->send_one_time_email();
         }
 
         // Handle settings save
@@ -547,6 +567,95 @@ class MSKD_Admin {
     }
 
     /**
+     * Send one-time email directly to a recipient
+     */
+    private function send_one_time_email() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        global $wpdb;
+
+        $recipient_email = sanitize_email( $_POST['recipient_email'] );
+        $recipient_name  = sanitize_text_field( $_POST['recipient_name'] );
+        $subject         = sanitize_text_field( $_POST['subject'] );
+        $body            = wp_kses_post( $_POST['body'] );
+
+        // Validate required fields
+        if ( empty( $recipient_email ) || empty( $subject ) || empty( $body ) ) {
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Моля, попълнете всички задължителни полета.', 'mail-system-by-katsarov-design' ), 'error' );
+            return;
+        }
+
+        // Validate email format
+        if ( ! is_email( $recipient_email ) ) {
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Невалиден имейл адрес на получателя.', 'mail-system-by-katsarov-design' ), 'error' );
+            return;
+        }
+
+        // Get settings
+        $settings   = get_option( 'mskd_settings', array() );
+        $from_name  = isset( $settings['from_name'] ) ? $settings['from_name'] : get_bloginfo( 'name' );
+        $from_email = isset( $settings['from_email'] ) ? $settings['from_email'] : get_bloginfo( 'admin_email' );
+        $reply_to   = isset( $settings['reply_to'] ) ? $settings['reply_to'] : get_bloginfo( 'admin_email' );
+
+        // Replace basic placeholders (no subscriber-specific placeholders for one-time emails)
+        $body = str_replace(
+            array( '{recipient_name}', '{recipient_email}' ),
+            array( $recipient_name, $recipient_email ),
+            $body
+        );
+        $subject = str_replace(
+            array( '{recipient_name}', '{recipient_email}' ),
+            array( $recipient_name, $recipient_email ),
+            $subject
+        );
+
+        // Email headers
+        $headers = array(
+            'Content-Type: text/html; charset=UTF-8',
+            sprintf( 'From: %s <%s>', $from_name, $from_email ),
+            sprintf( 'Reply-To: %s', $reply_to ),
+        );
+
+        // Send email immediately
+        $sent = wp_mail( $recipient_email, $subject, $body, $headers );
+
+        // Log the one-time email in the queue table for audit purposes
+        $log_status = $sent ? 'sent' : 'failed';
+        $wpdb->insert(
+            $wpdb->prefix . 'mskd_queue',
+            array(
+                'subscriber_id' => self::ONE_TIME_EMAIL_SUBSCRIBER_ID,
+                'subject'       => $subject,
+                'body'          => $body,
+                'status'        => $log_status,
+                'scheduled_at'  => current_time( 'mysql' ),
+                'sent_at'       => $sent ? current_time( 'mysql' ) : null,
+                'attempts'      => 1,
+                'error_message' => $sent ? null : __( 'wp_mail() неуспешен за еднократен имейл', 'mail-system-by-katsarov-design' ),
+            ),
+            array( '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s' )
+        );
+
+        if ( $sent ) {
+            add_settings_error(
+                'mskd_messages',
+                'mskd_success',
+                sprintf( __( 'Еднократният имейл е изпратен успешно до %s.', 'mail-system-by-katsarov-design' ), esc_html( $recipient_email ) ),
+                'success'
+            );
+        } else {
+            add_settings_error(
+                'mskd_messages',
+                'mskd_error',
+                __( 'Грешка при изпращане на еднократния имейл. Моля, опитайте отново.', 'mail-system-by-katsarov-design' ),
+                'error'
+            );
+        }
+    }
+
+    /**
      * Render Dashboard page
      */
     public function render_dashboard() {
@@ -621,5 +730,12 @@ class MSKD_Admin {
                 'message' => $result['message'],
             ) );
         }
+    }
+
+    /**
+     * Render One-Time Email page
+     */
+    public function render_one_time_email() {
+        include MSKD_PLUGIN_DIR . 'admin/partials/one-time-email.php';
     }
 }

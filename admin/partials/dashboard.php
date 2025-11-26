@@ -11,15 +11,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wpdb;
 
-// Get statistics
-$total_subscribers = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_subscribers" );
-$active_subscribers = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_subscribers WHERE status = 'active'" );
-$inactive_subscribers = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_subscribers WHERE status = 'inactive'" );
-$unsubscribed = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_subscribers WHERE status = 'unsubscribed'" );
+// Get subscriber statistics in a single query
+$subscriber_stats = $wpdb->get_row(
+    "SELECT 
+        COUNT(*) as total,
+        SUM(CASE WHEN status = 'active' THEN 1 ELSE 0 END) as active,
+        SUM(CASE WHEN status = 'inactive' THEN 1 ELSE 0 END) as inactive,
+        SUM(CASE WHEN status = 'unsubscribed' THEN 1 ELSE 0 END) as unsubscribed
+    FROM {$wpdb->prefix}mskd_subscribers"
+);
+$total_subscribers    = $subscriber_stats->total ?? 0;
+$active_subscribers   = $subscriber_stats->active ?? 0;
+$inactive_subscribers = $subscriber_stats->inactive ?? 0;
+$unsubscribed         = $subscriber_stats->unsubscribed ?? 0;
+
+// Get list count
 $total_lists = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_lists" );
-$pending_emails = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'pending'" );
-$sent_emails = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'sent'" );
-$failed_emails = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'failed'" );
+
+// Get queue statistics in a single query
+$queue_stats = $wpdb->get_row(
+    $wpdb->prepare(
+        "SELECT 
+            SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
+            SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
+            SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
+            SUM(CASE WHEN subscriber_id = %d THEN 1 ELSE 0 END) as one_time
+        FROM {$wpdb->prefix}mskd_queue",
+        MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID
+    )
+);
+$pending_emails  = $queue_stats->pending ?? 0;
+$sent_emails     = $queue_stats->sent ?? 0;
+$failed_emails   = $queue_stats->failed ?? 0;
+$one_time_emails = $queue_stats->one_time ?? 0;
 
 // Get next cron run
 $next_cron = wp_next_scheduled( 'mskd_process_queue' );
@@ -42,6 +66,9 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
             </a>
             <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose' ) ); ?>" class="button button-primary">
                 <?php _e( 'Ново писмо', 'mail-system-by-katsarov-design' ); ?>
+            </a>
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-one-time-email' ) ); ?>" class="button button-secondary">
+                <?php _e( 'Еднократен имейл', 'mail-system-by-katsarov-design' ); ?>
             </a>
         </div>
 
@@ -77,6 +104,7 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                     <span class="mskd-status-pending"><?php printf( __( 'Чакащи: %d', 'mail-system-by-katsarov-design' ), $pending_emails ); ?></span>
                     <span class="mskd-status-sent"><?php printf( __( 'Изпратени: %d', 'mail-system-by-katsarov-design' ), $sent_emails ); ?></span>
                     <span class="mskd-status-failed"><?php printf( __( 'Неуспешни: %d', 'mail-system-by-katsarov-design' ), $failed_emails ); ?></span>
+                    <span class="mskd-status-one-time"><?php printf( __( 'Еднократни: %d', 'mail-system-by-katsarov-design' ), $one_time_emails ); ?></span>
                 </div>
                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue' ) ); ?>" class="button">
                     <?php _e( 'Виж опашка', 'mail-system-by-katsarov-design' ); ?>

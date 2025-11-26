@@ -11,6 +11,9 @@ require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 // Load Brain Monkey.
 require_once dirname( __DIR__ ) . '/vendor/antecedent/patchwork/Patchwork.php';
 
+// Load base TestCase class.
+require_once __DIR__ . '/Unit/TestCase.php';
+
 // Define WordPress constants for testing.
 define( 'ABSPATH', '/tmp/wordpress/' );
 define( 'MSKD_VERSION', '1.0.0' );
