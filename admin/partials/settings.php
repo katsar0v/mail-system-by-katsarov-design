@@ -21,7 +21,7 @@ $smtp_port     = isset( $settings['smtp_port'] ) ? $settings['smtp_port'] : '587
 $smtp_security = isset( $settings['smtp_security'] ) ? $settings['smtp_security'] : 'tls';
 $smtp_auth     = isset( $settings['smtp_auth'] ) ? (bool) $settings['smtp_auth'] : true;
 $smtp_username = isset( $settings['smtp_username'] ) ? $settings['smtp_username'] : '';
-$smtp_password = isset( $settings['smtp_password'] ) ? $settings['smtp_password'] : '';
+$smtp_password = isset( $settings['smtp_password'] ) ? base64_decode( $settings['smtp_password'] ) : '';
 ?>
 
 <div class="wrap mskd-wrap">

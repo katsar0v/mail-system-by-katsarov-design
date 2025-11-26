@@ -50,8 +50,13 @@
             $('#smtp_auth').on('change', toggleSmtpAuthSettings);
         }
 
-        // SMTP Test Button
-        $('#mskd-smtp-test').on('click', function(e) {
+        // SMTP Test Button - Store original text before binding click handler
+        var $smtpTestButton = $('#mskd-smtp-test');
+        if ($smtpTestButton.length) {
+            $smtpTestButton.data('original-text', $smtpTestButton.text());
+        }
+
+        $smtpTestButton.on('click', function(e) {
             e.preventDefault();
 
             var $button = $(this);
@@ -82,9 +87,6 @@
                 }
             });
         });
-
-        // Store original button text
-        $('#mskd-smtp-test').data('original-text', $('#mskd-smtp-test').text());
     });
 
 })(jQuery);

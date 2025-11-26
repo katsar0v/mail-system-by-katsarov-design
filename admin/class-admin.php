@@ -539,7 +539,7 @@ class MSKD_Admin {
             'smtp_security' => $smtp_security,
             'smtp_auth'     => isset( $_POST['smtp_auth'] ) ? 1 : 0,
             'smtp_username' => sanitize_text_field( $_POST['smtp_username'] ),
-            'smtp_password' => isset( $_POST['smtp_password'] ) ? $_POST['smtp_password'] : '',
+            'smtp_password' => isset( $_POST['smtp_password'] ) ? base64_encode( sanitize_text_field( $_POST['smtp_password'] ) ) : '',
         );
 
         update_option( 'mskd_settings', $settings );
