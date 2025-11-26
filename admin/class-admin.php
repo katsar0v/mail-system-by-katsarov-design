@@ -22,6 +22,11 @@ class MSKD_Admin {
     const PAGE_PREFIX = 'mskd-';
 
     /**
+     * Subscriber ID used to identify one-time emails (not associated with any subscriber)
+     */
+    const ONE_TIME_EMAIL_SUBSCRIBER_ID = 0;
+
+    /**
      * Initialize admin hooks
      */
     public function init() {
@@ -543,6 +548,10 @@ class MSKD_Admin {
      * Send one-time email directly to a recipient
      */
     private function send_one_time_email() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
         global $wpdb;
 
         $recipient_email = sanitize_email( $_POST['recipient_email'] );
@@ -595,7 +604,7 @@ class MSKD_Admin {
         $wpdb->insert(
             $wpdb->prefix . 'mskd_queue',
             array(
-                'subscriber_id' => 0, // 0 indicates one-time email (no associated subscriber)
+                'subscriber_id' => self::ONE_TIME_EMAIL_SUBSCRIBER_ID,
                 'subject'       => $subject,
                 'body'          => $body,
                 'status'        => $log_status,

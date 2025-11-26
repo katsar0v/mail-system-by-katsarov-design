@@ -23,15 +23,27 @@ $where = '';
 if ( $status_filter ) {
     $where = $wpdb->prepare( " WHERE q.status = %s", $status_filter );
 } elseif ( $type_filter === 'one-time' ) {
-    $where = $wpdb->prepare( " WHERE q.subscriber_id = %d", 0 );
+    $where = $wpdb->prepare( " WHERE q.subscriber_id = %d", MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID );
 }
 
-// Get counts
-$pending_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'pending'" );
-$processing_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'processing'" );
-$sent_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'sent'" );
-$failed_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE status = 'failed'" );
-$one_time_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE subscriber_id = 0" );
+// Get counts in a single query for better performance
+$queue_counts = $wpdb->get_row(
+    $wpdb->prepare(
+        "SELECT 
+            SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
+            SUM(CASE WHEN status = 'processing' THEN 1 ELSE 0 END) as processing,
+            SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
+            SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
+            SUM(CASE WHEN subscriber_id = %d THEN 1 ELSE 0 END) as one_time
+        FROM {$wpdb->prefix}mskd_queue",
+        MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID
+    )
+);
+$pending_count    = $queue_counts->pending ?? 0;
+$processing_count = $queue_counts->processing ?? 0;
+$sent_count       = $queue_counts->sent ?? 0;
+$failed_count     = $queue_counts->failed ?? 0;
+$one_time_count   = $queue_counts->one_time ?? 0;
 
 // Get total count for current filter
 $total_items = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue q" . $where );
@@ -136,7 +148,7 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                     <tr>
                         <td><?php echo esc_html( $item->id ); ?></td>
                         <td>
-                            <?php if ( $item->subscriber_id == 0 ) : ?>
+                            <?php if ( $item->subscriber_id == MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID ) : ?>
                                 <em class="mskd-one-time-email"><?php _e( 'Еднократен имейл', 'mail-system-by-katsarov-design' ); ?></em>
                             <?php elseif ( $item->email ) : ?>
                                 <?php echo esc_html( $item->email ); ?>

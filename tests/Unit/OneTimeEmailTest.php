@@ -68,8 +68,9 @@ class OneTimeEmailTest extends TestCase {
             ->with( 'test_nonce', 'mskd_send_one_time_email' )
             ->andReturn( true );
 
+        // Called twice: once in handle_actions() and once in send_one_time_email()
         Functions\expect( 'current_user_can' )
-            ->once()
+            ->twice()
             ->with( 'manage_options' )
             ->andReturn( true );
 
@@ -106,8 +107,9 @@ class OneTimeEmailTest extends TestCase {
             ->with( 'test_nonce', 'mskd_send_one_time_email' )
             ->andReturn( true );
 
+        // Called twice: once in handle_actions() and once in send_one_time_email()
         Functions\expect( 'current_user_can' )
-            ->once()
+            ->twice()
             ->with( 'manage_options' )
             ->andReturn( true );
 
@@ -145,8 +147,9 @@ class OneTimeEmailTest extends TestCase {
             ->with( 'test_nonce', 'mskd_send_one_time_email' )
             ->andReturn( true );
 
+        // Called twice: once in handle_actions() and once in send_one_time_email()
         Functions\expect( 'current_user_can' )
-            ->once()
+            ->twice()
             ->with( 'manage_options' )
             ->andReturn( true );
 
@@ -221,8 +224,9 @@ class OneTimeEmailTest extends TestCase {
             ->with( 'test_nonce', 'mskd_send_one_time_email' )
             ->andReturn( true );
 
+        // Called twice: once in handle_actions() and once in send_one_time_email()
         Functions\expect( 'current_user_can' )
-            ->once()
+            ->twice()
             ->with( 'manage_options' )
             ->andReturn( true );
 
@@ -284,8 +288,9 @@ class OneTimeEmailTest extends TestCase {
             ->once()
             ->andReturn( true );
 
+        // Called twice: once in handle_actions() and once in send_one_time_email()
         Functions\expect( 'current_user_can' )
-            ->once()
+            ->twice()
             ->andReturn( true );
 
         Functions\expect( 'get_option' )
