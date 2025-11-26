@@ -18,6 +18,11 @@ use Mockery;
 class UnsubscribeTest extends TestCase {
 
     /**
+     * Exception message used to prevent exit() in tests.
+     */
+    const TEST_COMPLETE_EXCEPTION = 'test_complete';
+
+    /**
      * Public class instance.
      *
      * @var \MSKD_Public
@@ -90,13 +95,13 @@ class UnsubscribeTest extends TestCase {
             ->andReturnUsing( function() use ( &$update_called ) {
                 $update_called = true;
                 // Throw to prevent reaching include/exit
-                throw new \Exception( 'test_complete' );
+                throw new \Exception( self::TEST_COMPLETE_EXCEPTION );
             } );
         
         try {
             $this->public->handle_unsubscribe();
         } catch ( \Exception $e ) {
-            $this->assertEquals( 'test_complete', $e->getMessage() );
+            $this->assertEquals( self::TEST_COMPLETE_EXCEPTION, $e->getMessage() );
         }
         
         // Verify the update was called.
@@ -342,13 +347,13 @@ class UnsubscribeTest extends TestCase {
             ->andReturnUsing( function() use ( &$update_called ) {
                 $update_called = true;
                 // Throw to prevent reaching include/exit
-                throw new \Exception( 'test_complete' );
+                throw new \Exception( self::TEST_COMPLETE_EXCEPTION );
             } );
         
         try {
             $this->public->handle_unsubscribe();
         } catch ( \Exception $e ) {
-            $this->assertEquals( 'test_complete', $e->getMessage() );
+            $this->assertEquals( self::TEST_COMPLETE_EXCEPTION, $e->getMessage() );
         }
         
         // Verify the update was called.

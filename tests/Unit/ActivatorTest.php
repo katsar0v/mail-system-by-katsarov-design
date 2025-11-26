@@ -28,6 +28,20 @@ class ActivatorTest extends TestCase {
     }
 
     /**
+     * Set up common get_option mock that returns false for mskd_settings.
+     *
+     * @param mixed $mskd_settings_value Value to return for mskd_settings option.
+     */
+    protected function setup_get_option_mock( $mskd_settings_value = false ): void {
+        Functions\when( 'get_option' )->alias( function( $option, $default = false ) use ( $mskd_settings_value ) {
+            if ( $option === 'mskd_settings' ) {
+                return $mskd_settings_value;
+            }
+            return $default;
+        });
+    }
+
+    /**
      * Test that activation calls dbDelta for all required tables.
      */
     public function test_tables_created_on_activation(): void {
@@ -49,12 +63,7 @@ class ActivatorTest extends TestCase {
         Functions\when( 'flush_rewrite_rules' )->justReturn( null );
         
         // Override get_option to return false for mskd_settings.
-        Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
-            if ( $option === 'mskd_settings' ) {
-                return false;
-            }
-            return $default;
-        });
+        $this->setup_get_option_mock( false );
 
         // Track update_option calls.
         $update_option_calls = array();
@@ -106,12 +115,7 @@ class ActivatorTest extends TestCase {
         });
 
         // Override get_option.
-        Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
-            if ( $option === 'mskd_settings' ) {
-                return false;
-            }
-            return $default;
-        });
+        $this->setup_get_option_mock( false );
 
         \MSKD_Activator::activate();
         
@@ -141,12 +145,7 @@ class ActivatorTest extends TestCase {
         });
 
         // Override get_option.
-        Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
-            if ( $option === 'mskd_settings' ) {
-                return false;
-            }
-            return $default;
-        });
+        $this->setup_get_option_mock( false );
 
         \MSKD_Activator::activate();
         
@@ -166,12 +165,7 @@ class ActivatorTest extends TestCase {
         Functions\when( 'wp_next_scheduled' )->justReturn( 1234567890 );
 
         // No existing settings.
-        Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
-            if ( $option === 'mskd_settings' ) {
-                return false;
-            }
-            return $default;
-        });
+        $this->setup_get_option_mock( false );
 
         // Track update_option calls.
         $saved_settings = null;
@@ -210,12 +204,7 @@ class ActivatorTest extends TestCase {
             'reply_to'   => 'reply@example.com',
         );
 
-        Functions\when( 'get_option' )->alias( function( $option, $default = false ) use ( $existing_settings ) {
-            if ( $option === 'mskd_settings' ) {
-                return $existing_settings;
-            }
-            return $default;
-        });
+        $this->setup_get_option_mock( $existing_settings );
 
         // Track update_option calls for mskd_settings.
         $mskd_settings_updated = false;
@@ -244,12 +233,7 @@ class ActivatorTest extends TestCase {
         Functions\when( 'flush_rewrite_rules' )->justReturn( null );
         Functions\when( 'wp_next_scheduled' )->justReturn( 1234567890 );
 
-        Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
-            if ( $option === 'mskd_settings' ) {
-                return array(); // Existing settings.
-            }
-            return $default;
-        });
+        $this->setup_get_option_mock( array() ); // Existing settings.
 
         // Track update_option call for db_version.
         $db_version_stored = null;
