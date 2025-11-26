@@ -71,16 +71,15 @@ class MSKD_Cron_Handler {
 
         // Get settings
         $settings = get_option( 'mskd_settings', array() );
-        $from_name = isset( $settings['from_name'] ) ? $settings['from_name'] : get_bloginfo( 'name' );
-        $from_email = isset( $settings['from_email'] ) ? $settings['from_email'] : get_bloginfo( 'admin_email' );
-        $reply_to = isset( $settings['reply_to'] ) ? $settings['reply_to'] : get_bloginfo( 'admin_email' );
 
-        // Initialize SMTP mailer if enabled.
-        $use_smtp = false;
-        if ( ! empty( $settings['smtp_enabled'] ) && ! empty( $settings['smtp_host'] ) ) {
-            require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
-            $this->smtp_mailer = new MSKD_SMTP_Mailer( $settings );
-            $use_smtp = $this->smtp_mailer->is_enabled();
+        // Initialize SMTP mailer - required for sending emails.
+        require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+        $this->smtp_mailer = new MSKD_SMTP_Mailer( $settings );
+
+        if ( ! $this->smtp_mailer->is_enabled() ) {
+            // SMTP not configured, cannot send emails
+            error_log( 'MSKD: SMTP not configured. Cannot process email queue.' );
+            return;
         }
 
         foreach ( $queue_items as $item ) {
@@ -100,24 +99,13 @@ class MSKD_Cron_Handler {
             $body = $this->replace_placeholders( $item->body, $item );
             $subject = $this->replace_placeholders( $item->subject, $item );
 
-            // Email headers
-            $headers = array(
-                'Content-Type: text/html; charset=UTF-8',
-                sprintf( 'From: %s <%s>', $from_name, $from_email ),
-                sprintf( 'Reply-To: %s', $reply_to ),
-            );
-
-            // Send email using SMTP or wp_mail().
-            $sent         = false;
+            // Send email using SMTP mailer.
+            $sent          = false;
             $error_message = '';
 
-            if ( $use_smtp && $this->smtp_mailer ) {
-                $sent = $this->smtp_mailer->send( $item->email, $subject, $body, $headers );
-                if ( ! $sent ) {
-                    $error_message = $this->smtp_mailer->get_last_error();
-                }
-            } else {
-                $sent = wp_mail( $item->email, $subject, $body, $headers );
+            $sent = $this->smtp_mailer->send( $item->email, $subject, $body );
+            if ( ! $sent ) {
+                $error_message = $this->smtp_mailer->get_last_error();
             }
 
             if ( $sent ) {
@@ -137,9 +125,7 @@ class MSKD_Cron_Handler {
                 $new_attempts = $item->attempts + 1;
 
                 // Build error message with details.
-                $base_error = $use_smtp
-                    ? __( 'SMTP изпращане неуспешно', 'mail-system-by-katsarov-design' )
-                    : __( 'wp_mail() неуспешен', 'mail-system-by-katsarov-design' );
+                $base_error = __( 'SMTP изпращане неуспешно', 'mail-system-by-katsarov-design' );
                 
                 if ( $new_attempts < self::MAX_ATTEMPTS ) {
                     // Schedule for retry - set back to pending with delayed schedule

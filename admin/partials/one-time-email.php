@@ -8,6 +8,13 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
+
+// Get preserved form data (if any error occurred)
+$form_data = isset( $form_data ) ? $form_data : array();
+$recipient_email = isset( $form_data['recipient_email'] ) ? esc_attr( $form_data['recipient_email'] ) : '';
+$recipient_name  = isset( $form_data['recipient_name'] ) ? esc_attr( $form_data['recipient_name'] ) : '';
+$subject_value   = isset( $form_data['subject'] ) ? esc_attr( $form_data['subject'] ) : '';
+$body_value      = isset( $form_data['body'] ) ? $form_data['body'] : '';
 ?>
 
 <div class="wrap mskd-wrap">
@@ -29,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         <label for="recipient_email"><?php _e( 'Имейл на получателя', 'mail-system-by-katsarov-design' ); ?> *</label>
                     </th>
                     <td>
-                        <input type="email" name="recipient_email" id="recipient_email" class="regular-text" required>
+                        <input type="email" name="recipient_email" id="recipient_email" class="regular-text" value="<?php echo $recipient_email; ?>" required>
                         <p class="description"><?php _e( 'Имейл адресът, до който ще бъде изпратено писмото.', 'mail-system-by-katsarov-design' ); ?></p>
                     </td>
                 </tr>
@@ -38,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         <label for="recipient_name"><?php _e( 'Име на получателя', 'mail-system-by-katsarov-design' ); ?></label>
                     </th>
                     <td>
-                        <input type="text" name="recipient_name" id="recipient_name" class="regular-text">
+                        <input type="text" name="recipient_name" id="recipient_name" class="regular-text" value="<?php echo $recipient_name; ?>">
                         <p class="description"><?php _e( 'Име на получателя (по избор). Може да се използва в съдържанието с {recipient_name}.', 'mail-system-by-katsarov-design' ); ?></p>
                     </td>
                 </tr>
@@ -47,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         <label for="subject"><?php _e( 'Тема', 'mail-system-by-katsarov-design' ); ?> *</label>
                     </th>
                     <td>
-                        <input type="text" name="subject" id="subject" class="large-text" required>
+                        <input type="text" name="subject" id="subject" class="large-text" value="<?php echo $subject_value; ?>" required>
                     </td>
                 </tr>
                 <tr>
@@ -56,7 +63,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                     </th>
                     <td>
                         <?php
-                        wp_editor( '', 'body', array(
+                        wp_editor( $body_value, 'body', array(
                             'textarea_name' => 'body',
                             'textarea_rows' => 15,
                             'media_buttons' => true,

@@ -27,6 +27,20 @@ class MSKD_Admin {
     const ONE_TIME_EMAIL_SUBSCRIBER_ID = 0;
 
     /**
+     * Form data preserved on error for one-time email
+     *
+     * @var array
+     */
+    private $one_time_email_form_data = array();
+
+    /**
+     * Last wp_mail error
+     *
+     * @var string
+     */
+    private $last_mail_error = '';
+
+    /**
      * Initialize admin hooks
      */
     public function init() {
@@ -568,6 +582,26 @@ class MSKD_Admin {
     }
 
     /**
+     * Capture wp_mail errors
+     *
+     * @param WP_Error $wp_error The WP_Error object.
+     */
+    public function capture_mail_error( $wp_error ) {
+        if ( is_wp_error( $wp_error ) ) {
+            $this->last_mail_error = $wp_error->get_error_message();
+        }
+    }
+
+    /**
+     * Get preserved form data for one-time email
+     *
+     * @return array
+     */
+    public function get_one_time_email_form_data() {
+        return $this->one_time_email_form_data;
+    }
+
+    /**
      * Send one-time email directly to a recipient
      */
     private function send_one_time_email() {
@@ -582,6 +616,14 @@ class MSKD_Admin {
         $subject         = sanitize_text_field( $_POST['subject'] );
         $body            = wp_kses_post( $_POST['body'] );
 
+        // Store form data for preservation on error
+        $this->one_time_email_form_data = array(
+            'recipient_email' => $recipient_email,
+            'recipient_name'  => $recipient_name,
+            'subject'         => $subject,
+            'body'            => $body,
+        );
+
         // Validate required fields
         if ( empty( $recipient_email ) || empty( $subject ) || empty( $body ) ) {
             add_settings_error( 'mskd_messages', 'mskd_error', __( 'Моля, попълнете всички задължителни полета.', 'mail-system-by-katsarov-design' ), 'error' );
@@ -593,12 +635,6 @@ class MSKD_Admin {
             add_settings_error( 'mskd_messages', 'mskd_error', __( 'Невалиден имейл адрес на получателя.', 'mail-system-by-katsarov-design' ), 'error' );
             return;
         }
-
-        // Get settings
-        $settings   = get_option( 'mskd_settings', array() );
-        $from_name  = isset( $settings['from_name'] ) ? $settings['from_name'] : get_bloginfo( 'name' );
-        $from_email = isset( $settings['from_email'] ) ? $settings['from_email'] : get_bloginfo( 'admin_email' );
-        $reply_to   = isset( $settings['reply_to'] ) ? $settings['reply_to'] : get_bloginfo( 'admin_email' );
 
         // Replace basic placeholders (no subscriber-specific placeholders for one-time emails)
         $body = str_replace(
@@ -612,15 +648,22 @@ class MSKD_Admin {
             $subject
         );
 
-        // Email headers
-        $headers = array(
-            'Content-Type: text/html; charset=UTF-8',
-            sprintf( 'From: %s <%s>', $from_name, $from_email ),
-            sprintf( 'Reply-To: %s', $reply_to ),
-        );
+        // Load SMTP Mailer and send via SMTP
+        require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+        $mailer = new MSKD_SMTP_Mailer();
 
-        // Send email immediately
-        $sent = wp_mail( $recipient_email, $subject, $body, $headers );
+        // Check if SMTP is enabled
+        if ( ! $mailer->is_enabled() ) {
+            $this->last_mail_error = __( 'SMTP не е конфигуриран. Моля, настройте SMTP в настройките на плъгина.', 'mail-system-by-katsarov-design' );
+            $sent = false;
+        } else {
+            // Send email via SMTP
+            $sent = $mailer->send( $recipient_email, $subject, $body );
+            
+            if ( ! $sent ) {
+                $this->last_mail_error = $mailer->get_last_error();
+            }
+        }
 
         // Log the one-time email in the queue table for audit purposes
         $log_status = $sent ? 'sent' : 'failed';
@@ -634,12 +677,14 @@ class MSKD_Admin {
                 'scheduled_at'  => current_time( 'mysql' ),
                 'sent_at'       => $sent ? current_time( 'mysql' ) : null,
                 'attempts'      => 1,
-                'error_message' => $sent ? null : __( 'wp_mail() неуспешен за еднократен имейл', 'mail-system-by-katsarov-design' ),
+                'error_message' => $sent ? null : ( $this->last_mail_error ?: __( 'wp_mail() неуспешен за еднократен имейл', 'mail-system-by-katsarov-design' ) ),
             ),
             array( '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s' )
         );
 
         if ( $sent ) {
+            // Clear form data on success
+            $this->one_time_email_form_data = array();
             add_settings_error(
                 'mskd_messages',
                 'mskd_success',
@@ -647,10 +692,16 @@ class MSKD_Admin {
                 'success'
             );
         } else {
+            $error_message = __( 'Грешка при изпращане на еднократния имейл.', 'mail-system-by-katsarov-design' );
+            if ( ! empty( $this->last_mail_error ) ) {
+                $error_message .= ' ' . sprintf( __( 'Причина: %s', 'mail-system-by-katsarov-design' ), esc_html( $this->last_mail_error ) );
+            } else {
+                $error_message .= ' ' . __( 'Моля, опитайте отново.', 'mail-system-by-katsarov-design' );
+            }
             add_settings_error(
                 'mskd_messages',
                 'mskd_error',
-                __( 'Грешка при изпращане на еднократния имейл. Моля, опитайте отново.', 'mail-system-by-katsarov-design' ),
+                $error_message,
                 'error'
             );
         }
@@ -737,6 +788,7 @@ class MSKD_Admin {
      * Render One-Time Email page
      */
     public function render_one_time_email() {
+        $form_data = $this->get_one_time_email_form_data();
         include MSKD_PLUGIN_DIR . 'admin/partials/one-time-email.php';
     }
 }
