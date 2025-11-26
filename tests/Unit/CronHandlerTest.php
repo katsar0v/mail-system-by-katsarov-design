@@ -231,6 +231,9 @@ class CronHandlerTest extends TestCase {
                     'smtp_host'    => 'smtp.example.com',
                 )
             );
+
+        Functions\expect( 'wp_mail' )
+            ->once()
             ->andReturn( true );
 
         $this->cron_handler->process_queue();
