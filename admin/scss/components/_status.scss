@@ -45,3 +45,27 @@
   color: $color-error;
   font-weight: $font-weight-medium;
 }
+
+// SMTP Status
+.mskd-smtp-active {
+  color: $color-success;
+  font-weight: $font-weight-medium;
+  margin-right: 8px;
+}
+
+.mskd-smtp-inactive {
+  color: $color-wp-text-light;
+}
+
+// SMTP Test Results
+.mskd-smtp-success {
+  color: $color-success;
+  font-weight: $font-weight-medium;
+  margin-left: 12px;
+}
+
+.mskd-smtp-error {
+  color: $color-error;
+  font-weight: $font-weight-medium;
+  margin-left: 12px;
+}

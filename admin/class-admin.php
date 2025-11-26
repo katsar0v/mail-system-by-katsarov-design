@@ -34,6 +34,7 @@ class MSKD_Admin {
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
         add_action( 'admin_notices', array( $this, 'show_cron_notice' ) );
         add_action( 'admin_init', array( $this, 'handle_actions' ) );
+        add_action( 'wp_ajax_mskd_test_smtp', array( $this, 'ajax_test_smtp' ) );
     }
 
     /**
@@ -534,10 +535,31 @@ class MSKD_Admin {
      * Save settings
      */
     private function save_settings() {
+        // Validate SMTP port.
+        $smtp_port = isset( $_POST['smtp_port'] ) ? absint( $_POST['smtp_port'] ) : 587;
+        if ( $smtp_port < 1 || $smtp_port > 65535 ) {
+            $smtp_port = 587;
+        }
+
+        // Validate SMTP security.
+        $smtp_security        = isset( $_POST['smtp_security'] ) ? sanitize_text_field( $_POST['smtp_security'] ) : '';
+        $allowed_security     = array( '', 'ssl', 'tls' );
+        if ( ! in_array( $smtp_security, $allowed_security, true ) ) {
+            $smtp_security = 'tls';
+        }
+
         $settings = array(
-            'from_name'  => sanitize_text_field( $_POST['from_name'] ),
-            'from_email' => sanitize_email( $_POST['from_email'] ),
-            'reply_to'   => sanitize_email( $_POST['reply_to'] ),
+            'from_name'     => sanitize_text_field( $_POST['from_name'] ),
+            'from_email'    => sanitize_email( $_POST['from_email'] ),
+            'reply_to'      => sanitize_email( $_POST['reply_to'] ),
+            // SMTP Settings.
+            'smtp_enabled'  => isset( $_POST['smtp_enabled'] ) ? 1 : 0,
+            'smtp_host'     => sanitize_text_field( $_POST['smtp_host'] ),
+            'smtp_port'     => $smtp_port,
+            'smtp_security' => $smtp_security,
+            'smtp_auth'     => isset( $_POST['smtp_auth'] ) ? 1 : 0,
+            'smtp_username' => sanitize_text_field( $_POST['smtp_username'] ),
+            'smtp_password' => isset( $_POST['smtp_password'] ) ? base64_encode( sanitize_text_field( $_POST['smtp_password'] ) ) : '',
         );
 
         update_option( 'mskd_settings', $settings );
@@ -673,6 +695,41 @@ class MSKD_Admin {
      */
     public function render_settings() {
         include MSKD_PLUGIN_DIR . 'admin/partials/settings.php';
+    }
+
+    /**
+     * AJAX handler for SMTP test.
+     */
+    public function ajax_test_smtp() {
+        // Verify nonce.
+        if ( ! check_ajax_referer( 'mskd_admin_nonce', 'nonce', false ) ) {
+            wp_send_json_error( array(
+                'message' => __( 'Невалидна заявка. Моля, опреснете страницата.', 'mail-system-by-katsarov-design' ),
+            ) );
+        }
+
+        // Check permissions.
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array(
+                'message' => __( 'Нямате права за тази операция.', 'mail-system-by-katsarov-design' ),
+            ) );
+        }
+
+        // Load SMTP Mailer.
+        require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+
+        $smtp_mailer = new MSKD_SMTP_Mailer();
+        $result      = $smtp_mailer->test_connection();
+
+        if ( $result['success'] ) {
+            wp_send_json_success( array(
+                'message' => $result['message'],
+            ) );
+        } else {
+            wp_send_json_error( array(
+                'message' => $result['message'],
+            ) );
+        }
     }
 
     /**
