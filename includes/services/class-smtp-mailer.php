@@ -208,7 +208,7 @@ class MSKD_SMTP_Mailer {
             $mailer->Port       = ! empty( $this->settings['smtp_port'] ) ? (int) $this->settings['smtp_port'] : 587;
             $mailer->SMTPSecure = $this->get_smtp_secure();
             $mailer->SMTPAuth   = ! empty( $this->settings['smtp_auth'] );
-            $mailer->Timeout    = 10;
+            $mailer->Timeout    = 15;
 
             if ( $mailer->SMTPAuth ) {
                 $mailer->Username = ! empty( $this->settings['smtp_username'] ) ? $this->settings['smtp_username'] : '';

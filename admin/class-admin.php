@@ -155,6 +155,7 @@ class MSKD_Admin {
                 'sending'        => __( 'Изпращане...', 'mail-system-by-katsarov-design' ),
                 'success'        => __( 'Успешно!', 'mail-system-by-katsarov-design' ),
                 'error'          => __( 'Грешка!', 'mail-system-by-katsarov-design' ),
+                'timeout'        => __( 'Времето за изчакване изтече. Проверете SMTP настройките.', 'mail-system-by-katsarov-design' ),
             ),
         ) );
     }

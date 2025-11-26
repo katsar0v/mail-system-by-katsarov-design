@@ -50,17 +50,19 @@
             $('#smtp_auth').on('change', toggleSmtpAuthSettings);
         }
 
-        // SMTP Test Button - Store original text before binding click handler
-        var $smtpTestButton = $('#mskd-smtp-test');
-        if ($smtpTestButton.length) {
-            $smtpTestButton.data('original-text', $smtpTestButton.text());
-        }
-
-        $smtpTestButton.on('click', function(e) {
+        // SMTP Test Button
+        $(document).on('click', '#mskd-smtp-test', function(e) {
             e.preventDefault();
 
             var $button = $(this);
             var $result = $('#mskd-smtp-test-result');
+            var originalText = $button.data('original-text');
+
+            // Store original text if not already stored
+            if (!originalText) {
+                originalText = $button.text();
+                $button.data('original-text', originalText);
+            }
 
             $button.prop('disabled', true).text(mskd_admin.strings.sending);
             $result.removeClass('mskd-smtp-success mskd-smtp-error').text('');
@@ -68,6 +70,7 @@
             $.ajax({
                 url: mskd_admin.ajax_url,
                 type: 'POST',
+                timeout: 30000,
                 data: {
                     action: 'mskd_test_smtp',
                     nonce: mskd_admin.nonce
@@ -76,11 +79,16 @@
                     if (response.success) {
                         $result.addClass('mskd-smtp-success').text(response.data.message);
                     } else {
-                        $result.addClass('mskd-smtp-error').text(response.data.message);
+                        var errorMsg = (response.data && response.data.message) ? response.data.message : mskd_admin.strings.error;
+                        $result.addClass('mskd-smtp-error').text(errorMsg);
                     }
                 },
-                error: function() {
-                    $result.addClass('mskd-smtp-error').text(mskd_admin.strings.error);
+                error: function(xhr, status, error) {
+                    var errorMsg = mskd_admin.strings.error;
+                    if (status === 'timeout') {
+                        errorMsg = mskd_admin.strings.timeout || 'Времето за изчакване изтече.';
+                    }
+                    $result.addClass('mskd-smtp-error').text(errorMsg);
                 },
                 complete: function() {
                     $button.prop('disabled', false).text($button.data('original-text'));
