@@ -803,17 +803,24 @@ class Import_Export_Service {
 	 *
 	 * Prevents CSV formula injection by prefixing dangerous leading characters
 	 * with a single quote. In spreadsheet applications, values starting with
-	 * '=', '+', '-', or '@' can execute formulas when opened.
+	 * '=', '+', '-', '@', tab, or carriage return can execute formulas when opened.
 	 *
-	 * @param string $value The value to sanitize.
+	 * @param string|null $value The value to sanitize.
 	 * @return string Sanitized value safe for CSV export.
 	 */
-	private function sanitize_csv_value( string $value ): string {
+	private function sanitize_csv_value( $value ): string {
+		// Ensure we have a string to work with.
+		if ( $value === null || $value === '' ) {
+			return '';
+		}
+
+		$value = (string) $value;
+
 		// Characters that can trigger formula execution in spreadsheet applications.
-		$dangerous_chars = array( '=', '+', '-', '@', "\t", "\r" );
+		$dangerous_chars = array( '=', '+', '-', '@', "\t", "\r", "\n", '|' );
 
 		// Check if the value starts with a dangerous character.
-		if ( ! empty( $value ) && in_array( $value[0], $dangerous_chars, true ) ) {
+		if ( isset( $value[0] ) && in_array( $value[0], $dangerous_chars, true ) ) {
 			// Prefix with single quote to prevent formula execution.
 			return "'" . $value;
 		}
