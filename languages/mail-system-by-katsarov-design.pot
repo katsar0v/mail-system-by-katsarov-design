@@ -926,6 +926,26 @@ msgstr ""
 msgid "All queued emails deleted successfully."
 msgstr ""
 
+#: admin/class-admin.php
+msgid "Campaign not found."
+msgstr ""
+
+#: admin/class-admin.php
+msgid "This campaign cannot be cancelled."
+msgstr ""
+
+#: admin/class-admin.php
+msgid "Campaign cancelled by administrator"
+msgstr ""
+
+#: admin/class-admin.php
+msgid "Campaign cancelled. %d emails were cancelled."
+msgstr ""
+
+#: admin/class-admin.php
+msgid "Error creating campaign."
+msgstr ""
+
 #: admin/partials/settings.php
 msgid "Danger Zone"
 msgstr ""
@@ -972,4 +992,140 @@ msgstr ""
 
 #: admin/partials/queue.php
 msgid "External"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "Completed"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "Campaigns"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "Type"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "Recipients"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "Progress"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "Campaign"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "View details"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "Details"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "Cancel campaign"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "No campaigns in queue."
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "There are %d emails from before the campaign system was introduced."
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "View legacy emails"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Back to Queue"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Campaign #%d"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Created:"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Scheduled:"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Completed:"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Lists:"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "total"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "sent"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "failed"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "pending"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "cancelled"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Cancel Campaign"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Are you sure you want to cancel this campaign? All pending emails will be cancelled."
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Error"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "No emails in this campaign."
+msgstr ""
+
+#: admin/partials/queue-legacy.php
+msgid "Legacy Emails"
+msgstr ""
+
+#: admin/partials/queue-legacy.php
+msgid "These emails were sent before the campaign system was introduced. They are not grouped by campaign."
+msgstr ""
+
+#: admin/partials/queue-legacy.php
+msgid "No legacy emails."
+msgstr ""
+
+#: admin/class-admin.php
+msgid "Enjoying Mail System by Katsarov Design?"
+msgstr ""
+
+#: admin/class-admin.php
+msgid "If you like this plugin, please share it with your friends!"
+msgstr ""
+
+#: admin/class-admin.php
+msgid "Yes, of course!"
+msgstr ""
+
+#: admin/class-admin.php
+msgid "Nah, I do not like the plugin"
 msgstr ""

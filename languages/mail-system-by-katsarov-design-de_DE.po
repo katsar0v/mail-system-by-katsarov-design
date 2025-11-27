@@ -929,6 +929,26 @@ msgstr "Alle Listen wurden erfolgreich gelöscht."
 msgid "All queued emails deleted successfully."
 msgstr "Alle E-Mails aus der Warteschlange wurden erfolgreich gelöscht."
 
+#: admin/class-admin.php
+msgid "Campaign not found."
+msgstr "Kampagne nicht gefunden."
+
+#: admin/class-admin.php
+msgid "This campaign cannot be cancelled."
+msgstr "Diese Kampagne kann nicht abgebrochen werden."
+
+#: admin/class-admin.php
+msgid "Campaign cancelled by administrator"
+msgstr "Kampagne vom Administrator abgebrochen"
+
+#: admin/class-admin.php
+msgid "Campaign cancelled. %d emails were cancelled."
+msgstr "Kampagne abgebrochen. %d E-Mails wurden abgebrochen."
+
+#: admin/class-admin.php
+msgid "Error creating campaign."
+msgstr "Fehler beim Erstellen der Kampagne."
+
 #: admin/partials/settings.php
 msgid "Danger Zone"
 msgstr "Gefahrenzone"
@@ -976,3 +996,139 @@ msgstr "Löscht dauerhaft alle E-Mails aus der Warteschlange (ausstehend, in Bea
 #: admin/partials/queue.php
 msgid "External"
 msgstr "Extern"
+
+#: admin/partials/queue.php
+msgid "Completed"
+msgstr "Abgeschlossen"
+
+#: admin/partials/queue.php
+msgid "Campaigns"
+msgstr "Kampagnen"
+
+#: admin/partials/queue.php
+msgid "Type"
+msgstr "Typ"
+
+#: admin/partials/queue.php
+msgid "Recipients"
+msgstr "Empfänger"
+
+#: admin/partials/queue.php
+msgid "Progress"
+msgstr "Fortschritt"
+
+#: admin/partials/queue.php
+msgid "Campaign"
+msgstr "Kampagne"
+
+#: admin/partials/queue.php
+msgid "View details"
+msgstr "Details anzeigen"
+
+#: admin/partials/queue.php
+msgid "Details"
+msgstr "Details"
+
+#: admin/partials/queue.php
+msgid "Cancel campaign"
+msgstr "Kampagne abbrechen"
+
+#: admin/partials/queue.php
+msgid "No campaigns in queue."
+msgstr "Keine Kampagnen in der Warteschlange."
+
+#: admin/partials/queue.php
+msgid "There are %d emails from before the campaign system was introduced."
+msgstr "Es gibt %d E-Mails aus der Zeit vor der Einführung des Kampagnensystems."
+
+#: admin/partials/queue.php
+msgid "View legacy emails"
+msgstr "Alte E-Mails anzeigen"
+
+#: admin/partials/queue-detail.php
+msgid "Back to Queue"
+msgstr "Zurück zur Warteschlange"
+
+#: admin/partials/queue-detail.php
+msgid "Campaign #%d"
+msgstr "Kampagne #%d"
+
+#: admin/partials/queue-detail.php
+msgid "Created:"
+msgstr "Erstellt:"
+
+#: admin/partials/queue-detail.php
+msgid "Scheduled:"
+msgstr "Geplant:"
+
+#: admin/partials/queue-detail.php
+msgid "Completed:"
+msgstr "Abgeschlossen:"
+
+#: admin/partials/queue-detail.php
+msgid "Lists:"
+msgstr "Listen:"
+
+#: admin/partials/queue-detail.php
+msgid "total"
+msgstr "gesamt"
+
+#: admin/partials/queue-detail.php
+msgid "sent"
+msgstr "gesendet"
+
+#: admin/partials/queue-detail.php
+msgid "failed"
+msgstr "fehlgeschlagen"
+
+#: admin/partials/queue-detail.php
+msgid "pending"
+msgstr "ausstehend"
+
+#: admin/partials/queue-detail.php
+msgid "cancelled"
+msgstr "abgebrochen"
+
+#: admin/partials/queue-detail.php
+msgid "Cancel Campaign"
+msgstr "Kampagne abbrechen"
+
+#: admin/partials/queue-detail.php
+msgid "Are you sure you want to cancel this campaign? All pending emails will be cancelled."
+msgstr "Sind Sie sicher, dass Sie diese Kampagne abbrechen möchten? Alle ausstehenden E-Mails werden abgebrochen."
+
+#: admin/partials/queue-detail.php
+msgid "Error"
+msgstr "Fehler"
+
+#: admin/partials/queue-detail.php
+msgid "No emails in this campaign."
+msgstr "Keine E-Mails in dieser Kampagne."
+
+#: admin/partials/queue-legacy.php
+msgid "Legacy Emails"
+msgstr "Alte E-Mails"
+
+#: admin/partials/queue-legacy.php
+msgid "These emails were sent before the campaign system was introduced. They are not grouped by campaign."
+msgstr "Diese E-Mails wurden vor der Einführung des Kampagnensystems gesendet. Sie sind nicht nach Kampagnen gruppiert."
+
+#: admin/partials/queue-legacy.php
+msgid "No legacy emails."
+msgstr "Keine alten E-Mails."
+
+#: admin/class-admin.php
+msgid "Enjoying Mail System by Katsarov Design?"
+msgstr "Gefällt Ihnen Mail System by Katsarov Design?"
+
+#: admin/class-admin.php
+msgid "If you like this plugin, please share it with your friends!"
+msgstr "Wenn Ihnen dieses Plugin gefällt, teilen Sie es bitte mit Ihren Freunden!"
+
+#: admin/class-admin.php
+msgid "Yes, of course!"
+msgstr "Ja, natürlich!"
+
+#: admin/class-admin.php
+msgid "Nah, I do not like the plugin"
+msgstr "Nein, das Plugin gefällt mir nicht"

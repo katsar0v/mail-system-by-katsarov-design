@@ -47,11 +47,13 @@ class MSKD_Admin {
         add_action( 'admin_menu', array( $this, 'register_menu' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
         add_action( 'admin_notices', array( $this, 'show_cron_notice' ) );
+        add_action( 'admin_notices', array( $this, 'show_share_notice' ) );
         add_action( 'admin_init', array( $this, 'handle_actions' ) );
         add_action( 'wp_ajax_mskd_test_smtp', array( $this, 'ajax_test_smtp' ) );
         add_action( 'wp_ajax_mskd_truncate_subscribers', array( $this, 'ajax_truncate_subscribers' ) );
         add_action( 'wp_ajax_mskd_truncate_lists', array( $this, 'ajax_truncate_lists' ) );
         add_action( 'wp_ajax_mskd_truncate_queue', array( $this, 'ajax_truncate_queue' ) );
+        add_action( 'wp_ajax_mskd_dismiss_share_notice', array( $this, 'ajax_dismiss_share_notice' ) );
     }
 
     /**
@@ -217,6 +219,81 @@ class MSKD_Admin {
     }
 
     /**
+     * Show share notice asking users to share the plugin
+     */
+    public function show_share_notice() {
+        // Check if notice was already dismissed
+        if ( get_option( 'mskd_share_notice_dismissed' ) ) {
+            return;
+        }
+
+        // Only show to users who can manage options
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        $screen = get_current_screen();
+        
+        // Only show on plugin pages
+        if ( ! $screen || strpos( $screen->id, self::PAGE_PREFIX ) === false ) {
+            return;
+        }
+
+        // Only show after at least 3 campaigns have been created (persistent counter)
+        $campaign_count = (int) get_option( 'mskd_total_campaigns_created', 0 );
+        if ( $campaign_count < 3 ) {
+            return;
+        }
+
+        ?>
+        <div class="notice notice-info mskd-share-notice" style="padding: 15px;">
+            <p style="font-size: 14px; margin-bottom: 10px;">
+                <strong><?php esc_html_e( 'Enjoying Mail System by Katsarov Design?', 'mail-system-by-katsarov-design' ); ?></strong>
+                <?php esc_html_e( 'If you like this plugin, please share it with your friends!', 'mail-system-by-katsarov-design' ); ?>
+            </p>
+            <p>
+                <a href="#" class="button button-primary mskd-share-dismiss" data-nonce="<?php echo esc_attr( wp_create_nonce( 'mskd_dismiss_share_notice' ) ); ?>">
+                    <?php esc_html_e( 'Yes, of course!', 'mail-system-by-katsarov-design' ); ?>
+                </a>
+                <a href="https://github.com/katsar0v/mail-system-by-katsarov-design" target="_blank" class="button" style="margin-left: 10px;">
+                    <?php esc_html_e( 'Nah, I do not like the plugin', 'mail-system-by-katsarov-design' ); ?>
+                </a>
+            </p>
+        </div>
+        <script type="text/javascript">
+            jQuery(document).ready(function($) {
+                $('.mskd-share-dismiss').on('click', function(e) {
+                    e.preventDefault();
+                    var $notice = $(this).closest('.mskd-share-notice');
+                    var nonce = $(this).data('nonce');
+                    
+                    $.post(ajaxurl, {
+                        action: 'mskd_dismiss_share_notice',
+                        nonce: nonce
+                    }, function() {
+                        $notice.fadeOut();
+                    });
+                });
+            });
+        </script>
+        <?php
+    }
+
+    /**
+     * AJAX handler to dismiss share notice permanently
+     */
+    public function ajax_dismiss_share_notice() {
+        check_ajax_referer( 'mskd_dismiss_share_notice', 'nonce' );
+        
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( 'Unauthorized' );
+        }
+
+        update_option( 'mskd_share_notice_dismissed', true );
+        wp_send_json_success();
+    }
+
+    /**
      * Handle admin actions (add, edit, delete)
      */
     public function handle_actions() {
@@ -268,6 +345,13 @@ class MSKD_Admin {
         if ( isset( $_GET['action'] ) && $_GET['action'] === 'cancel_queue_item' && isset( $_GET['id'] ) ) {
             if ( wp_verify_nonce( $_GET['_wpnonce'], 'cancel_queue_item_' . $_GET['id'] ) ) {
                 $this->cancel_queue_item( intval( $_GET['id'] ) );
+            }
+        }
+
+        // Handle cancel campaign action
+        if ( isset( $_GET['action'] ) && $_GET['action'] === 'cancel_campaign' && isset( $_GET['id'] ) ) {
+            if ( wp_verify_nonce( $_GET['_wpnonce'], 'cancel_campaign_' . $_GET['id'] ) ) {
+                $this->cancel_campaign( intval( $_GET['id'] ) );
             }
         }
 
@@ -547,6 +631,72 @@ class MSKD_Admin {
             add_settings_error( 'mskd_messages', 'mskd_error', __( 'Error cancelling email.', 'mail-system-by-katsarov-design' ), 'error' );
         }
 
+        // Check if we should return to campaign detail page
+        $return_campaign = isset( $_GET['return_campaign'] ) ? intval( $_GET['return_campaign'] ) : 0;
+        if ( $return_campaign > 0 ) {
+            wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'queue&action=view&campaign_id=' . $return_campaign ) );
+        } elseif ( isset( $_GET['view'] ) && $_GET['view'] === 'legacy' ) {
+            wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'queue&view=legacy' ) );
+        } else {
+            wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'queue' ) );
+        }
+        exit;
+    }
+
+    /**
+     * Cancel a campaign and all its pending queue items
+     *
+     * @param int $id Campaign ID
+     */
+    private function cancel_campaign( $id ) {
+        global $wpdb;
+
+        // Check if campaign exists and is cancellable
+        $campaign = $wpdb->get_row( $wpdb->prepare(
+            "SELECT id, status FROM {$wpdb->prefix}mskd_campaigns WHERE id = %d",
+            $id
+        ) );
+
+        if ( ! $campaign ) {
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Campaign not found.', 'mail-system-by-katsarov-design' ), 'error' );
+            wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'queue' ) );
+            exit;
+        }
+
+        if ( ! in_array( $campaign->status, array( 'pending', 'processing' ), true ) ) {
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'This campaign cannot be cancelled.', 'mail-system-by-katsarov-design' ), 'error' );
+            wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'queue' ) );
+            exit;
+        }
+
+        // Cancel all pending/processing queue items for this campaign
+        $cancelled_count = $wpdb->query( $wpdb->prepare(
+            "UPDATE {$wpdb->prefix}mskd_queue 
+             SET status = 'cancelled', error_message = %s 
+             WHERE campaign_id = %d AND status IN ('pending', 'processing')",
+            __( 'Campaign cancelled by administrator', 'mail-system-by-katsarov-design' ),
+            $id
+        ) );
+
+        // Update campaign status
+        $wpdb->update(
+            $wpdb->prefix . 'mskd_campaigns',
+            array( 
+                'status'       => 'cancelled',
+                'completed_at' => current_time( 'mysql' ),
+            ),
+            array( 'id' => $id ),
+            array( '%s', '%s' ),
+            array( '%d' )
+        );
+
+        add_settings_error( 
+            'mskd_messages', 
+            'mskd_success', 
+            sprintf( __( 'Campaign cancelled. %d emails were cancelled.', 'mail-system-by-katsarov-design' ), $cancelled_count ), 
+            'success' 
+        );
+
         wp_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'queue' ) );
         exit;
     }
@@ -593,6 +743,34 @@ class MSKD_Admin {
         $scheduled_at = $this->calculate_scheduled_time( $_POST );
         $is_immediate = $this->is_immediate_send( $_POST );
 
+        // Create campaign record first.
+        $campaign_data = array(
+            'subject'          => $subject,
+            'body'             => $body,
+            'list_ids'         => wp_json_encode( $list_ids ),
+            'type'             => 'campaign',
+            'total_recipients' => count( $all_subscribers ),
+            'status'           => 'pending',
+            'scheduled_at'     => $scheduled_at,
+        );
+
+        $wpdb->insert(
+            $wpdb->prefix . 'mskd_campaigns',
+            $campaign_data,
+            array( '%s', '%s', '%s', '%s', '%d', '%s', '%s' )
+        );
+
+        $campaign_id = $wpdb->insert_id;
+
+        if ( ! $campaign_id ) {
+            add_settings_error( 'mskd_messages', 'mskd_error', __( 'Error creating campaign.', 'mail-system-by-katsarov-design' ), 'error' );
+            return;
+        }
+
+        // Increment persistent campaign counter for share notice
+        $total_campaigns = (int) get_option( 'mskd_total_campaigns_created', 0 );
+        update_option( 'mskd_total_campaigns_created', $total_campaigns + 1 );
+
         // Add to queue
         $queued = 0;
         foreach ( $all_subscribers as $subscriber ) {
@@ -601,6 +779,7 @@ class MSKD_Admin {
             // For external subscribers, store their data inline as JSON.
             // For database subscribers, use subscriber_id reference.
             $queue_data = array(
+                'campaign_id'   => $campaign_id,
                 'subscriber_id' => $is_external ? 0 : intval( $subscriber->id ),
                 'subject'       => $subject,
                 'body'          => $body,
@@ -624,8 +803,8 @@ class MSKD_Admin {
                 $wpdb->prefix . 'mskd_queue',
                 $queue_data,
                 $is_external 
-                    ? array( '%d', '%s', '%s', '%s', '%s', '%s' )
-                    : array( '%d', '%s', '%s', '%s', '%s' )
+                    ? array( '%d', '%d', '%s', '%s', '%s', '%s', '%s' )
+                    : array( '%d', '%d', '%s', '%s', '%s', '%s' )
             );
             
             if ( $result ) {
@@ -869,11 +1048,35 @@ class MSKD_Admin {
                 $this->last_mail_error = $mailer->get_last_error();
             }
 
+            // Create campaign record for the one-time email.
+            $campaign_result = $wpdb->insert(
+                $wpdb->prefix . 'mskd_campaigns',
+                array(
+                    'subject'          => $subject,
+                    'body'             => $body,
+                    'list_ids'         => null,
+                    'type'             => 'one_time',
+                    'total_recipients' => 1,
+                    'status'           => $sent ? 'completed' : 'completed',
+                    'scheduled_at'     => mskd_current_time_normalized(),
+                    'completed_at'     => mskd_current_time_normalized(),
+                ),
+                array( '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s' )
+            );
+            $campaign_id = $campaign_result ? $wpdb->insert_id : null;
+
+            // Increment persistent campaign counter for share notice
+            if ( $campaign_id ) {
+                $total_campaigns = (int) get_option( 'mskd_total_campaigns_created', 0 );
+                update_option( 'mskd_total_campaigns_created', $total_campaigns + 1 );
+            }
+
             // Log the one-time email in the queue table for audit purposes
             $log_status = $sent ? 'sent' : 'failed';
             $wpdb->insert(
                 $wpdb->prefix . 'mskd_queue',
                 array(
+                    'campaign_id'   => $campaign_id,
                     'subscriber_id' => self::ONE_TIME_EMAIL_SUBSCRIBER_ID,
                     'subject'       => $subject,
                     'body'          => $body,
@@ -883,7 +1086,7 @@ class MSKD_Admin {
                     'attempts'      => 1,
                     'error_message' => $sent ? null : ( $this->last_mail_error ?: __( 'wp_mail() failed for one-time email', 'mail-system-by-katsarov-design' ) ),
                 ),
-                array( '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s' )
+                array( '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s' )
             );
 
             if ( $sent ) {
@@ -920,9 +1123,32 @@ class MSKD_Admin {
                 'source'            => 'one-time-email',
             ) );
 
+            // Create campaign record for the scheduled one-time email.
+            $campaign_result = $wpdb->insert(
+                $wpdb->prefix . 'mskd_campaigns',
+                array(
+                    'subject'          => $subject,
+                    'body'             => $body,
+                    'list_ids'         => null,
+                    'type'             => 'one_time',
+                    'total_recipients' => 1,
+                    'status'           => 'pending',
+                    'scheduled_at'     => $scheduled_at,
+                ),
+                array( '%s', '%s', '%s', '%s', '%d', '%s', '%s' )
+            );
+            $campaign_id = $campaign_result ? $wpdb->insert_id : null;
+
+            // Increment persistent campaign counter for share notice
+            if ( $campaign_id ) {
+                $total_campaigns = (int) get_option( 'mskd_total_campaigns_created', 0 );
+                update_option( 'mskd_total_campaigns_created', $total_campaigns + 1 );
+            }
+
             $result = $wpdb->insert(
                 $wpdb->prefix . 'mskd_queue',
                 array(
+                    'campaign_id'     => $campaign_id,
                     'subscriber_id'   => self::ONE_TIME_EMAIL_SUBSCRIBER_ID,
                     'subscriber_data' => $subscriber_data,
                     'subject'         => $subject,
@@ -933,7 +1159,7 @@ class MSKD_Admin {
                     'attempts'        => 0,
                     'error_message'   => null,
                 ),
-                array( '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s' )
+                array( '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s' )
             );
 
             if ( $result ) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Queue page
+ * Queue page - Shows campaigns (grouped emails) overview
  *
  * @package MSKD
  */
@@ -11,61 +11,106 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wpdb;
 
+// Check if viewing a specific campaign detail
+$action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : '';
+$campaign_id = isset( $_GET['campaign_id'] ) ? intval( $_GET['campaign_id'] ) : 0;
+$view = isset( $_GET['view'] ) ? sanitize_text_field( $_GET['view'] ) : '';
+
+// If viewing campaign details, include the detail partial
+if ( $action === 'view' && $campaign_id > 0 ) {
+    include MSKD_PLUGIN_DIR . 'admin/partials/queue-detail.php';
+    return;
+}
+
+// If viewing legacy emails (without campaign_id)
+if ( $view === 'legacy' ) {
+    include MSKD_PLUGIN_DIR . 'admin/partials/queue-legacy.php';
+    return;
+}
+
 // Pagination
-$per_page = 50;
+$per_page = 20;
 $current_page = isset( $_GET['paged'] ) ? max( 1, intval( $_GET['paged'] ) ) : 1;
 $offset = ( $current_page - 1 ) * $per_page;
 
 // Filter by status or type
 $status_filter = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '';
 $type_filter = isset( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : '';
-$where = '';
+
+// Build WHERE clause for campaigns
+$where = ' WHERE 1=1';
 if ( $status_filter ) {
-    $where = $wpdb->prepare( " WHERE q.status = %s", $status_filter );
-} elseif ( $type_filter === 'one-time' ) {
-    $where = $wpdb->prepare( " WHERE q.subscriber_id = %d", MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID );
+    $where .= $wpdb->prepare( " AND c.status = %s", $status_filter );
+}
+if ( $type_filter === 'one-time' ) {
+    $where .= " AND c.type = 'one_time'";
+} elseif ( $type_filter === 'campaign' ) {
+    $where .= " AND c.type = 'campaign'";
 } elseif ( $type_filter === 'scheduled' ) {
-    $where = $wpdb->prepare( " WHERE q.status = 'pending' AND q.scheduled_at > %s", current_time( 'mysql' ) );
+    $where .= $wpdb->prepare( " AND c.status = 'pending' AND c.scheduled_at > %s", current_time( 'mysql' ) );
 }
 
-// Get counts in a single query for better performance
-$queue_counts = $wpdb->get_row(
+// Get campaign counts
+$campaign_counts = $wpdb->get_row(
     $wpdb->prepare(
         "SELECT 
+            COUNT(*) as total,
             SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
             SUM(CASE WHEN status = 'processing' THEN 1 ELSE 0 END) as processing,
-            SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
-            SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
+            SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed,
             SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled,
-            SUM(CASE WHEN subscriber_id = %d THEN 1 ELSE 0 END) as one_time,
+            SUM(CASE WHEN type = 'one_time' THEN 1 ELSE 0 END) as one_time,
+            SUM(CASE WHEN type = 'campaign' THEN 1 ELSE 0 END) as campaigns,
             SUM(CASE WHEN status = 'pending' AND scheduled_at > %s THEN 1 ELSE 0 END) as scheduled
-        FROM {$wpdb->prefix}mskd_queue",
-        MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID,
+        FROM {$wpdb->prefix}mskd_campaigns",
         current_time( 'mysql' )
     )
 );
-$pending_count    = $queue_counts->pending ?? 0;
-$processing_count = $queue_counts->processing ?? 0;
-$sent_count       = $queue_counts->sent ?? 0;
-$failed_count     = $queue_counts->failed ?? 0;
-$cancelled_count  = $queue_counts->cancelled ?? 0;
-$one_time_count   = $queue_counts->one_time ?? 0;
-$scheduled_count  = $queue_counts->scheduled ?? 0;
+$total_count      = $campaign_counts->total ?? 0;
+$pending_count    = $campaign_counts->pending ?? 0;
+$processing_count = $campaign_counts->processing ?? 0;
+$completed_count  = $campaign_counts->completed ?? 0;
+$cancelled_count  = $campaign_counts->cancelled ?? 0;
+$one_time_count   = $campaign_counts->one_time ?? 0;
+$campaign_count   = $campaign_counts->campaigns ?? 0;
+$scheduled_count  = $campaign_counts->scheduled ?? 0;
 
 // Get total count for current filter
-$total_items = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue q" . $where );
+$total_items = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_campaigns c" . $where );
 $total_pages = ceil( $total_items / $per_page );
 
-// Get queue items
-$queue_items = $wpdb->get_results( $wpdb->prepare(
-    "SELECT q.*, s.email, s.first_name, s.last_name 
-    FROM {$wpdb->prefix}mskd_queue q
-    LEFT JOIN {$wpdb->prefix}mskd_subscribers s ON q.subscriber_id = s.id" 
-    . $where . 
-    " ORDER BY q.created_at DESC LIMIT %d OFFSET %d",
+// Get campaigns with aggregated queue stats
+$campaigns = $wpdb->get_results( $wpdb->prepare(
+    "SELECT 
+        c.*,
+        COALESCE(q.sent_count, 0) as sent_count,
+        COALESCE(q.failed_count, 0) as failed_count,
+        COALESCE(q.pending_count, 0) as pending_count,
+        COALESCE(q.processing_count, 0) as processing_count,
+        COALESCE(q.cancelled_count, 0) as cancelled_count
+    FROM {$wpdb->prefix}mskd_campaigns c
+    LEFT JOIN (
+        SELECT 
+            campaign_id,
+            SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent_count,
+            SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed_count,
+            SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending_count,
+            SUM(CASE WHEN status = 'processing' THEN 1 ELSE 0 END) as processing_count,
+            SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled_count
+        FROM {$wpdb->prefix}mskd_queue
+        WHERE campaign_id IS NOT NULL
+        GROUP BY campaign_id
+    ) q ON c.id = q.campaign_id"
+    . $where .
+    " ORDER BY c.created_at DESC LIMIT %d OFFSET %d",
     $per_page,
     $offset
 ) );
+
+// Also check for orphan queue items (without campaign_id) for backwards compatibility
+$orphan_count = $wpdb->get_var(
+    "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE campaign_id IS NULL"
+);
 
 // Next cron run
 $next_cron = wp_next_scheduled( 'mskd_process_queue' );
@@ -97,7 +142,7 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
             <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue' ) ); ?>" 
                class="<?php echo empty( $status_filter ) && empty( $type_filter ) ? 'current' : ''; ?>">
                 <?php _e( 'All', 'mail-system-by-katsarov-design' ); ?>
-                <span class="count">(<?php echo esc_html( $pending_count + $processing_count + $sent_count + $failed_count + $cancelled_count ); ?>)</span>
+                <span class="count">(<?php echo esc_html( $total_count ); ?>)</span>
             </a> |
         </li>
         <li>
@@ -122,17 +167,10 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
             </a> |
         </li>
         <li>
-            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&status=sent' ) ); ?>"
-               class="<?php echo $status_filter === 'sent' ? 'current' : ''; ?>">
-                <?php _e( 'Sent', 'mail-system-by-katsarov-design' ); ?>
-                <span class="count">(<?php echo esc_html( $sent_count ); ?>)</span>
-            </a> |
-        </li>
-        <li>
-            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&status=failed' ) ); ?>"
-               class="<?php echo $status_filter === 'failed' ? 'current' : ''; ?>">
-                <?php _e( 'Failed', 'mail-system-by-katsarov-design' ); ?>
-                <span class="count">(<?php echo esc_html( $failed_count ); ?>)</span>
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&status=completed' ) ); ?>"
+               class="<?php echo $status_filter === 'completed' ? 'current' : ''; ?>">
+                <?php _e( 'Completed', 'mail-system-by-katsarov-design' ); ?>
+                <span class="count">(<?php echo esc_html( $completed_count ); ?>)</span>
             </a> |
         </li>
         <li>
@@ -147,84 +185,117 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                class="<?php echo $type_filter === 'one-time' ? 'current' : ''; ?>">
                 <?php _e( 'One-time', 'mail-system-by-katsarov-design' ); ?>
                 <span class="count">(<?php echo esc_html( $one_time_count ); ?>)</span>
+            </a> |
+        </li>
+        <li>
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&type=campaign' ) ); ?>"
+               class="<?php echo $type_filter === 'campaign' ? 'current' : ''; ?>">
+                <?php _e( 'Campaigns', 'mail-system-by-katsarov-design' ); ?>
+                <span class="count">(<?php echo esc_html( $campaign_count ); ?>)</span>
             </a>
         </li>
     </ul>
+
+    <?php if ( $orphan_count > 0 ) : ?>
+        <div class="notice notice-info inline" style="margin-top: 15px;">
+            <p>
+                <?php printf(
+                    __( 'There are %d emails from before the campaign system was introduced.', 'mail-system-by-katsarov-design' ),
+                    $orphan_count
+                ); ?>
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&view=legacy' ) ); ?>">
+                    <?php _e( 'View legacy emails', 'mail-system-by-katsarov-design' ); ?>
+                </a>
+            </p>
+        </div>
+    <?php endif; ?>
 
     <table class="wp-list-table widefat fixed striped">
         <thead>
             <tr>
                 <th scope="col" style="width: 50px;"><?php _e( 'ID', 'mail-system-by-katsarov-design' ); ?></th>
-                <th scope="col"><?php _e( 'Recipient', 'mail-system-by-katsarov-design' ); ?></th>
                 <th scope="col"><?php _e( 'Subject', 'mail-system-by-katsarov-design' ); ?></th>
+                <th scope="col" style="width: 100px;"><?php _e( 'Type', 'mail-system-by-katsarov-design' ); ?></th>
+                <th scope="col" style="width: 100px;"><?php _e( 'Recipients', 'mail-system-by-katsarov-design' ); ?></th>
+                <th scope="col" style="width: 180px;"><?php _e( 'Progress', 'mail-system-by-katsarov-design' ); ?></th>
                 <th scope="col" style="width: 100px;"><?php _e( 'Status', 'mail-system-by-katsarov-design' ); ?></th>
-                <th scope="col" style="width: 80px;"><?php _e( 'Attempts', 'mail-system-by-katsarov-design' ); ?></th>
-                <th scope="col"><?php _e( 'Scheduled', 'mail-system-by-katsarov-design' ); ?></th>
-                <th scope="col"><?php _e( 'Sent', 'mail-system-by-katsarov-design' ); ?></th>
-                <th scope="col" style="width: 100px;"><?php _e( 'Actions', 'mail-system-by-katsarov-design' ); ?></th>
+                <th scope="col" style="width: 140px;"><?php _e( 'Created', 'mail-system-by-katsarov-design' ); ?></th>
+                <th scope="col" style="width: 140px;"><?php _e( 'Scheduled', 'mail-system-by-katsarov-design' ); ?></th>
+                <th scope="col" style="width: 120px;"><?php _e( 'Actions', 'mail-system-by-katsarov-design' ); ?></th>
             </tr>
         </thead>
         <tbody>
-            <?php if ( ! empty( $queue_items ) ) : ?>
-                <?php foreach ( $queue_items as $item ) : ?>
+            <?php if ( ! empty( $campaigns ) ) : ?>
+                <?php foreach ( $campaigns as $campaign ) : ?>
                     <?php
-                    // Check if item is scheduled for the future
-                    $scheduled_timestamp = strtotime( $item->scheduled_at );
+                    // Check if campaign is scheduled for the future
+                    $scheduled_timestamp = strtotime( $campaign->scheduled_at );
                     $is_future_scheduled = $scheduled_timestamp > current_time( 'timestamp' );
-                    $can_cancel = in_array( $item->status, array( 'pending', 'processing' ), true );
+                    $can_cancel = in_array( $campaign->status, array( 'pending', 'processing' ), true );
+                    
+                    // Calculate progress
+                    $total = intval( $campaign->total_recipients );
+                    $sent = intval( $campaign->sent_count );
+                    $failed = intval( $campaign->failed_count );
+                    $pending = intval( $campaign->pending_count );
+                    $processing = intval( $campaign->processing_count );
+                    $cancelled = intval( $campaign->cancelled_count );
+                    $completed = $sent + $failed + $cancelled;
+                    $progress_percent = $total > 0 ? round( ( $completed / $total ) * 100 ) : 0;
                     ?>
                     <tr>
-                        <td><?php echo esc_html( $item->id ); ?></td>
+                        <td><?php echo esc_html( $campaign->id ); ?></td>
                         <td>
-                            <?php 
-                            // Check for external/dynamic list subscriber (subscriber_id = 0 with subscriber_data)
-                            $external_data = null;
-                            if ( $item->subscriber_id == MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID && ! empty( $item->subscriber_data ) ) {
-                                $external_data = json_decode( $item->subscriber_data );
-                            }
-                            ?>
-                            <?php if ( $external_data && ! empty( $external_data->email ) ) : ?>
-                                <?php echo esc_html( $external_data->email ); ?>
-                                <?php if ( ! empty( $external_data->first_name ) || ! empty( $external_data->last_name ) ) : ?>
-                                    <br><small><?php echo esc_html( trim( ( $external_data->first_name ?? '' ) . ' ' . ( $external_data->last_name ?? '' ) ) ); ?></small>
-                                <?php endif; ?>
-                                <br><span class="mskd-external-badge"><?php _e( 'External', 'mail-system-by-katsarov-design' ); ?></span>
-                            <?php elseif ( $item->subscriber_id == MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID ) : ?>
-                                <em class="mskd-one-time-email"><?php _e( 'One-time email', 'mail-system-by-katsarov-design' ); ?></em>
-                            <?php elseif ( $item->email ) : ?>
-                                <?php echo esc_html( $item->email ); ?>
-                                <?php if ( $item->first_name || $item->last_name ) : ?>
-                                    <br><small><?php echo esc_html( trim( $item->first_name . ' ' . $item->last_name ) ); ?></small>
-                                <?php endif; ?>
+                            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&action=view&campaign_id=' . $campaign->id ) ); ?>">
+                                <strong><?php echo esc_html( $campaign->subject ); ?></strong>
+                            </a>
+                        </td>
+                        <td>
+                            <?php if ( $campaign->type === 'one_time' ) : ?>
+                                <span class="mskd-badge mskd-badge-onetime"><?php _e( 'One-time', 'mail-system-by-katsarov-design' ); ?></span>
                             <?php else : ?>
-                                <em><?php _e( 'Deleted subscriber', 'mail-system-by-katsarov-design' ); ?></em>
+                                <span class="mskd-badge mskd-badge-campaign"><?php _e( 'Campaign', 'mail-system-by-katsarov-design' ); ?></span>
                             <?php endif; ?>
                         </td>
-                        <td><?php echo esc_html( $item->subject ); ?></td>
                         <td>
-                            <span class="mskd-status mskd-status-<?php echo esc_attr( $item->status ); ?>">
+                            <strong><?php echo esc_html( $total ); ?></strong>
+                        </td>
+                        <td>
+                            <div class="mskd-progress-bar">
+                                <div class="mskd-progress-bar-inner" style="width: <?php echo esc_attr( $progress_percent ); ?>%;"></div>
+                            </div>
+                            <small>
+                                <span class="mskd-stat-sent" title="<?php esc_attr_e( 'Sent', 'mail-system-by-katsarov-design' ); ?>">✓ <?php echo esc_html( $sent ); ?></span>
+                                <?php if ( $failed > 0 ) : ?>
+                                    <span class="mskd-stat-failed" title="<?php esc_attr_e( 'Failed', 'mail-system-by-katsarov-design' ); ?>">✗ <?php echo esc_html( $failed ); ?></span>
+                                <?php endif; ?>
+                                <?php if ( $pending > 0 || $processing > 0 ) : ?>
+                                    <span class="mskd-stat-pending" title="<?php esc_attr_e( 'Pending', 'mail-system-by-katsarov-design' ); ?>">⏳ <?php echo esc_html( $pending + $processing ); ?></span>
+                                <?php endif; ?>
+                            </small>
+                        </td>
+                        <td>
+                            <span class="mskd-status mskd-status-<?php echo esc_attr( $campaign->status ); ?>">
                                 <?php
                                 $statuses = array(
                                     'pending'    => __( 'Pending', 'mail-system-by-katsarov-design' ),
                                     'processing' => __( 'Processing', 'mail-system-by-katsarov-design' ),
-                                    'sent'       => __( 'Sent', 'mail-system-by-katsarov-design' ),
-                                    'failed'     => __( 'Failed', 'mail-system-by-katsarov-design' ),
+                                    'completed'  => __( 'Completed', 'mail-system-by-katsarov-design' ),
                                     'cancelled'  => __( 'Cancelled', 'mail-system-by-katsarov-design' ),
                                 );
-                                echo esc_html( $statuses[ $item->status ] ?? $item->status );
+                                echo esc_html( $statuses[ $campaign->status ] ?? $campaign->status );
                                 ?>
                             </span>
-                            <?php if ( $is_future_scheduled && $item->status === 'pending' ) : ?>
+                            <?php if ( $is_future_scheduled && $campaign->status === 'pending' ) : ?>
                                 <br><small class="mskd-scheduled-badge"><?php _e( 'Scheduled', 'mail-system-by-katsarov-design' ); ?></small>
                             <?php endif; ?>
-                            <?php if ( $item->status === 'failed' && $item->error_message ) : ?>
-                                <br><small class="mskd-error-msg"><?php echo esc_html( $item->error_message ); ?></small>
-                            <?php endif; ?>
                         </td>
-                        <td><?php echo esc_html( $item->attempts ); ?></td>
+                        <td>
+                            <?php echo esc_html( date_i18n( 'd.m.Y H:i', strtotime( $campaign->created_at ) ) ); ?>
+                        </td>
                         <td>
                             <?php echo esc_html( date_i18n( 'd.m.Y H:i', $scheduled_timestamp ) ); ?>
-                            <?php if ( $is_future_scheduled && $item->status === 'pending' ) : ?>
+                            <?php if ( $is_future_scheduled && $campaign->status === 'pending' ) : ?>
                                 <br><small class="mskd-time-remaining">
                                     <?php 
                                     $diff = $scheduled_timestamp - current_time( 'timestamp' );
@@ -240,27 +311,27 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                             <?php endif; ?>
                         </td>
                         <td>
-                            <?php echo $item->sent_at ? esc_html( date_i18n( 'd.m.Y H:i', strtotime( $item->sent_at ) ) ) : '—'; ?>
-                        </td>
-                        <td>
+                            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&action=view&campaign_id=' . $campaign->id ) ); ?>" 
+                               class="button button-small"
+                               title="<?php esc_attr_e( 'View details', 'mail-system-by-katsarov-design' ); ?>">
+                                <?php _e( 'Details', 'mail-system-by-katsarov-design' ); ?>
+                            </a>
                             <?php if ( $can_cancel ) : ?>
                                 <a href="<?php echo wp_nonce_url( 
-                                    admin_url( 'admin.php?page=mskd-queue&action=cancel_queue_item&id=' . $item->id ), 
-                                    'cancel_queue_item_' . $item->id 
+                                    admin_url( 'admin.php?page=mskd-queue&action=cancel_campaign&id=' . $campaign->id ), 
+                                    'cancel_campaign_' . $campaign->id 
                                 ); ?>" 
                                    class="mskd-delete-link mskd-cancel-link"
-                                   title="<?php esc_attr_e( 'Cancel sending', 'mail-system-by-katsarov-design' ); ?>">
+                                   title="<?php esc_attr_e( 'Cancel campaign', 'mail-system-by-katsarov-design' ); ?>">
                                     <?php _e( 'Cancel', 'mail-system-by-katsarov-design' ); ?>
                                 </a>
-                            <?php else : ?>
-                                —
                             <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             <?php else : ?>
                 <tr>
-                    <td colspan="8"><?php _e( 'No records in queue.', 'mail-system-by-katsarov-design' ); ?></td>
+                    <td colspan="9"><?php _e( 'No campaigns in queue.', 'mail-system-by-katsarov-design' ); ?></td>
                 </tr>
             <?php endif; ?>
         </tbody>

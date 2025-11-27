@@ -51,6 +51,12 @@
   color: $color-wp-text-light;
 }
 
+// Completed Status
+.mskd-status-completed {
+  background-color: $color-success-bg;
+  color: $color-success-text;
+}
+
 // External Subscriber Badge
 .mskd-external-badge {
   display: inline-block;
@@ -61,4 +67,131 @@
   font-size: 11px;
   font-weight: 500;
   margin-top: 4px;
+}
+
+// Campaign Type Badges
+.mskd-badge-onetime {
+  background: $color-info-bg;
+  color: $color-info-text;
+}
+
+.mskd-badge-campaign {
+  background: $color-primary;
+  color: $color-white;
+}
+
+// Progress Bar
+.mskd-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.mskd-progress-bar-inner {
+  height: 100%;
+  background: $color-success;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.mskd-progress-bar-large {
+  height: 12px;
+  margin-bottom: 12px;
+}
+
+// Queue Stats (in progress column)
+.mskd-stat-sent {
+  color: $color-success;
+  margin-right: 8px;
+}
+
+.mskd-stat-failed {
+  color: $color-error;
+  margin-right: 8px;
+}
+
+.mskd-stat-pending {
+  color: $color-warning-text;
+  margin-right: 8px;
+}
+
+.mskd-stat-cancelled {
+  color: $color-wp-text-light;
+}
+
+.mskd-stat-total {
+  color: $color-wp-text;
+  margin-right: 16px;
+}
+
+// Campaign Info Card
+.mskd-campaign-info-card {
+  background: $color-white;
+  border: $border-width solid $color-wp-border;
+  border-radius: $border-radius-lg;
+  padding: $spacing-6;
+  margin: $spacing-5 0;
+  box-shadow: $box-shadow;
+}
+
+.mskd-campaign-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: $spacing-4;
+  flex-wrap: wrap;
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    flex-grow: 1;
+  }
+}
+
+.mskd-campaign-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-4;
+  margin-bottom: $spacing-4;
+  padding-bottom: $spacing-4;
+  border-bottom: 1px solid $color-wp-border;
+}
+
+.mskd-campaign-meta-item {
+  font-size: 13px;
+  color: $color-wp-text-light;
+
+  strong {
+    color: $color-wp-text;
+  }
+}
+
+.mskd-campaign-progress {
+  margin-bottom: $spacing-4;
+}
+
+.mskd-campaign-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-4;
+  font-size: 13px;
+}
+
+.mskd-campaign-actions {
+  padding-top: $spacing-4;
+  border-top: 1px solid $color-wp-border;
+}
+
+.mskd-cancel-btn {
+  color: $color-error !important;
+  border-color: $color-error !important;
+
+  &:hover,
+  &:focus {
+    background: lighten($color-error, 45%) !important;
+    color: $color-error !important;
+  }
 }

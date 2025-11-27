@@ -929,6 +929,26 @@ msgstr "Всички списъци са изтрити успешно."
 msgid "All queued emails deleted successfully."
 msgstr "Всички имейли от опашката са изтрити успешно."
 
+#: admin/class-admin.php
+msgid "Campaign not found."
+msgstr "Кампанията не е намерена."
+
+#: admin/class-admin.php
+msgid "This campaign cannot be cancelled."
+msgstr "Тази кампания не може да бъде отменена."
+
+#: admin/class-admin.php
+msgid "Campaign cancelled by administrator"
+msgstr "Кампанията е отменена от администратор"
+
+#: admin/class-admin.php
+msgid "Campaign cancelled. %d emails were cancelled."
+msgstr "Кампанията е отменена. %d имейла бяха отменени."
+
+#: admin/class-admin.php
+msgid "Error creating campaign."
+msgstr "Грешка при създаване на кампания."
+
 #: admin/partials/settings.php
 msgid "Danger Zone"
 msgstr "Опасна зона"
@@ -976,3 +996,139 @@ msgstr "Изтрива завинаги всички имейли от опаш�
 #: admin/partials/queue.php
 msgid "External"
 msgstr "Външен"
+
+#: admin/partials/queue.php
+msgid "Completed"
+msgstr "Завършена"
+
+#: admin/partials/queue.php
+msgid "Campaigns"
+msgstr "Кампании"
+
+#: admin/partials/queue.php
+msgid "Type"
+msgstr "Тип"
+
+#: admin/partials/queue.php
+msgid "Recipients"
+msgstr "Получатели"
+
+#: admin/partials/queue.php
+msgid "Progress"
+msgstr "Прогрес"
+
+#: admin/partials/queue.php
+msgid "Campaign"
+msgstr "Кампания"
+
+#: admin/partials/queue.php
+msgid "View details"
+msgstr "Виж детайли"
+
+#: admin/partials/queue.php
+msgid "Details"
+msgstr "Детайли"
+
+#: admin/partials/queue.php
+msgid "Cancel campaign"
+msgstr "Отмени кампания"
+
+#: admin/partials/queue.php
+msgid "No campaigns in queue."
+msgstr "Няма кампании в опашката."
+
+#: admin/partials/queue.php
+msgid "There are %d emails from before the campaign system was introduced."
+msgstr "Има %d имейла от преди въвеждането на системата за кампании."
+
+#: admin/partials/queue.php
+msgid "View legacy emails"
+msgstr "Виж стари имейли"
+
+#: admin/partials/queue-detail.php
+msgid "Back to Queue"
+msgstr "Назад към опашката"
+
+#: admin/partials/queue-detail.php
+msgid "Campaign #%d"
+msgstr "Кампания #%d"
+
+#: admin/partials/queue-detail.php
+msgid "Created:"
+msgstr "Създадена:"
+
+#: admin/partials/queue-detail.php
+msgid "Scheduled:"
+msgstr "Насрочена:"
+
+#: admin/partials/queue-detail.php
+msgid "Completed:"
+msgstr "Завършена:"
+
+#: admin/partials/queue-detail.php
+msgid "Lists:"
+msgstr "Списъци:"
+
+#: admin/partials/queue-detail.php
+msgid "total"
+msgstr "общо"
+
+#: admin/partials/queue-detail.php
+msgid "sent"
+msgstr "изпратени"
+
+#: admin/partials/queue-detail.php
+msgid "failed"
+msgstr "неуспешни"
+
+#: admin/partials/queue-detail.php
+msgid "pending"
+msgstr "чакащи"
+
+#: admin/partials/queue-detail.php
+msgid "cancelled"
+msgstr "отменени"
+
+#: admin/partials/queue-detail.php
+msgid "Cancel Campaign"
+msgstr "Отмени кампанията"
+
+#: admin/partials/queue-detail.php
+msgid "Are you sure you want to cancel this campaign? All pending emails will be cancelled."
+msgstr "Сигурни ли сте, че искате да отмените тази кампания? Всички чакащи имейли ще бъдат отменени."
+
+#: admin/partials/queue-detail.php
+msgid "Error"
+msgstr "Грешка"
+
+#: admin/partials/queue-detail.php
+msgid "No emails in this campaign."
+msgstr "Няма имейли в тази кампания."
+
+#: admin/partials/queue-legacy.php
+msgid "Legacy Emails"
+msgstr "Стари имейли"
+
+#: admin/partials/queue-legacy.php
+msgid "These emails were sent before the campaign system was introduced. They are not grouped by campaign."
+msgstr "Тези имейли са изпратени преди въвеждането на системата за кампании. Те не са групирани по кампании."
+
+#: admin/partials/queue-legacy.php
+msgid "No legacy emails."
+msgstr "Няма стари имейли."
+
+#: admin/class-admin.php
+msgid "Enjoying Mail System by Katsarov Design?"
+msgstr "Харесва ли ви Mail System by Katsarov Design?"
+
+#: admin/class-admin.php
+msgid "If you like this plugin, please share it with your friends!"
+msgstr "Ако харесвате този плъгин, моля споделете го с приятелите си!"
+
+#: admin/class-admin.php
+msgid "Yes, of course!"
+msgstr "Да, разбира се!"
+
+#: admin/class-admin.php
+msgid "Nah, I do not like the plugin"
+msgstr "Не, не харесвам плъгина"

@@ -221,6 +221,64 @@ class MSKD_Cron_Handler {
                     );
                 }
             }
+
+            // Update campaign status if this item belongs to a campaign.
+            if ( ! empty( $item->campaign_id ) ) {
+                $this->update_campaign_status( $item->campaign_id );
+            }
+        }
+    }
+
+    /**
+     * Update campaign status based on queue item statuses
+     *
+     * @param int $campaign_id The campaign ID to update.
+     */
+    private function update_campaign_status( $campaign_id ) {
+        global $wpdb;
+
+        // Get counts of queue items for this campaign.
+        $stats = $wpdb->get_row( $wpdb->prepare(
+            "SELECT 
+                COUNT(*) as total,
+                SUM(CASE WHEN status IN ('pending', 'processing') THEN 1 ELSE 0 END) as pending,
+                SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
+                SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
+                SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled
+            FROM {$wpdb->prefix}mskd_queue
+            WHERE campaign_id = %d",
+            $campaign_id
+        ) );
+
+        if ( ! $stats ) {
+            return;
+        }
+
+        // Determine campaign status.
+        $pending = intval( $stats->pending );
+        $total   = intval( $stats->total );
+
+        if ( $pending > 0 ) {
+            // Still has pending emails - mark as processing.
+            $wpdb->update(
+                $wpdb->prefix . 'mskd_campaigns',
+                array( 'status' => 'processing' ),
+                array( 'id' => $campaign_id ),
+                array( '%s' ),
+                array( '%d' )
+            );
+        } else {
+            // All emails are done - mark as completed.
+            $wpdb->update(
+                $wpdb->prefix . 'mskd_campaigns',
+                array( 
+                    'status'       => 'completed',
+                    'completed_at' => current_time( 'mysql' ),
+                ),
+                array( 'id' => $campaign_id ),
+                array( '%s', '%s' ),
+                array( '%d' )
+            );
         }
     }
 

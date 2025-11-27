@@ -19,7 +19,7 @@ class MSKD_Activator {
     /**
      * Database version for tracking schema updates
      */
-    const DB_VERSION = '1.1.0';
+    const DB_VERSION = '1.2.0';
 
     /**
      * Activate the plugin
@@ -75,6 +75,32 @@ class MSKD_Activator {
                 );
             }
         }
+
+        // Upgrade from 1.1.0 to 1.2.0: Add campaigns table and campaign_id to queue.
+        if ( version_compare( $from_version, '1.2.0', '<' ) ) {
+            self::create_campaigns_table();
+
+            $table_queue = $wpdb->prefix . 'mskd_queue';
+
+            // Add campaign_id column to queue table.
+            $column_exists = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SHOW COLUMNS FROM {$table_queue} LIKE %s",
+                    'campaign_id'
+                )
+            );
+
+            if ( empty( $column_exists ) ) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+                $wpdb->query(
+                    "ALTER TABLE {$table_queue} ADD COLUMN campaign_id bigint(20) UNSIGNED DEFAULT NULL AFTER id"
+                );
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+                $wpdb->query(
+                    "ALTER TABLE {$table_queue} ADD KEY campaign_id (campaign_id)"
+                );
+            }
+        }
     }
 
     /**
@@ -125,10 +151,30 @@ class MSKD_Activator {
             KEY list_id (list_id)
         ) $charset_collate;";
 
+        // Campaigns table (groups emails by send operation)
+        $table_campaigns = $wpdb->prefix . 'mskd_campaigns';
+        $sql_campaigns = "CREATE TABLE $table_campaigns (
+            id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            subject varchar(255) NOT NULL,
+            body longtext NOT NULL,
+            list_ids text DEFAULT NULL,
+            type enum('campaign','one_time') DEFAULT 'campaign',
+            total_recipients int(11) DEFAULT 0,
+            status enum('pending','processing','completed','cancelled') DEFAULT 'pending',
+            scheduled_at datetime DEFAULT CURRENT_TIMESTAMP,
+            completed_at datetime DEFAULT NULL,
+            created_at datetime DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY status (status),
+            KEY scheduled_at (scheduled_at),
+            KEY type (type)
+        ) $charset_collate;";
+
         // Queue table
         $table_queue = $wpdb->prefix . 'mskd_queue';
         $sql_queue = "CREATE TABLE $table_queue (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            campaign_id bigint(20) UNSIGNED DEFAULT NULL,
             subscriber_id bigint(20) UNSIGNED NOT NULL DEFAULT 0,
             subscriber_data text DEFAULT NULL,
             subject varchar(255) NOT NULL,
@@ -140,6 +186,7 @@ class MSKD_Activator {
             error_message text,
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
+            KEY campaign_id (campaign_id),
             KEY subscriber_id (subscriber_id),
             KEY status (status),
             KEY scheduled_at (scheduled_at)
@@ -150,7 +197,38 @@ class MSKD_Activator {
         dbDelta( $sql_subscribers );
         dbDelta( $sql_lists );
         dbDelta( $sql_subscriber_list );
+        dbDelta( $sql_campaigns );
         dbDelta( $sql_queue );
+    }
+
+    /**
+     * Create campaigns table (used for upgrades)
+     */
+    private static function create_campaigns_table() {
+        global $wpdb;
+
+        $charset_collate = $wpdb->get_charset_collate();
+
+        $table_campaigns = $wpdb->prefix . 'mskd_campaigns';
+        $sql_campaigns = "CREATE TABLE $table_campaigns (
+            id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            subject varchar(255) NOT NULL,
+            body longtext NOT NULL,
+            list_ids text DEFAULT NULL,
+            type enum('campaign','one_time') DEFAULT 'campaign',
+            total_recipients int(11) DEFAULT 0,
+            status enum('pending','processing','completed','cancelled') DEFAULT 'pending',
+            scheduled_at datetime DEFAULT CURRENT_TIMESTAMP,
+            completed_at datetime DEFAULT NULL,
+            created_at datetime DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY status (status),
+            KEY scheduled_at (scheduled_at),
+            KEY type (type)
+        ) $charset_collate;";
+
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        dbDelta( $sql_campaigns );
     }
 
     /**
