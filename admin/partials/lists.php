@@ -101,7 +101,6 @@ if ( $action === 'edit' && $list_id ) {
                     <th scope="col"><?php _e( 'Description', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Source', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Subscribers', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Date', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Actions', 'mail-system-by-katsarov-design' ); ?></th>
                 </tr>
             </thead>
@@ -133,13 +132,6 @@ if ( $action === 'edit' && $list_id ) {
                             </td>
                             <td>
                                 <?php echo esc_html( $subscriber_count ); ?>
-                            </td>
-                            <td>
-                                <?php if ( $item->created_at ) : ?>
-                                    <?php echo esc_html( date_i18n( 'd.m.Y', strtotime( $item->created_at ) ) ); ?>
-                                <?php else : ?>
-                                    <span class="mskd-readonly-text">—</span>
-                                <?php endif; ?>
                             </td>
                             <td>
                                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&list_id=' . rawurlencode( $item->id ) ) ); ?>">
