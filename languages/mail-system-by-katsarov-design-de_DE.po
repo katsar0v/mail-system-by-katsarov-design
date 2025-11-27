@@ -851,3 +851,7 @@ msgstr "Sie werden keine E-Mails mehr von uns erhalten."
 #: public/partials/unsubscribe.php
 msgid "Back to site"
 msgstr "Zurück zur Website"
+
+#: admin/partials/lists.php
+msgid "Send email"
+msgstr "E-Mail senden"

@@ -17,6 +17,21 @@ require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
 // Get all lists (database + external).
 $lists = MSKD_List_Provider::get_all_lists();
 
+// Get pre-selected list IDs from URL parameter (supports both single and multiple).
+$preselected_list_ids = array();
+if ( isset( $_GET['list_id'] ) ) {
+    $list_id_param = sanitize_text_field( wp_unslash( $_GET['list_id'] ) );
+    // Support comma-separated list IDs.
+    $raw_ids = array_map( 'trim', explode( ',', $list_id_param ) );
+    foreach ( $raw_ids as $raw_id ) {
+        // Validate that the list exists (works for both numeric and ext_* IDs).
+        $list = MSKD_List_Provider::get_list( $raw_id );
+        if ( $list ) {
+            $preselected_list_ids[] = $list->id;
+        }
+    }
+}
+
 // Get minimum datetime for picker (now + 10 minutes, rounded to nearest 10 min)
 $wp_timezone = wp_timezone();
 $now = new DateTime( 'now', $wp_timezone );
@@ -50,9 +65,10 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
                                 <?php
                                 $subscriber_count = MSKD_List_Provider::get_list_active_subscriber_count( $list );
                                 $is_external      = $list->source === 'external';
+                                $is_preselected   = in_array( $list->id, $preselected_list_ids, true );
                                 ?>
                                 <label style="display: block; margin-bottom: 5px;">
-                                    <input type="checkbox" name="lists[]" value="<?php echo esc_attr( $list->id ); ?>">
+                                    <input type="checkbox" name="lists[]" value="<?php echo esc_attr( $list->id ); ?>"<?php checked( $is_preselected ); ?>>
                                     <?php echo esc_html( $list->name ); ?>
                                     <?php if ( $is_external ) : ?>
                                         <span class="mskd-badge mskd-badge-external-small"><?php _e( 'Automated', 'mail-system-by-katsarov-design' ); ?></span>

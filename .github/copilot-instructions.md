@@ -102,3 +102,26 @@ composer phpcs         # WordPress coding standards check
 composer phpcbf        # Auto-fix coding standards
 composer translations  # Compile .po to .mo translation files
 ```
+
+## Translation Workflow
+
+**IMPORTANT**: When adding or modifying user-facing strings, always update translations:
+
+1. **Add new strings** to all `.po` files in `languages/`:
+   - `mail-system-by-katsarov-design.pot` (template - empty msgstr)
+   - `mail-system-by-katsarov-design-bg_BG.po` (Bulgarian translation)
+   - `mail-system-by-katsarov-design-de_DE.po` (German translation)
+
+2. **Compile translations** after updating `.po` files:
+   ```bash
+   docker exec -it <php-container> bash -c "cd /var/www/html/wp-content/plugins/mail-system-by-katsarov-design && composer translations"
+   ```
+
+3. **String format** in `.po` files:
+   ```po
+   #: path/to/file.php
+   msgid "Original English string"
+   msgstr "Translated string"
+   ```
+
+All user-facing strings must use `__()`, `_e()`, or `esc_html__()` with text domain `mail-system-by-katsarov-design`.

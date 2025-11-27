@@ -142,18 +142,17 @@ if ( $action === 'edit' && $list_id ) {
                                 <?php endif; ?>
                             </td>
                             <td>
+                                <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&list_id=' . rawurlencode( $item->id ) ) ); ?>">
+                                    <?php _e( 'Send email', 'mail-system-by-katsarov-design' ); ?>
+                                </a>
                                 <?php if ( $item->is_editable ) : ?>
-                                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-lists&action=edit&id=' . $item->id ) ); ?>">
+                                    | <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-lists&action=edit&id=' . $item->id ) ); ?>">
                                         <?php _e( 'Edit', 'mail-system-by-katsarov-design' ); ?>
                                     </a> |
                                     <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=mskd-lists&action=delete_list&id=' . $item->id ), 'delete_list_' . $item->id ) ); ?>" 
                                        class="mskd-delete-link" style="color: #a00;">
                                         <?php _e( 'Delete', 'mail-system-by-katsarov-design' ); ?>
                                     </a>
-                                <?php else : ?>
-                                    <span class="mskd-readonly-text" title="<?php esc_attr_e( 'Automated lists cannot be edited', 'mail-system-by-katsarov-design' ); ?>">
-                                        <?php _e( 'Read-only', 'mail-system-by-katsarov-design' ); ?>
-                                    </span>
                                 <?php endif; ?>
                             </td>
                         </tr>

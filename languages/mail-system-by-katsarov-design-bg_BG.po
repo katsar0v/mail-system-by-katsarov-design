@@ -879,3 +879,7 @@ msgstr "Автоматичните списъци не могат да бъда�
 #: admin/partials/lists.php
 msgid "Read-only"
 msgstr "Само за четене"
+
+#: admin/partials/lists.php
+msgid "Send email"
+msgstr "Изпрати имейл"

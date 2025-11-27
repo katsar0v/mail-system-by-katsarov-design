@@ -874,5 +874,9 @@ msgid "Automated lists cannot be edited"
 msgstr ""
 
 #: admin/partials/lists.php
-msgid "Read only"
+msgid "Read-only"
+msgstr ""
+
+#: admin/partials/lists.php
+msgid "Send email"
 msgstr ""
