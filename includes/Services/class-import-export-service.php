@@ -115,14 +115,14 @@ class Import_Export_Service {
 			foreach ( $lists as $list_id ) {
 				$list = $this->list_service->get_by_id( (int) $list_id );
 				if ( $list ) {
-					$list_names[] = $list->name;
+					$list_names[] = $this->sanitize_csv_value( $list->name );
 				}
 			}
 
 			$row = array(
-				$subscriber->email,
-				$subscriber->first_name,
-				$subscriber->last_name,
+				$this->sanitize_csv_value( $subscriber->email ),
+				$this->sanitize_csv_value( $subscriber->first_name ),
+				$this->sanitize_csv_value( $subscriber->last_name ),
 				$subscriber->status,
 				implode( ';', $list_names ),
 				$subscriber->created_at,
@@ -197,8 +197,8 @@ class Import_Export_Service {
 
 		foreach ( $lists as $list ) {
 			$row = array(
-				$list->name,
-				$list->description,
+				$this->sanitize_csv_value( $list->name ),
+				$this->sanitize_csv_value( $list->description ),
 				$list->subscriber_count,
 				$list->created_at,
 			);
@@ -243,7 +243,7 @@ class Import_Export_Service {
 	 */
 	private function get_subscribers_for_export( array $args ): array {
 		$query_args = array(
-			'per_page' => 999999, // Get all subscribers.
+			'per_page' => PHP_INT_MAX, // Get all subscribers.
 			'page'     => 1,
 		);
 
@@ -797,6 +797,29 @@ class Import_Export_Service {
 	// =========================================================================
 	// Helper Methods
 	// =========================================================================
+
+	/**
+	 * Sanitize a value for safe CSV export.
+	 *
+	 * Prevents CSV formula injection by prefixing dangerous leading characters
+	 * with a single quote. In spreadsheet applications, values starting with
+	 * '=', '+', '-', or '@' can execute formulas when opened.
+	 *
+	 * @param string $value The value to sanitize.
+	 * @return string Sanitized value safe for CSV export.
+	 */
+	private function sanitize_csv_value( string $value ): string {
+		// Characters that can trigger formula execution in spreadsheet applications.
+		$dangerous_chars = array( '=', '+', '-', '@', "\t", "\r" );
+
+		// Check if the value starts with a dangerous character.
+		if ( ! empty( $value ) && in_array( $value[0], $dangerous_chars, true ) ) {
+			// Prefix with single quote to prevent formula execution.
+			return "'" . $value;
+		}
+
+		return $value;
+	}
 
 	/**
 	 * Get list IDs from a semicolon-separated string of list names.

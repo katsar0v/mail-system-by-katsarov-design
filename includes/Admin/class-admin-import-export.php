@@ -130,6 +130,9 @@ class Admin_Import_Export {
 			ob_end_clean();
 		}
 
+		// Direct output is safe here: this is a binary file download (CSV/JSON)
+		// with appropriate Content-Type and Content-Disposition headers set above.
+		// The content is generated internally by the service, not from user input.
 		echo $content;
 		exit;
 	}
