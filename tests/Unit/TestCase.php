@@ -143,6 +143,12 @@ abstract class TestCase extends PHPUnitTestCase {
         // Other common functions.
         Functions\stubs(
             array(
+                'wp_parse_args'        => function ( $args, $defaults = array() ) {
+                    if ( is_object( $args ) ) {
+                        $args = get_object_vars( $args );
+                    }
+                    return array_merge( $defaults, $args );
+                },
                 'wp_generate_password' => function ( $length = 12, $special_chars = true ) {
                     return substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' ), 0, $length );
                 },

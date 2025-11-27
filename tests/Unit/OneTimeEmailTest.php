@@ -30,6 +30,11 @@ class OneTimeEmailTest extends TestCase {
     protected function setUp(): void {
         parent::setUp();
 
+        // Set up a base wpdb mock BEFORE creating admin class.
+        // Services capture $wpdb in their constructors.
+        $this->setup_wpdb_mock();
+        $this->wpdb->shouldIgnoreMissing();
+
         // Load the admin class.
         require_once MSKD_PLUGIN_DIR . 'admin/class-admin.php';
 
@@ -68,9 +73,10 @@ class OneTimeEmailTest extends TestCase {
             ->with( 'test_nonce', 'mskd_send_one_time_email' )
             ->andReturn( true );
 
-        // Called twice: once in handle_actions() and once in send_one_time_email()
+        // Called multiple times: once in main handle_actions() and once per controller.
         Functions\expect( 'current_user_can' )
-            ->twice()
+            ->atLeast()
+            ->times( 1 )
             ->with( 'manage_options' )
             ->andReturn( true );
 
@@ -107,9 +113,10 @@ class OneTimeEmailTest extends TestCase {
             ->with( 'test_nonce', 'mskd_send_one_time_email' )
             ->andReturn( true );
 
-        // Called twice: once in handle_actions() and once in send_one_time_email()
+        // Called multiple times: once in main handle_actions() and once per controller.
         Functions\expect( 'current_user_can' )
-            ->twice()
+            ->atLeast()
+            ->times( 1 )
             ->with( 'manage_options' )
             ->andReturn( true );
 
@@ -131,7 +138,8 @@ class OneTimeEmailTest extends TestCase {
      * Test one-time email sends successfully.
      */
     public function test_one_time_email_sends_successfully(): void {
-        $wpdb = $this->setup_wpdb_mock();
+        // Use the wpdb mock set up in setUp().
+        $wpdb = $this->wpdb;
 
         $_POST = array(
             'mskd_send_one_time_email' => 1,
@@ -147,9 +155,10 @@ class OneTimeEmailTest extends TestCase {
             ->with( 'test_nonce', 'mskd_send_one_time_email' )
             ->andReturn( true );
 
-        // Called twice: once in handle_actions() and once in send_one_time_email()
+        // Called multiple times: once in main handle_actions() and once per controller.
         Functions\expect( 'current_user_can' )
-            ->twice()
+            ->atLeast()
+            ->times( 1 )
             ->with( 'manage_options' )
             ->andReturn( true );
 
@@ -170,7 +179,17 @@ class OneTimeEmailTest extends TestCase {
         // Note: SMTP mailer uses PHPMailer directly, not wp_mail.
         // The mock PHPMailer in bootstrap.php returns true from send().
 
-        // Expect database insert for logging.
+        // Expect database inserts: first campaigns table, then queue table.
+        $wpdb->insert_id = 1;
+        $wpdb->shouldReceive( 'insert' )
+            ->once()
+            ->with(
+                'wp_mskd_campaigns',
+                Mockery::type( 'array' ),
+                Mockery::type( 'array' )
+            )
+            ->andReturn( 1 );
+
         $wpdb->shouldReceive( 'insert' )
             ->once()
             ->with(
@@ -208,7 +227,7 @@ class OneTimeEmailTest extends TestCase {
      * This causes is_enabled() to return false and triggers the error path.
      */
     public function test_one_time_email_logs_failure(): void {
-        $wpdb = $this->setup_wpdb_mock();
+        // wpdb mock already set up in setUp().
 
         $_POST = array(
             'mskd_send_one_time_email' => 1,
@@ -224,9 +243,10 @@ class OneTimeEmailTest extends TestCase {
             ->with( 'test_nonce', 'mskd_send_one_time_email' )
             ->andReturn( true );
 
-        // Called twice: once in handle_actions() and once in send_one_time_email()
+        // Called multiple times: once in main handle_actions() and once per controller.
         Functions\expect( 'current_user_can' )
-            ->twice()
+            ->atLeast()
+            ->times( 1 )
             ->with( 'manage_options' )
             ->andReturn( true );
 
@@ -261,7 +281,8 @@ class OneTimeEmailTest extends TestCase {
      * Test placeholder replacement in one-time email.
      */
     public function test_placeholder_replacement_in_one_time_email(): void {
-        $wpdb = $this->setup_wpdb_mock();
+        // Use the wpdb mock set up in setUp().
+        $wpdb = $this->wpdb;
 
         $_POST = array(
             'mskd_send_one_time_email' => 1,
@@ -276,9 +297,10 @@ class OneTimeEmailTest extends TestCase {
             ->once()
             ->andReturn( true );
 
-        // Called twice: once in handle_actions() and once in send_one_time_email()
+        // Called multiple times: once in main handle_actions() and once per controller.
         Functions\expect( 'current_user_can' )
-            ->twice()
+            ->atLeast()
+            ->times( 1 )
             ->andReturn( true );
 
         // Use when() to handle multiple get_option calls.
@@ -300,6 +322,18 @@ class OneTimeEmailTest extends TestCase {
         $sent_subject = '';
         $sent_body    = '';
 
+        // First insert is to campaigns table.
+        $wpdb->insert_id = 1;
+        $wpdb->shouldReceive( 'insert' )
+            ->once()
+            ->with(
+                'wp_mskd_campaigns',
+                Mockery::type( 'array' ),
+                Mockery::type( 'array' )
+            )
+            ->andReturn( 1 );
+
+        // Second insert is to queue table - capture the sent content.
         $wpdb->shouldReceive( 'insert' )
             ->once()
             ->with(

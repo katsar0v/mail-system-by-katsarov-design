@@ -1,0 +1,200 @@
+<?php
+/**
+ * Admin Queue Controller
+ *
+ * Handles queue-related admin actions and page rendering.
+ *
+ * @package MSKD\Admin
+ * @since   1.1.0
+ */
+
+namespace MSKD\Admin;
+
+use MSKD\Services\Email_Service;
+
+// Prevent direct access.
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+/**
+ * Class Admin_Queue
+ *
+ * Controller for queue admin page.
+ */
+class Admin_Queue {
+
+    /**
+     * Email service instance.
+     *
+     * @var Email_Service
+     */
+    private $service;
+
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        $this->service = new Email_Service();
+    }
+
+    /**
+     * Handle queue-related actions.
+     *
+     * @return void
+     */
+    public function handle_actions(): void {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        // Handle cancel queue item action.
+        if ( isset( $_GET['action'] ) && 'cancel_queue_item' === $_GET['action'] && isset( $_GET['id'] ) ) {
+            if ( wp_verify_nonce( $_GET['_wpnonce'], 'cancel_queue_item_' . $_GET['id'] ) ) {
+                $this->handle_cancel_item( intval( $_GET['id'] ) );
+            }
+        }
+
+        // Handle cancel campaign action.
+        if ( isset( $_GET['action'] ) && 'cancel_campaign' === $_GET['action'] && isset( $_GET['id'] ) ) {
+            if ( wp_verify_nonce( $_GET['_wpnonce'], 'cancel_campaign_' . $_GET['id'] ) ) {
+                $this->handle_cancel_campaign( intval( $_GET['id'] ) );
+            }
+        }
+    }
+
+    /**
+     * Handle cancel queue item action.
+     *
+     * @param int $id Queue item ID.
+     * @return void
+     */
+    private function handle_cancel_item( int $id ): void {
+        $item = $this->service->get_queue_item( $id );
+
+        if ( ! $item ) {
+            add_settings_error(
+                'mskd_messages',
+                'mskd_error',
+                __( 'Record not found.', 'mail-system-by-katsarov-design' ),
+                'error'
+            );
+            wp_redirect( admin_url( 'admin.php?page=mskd-queue' ) );
+            exit;
+        }
+
+        if ( ! in_array( $item->status, array( 'pending', 'processing' ), true ) ) {
+            add_settings_error(
+                'mskd_messages',
+                'mskd_error',
+                __( 'This email cannot be cancelled.', 'mail-system-by-katsarov-design' ),
+                'error'
+            );
+            wp_redirect( admin_url( 'admin.php?page=mskd-queue' ) );
+            exit;
+        }
+
+        $result = $this->service->cancel_queue_item( $id );
+
+        if ( $result ) {
+            add_settings_error(
+                'mskd_messages',
+                'mskd_success',
+                __( 'Email cancelled successfully.', 'mail-system-by-katsarov-design' ),
+                'success'
+            );
+        } else {
+            add_settings_error(
+                'mskd_messages',
+                'mskd_error',
+                __( 'Error cancelling email.', 'mail-system-by-katsarov-design' ),
+                'error'
+            );
+        }
+
+        // Check if we should return to campaign detail page.
+        $return_campaign = isset( $_GET['return_campaign'] ) ? intval( $_GET['return_campaign'] ) : 0;
+        if ( $return_campaign > 0 ) {
+            wp_redirect( admin_url( 'admin.php?page=mskd-queue&action=view&campaign_id=' . $return_campaign ) );
+        } elseif ( isset( $_GET['view'] ) && 'legacy' === $_GET['view'] ) {
+            wp_redirect( admin_url( 'admin.php?page=mskd-queue&view=legacy' ) );
+        } else {
+            wp_redirect( admin_url( 'admin.php?page=mskd-queue' ) );
+        }
+        exit;
+    }
+
+    /**
+     * Handle cancel campaign action.
+     *
+     * @param int $id Campaign ID.
+     * @return void
+     */
+    private function handle_cancel_campaign( int $id ): void {
+        $campaign = $this->service->get_campaign( $id );
+
+        if ( ! $campaign ) {
+            add_settings_error(
+                'mskd_messages',
+                'mskd_error',
+                __( 'Campaign not found.', 'mail-system-by-katsarov-design' ),
+                'error'
+            );
+            wp_redirect( admin_url( 'admin.php?page=mskd-queue' ) );
+            exit;
+        }
+
+        if ( ! in_array( $campaign->status, array( 'pending', 'processing' ), true ) ) {
+            add_settings_error(
+                'mskd_messages',
+                'mskd_error',
+                __( 'This campaign cannot be cancelled.', 'mail-system-by-katsarov-design' ),
+                'error'
+            );
+            wp_redirect( admin_url( 'admin.php?page=mskd-queue' ) );
+            exit;
+        }
+
+        $cancelled_count = $this->service->cancel_campaign( $id );
+
+        if ( false !== $cancelled_count ) {
+            add_settings_error(
+                'mskd_messages',
+                'mskd_success',
+                sprintf(
+                    __( 'Campaign cancelled. %d emails were cancelled.', 'mail-system-by-katsarov-design' ),
+                    $cancelled_count
+                ),
+                'success'
+            );
+        } else {
+            add_settings_error(
+                'mskd_messages',
+                'mskd_error',
+                __( 'Error cancelling campaign.', 'mail-system-by-katsarov-design' ),
+                'error'
+            );
+        }
+
+        wp_redirect( admin_url( 'admin.php?page=mskd-queue' ) );
+        exit;
+    }
+
+    /**
+     * Render the queue page.
+     *
+     * @return void
+     */
+    public function render(): void {
+        include MSKD_PLUGIN_DIR . 'admin/partials/queue.php';
+    }
+
+    /**
+     * Get the service instance.
+     *
+     * @return Email_Service
+     */
+    public function get_service(): Email_Service {
+        return $this->service;
+    }
+}

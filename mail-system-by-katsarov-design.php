@@ -29,7 +29,17 @@ define( 'MSKD_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'MSKD_BATCH_SIZE', 10 ); // Number of emails to send per minute
 
 /**
- * Autoloader for MSKD_ classes
+ * Load Composer autoloader for PSR-4 namespaced classes (MSKD\*)
+ */
+if ( file_exists( MSKD_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
+    require_once MSKD_PLUGIN_DIR . 'vendor/autoload.php';
+}
+
+/**
+ * Legacy autoloader for MSKD_ prefixed classes (backward compatibility)
+ * This will be removed in a future version once all classes are migrated to PSR-4.
+ *
+ * @deprecated Will be removed after full migration to PSR-4 namespaces.
  */
 spl_autoload_register( function( $class ) {
     // Only autoload MSKD_ prefixed classes

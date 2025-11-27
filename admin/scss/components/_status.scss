@@ -33,6 +33,11 @@
   @include status-badge-variant($color-info-bg, $color-info-text);
 }
 
+// Neutral/One-time States
+.mskd-status-one-time {
+  @include status-badge-variant($color-gray-200, $color-gray-600);
+}
+
 // External/Automated List Badge
 .mskd-badge {
   @include status-badge;
