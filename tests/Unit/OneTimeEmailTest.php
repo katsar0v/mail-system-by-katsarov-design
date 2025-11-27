@@ -220,14 +220,15 @@ class OneTimeEmailTest extends TestCase {
     }
 
     /**
-     * Test one-time email logs failure.
+     * Test one-time email succeeds using PHP mail when SMTP is not configured.
      *
-     * Note: Since the mock PHPMailer always succeeds in send(), this test now verifies
-     * the behavior when SMTP is not configured properly (no smtp_host).
-     * This causes is_enabled() to return false and triggers the error path.
+     * Note: Since we now allow sending emails without SMTP (using PHP mail as fallback),
+     * this test verifies that sending works even when SMTP is not configured.
+     * The mock PHPMailer always succeeds in send().
      */
     public function test_one_time_email_logs_failure(): void {
         // wpdb mock already set up in setUp().
+        $wpdb = $this->wpdb;
 
         $_POST = array(
             'mskd_send_one_time_email' => 1,
@@ -250,31 +251,42 @@ class OneTimeEmailTest extends TestCase {
             ->with( 'manage_options' )
             ->andReturn( true );
 
-        // Return settings with SMTP enabled but no host, which makes is_enabled() return false.
+        // Return settings without SMTP configured (no host).
         Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
             if ( $option === 'mskd_settings' ) {
                 return array(
-                    'smtp_enabled' => true,
-                    'smtp_host'    => '', // Empty host causes is_enabled() to return false.
+                    'smtp_enabled' => false,
+                    'smtp_host'    => '', // No SMTP - will use PHP mail fallback.
                 );
             }
             return $default;
         });
 
-        // When SMTP is not configured, no database insert happens.
+        // Expect database insert for logging the sent email.
+        $wpdb->shouldReceive( 'insert' )
+            ->once()
+            ->with(
+                'wp_mskd_queue',
+                \Mockery::type( 'array' ),
+                \Mockery::type( 'array' )
+            )
+            ->andReturn( true );
 
-        $error_called = false;
+        $wpdb->insert_id = 1;
+
+        // Should show success message since PHP mail fallback works.
+        $success_called = false;
         Functions\expect( 'add_settings_error' )
             ->once()
-            ->andReturnUsing( function ( $setting, $code, $message, $type ) use ( &$error_called ) {
-                $error_called = true;
+            ->andReturnUsing( function ( $setting, $code, $message, $type ) use ( &$success_called ) {
+                $success_called = true;
                 $this->assertEquals( 'mskd_messages', $setting );
-                $this->assertEquals( 'mskd_error', $code );
-                $this->assertEquals( 'error', $type );
+                $this->assertEquals( 'mskd_success', $code );
+                $this->assertEquals( 'success', $type );
             } );
 
         $this->admin->handle_actions();
-        $this->assertTrue( $error_called, 'add_settings_error should be called for failure' );
+        $this->assertTrue( $success_called, 'add_settings_error should be called for success' );
     }
 
     /**

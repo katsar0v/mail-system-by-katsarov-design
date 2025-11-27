@@ -57,25 +57,29 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
             <table class="form-table">
                 <tr>
                     <th scope="row">
-                        <label><?php _e( 'Send to lists', 'mail-system-by-katsarov-design' ); ?> *</label>
+                        <label for="mskd-lists-select"><?php _e( 'Send to lists', 'mail-system-by-katsarov-design' ); ?> *</label>
                     </th>
                     <td>
                         <?php if ( ! empty( $lists ) ) : ?>
-                            <?php foreach ( $lists as $list ) : ?>
-                                <?php
-                                $subscriber_count = MSKD_List_Provider::get_list_active_subscriber_count( $list );
-                                $is_external      = $list->source === 'external';
-                                $is_preselected   = in_array( $list->id, $preselected_list_ids, true );
-                                ?>
-                                <label style="display: block; margin-bottom: 5px;">
-                                    <input type="checkbox" name="lists[]" value="<?php echo esc_attr( $list->id ); ?>"<?php checked( $is_preselected ); ?>>
-                                    <?php echo esc_html( $list->name ); ?>
-                                    <?php if ( $is_external ) : ?>
-                                        <span class="mskd-badge mskd-badge-external-small"><?php _e( 'Automated', 'mail-system-by-katsarov-design' ); ?></span>
-                                    <?php endif; ?>
-                                    <span class="description">(<?php printf( __( '%d active subscribers', 'mail-system-by-katsarov-design' ), $subscriber_count ); ?>)</span>
-                                </label>
-                            <?php endforeach; ?>
+                            <select name="lists[]" id="mskd-lists-select" class="mskd-select2-lists" multiple="multiple" style="width: 100%;" required>
+                                <?php foreach ( $lists as $list ) : ?>
+                                    <?php
+                                    $subscriber_count = MSKD_List_Provider::get_list_active_subscriber_count( $list );
+                                    $is_external      = $list->source === 'external';
+                                    $is_preselected   = in_array( $list->id, $preselected_list_ids, true );
+                                    $badge            = $is_external ? ' [' . __( 'Automated', 'mail-system-by-katsarov-design' ) . ']' : '';
+                                    ?>
+                                    <option value="<?php echo esc_attr( $list->id ); ?>" 
+                                            data-subscribers="<?php echo esc_attr( $subscriber_count ); ?>"
+                                            data-external="<?php echo esc_attr( $is_external ? '1' : '0' ); ?>"
+                                            <?php selected( $is_preselected ); ?>>
+                                        <?php echo esc_html( $list->name . $badge . ' (' . sprintf( __( '%d subscribers', 'mail-system-by-katsarov-design' ), $subscriber_count ) . ')' ); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <p class="description" style="margin-top: 8px;">
+                                <?php _e( 'Start typing to search. You can select multiple lists.', 'mail-system-by-katsarov-design' ); ?>
+                            </p>
                         <?php else : ?>
                             <p class="description">
                                 <?php _e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?>

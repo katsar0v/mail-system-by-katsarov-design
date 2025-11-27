@@ -8,6 +8,20 @@
     'use strict';
 
     $(document).ready(function() {
+        // Initialize Select2 for lists multi-select
+        if ($('.mskd-select2-lists').length && typeof $.fn.select2 === 'function') {
+            $('.mskd-select2-lists').select2({
+                placeholder: mskd_admin.strings.select_lists_placeholder || 'Select lists...',
+                allowClear: true,
+                width: '100%',
+                language: {
+                    noResults: function() {
+                        return mskd_admin.strings.no_results || 'No results found';
+                    }
+                }
+            });
+        }
+
         // Confirm delete
         $('.mskd-delete-link').on('click', function(e) {
             if (!confirm(mskd_admin.strings.confirm_delete)) {

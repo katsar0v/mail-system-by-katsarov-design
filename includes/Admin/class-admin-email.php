@@ -241,15 +241,8 @@ class Admin_Email {
         require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
         $mailer = new \MSKD_SMTP_Mailer();
 
-        // Check if SMTP is enabled.
-        if ( ! $mailer->is_enabled() ) {
-            $this->last_mail_error = __( 'SMTP is not configured. Please set up SMTP in the plugin settings.', 'mail-system-by-katsarov-design' );
-            add_settings_error( 'mskd_messages', 'mskd_error', $this->last_mail_error, 'error' );
-            return;
-        }
-
         if ( $is_immediate ) {
-            // Send immediately via SMTP.
+            // Send immediately (via SMTP if configured, otherwise via PHP mail).
             $sent = $mailer->send( $recipient_email, $subject, $body );
 
             if ( ! $sent ) {

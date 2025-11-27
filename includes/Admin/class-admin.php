@@ -199,17 +199,34 @@ class Admin {
             return;
         }
 
+        // Select2 CSS.
+        wp_enqueue_style(
+            'select2',
+            'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
+            array(),
+            '4.1.0-rc.0'
+        );
+
         wp_enqueue_style(
             'mskd-admin-style',
             MSKD_PLUGIN_URL . 'admin/css/admin-style.css',
-            array(),
+            array( 'select2' ),
             MSKD_VERSION
+        );
+
+        // Select2 JS.
+        wp_enqueue_script(
+            'select2',
+            'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
+            array( 'jquery' ),
+            '4.1.0-rc.0',
+            true
         );
 
         wp_enqueue_script(
             'mskd-admin-script',
             MSKD_PLUGIN_URL . 'admin/js/admin-script.js',
-            array( 'jquery' ),
+            array( 'jquery', 'select2' ),
             MSKD_VERSION,
             true
         );
@@ -228,6 +245,8 @@ class Admin {
                 'confirm_truncate_subscribers' => __( 'Are you sure you want to delete ALL subscribers? This action cannot be undone!', 'mail-system-by-katsarov-design' ),
                 'confirm_truncate_lists'       => __( 'Are you sure you want to delete ALL lists? This action cannot be undone!', 'mail-system-by-katsarov-design' ),
                 'confirm_truncate_queue'       => __( 'Are you sure you want to delete ALL queued emails? This action cannot be undone!', 'mail-system-by-katsarov-design' ),
+                'select_lists_placeholder'     => __( 'Select lists...', 'mail-system-by-katsarov-design' ),
+                'no_results'                   => __( 'No results found', 'mail-system-by-katsarov-design' ),
             ),
         ) );
     }

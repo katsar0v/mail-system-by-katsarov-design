@@ -108,15 +108,9 @@ class MSKD_Cron_Handler {
         // Get settings
         $settings = get_option( 'mskd_settings', array() );
 
-        // Initialize SMTP mailer - required for sending emails.
+        // Initialize mailer (uses SMTP if configured, otherwise PHP mail).
         require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
         $this->smtp_mailer = new MSKD_SMTP_Mailer( $settings );
-
-        if ( ! $this->smtp_mailer->is_enabled() ) {
-            // SMTP not configured, cannot send emails
-            error_log( 'MSKD: SMTP not configured. Cannot process email queue.' );
-            return;
-        }
 
         foreach ( $queue_items as $item ) {
             // Skip external items with invalid email.

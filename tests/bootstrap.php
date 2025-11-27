@@ -64,6 +64,7 @@ class PHPMailer {
     public $CharSet = "UTF-8";
     public function __construct($exceptions = null) {}
     public function isSMTP() {}
+    public function isMail() {}
     public function setFrom($address, $name = "") {}
     public function addReplyTo($address, $name = "") {}
     public function addAddress($address, $name = "") {}

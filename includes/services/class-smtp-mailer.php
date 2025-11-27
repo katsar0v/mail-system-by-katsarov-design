@@ -52,11 +52,20 @@ class MSKD_SMTP_Mailer {
     }
 
     /**
-     * Check if SMTP is enabled and configured.
+     * Check if mailer can send emails (always true - uses PHP mail as fallback).
      *
      * @return bool
      */
     public function is_enabled() {
+        return true;
+    }
+
+    /**
+     * Check if SMTP is specifically enabled and configured.
+     *
+     * @return bool
+     */
+    public function is_smtp_enabled() {
         return ! empty( $this->settings['smtp_enabled'] ) 
             && ! empty( $this->settings['smtp_host'] );
     }
@@ -92,12 +101,6 @@ class MSKD_SMTP_Mailer {
         $this->last_error = '';
         $this->debug_log  = array();
 
-        // Check if SMTP is enabled.
-        if ( ! $this->is_enabled() ) {
-            $this->log_error( __( 'SMTP is not enabled or configured.', 'mail-system-by-katsarov-design' ) );
-            return false;
-        }
-
         // Create a local PHPMailer instance to avoid conflicts with global instance.
         require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
         require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
@@ -106,16 +109,21 @@ class MSKD_SMTP_Mailer {
         $mailer = new PHPMailer\PHPMailer\PHPMailer( true );
 
         try {
-            // Configure SMTP.
-            $mailer->isSMTP();
-            $mailer->Host       = $this->settings['smtp_host'];
-            $mailer->Port       = ! empty( $this->settings['smtp_port'] ) ? (int) $this->settings['smtp_port'] : 587;
-            $mailer->SMTPSecure = $this->get_smtp_secure();
-            $mailer->SMTPAuth   = ! empty( $this->settings['smtp_auth'] );
+            // Configure mailer - use SMTP if configured, otherwise use PHP mail.
+            if ( $this->is_smtp_enabled() ) {
+                $mailer->isSMTP();
+                $mailer->Host       = $this->settings['smtp_host'];
+                $mailer->Port       = ! empty( $this->settings['smtp_port'] ) ? (int) $this->settings['smtp_port'] : 587;
+                $mailer->SMTPSecure = $this->get_smtp_secure();
+                $mailer->SMTPAuth   = ! empty( $this->settings['smtp_auth'] );
 
-            if ( $mailer->SMTPAuth ) {
-                $mailer->Username = ! empty( $this->settings['smtp_username'] ) ? $this->settings['smtp_username'] : '';
-                $mailer->Password = ! empty( $this->settings['smtp_password'] ) ? base64_decode( $this->settings['smtp_password'] ) : '';
+                if ( $mailer->SMTPAuth ) {
+                    $mailer->Username = ! empty( $this->settings['smtp_username'] ) ? $this->settings['smtp_username'] : '';
+                    $mailer->Password = ! empty( $this->settings['smtp_password'] ) ? base64_decode( $this->settings['smtp_password'] ) : '';
+                }
+            } else {
+                // Use PHP's mail() function as fallback.
+                $mailer->isMail();
             }
 
             // Set sender.
@@ -178,7 +186,7 @@ class MSKD_SMTP_Mailer {
         $this->debug_log  = array();
 
         // Check if SMTP is enabled.
-        if ( ! $this->is_enabled() ) {
+        if ( ! $this->is_smtp_enabled() ) {
             return array(
                 'success' => false,
                 'message' => __( 'SMTP is not enabled or configured. Please fill in SMTP settings.', 'mail-system-by-katsarov-design' ),

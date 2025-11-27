@@ -35,7 +35,7 @@ class SmtpMailerTest extends TestCase {
     }
 
     /**
-     * Test that is_enabled returns false when SMTP is disabled.
+     * Test that is_smtp_enabled returns false when SMTP is disabled.
      */
     public function test_is_enabled_returns_false_when_disabled(): void {
         $settings = array(
@@ -45,11 +45,11 @@ class SmtpMailerTest extends TestCase {
 
         $this->smtp_mailer = new \MSKD_SMTP_Mailer( $settings );
 
-        $this->assertFalse( $this->smtp_mailer->is_enabled() );
+        $this->assertFalse( $this->smtp_mailer->is_smtp_enabled() );
     }
 
     /**
-     * Test that is_enabled returns false when host is empty.
+     * Test that is_smtp_enabled returns false when host is empty.
      */
     public function test_is_enabled_returns_false_when_host_empty(): void {
         $settings = array(
@@ -59,7 +59,7 @@ class SmtpMailerTest extends TestCase {
 
         $this->smtp_mailer = new \MSKD_SMTP_Mailer( $settings );
 
-        $this->assertFalse( $this->smtp_mailer->is_enabled() );
+        $this->assertFalse( $this->smtp_mailer->is_smtp_enabled() );
     }
 
     /**
@@ -77,7 +77,7 @@ class SmtpMailerTest extends TestCase {
     }
 
     /**
-     * Test that send returns false when SMTP is not enabled.
+     * Test that send works using PHP mail when SMTP is not configured.
      */
     public function test_send_returns_false_when_not_enabled(): void {
         $settings = array(
@@ -87,14 +87,16 @@ class SmtpMailerTest extends TestCase {
 
         $this->smtp_mailer = new \MSKD_SMTP_Mailer( $settings );
 
+        // When SMTP is not configured, it falls back to PHP mail.
+        // The mock PHPMailer always returns true for send().
         $result = $this->smtp_mailer->send(
             'test@example.com',
             'Test Subject',
             '<p>Test Body</p>'
         );
 
-        $this->assertFalse( $result );
-        $this->assertNotEmpty( $this->smtp_mailer->get_last_error() );
+        // Should succeed using PHP mail fallback.
+        $this->assertTrue( $result );
     }
 
     /**
