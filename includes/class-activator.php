@@ -37,6 +37,47 @@ class MSKD_Activator {
     }
 
     /**
+     * Check and perform database upgrades if needed
+     */
+    public static function maybe_upgrade() {
+        $installed_version = get_option( 'mskd_db_version', '1.0.0' );
+
+        if ( version_compare( $installed_version, self::DB_VERSION, '<' ) ) {
+            self::upgrade( $installed_version );
+            update_option( 'mskd_db_version', self::DB_VERSION );
+        }
+    }
+
+    /**
+     * Perform database upgrades based on current version
+     *
+     * @param string $from_version The version being upgraded from.
+     */
+    private static function upgrade( $from_version ) {
+        global $wpdb;
+
+        // Upgrade from 1.0.0 to 1.1.0: Add subscriber_data column to queue table.
+        if ( version_compare( $from_version, '1.1.0', '<' ) ) {
+            $table_queue = $wpdb->prefix . 'mskd_queue';
+
+            // Check if column exists.
+            $column_exists = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SHOW COLUMNS FROM {$table_queue} LIKE %s",
+                    'subscriber_data'
+                )
+            );
+
+            if ( empty( $column_exists ) ) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+                $wpdb->query(
+                    "ALTER TABLE {$table_queue} ADD COLUMN subscriber_data text DEFAULT NULL AFTER subscriber_id"
+                );
+            }
+        }
+    }
+
+    /**
      * Create database tables
      */
     private static function create_tables() {

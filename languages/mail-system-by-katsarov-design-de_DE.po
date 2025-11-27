@@ -855,3 +855,8 @@ msgstr "Zurück zur Website"
 #: admin/partials/lists.php
 msgid "Send email"
 msgstr "E-Mail senden"
+
+#. translators: %d: number of additional subscribers
+#: admin/partials/lists.php
+msgid "... and %d more"
+msgstr "... und %d weitere"

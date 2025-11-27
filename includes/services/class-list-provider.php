@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Load the List Subscriber DAO.
+require_once MSKD_PLUGIN_DIR . 'includes/models/class-list-subscriber.php';
+
 /**
  * Class MSKD_List_Provider
  *
@@ -279,6 +282,9 @@ class MSKD_List_Provider {
 	/**
 	 * Get active subscriber count for an external list.
 	 *
+	 * The subscriber_callback must return an array of subscriber arrays,
+	 * each with at least an 'email' key.
+	 *
 	 * @since 1.1.0
 	 *
 	 * @param object $list External list object.
@@ -289,42 +295,15 @@ class MSKD_List_Provider {
 			return 0;
 		}
 
-		$subscribers = call_user_func( $list->subscriber_callback );
-		if ( ! is_array( $subscribers ) || empty( $subscribers ) ) {
+		$result = call_user_func( $list->subscriber_callback );
+
+		if ( ! MSKD_List_Subscriber::is_valid_callback_result( $result ) ) {
 			return 0;
 		}
 
-		// Check if subscribers are IDs or emails.
-		$first = reset( $subscribers );
+		$subscribers = MSKD_List_Subscriber::from_callback_result( $result );
 
-		if ( is_numeric( $first ) ) {
-			// Subscriber IDs - count active.
-			global $wpdb;
-			$placeholders = implode( ',', array_fill( 0, count( $subscribers ), '%d' ) );
-			return (int) $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT COUNT(*) FROM {$wpdb->prefix}mskd_subscribers 
-					WHERE id IN ($placeholders) AND status = 'active'",
-					$subscribers
-				)
-			);
-		}
-
-		// Check if it's a string containing @ to determine if it's likely an email.
-		if ( is_string( $first ) && strpos( $first, '@' ) !== false ) {
-			// Email addresses - count those that exist and are active.
-			global $wpdb;
-			$placeholders = implode( ',', array_fill( 0, count( $subscribers ), '%s' ) );
-			return (int) $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT COUNT(*) FROM {$wpdb->prefix}mskd_subscribers 
-					WHERE email IN ($placeholders) AND status = 'active'",
-					$subscribers
-				)
-			);
-		}
-
-		return 0;
+		return count( $subscribers );
 	}
 
 	/**
@@ -363,51 +342,33 @@ class MSKD_List_Provider {
 	/**
 	 * Get subscriber IDs for an external list.
 	 *
+	 * Since external lists return subscriber arrays (not database IDs),
+	 * this method returns unique identifiers based on email addresses.
+	 *
 	 * @since 1.1.0
 	 *
 	 * @param object $list External list object.
-	 * @return array Array of subscriber IDs.
+	 * @return array Array of email addresses as identifiers.
 	 */
 	private static function get_external_list_subscriber_ids( $list ) {
 		if ( ! isset( $list->subscriber_callback ) || ! is_callable( $list->subscriber_callback ) ) {
 			return array();
 		}
 
-		$subscribers = call_user_func( $list->subscriber_callback );
-		if ( ! is_array( $subscribers ) || empty( $subscribers ) ) {
+		$result = call_user_func( $list->subscriber_callback );
+
+		if ( ! MSKD_List_Subscriber::is_valid_callback_result( $result ) ) {
 			return array();
 		}
 
-		$first = reset( $subscribers );
+		$subscribers = MSKD_List_Subscriber::from_callback_result( $result );
 
-		// If already IDs (numeric values), filter to active subscribers.
-		if ( is_numeric( $first ) ) {
-			global $wpdb;
-			$placeholders = implode( ',', array_fill( 0, count( $subscribers ), '%d' ) );
-			return $wpdb->get_col(
-				$wpdb->prepare(
-					"SELECT id FROM {$wpdb->prefix}mskd_subscribers 
-					WHERE id IN ($placeholders) AND status = 'active'",
-					$subscribers
-				)
-			);
-		}
-
-		// If strings that look like emails, convert to IDs.
-		// Check if it's a string containing @ to determine if it's likely an email.
-		if ( is_string( $first ) && strpos( $first, '@' ) !== false ) {
-			global $wpdb;
-			$placeholders = implode( ',', array_fill( 0, count( $subscribers ), '%s' ) );
-			return $wpdb->get_col(
-				$wpdb->prepare(
-					"SELECT id FROM {$wpdb->prefix}mskd_subscribers 
-					WHERE email IN ($placeholders) AND status = 'active'",
-					$subscribers
-				)
-			);
-		}
-
-		return array();
+		return array_map(
+			function ( MSKD_List_Subscriber $sub ) {
+				return $sub->get_email();
+			},
+			$subscribers
+		);
 	}
 
 	/**
@@ -723,10 +684,11 @@ class MSKD_List_Provider {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param object|string|int $list List object or list ID.
+	 * @param object|string|int $list  List object or list ID.
+	 * @param int|null          $limit Optional. Maximum number of subscribers to return. Default null (no limit).
 	 * @return array Array of subscriber objects with email, first_name, last_name, etc.
 	 */
-	public static function get_list_subscribers_full( $list ) {
+	public static function get_list_subscribers_full( $list, $limit = null ) {
 		if ( ! is_object( $list ) ) {
 			$list = self::get_list( $list );
 		}
@@ -738,14 +700,19 @@ class MSKD_List_Provider {
 		// For database lists, get full subscriber data.
 		if ( $list->source === 'database' ) {
 			global $wpdb;
-			$subscribers = $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT s.* FROM {$wpdb->prefix}mskd_subscribers s
-					INNER JOIN {$wpdb->prefix}mskd_subscriber_list sl ON s.id = sl.subscriber_id
-					WHERE sl.list_id = %d AND s.status = 'active'",
-					intval( $list->id )
-				)
+
+			$sql = $wpdb->prepare(
+				"SELECT s.* FROM {$wpdb->prefix}mskd_subscribers s
+				INNER JOIN {$wpdb->prefix}mskd_subscriber_list sl ON s.id = sl.subscriber_id
+				WHERE sl.list_id = %d AND s.status = 'active'",
+				intval( $list->id )
 			);
+
+			if ( $limit !== null && $limit > 0 ) {
+				$sql .= $wpdb->prepare( ' LIMIT %d', $limit );
+			}
+
+			$subscribers = $wpdb->get_results( $sql );
 
 			foreach ( $subscribers as $sub ) {
 				$sub->source      = 'database';
@@ -760,60 +727,25 @@ class MSKD_List_Provider {
 			return array();
 		}
 
-		/**
-		 * Filter to get full subscriber data for an external list.
-		 *
-		 * If the callback returns arrays with subscriber data, those will be used.
-		 * If it returns IDs or emails, we'll try to look them up in the database.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param array  $subscribers Array of subscriber IDs, emails, or subscriber data arrays.
-		 * @param object $list        The external list object.
-		 */
-		$result = apply_filters( 'mskd_external_list_subscribers_full', call_user_func( $list->subscriber_callback ), $list );
+		$result = call_user_func( $list->subscriber_callback );
 
-		if ( ! is_array( $result ) || empty( $result ) ) {
+		if ( ! MSKD_List_Subscriber::is_valid_callback_result( $result ) ) {
 			return array();
 		}
 
-		$first = reset( $result );
+		$subscribers = MSKD_List_Subscriber::from_callback_result( $result );
 
-		// If result contains full subscriber data (arrays/objects with email key).
-		if ( is_array( $first ) && isset( $first['email'] ) ) {
-			return array_filter( array_map( array( __CLASS__, 'format_external_subscriber' ), $result ) );
+		// Apply limit if specified.
+		if ( $limit !== null && $limit > 0 ) {
+			$subscribers = array_slice( $subscribers, 0, $limit );
 		}
 
-		if ( is_object( $first ) && isset( $first->email ) ) {
-			return array_values( $result );
-		}
-
-		// If result is numeric IDs, look them up in database.
-		if ( is_numeric( $first ) ) {
-			global $wpdb;
-			$placeholders = implode( ',', array_fill( 0, count( $result ), '%d' ) );
-			return $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT s.*, 'database' as source, 1 as is_editable FROM {$wpdb->prefix}mskd_subscribers s
-					WHERE id IN ($placeholders) AND status = 'active'",
-					$result
-				)
-			);
-		}
-
-		// If result is emails, look them up in database.
-		if ( is_string( $first ) && strpos( $first, '@' ) !== false ) {
-			global $wpdb;
-			$placeholders = implode( ',', array_fill( 0, count( $result ), '%s' ) );
-			return $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT s.*, 'database' as source, 1 as is_editable FROM {$wpdb->prefix}mskd_subscribers s
-					WHERE email IN ($placeholders) AND status = 'active'",
-					$result
-				)
-			);
-		}
-
-		return array();
+		// Convert MSKD_List_Subscriber objects to stdClass for compatibility.
+		return array_map(
+			function ( MSKD_List_Subscriber $sub ) {
+				return $sub->to_object();
+			},
+			$subscribers
+		);
 	}
 }

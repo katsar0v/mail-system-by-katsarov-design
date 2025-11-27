@@ -883,3 +883,8 @@ msgstr "Само за четене"
 #: admin/partials/lists.php
 msgid "Send email"
 msgstr "Изпрати имейл"
+
+#. translators: %d: number of additional subscribers
+#: admin/partials/lists.php
+msgid "... and %d more"
+msgstr "... и още %d"

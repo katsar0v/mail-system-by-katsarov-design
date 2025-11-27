@@ -108,6 +108,14 @@ if ( $action === 'edit' && $list_id ) {
                         <?php
                         $subscriber_count = MSKD_List_Provider::get_list_subscriber_count( $item );
                         $is_external      = $item->source === 'external';
+                        
+                        // Get subscribers for tooltip (limit to 11 to check if there are more).
+                        $subscribers_for_tooltip = array();
+                        if ( $subscriber_count > 0 ) {
+                            $subscribers_for_tooltip = MSKD_List_Provider::get_list_subscribers_full( $item, 11 );
+                        }
+                        $show_more = count( $subscribers_for_tooltip ) > 10;
+                        $subscribers_display = array_slice( $subscribers_for_tooltip, 0, 10 );
                         ?>
                         <tr<?php echo $is_external ? ' class="mskd-external-list"' : ''; ?>>
                             <td>
@@ -119,7 +127,42 @@ if ( $action === 'edit' && $list_id ) {
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <?php echo esc_html( $subscriber_count ); ?>
+                                <?php if ( $subscriber_count > 0 ) : ?>
+                                    <span class="mskd-subscriber-count">
+                                        <?php echo esc_html( $subscriber_count ); ?>
+                                        <div class="mskd-subscriber-tooltip">
+                                            <div class="mskd-subscriber-tooltip__title">
+                                                <?php _e( 'Subscribers', 'mail-system-by-katsarov-design' ); ?>
+                                            </div>
+                                            <ul class="mskd-subscriber-tooltip__list">
+                                                <?php foreach ( $subscribers_display as $sub ) : ?>
+                                                    <li class="mskd-subscriber-tooltip__item">
+                                                        <span class="mskd-subscriber-tooltip__email"><?php echo esc_html( $sub->email ); ?></span>
+                                                        <?php 
+                                                        $name = trim( ( $sub->first_name ?? '' ) . ' ' . ( $sub->last_name ?? '' ) );
+                                                        if ( $name ) : 
+                                                        ?>
+                                                            <span class="mskd-subscriber-tooltip__name"><?php echo esc_html( $name ); ?></span>
+                                                        <?php endif; ?>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                            <?php if ( $show_more ) : ?>
+                                                <div class="mskd-subscriber-tooltip__more">
+                                                    <?php 
+                                                    printf( 
+                                                        /* translators: %d: number of additional subscribers */
+                                                        esc_html__( '... and %d more', 'mail-system-by-katsarov-design' ), 
+                                                        $subscriber_count - 10 
+                                                    ); 
+                                                    ?>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </span>
+                                <?php else : ?>
+                                    <span class="mskd-subscriber-count-empty">0</span>
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&list_id=' . rawurlencode( $item->id ) ) ); ?>">

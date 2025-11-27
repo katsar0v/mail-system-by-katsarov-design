@@ -59,12 +59,22 @@ function my_plugin_register_lists( $lists ) {
 }
 
 function my_plugin_get_vip_subscribers() {
-    // Return array of email addresses or subscriber IDs
-    // These can be fetched from any source: database, API, etc.
+    // Return array of subscriber arrays
+    // 'email' is required, 'first_name' and 'last_name' are optional
     return array(
-        'vip1@example.com',
-        'vip2@example.com',
-        'vip3@example.com',
+        array(
+            'email'      => 'john@example.com',
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+        ),
+        array(
+            'email'      => 'jane@example.com',
+            'first_name' => 'Jane',
+            'last_name'  => 'Smith',
+        ),
+        array(
+            'email'      => 'user@example.com', // Minimal - only email
+        ),
     );
 }
 ```
@@ -103,7 +113,7 @@ Register external/automated subscriber lists that appear alongside database list
 | `name` | string | Yes | Display name in admin interface |
 | `description` | string | No | Description shown in lists table |
 | `provider` | string | No | Plugin/provider name. Default: "External" |
-| `subscriber_callback` | callable | No | Returns subscriber IDs or emails |
+| `subscriber_callback` | callable | No | Returns array of subscriber arrays (see format below) |
 
 **Example:**
 
@@ -184,34 +194,6 @@ Control whether a database subscriber can be edited.
 **Parameters:**
 - `$is_editable` (bool) - Current editable status
 - `$subscriber_id` (int) - The subscriber ID
-
-#### `mskd_external_list_subscribers_full`
-
-Provide full subscriber data for external lists when queuing emails.
-
-**Parameters:**
-- `$subscribers` (array) - Array from `subscriber_callback`
-- `$list` (object) - The external list object
-
-**Example:**
-
-```php
-add_filter( 'mskd_external_list_subscribers_full', function( $subscribers, $list ) {
-    if ( $list->id !== 'ext_crm_contacts' ) {
-        return $subscribers;
-    }
-    
-    // Return full subscriber data for email sending
-    return array(
-        array(
-            'id'         => 'crm_1',
-            'email'      => 'john@example.com',
-            'first_name' => 'John',
-            'last_name'  => 'Doe',
-        ),
-    );
-}, 10, 2 );
-```
 
 ---
 
@@ -495,33 +477,22 @@ add_filter( 'mskd_register_external_lists', function( $lists ) {
         'name'                => 'CRM Leads',
         'description'         => 'Active leads from CRM system',
         'provider'            => 'My CRM',
-        'subscriber_callback' => 'get_crm_lead_emails',
+        'subscriber_callback' => 'get_crm_leads',
     );
     return $lists;
 });
 
-// Provide full data for external subscribers
-add_filter( 'mskd_external_list_subscribers_full', function( $subscribers, $list ) {
-    if ( $list->id !== 'ext_crm_leads' ) {
-        return $subscribers;
-    }
-    
-    // Fetch from CRM API
+function get_crm_leads() {
+    // Fetch from CRM API and return subscriber arrays
     $leads = my_crm_api_get_leads();
     
     return array_map( function( $lead ) {
         return array(
-            'id'         => 'crm_' . $lead->id,
             'email'      => $lead->email,
             'first_name' => $lead->first_name,
             'last_name'  => $lead->last_name,
         );
     }, $leads );
-}, 10, 2 );
-
-function get_crm_lead_emails() {
-    $leads = my_crm_api_get_leads();
-    return wp_list_pluck( $leads, 'email' );
 }
 ```
 
@@ -619,9 +590,9 @@ add_action( 'mskd_subscriber_unsubscribed', function( $email, $token ) {
 
 ### Subscriber Count Shows 0
 
-1. Verify callback returns IDs/emails that exist in `mskd_subscribers`
-2. Check returned subscribers have `status = 'active'`
-3. Test callback directly: `var_dump( your_callback() );`
+1. Verify callback returns array of arrays with `email` key
+2. Test callback directly: `var_dump( your_callback() );`
+3. Check for PHP errors in the callback function
 
 ### Emails Not Sending
 
@@ -632,8 +603,8 @@ add_action( 'mskd_subscriber_unsubscribed', function( $email, $token ) {
 
 ### External Subscriber Can't Receive Emails
 
-1. Implement `mskd_external_list_subscribers_full` filter
-2. Return complete subscriber data with `email`, `first_name`, `last_name`
+1. Ensure `subscriber_callback` returns array of arrays with `email` key
+2. Optionally include `first_name` and `last_name` for personalization
 3. Data is stored as JSON in `subscriber_data` column
 
 ---
