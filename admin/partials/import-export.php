@@ -1,0 +1,194 @@
+<?php
+/**
+ * Import/Export page
+ *
+ * @package MSKD
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+// Get all lists for filter dropdown.
+use MSKD\Services\List_Service;
+$list_service = new List_Service();
+$lists = $list_service->get_all();
+?>
+
+<div class="wrap mskd-wrap">
+	<h1><?php esc_html_e( 'Import / Export', 'mail-system-by-katsarov-design' ); ?></h1>
+
+	<?php settings_errors( 'mskd_messages' ); ?>
+
+	<div class="mskd-import-export-container">
+		<!-- Export Section -->
+		<div class="mskd-card">
+			<h2 class="mskd-card-title">
+				<span class="dashicons dashicons-download"></span>
+				<?php esc_html_e( 'Export', 'mail-system-by-katsarov-design' ); ?>
+			</h2>
+			<p class="description">
+				<?php esc_html_e( 'Export subscribers or lists to a CSV file for backup or migration.', 'mail-system-by-katsarov-design' ); ?>
+			</p>
+
+			<form method="post" action="">
+				<?php wp_nonce_field( 'mskd_export', 'mskd_nonce' ); ?>
+
+				<table class="form-table">
+					<tr>
+						<th scope="row">
+							<label for="export_type"><?php esc_html_e( 'Export type', 'mail-system-by-katsarov-design' ); ?></label>
+						</th>
+						<td>
+							<select name="export_type" id="export_type" class="regular-text">
+								<option value="subscribers"><?php esc_html_e( 'Subscribers', 'mail-system-by-katsarov-design' ); ?></option>
+								<option value="lists"><?php esc_html_e( 'Lists', 'mail-system-by-katsarov-design' ); ?></option>
+							</select>
+						</td>
+					</tr>
+					<input type="hidden" name="export_format" value="csv">
+					<tr class="mskd-export-subscribers-options">
+						<th scope="row">
+							<label for="export_list_id"><?php esc_html_e( 'Filter by list', 'mail-system-by-katsarov-design' ); ?></label>
+						</th>
+						<td>
+							<select name="export_list_id" id="export_list_id" class="regular-text">
+								<option value=""><?php esc_html_e( 'All lists', 'mail-system-by-katsarov-design' ); ?></option>
+								<?php foreach ( $lists as $list ) : ?>
+									<option value="<?php echo esc_attr( $list->id ); ?>">
+										<?php echo esc_html( $list->name ); ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+						</td>
+					</tr>
+					<tr class="mskd-export-subscribers-options">
+						<th scope="row">
+							<label for="export_status"><?php esc_html_e( 'Filter by status', 'mail-system-by-katsarov-design' ); ?></label>
+						</th>
+						<td>
+							<select name="export_status" id="export_status" class="regular-text">
+								<option value=""><?php esc_html_e( 'All statuses', 'mail-system-by-katsarov-design' ); ?></option>
+								<option value="active"><?php esc_html_e( 'Active', 'mail-system-by-katsarov-design' ); ?></option>
+								<option value="inactive"><?php esc_html_e( 'Inactive', 'mail-system-by-katsarov-design' ); ?></option>
+								<option value="unsubscribed"><?php esc_html_e( 'Unsubscribed', 'mail-system-by-katsarov-design' ); ?></option>
+							</select>
+						</td>
+					</tr>
+				</table>
+
+				<p class="submit">
+					<input type="submit" name="mskd_export" class="button button-primary" value="<?php esc_attr_e( 'Export', 'mail-system-by-katsarov-design' ); ?>">
+				</p>
+			</form>
+		</div>
+
+		<!-- Import Section -->
+		<div class="mskd-card">
+			<h2 class="mskd-card-title">
+				<span class="dashicons dashicons-upload"></span>
+				<?php esc_html_e( 'Import', 'mail-system-by-katsarov-design' ); ?>
+			</h2>
+			<p class="description">
+				<?php esc_html_e( 'Import subscribers or lists from a CSV file.', 'mail-system-by-katsarov-design' ); ?>
+			</p>
+
+			<form method="post" action="" enctype="multipart/form-data">
+				<?php wp_nonce_field( 'mskd_import', 'mskd_nonce' ); ?>
+
+				<table class="form-table">
+					<tr>
+						<th scope="row">
+							<label for="import_type"><?php esc_html_e( 'Import type', 'mail-system-by-katsarov-design' ); ?></label>
+						</th>
+						<td>
+							<select name="import_type" id="import_type" class="regular-text">
+								<option value="subscribers"><?php esc_html_e( 'Subscribers', 'mail-system-by-katsarov-design' ); ?></option>
+								<option value="lists"><?php esc_html_e( 'Lists', 'mail-system-by-katsarov-design' ); ?></option>
+							</select>
+						</td>
+					</tr>
+					<input type="hidden" name="import_format" value="csv">
+					<tr>
+						<th scope="row">
+							<label for="import_file"><?php esc_html_e( 'File', 'mail-system-by-katsarov-design' ); ?></label>
+						</th>
+						<td>
+							<input type="file" name="import_file" id="import_file" accept=".csv" required>
+							<p class="description">
+								<?php esc_html_e( 'Maximum file size: 5MB.', 'mail-system-by-katsarov-design' ); ?>
+							</p>
+						</td>
+					</tr>
+					<tr class="mskd-import-subscribers-options">
+						<th scope="row">
+							<?php esc_html_e( 'Options', 'mail-system-by-katsarov-design' ); ?>
+						</th>
+						<td>
+							<fieldset>
+								<label>
+									<input type="checkbox" name="update_existing" value="1">
+									<?php esc_html_e( 'Update existing subscribers', 'mail-system-by-katsarov-design' ); ?>
+								</label>
+								<p class="description">
+									<?php esc_html_e( 'If a subscriber with the same email already exists, update their information.', 'mail-system-by-katsarov-design' ); ?>
+								</p>
+								<br>
+								<label>
+									<input type="checkbox" name="assign_lists" value="1" checked>
+									<?php esc_html_e( 'Assign to lists from file', 'mail-system-by-katsarov-design' ); ?>
+								</label>
+								<p class="description">
+									<?php esc_html_e( 'If the file contains a "lists" column, assign subscribers to those lists. Lists will be created if they do not exist.', 'mail-system-by-katsarov-design' ); ?>
+								</p>
+							</fieldset>
+						</td>
+					</tr>
+				</table>
+
+				<p class="submit">
+					<input type="submit" name="mskd_import" class="button button-primary" value="<?php esc_attr_e( 'Import', 'mail-system-by-katsarov-design' ); ?>">
+				</p>
+			</form>
+		</div>
+
+		<!-- File Format Info -->
+		<div class="mskd-card mskd-card-info">
+			<h2 class="mskd-card-title">
+				<span class="dashicons dashicons-info"></span>
+				<?php esc_html_e( 'File format requirements', 'mail-system-by-katsarov-design' ); ?>
+			</h2>
+
+			<h3><?php esc_html_e( 'Subscribers CSV format', 'mail-system-by-katsarov-design' ); ?></h3>
+			<p class="description">
+				<?php esc_html_e( 'The CSV file must contain at minimum an "email" column. Optional columns:', 'mail-system-by-katsarov-design' ); ?>
+			</p>
+			<ul>
+				<li><code>email</code> - <?php esc_html_e( 'Email address (required)', 'mail-system-by-katsarov-design' ); ?></li>
+				<li><code>first_name</code> - <?php esc_html_e( 'First name', 'mail-system-by-katsarov-design' ); ?></li>
+				<li><code>last_name</code> - <?php esc_html_e( 'Last name', 'mail-system-by-katsarov-design' ); ?></li>
+				<li><code>status</code> - <?php esc_html_e( 'Status: active, inactive, or unsubscribed (default: active)', 'mail-system-by-katsarov-design' ); ?></li>
+				<li><code>lists</code> - <?php esc_html_e( 'List names separated by semicolon (;)', 'mail-system-by-katsarov-design' ); ?></li>
+			</ul>
+
+			<h4><?php esc_html_e( 'Example:', 'mail-system-by-katsarov-design' ); ?></h4>
+			<pre class="mskd-code-example">email,first_name,last_name,status,lists
+john@example.com,John,Doe,active,Newsletter;Updates
+jane@example.com,Jane,Smith,active,Newsletter</pre>
+
+			<h3><?php esc_html_e( 'Lists CSV format', 'mail-system-by-katsarov-design' ); ?></h3>
+			<p class="description">
+				<?php esc_html_e( 'The CSV file must contain at minimum a "name" column. Optional columns:', 'mail-system-by-katsarov-design' ); ?>
+			</p>
+			<ul>
+				<li><code>name</code> - <?php esc_html_e( 'List name (required)', 'mail-system-by-katsarov-design' ); ?></li>
+				<li><code>description</code> - <?php esc_html_e( 'List description', 'mail-system-by-katsarov-design' ); ?></li>
+			</ul>
+
+			<h4><?php esc_html_e( 'Example:', 'mail-system-by-katsarov-design' ); ?></h4>
+			<pre class="mskd-code-example">name,description
+Newsletter,Weekly newsletter subscribers
+Updates,Product update notifications</pre>
+		</div>
+	</div>
+</div>

@@ -277,6 +277,37 @@
                 }
             });
         }
+
+        // =====================================================================
+        // Import/Export Page
+        // =====================================================================
+
+        // Only run import/export logic if on the import/export page
+        if ($('.mskd-import-export-container').length) {
+            // Toggle subscriber-specific export options
+            $('#export_type').on('change', function() {
+                if ($(this).val() === 'subscribers') {
+                    $('.mskd-export-subscribers-options').show();
+                } else {
+                    $('.mskd-export-subscribers-options').hide();
+                }
+            });
+
+            // Toggle subscriber-specific import options
+            $('#import_type').on('change', function() {
+                if ($(this).val() === 'subscribers') {
+                    $('.mskd-import-subscribers-options').show();
+                } else {
+                    $('.mskd-import-subscribers-options').hide();
+                }
+            });
+
+            // Update accepted file types based on format
+            $('#import_format').on('change', function() {
+                var format = $(this).val();
+                $('#import_file').attr('accept', '.' + format);
+            });
+        }
     });
 
 })(jQuery);

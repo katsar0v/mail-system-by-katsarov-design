@@ -1,0 +1,90 @@
+// ==========================================================================
+// Import/Export Component
+// ==========================================================================
+// Styles for the import/export admin page.
+
+@use '../abstracts' as *;
+
+// Container layout
+.mskd-import-export-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $grid-gap;
+  margin-top: $spacing-5;
+}
+
+// Cards within import/export container
+.mskd-import-export-container .mskd-card {
+  @include card-padded;
+  flex: 1 1 400px;
+  max-width: 600px;
+}
+
+// Info card spans full width
+.mskd-import-export-container .mskd-card-info {
+  flex: 1 1 100%;
+  max-width: 100%;
+}
+
+// Card title styling
+.mskd-card-title {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  margin-top: 0;
+  margin-bottom: $spacing-3;
+  padding-bottom: $spacing-3;
+  border-bottom: $border-width solid $color-gray-200;
+
+  .dashicons {
+    color: $color-primary;
+  }
+}
+
+// Code example blocks
+.mskd-code-example {
+  background: $color-gray-100;
+  border: $border-width solid $color-gray-300;
+  border-radius: $border-radius;
+  padding: $spacing-3;
+  overflow-x: auto;
+  font-family: $font-family-code;
+  font-size: $font-size-sm;
+  line-height: $line-height-normal;
+  white-space: pre;
+}
+
+// Info card headings
+.mskd-card-info {
+  h3 {
+    margin-top: $spacing-5;
+    margin-bottom: $spacing-3;
+  }
+
+  h4 {
+    margin-top: $spacing-4;
+    margin-bottom: $spacing-1;
+  }
+
+  ul {
+    margin-left: $spacing-5;
+  }
+
+  ul li {
+    margin-bottom: $spacing-1;
+
+    code {
+      background: $color-wp-background;
+      padding: $spacing-1 $spacing-2;
+      border-radius: $border-radius-sm;
+    }
+  }
+}
+
+// Responsive adjustments
+@include mobile {
+  .mskd-import-export-container .mskd-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}

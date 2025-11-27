@@ -1173,3 +1173,256 @@ msgstr "Прогрес"
 msgid "Scheduled for"
 msgstr "Насрочен за"
 
+#: includes/Admin/class-admin.php
+msgid "Import / Export"
+msgstr "Импорт / Експорт"
+
+#: admin/partials/import-export.php
+msgid "Export"
+msgstr "Експорт"
+
+#: admin/partials/import-export.php
+msgid "Export subscribers or lists to a CSV file for backup or migration."
+msgstr "Експортирайте абонати или списъци в CSV файл за архивиране или миграция."
+
+#: admin/partials/import-export.php
+msgid "Export type"
+msgstr "Тип експорт"
+
+#: admin/partials/import-export.php
+msgid "Format"
+msgstr "Формат"
+
+#: admin/partials/import-export.php
+msgid "CSV is recommended for Excel and spreadsheet applications."
+msgstr "CSV се препоръчва за Excel и приложения за електронни таблици."
+
+#: admin/partials/import-export.php
+msgid "Filter by list"
+msgstr "Филтър по списък"
+
+#: admin/partials/import-export.php
+msgid "All lists"
+msgstr "Всички списъци"
+
+#: admin/partials/import-export.php
+msgid "Filter by status"
+msgstr "Филтър по статус"
+
+#: admin/partials/import-export.php
+msgid "All statuses"
+msgstr "Всички статуси"
+
+#: admin/partials/import-export.php
+msgid "Import"
+msgstr "Импорт"
+
+#: admin/partials/import-export.php
+msgid "Import subscribers or lists from a CSV file."
+msgstr "Импортирайте абонати или списъци от CSV файл."
+
+#: admin/partials/import-export.php
+msgid "Import type"
+msgstr "Тип импорт"
+
+#: admin/partials/import-export.php
+msgid "File"
+msgstr "Файл"
+
+#: admin/partials/import-export.php
+msgid "Maximum file size: 5MB."
+msgstr "Максимален размер на файла: 5MB."
+
+#: admin/partials/import-export.php
+msgid "Options"
+msgstr "Опции"
+
+#: admin/partials/import-export.php
+msgid "Update existing subscribers"
+msgstr "Актуализирай съществуващи абонати"
+
+#: admin/partials/import-export.php
+msgid "If a subscriber with the same email already exists, update their information."
+msgstr "Ако абонат със същия имейл вече съществува, актуализирай информацията му."
+
+#: admin/partials/import-export.php
+msgid "Assign to lists from file"
+msgstr "Добави към списъци от файла"
+
+#: admin/partials/import-export.php
+msgid "If the file contains a \"lists\" column, assign subscribers to those lists. Lists will be created if they do not exist."
+msgstr "Ако файлът съдържа колона \"lists\", добави абонатите към тези списъци. Списъците ще бъдат създадени, ако не съществуват."
+
+#: admin/partials/import-export.php
+msgid "File format requirements"
+msgstr "Изисквания за формат на файла"
+
+#: admin/partials/import-export.php
+msgid "Subscribers CSV format"
+msgstr "CSV формат за абонати"
+
+#: admin/partials/import-export.php
+msgid "The CSV file must contain at minimum an \"email\" column. Optional columns:"
+msgstr "CSV файлът трябва да съдържа минимум колона \"email\". Незадължителни колони:"
+
+#: admin/partials/import-export.php
+msgid "Email address (required)"
+msgstr "Имейл адрес (задължително)"
+
+#: admin/partials/import-export.php
+msgid "Status: active, inactive, or unsubscribed (default: active)"
+msgstr "Статус: active, inactive или unsubscribed (по подразбиране: active)"
+
+#: admin/partials/import-export.php
+msgid "List names separated by semicolon (;)"
+msgstr "Имена на списъци, разделени с точка и запетая (;)"
+
+#: admin/partials/import-export.php
+msgid "Example:"
+msgstr "Пример:"
+
+#: admin/partials/import-export.php
+msgid "Lists CSV format"
+msgstr "CSV формат за списъци"
+
+#: admin/partials/import-export.php
+msgid "The CSV file must contain at minimum a \"name\" column. Optional columns:"
+msgstr "CSV файлът трябва да съдържа минимум колона \"name\". Незадължителни колони:"
+
+#: admin/partials/import-export.php
+msgid "List name (required)"
+msgstr "Име на списък (задължително)"
+
+#: admin/partials/import-export.php
+msgid "List description"
+msgstr "Описание на списък"
+
+#: includes/Services/class-import-export-service.php
+msgid "File size exceeds the maximum limit of 5MB."
+msgstr "Размерът на файла надвишава максималния лимит от 5MB."
+
+#. translators: %s: expected format
+#: includes/Services/class-import-export-service.php
+msgid "Invalid file format. Expected %s file."
+msgstr "Невалиден формат на файла. Очаква се %s файл."
+
+#: includes/Services/class-import-export-service.php
+msgid "Invalid file type. The file content does not match the expected format."
+msgstr "Невалиден тип файл. Съдържанието на файла не съответства на очаквания формат."
+
+#: includes/Services/class-import-export-service.php
+msgid "Could not read the file."
+msgstr "Файлът не може да бъде прочетен."
+
+#: includes/Services/class-import-export-service.php
+msgid "Could not read CSV headers."
+msgstr "CSV заглавията не могат да бъдат прочетени."
+
+#: includes/Services/class-import-export-service.php
+msgid "The CSV file must contain an \"email\" column."
+msgstr "CSV файлът трябва да съдържа колона \"email\"."
+
+#. translators: 1: row number, 2: email value
+#: includes/Services/class-import-export-service.php
+msgid "Row %1$d: Invalid email address \"%2$s\"."
+msgstr "Ред %1$d: Невалиден имейл адрес \"%2$s\"."
+
+#. translators: %s: email address
+#: includes/Services/class-import-export-service.php
+msgid "Failed to import subscriber: %s"
+msgstr "Неуспешен импорт на абонат: %s"
+
+#: includes/Services/class-import-export-service.php
+msgid "The CSV file must contain a \"name\" column."
+msgstr "CSV файлът трябва да съдържа колона \"name\"."
+
+#. translators: %d: row number
+#: includes/Services/class-import-export-service.php
+msgid "Row %d: List name is required."
+msgstr "Ред %d: Името на списъка е задължително."
+
+#. translators: %s: list name
+#: includes/Services/class-import-export-service.php
+msgid "Failed to import list: %s"
+msgstr "Неуспешен импорт на списък: %s"
+
+#: includes/Services/class-import-export-service.php
+msgid "File exceeds the maximum upload size."
+msgstr "Файлът надвишава максималния размер за качване."
+
+#: includes/Services/class-import-export-service.php
+msgid "File exceeds the maximum form size."
+msgstr "Файлът надвишава максималния размер на формуляра."
+
+#: includes/Services/class-import-export-service.php
+msgid "File was only partially uploaded."
+msgstr "Файлът беше качен само частично."
+
+#: includes/Services/class-import-export-service.php
+msgid "No file was uploaded."
+msgstr "Не беше качен файл."
+
+#: includes/Services/class-import-export-service.php
+msgid "Missing temporary folder."
+msgstr "Липсваща временна папка."
+
+#: includes/Services/class-import-export-service.php
+msgid "Failed to write file to disk."
+msgstr "Неуспешен запис на файла на диска."
+
+#: includes/Services/class-import-export-service.php
+msgid "A PHP extension stopped the file upload."
+msgstr "PHP разширение спря качването на файла."
+
+#: includes/Services/class-import-export-service.php
+msgid "Unknown upload error."
+msgstr "Неизвестна грешка при качване."
+
+#: includes/Admin/class-admin-import-export.php
+msgid "Please select a file to import."
+msgstr "Моля, изберете файл за импорт."
+
+#. translators: %d: number of additional errors
+#: includes/Admin/class-admin-import-export.php
+msgid "... and %d more validation errors."
+msgstr "... и още %d грешки при валидация."
+
+#: includes/Admin/class-admin-import-export.php
+msgid "No valid records found to import."
+msgstr "Не бяха намерени валидни записи за импорт."
+
+#. translators: %d: number of imported subscribers
+#: includes/Admin/class-admin-import-export.php
+msgid "%d subscriber imported."
+msgid_plural "%d subscribers imported."
+msgstr[0] "%d абонат импортиран."
+msgstr[1] "%d абонати импортирани."
+
+#. translators: %d: number of updated subscribers
+#: includes/Admin/class-admin-import-export.php
+msgid "%d subscriber updated."
+msgid_plural "%d subscribers updated."
+msgstr[0] "%d абонат актуализиран."
+msgstr[1] "%d абонати актуализирани."
+
+#. translators: %d: number of skipped subscribers
+#: includes/Admin/class-admin-import-export.php
+msgid "%d subscriber skipped (already exists)."
+msgid_plural "%d subscribers skipped (already exist)."
+msgstr[0] "%d абонат пропуснат (вече съществува)."
+msgstr[1] "%d абонати пропуснати (вече съществуват)."
+
+#. translators: %d: number of imported lists
+#: includes/Admin/class-admin-import-export.php
+msgid "%d list imported."
+msgid_plural "%d lists imported."
+msgstr[0] "%d списък импортиран."
+msgstr[1] "%d списъци импортирани."
+
+#. translators: %d: number of skipped lists
+#: includes/Admin/class-admin-import-export.php
+msgid "%d list skipped (already exists)."
+msgid_plural "%d lists skipped (already exist)."
+msgstr[0] "%d списък пропуснат (вече съществува)."
+msgstr[1] "%d списъци пропуснати (вече съществуват)."
+

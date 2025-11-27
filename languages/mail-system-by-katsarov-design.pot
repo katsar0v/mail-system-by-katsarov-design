@@ -1170,3 +1170,257 @@ msgstr ""
 msgid "Scheduled for"
 msgstr ""
 
+#: includes/Admin/class-admin.php
+msgid "Import / Export"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Export"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Export subscribers or lists to a CSV file for backup or migration."
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Export type"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Format"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "CSV is recommended for Excel and spreadsheet applications."
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Filter by list"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "All lists"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Filter by status"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "All statuses"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Import"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Import subscribers or lists from a CSV file."
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Import type"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "File"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Maximum file size: 5MB."
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Options"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Update existing subscribers"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "If a subscriber with the same email already exists, update their information."
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Assign to lists from file"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "If the file contains a \"lists\" column, assign subscribers to those lists. Lists will be created if they do not exist."
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "File format requirements"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Subscribers CSV format"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "The CSV file must contain at minimum an \"email\" column. Optional columns:"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Email address (required)"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Status: active, inactive, or unsubscribed (default: active)"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "List names separated by semicolon (;)"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Example:"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Lists CSV format"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "The CSV file must contain at minimum a \"name\" column. Optional columns:"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "List name (required)"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "List description"
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "File size exceeds the maximum limit of 5MB."
+msgstr ""
+
+#. translators: %s: expected format
+#: includes/Services/class-import-export-service.php
+msgid "Invalid file format. Expected %s file."
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "Invalid file type. The file content does not match the expected format."
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "Could not read the file."
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "Could not read CSV headers."
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "The CSV file must contain an \"email\" column."
+msgstr ""
+
+#. translators: 1: row number, 2: email value
+#: includes/Services/class-import-export-service.php
+msgid "Row %1$d: Invalid email address \"%2$s\"."
+msgstr ""
+
+#. translators: %s: email address
+#: includes/Services/class-import-export-service.php
+msgid "Failed to import subscriber: %s"
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "The CSV file must contain a \"name\" column."
+msgstr ""
+
+#. translators: %d: row number
+#: includes/Services/class-import-export-service.php
+msgid "Row %d: List name is required."
+msgstr ""
+
+#. translators: %s: list name
+#: includes/Services/class-import-export-service.php
+msgid "Failed to import list: %s"
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "File exceeds the maximum upload size."
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "File exceeds the maximum form size."
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "File was only partially uploaded."
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "No file was uploaded."
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "Missing temporary folder."
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "Failed to write file to disk."
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "A PHP extension stopped the file upload."
+msgstr ""
+
+#: includes/Services/class-import-export-service.php
+msgid "Unknown upload error."
+msgstr ""
+
+#: includes/Admin/class-admin-import-export.php
+msgid "Please select a file to import."
+msgstr ""
+
+#. translators: %d: number of additional errors
+#: includes/Admin/class-admin-import-export.php
+msgid "... and %d more validation errors."
+msgstr ""
+
+#: includes/Admin/class-admin-import-export.php
+msgid "No valid records found to import."
+msgstr ""
+
+#. translators: %d: number of imported subscribers
+#: includes/Admin/class-admin-import-export.php
+msgid "%d subscriber imported."
+msgid_plural "%d subscribers imported."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of updated subscribers
+#: includes/Admin/class-admin-import-export.php
+msgid "%d subscriber updated."
+msgid_plural "%d subscribers updated."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of skipped subscribers
+#: includes/Admin/class-admin-import-export.php
+msgid "%d subscriber skipped (already exists)."
+msgid_plural "%d subscribers skipped (already exist)."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of imported lists
+#: includes/Admin/class-admin-import-export.php
+msgid "%d list imported."
+msgid_plural "%d lists imported."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of skipped lists
+#: includes/Admin/class-admin-import-export.php
+msgid "%d list skipped (already exists)."
+msgid_plural "%d lists skipped (already exist)."
+msgstr[0] ""
+msgstr[1] ""
+
+

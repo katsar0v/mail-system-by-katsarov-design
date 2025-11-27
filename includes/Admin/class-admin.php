@@ -71,15 +71,23 @@ class Admin {
     private $ajax;
 
     /**
+     * Import/Export controller.
+     *
+     * @var Admin_Import_Export
+     */
+    private $import_export;
+
+    /**
      * Constructor - initialize controllers.
      */
     public function __construct() {
-        $this->subscribers = new Admin_Subscribers();
-        $this->lists       = new Admin_Lists();
-        $this->email       = new Admin_Email();
-        $this->queue       = new Admin_Queue();
-        $this->settings    = new Admin_Settings();
-        $this->ajax        = new Admin_Ajax();
+        $this->subscribers   = new Admin_Subscribers();
+        $this->lists         = new Admin_Lists();
+        $this->email         = new Admin_Email();
+        $this->queue         = new Admin_Queue();
+        $this->settings      = new Admin_Settings();
+        $this->ajax          = new Admin_Ajax();
+        $this->import_export = new Admin_Import_Export();
     }
 
     /**
@@ -184,6 +192,16 @@ class Admin {
             'manage_options',
             self::PAGE_PREFIX . 'settings',
             array( $this->settings, 'render' )
+        );
+
+        // Import/Export.
+        add_submenu_page(
+            self::PAGE_PREFIX . 'dashboard',
+            __( 'Import / Export', 'mail-system-by-katsarov-design' ),
+            __( 'Import / Export', 'mail-system-by-katsarov-design' ),
+            'manage_options',
+            self::PAGE_PREFIX . 'import-export',
+            array( $this->import_export, 'render' )
         );
     }
 
@@ -367,6 +385,7 @@ class Admin {
         $this->email->handle_actions();
         $this->queue->handle_actions();
         $this->settings->handle_actions();
+        $this->import_export->handle_actions();
     }
 
     /**
@@ -430,5 +449,14 @@ class Admin {
      */
     public function get_ajax_handler(): Admin_Ajax {
         return $this->ajax;
+    }
+
+    /**
+     * Get the import/export controller.
+     *
+     * @return Admin_Import_Export
+     */
+    public function get_import_export_controller(): Admin_Import_Export {
+        return $this->import_export;
     }
 }
