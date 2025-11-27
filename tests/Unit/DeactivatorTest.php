@@ -38,10 +38,14 @@ class DeactivatorTest extends TestCase {
             ->with( 'mskd_process_queue' )
             ->andReturn( $timestamp );
 
+        $unschedule_called = false;
         Functions\expect( 'wp_unschedule_event' )
             ->once()
             ->with( $timestamp, 'mskd_process_queue' )
-            ->andReturn( true );
+            ->andReturnUsing( function() use ( &$unschedule_called ) {
+                $unschedule_called = true;
+                return true;
+            } );
 
         Functions\expect( 'wp_clear_scheduled_hook' )
             ->once()
@@ -49,6 +53,8 @@ class DeactivatorTest extends TestCase {
             ->andReturn( 1 );
 
         \MSKD_Deactivator::deactivate();
+        
+        $this->assertTrue( $unschedule_called, 'wp_unschedule_event should be called during deactivation' );
     }
 
     /**
@@ -65,11 +71,17 @@ class DeactivatorTest extends TestCase {
             ->never();
 
         // But should still clear all scheduled hooks.
+        $clear_called = false;
         Functions\expect( 'wp_clear_scheduled_hook' )
             ->once()
             ->with( 'mskd_process_queue' )
-            ->andReturn( 0 );
+            ->andReturnUsing( function() use ( &$clear_called ) {
+                $clear_called = true;
+                return 0;
+            } );
 
         \MSKD_Deactivator::deactivate();
+        
+        $this->assertTrue( $clear_called, 'wp_clear_scheduled_hook should be called during deactivation' );
     }
 }

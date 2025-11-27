@@ -131,8 +131,12 @@ abstract class TestCase extends PHPUnitTestCase {
                 'get_option'    => function ( $option, $default = false ) {
                     return $default;
                 },
-                'update_option' => '__return_true',
-                'delete_option' => '__return_true',
+                'update_option' => function () {
+                    return true;
+                },
+                'delete_option' => function () {
+                    return true;
+                },
             )
         );
 
@@ -149,8 +153,17 @@ abstract class TestCase extends PHPUnitTestCase {
                     $values = array(
                         'name'        => 'Test Site',
                         'admin_email' => 'admin@example.com',
+                        'charset'     => 'UTF-8',
                     );
                     return $values[ $show ] ?? '';
+                },
+                'bloginfo'             => function ( $show ) {
+                    $values = array(
+                        'name'        => 'Test Site',
+                        'admin_email' => 'admin@example.com',
+                        'charset'     => 'UTF-8',
+                    );
+                    echo $values[ $show ] ?? '';
                 },
                 'wp_timezone'          => function () {
                     return new \DateTimeZone( 'UTC' );

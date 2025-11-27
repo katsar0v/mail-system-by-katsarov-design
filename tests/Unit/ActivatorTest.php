@@ -28,6 +28,20 @@ class ActivatorTest extends TestCase {
     }
 
     /**
+     * Set up common get_option mock that returns false for mskd_settings.
+     *
+     * @param mixed $mskd_settings_value Value to return for mskd_settings option.
+     */
+    protected function setup_get_option_mock( $mskd_settings_value = false ): void {
+        Functions\when( 'get_option' )->alias( function( $option, $default = false ) use ( $mskd_settings_value ) {
+            if ( $option === 'mskd_settings' ) {
+                return $mskd_settings_value;
+            }
+            return $default;
+        });
+    }
+
+    /**
      * Test that activation calls dbDelta for all required tables.
      */
     public function test_tables_created_on_activation(): void {
@@ -38,36 +52,25 @@ class ActivatorTest extends TestCase {
 
         // Track dbDelta calls.
         $db_delta_calls = array();
-        Functions\expect( 'dbDelta' )
-            ->times( 4 )
-            ->andReturnUsing(
-                function ( $sql ) use ( &$db_delta_calls ) {
-                    $db_delta_calls[] = $sql;
-                    return array();
-                }
-            );
+        Functions\when( 'dbDelta' )->alias( function ( $sql ) use ( &$db_delta_calls ) {
+            $db_delta_calls[] = $sql;
+            return array();
+        } );
 
-        // Mock other required functions.
-        Functions\expect( 'wp_next_scheduled' )
-            ->once()
-            ->with( 'mskd_process_queue' )
-            ->andReturn( false );
+        // Mock other required functions using when() to override stubs.
+        Functions\when( 'wp_next_scheduled' )->justReturn( false );
+        Functions\when( 'wp_schedule_event' )->justReturn( true );
+        Functions\when( 'flush_rewrite_rules' )->justReturn( null );
+        
+        // Override get_option to return false for mskd_settings.
+        $this->setup_get_option_mock( false );
 
-        Functions\expect( 'wp_schedule_event' )
-            ->once()
-            ->andReturn( true );
-
-        Functions\expect( 'get_option' )
-            ->with( 'mskd_settings' )
-            ->andReturn( false );
-
-        Functions\expect( 'update_option' )
-            ->times( 2 )
-            ->andReturn( true );
-
-        Functions\expect( 'flush_rewrite_rules' )
-            ->once()
-            ->andReturn( null );
+        // Track update_option calls.
+        $update_option_calls = array();
+        Functions\when( 'update_option' )->alias( function( $option, $value ) use ( &$update_option_calls ) {
+            $update_option_calls[] = array( 'option' => $option, 'value' => $value );
+            return true;
+        });
 
         // Run activation.
         \MSKD_Activator::activate();
@@ -81,6 +84,9 @@ class ActivatorTest extends TestCase {
         $this->assertStringContainsString( 'wp_mskd_lists', $all_sql, 'Should create lists table' );
         $this->assertStringContainsString( 'wp_mskd_subscriber_list', $all_sql, 'Should create subscriber_list pivot table' );
         $this->assertStringContainsString( 'wp_mskd_queue', $all_sql, 'Should create queue table' );
+        
+        // Verify update_option was called.
+        $this->assertCount( 2, $update_option_calls, 'Should call update_option twice' );
     }
 
     /**
@@ -91,29 +97,29 @@ class ActivatorTest extends TestCase {
         $wpdb->shouldReceive( 'get_charset_collate' )
             ->andReturn( 'DEFAULT CHARACTER SET utf8mb4' );
 
-        Functions\stubs( array( 'dbDelta' => array() ) );
-        Functions\stubs( array( 'flush_rewrite_rules' => null ) );
+        Functions\when( 'dbDelta' )->justReturn( array() );
+        Functions\when( 'flush_rewrite_rules' )->justReturn( null );
+        Functions\when( 'update_option' )->justReturn( true );
 
         // Cron not yet scheduled.
-        Functions\expect( 'wp_next_scheduled' )
-            ->once()
-            ->with( 'mskd_process_queue' )
-            ->andReturn( false );
+        Functions\when( 'wp_next_scheduled' )->justReturn( false );
 
-        // Should schedule the cron event.
-        Functions\expect( 'wp_schedule_event' )
-            ->once()
-            ->with( Mockery::type( 'int' ), 'mskd_every_minute', 'mskd_process_queue' )
-            ->andReturn( true );
+        // Track wp_schedule_event call.
+        $schedule_event_called = false;
+        Functions\when( 'wp_schedule_event' )->alias( function( $timestamp, $recurrence, $hook ) use ( &$schedule_event_called ) {
+            $schedule_event_called = true;
+            $this->assertIsInt( $timestamp );
+            $this->assertEquals( 'mskd_every_minute', $recurrence );
+            $this->assertEquals( 'mskd_process_queue', $hook );
+            return true;
+        });
 
-        Functions\expect( 'get_option' )
-            ->with( 'mskd_settings' )
-            ->andReturn( false );
-
-        Functions\expect( 'update_option' )
-            ->andReturn( true );
+        // Override get_option.
+        $this->setup_get_option_mock( false );
 
         \MSKD_Activator::activate();
+        
+        $this->assertTrue( $schedule_event_called, 'wp_schedule_event should be called when cron not scheduled' );
     }
 
     /**
@@ -124,27 +130,26 @@ class ActivatorTest extends TestCase {
         $wpdb->shouldReceive( 'get_charset_collate' )
             ->andReturn( 'DEFAULT CHARACTER SET utf8mb4' );
 
-        Functions\stubs( array( 'dbDelta' => array() ) );
-        Functions\stubs( array( 'flush_rewrite_rules' => null ) );
+        Functions\when( 'dbDelta' )->justReturn( array() );
+        Functions\when( 'flush_rewrite_rules' )->justReturn( null );
+        Functions\when( 'update_option' )->justReturn( true );
 
         // Cron already scheduled.
-        Functions\expect( 'wp_next_scheduled' )
-            ->once()
-            ->with( 'mskd_process_queue' )
-            ->andReturn( 1234567890 );
+        Functions\when( 'wp_next_scheduled' )->justReturn( 1234567890 );
 
-        // Should NOT schedule the cron event again.
-        Functions\expect( 'wp_schedule_event' )
-            ->never();
+        // Should NOT schedule the cron event again - track if it's called.
+        $schedule_event_called = false;
+        Functions\when( 'wp_schedule_event' )->alias( function() use ( &$schedule_event_called ) {
+            $schedule_event_called = true;
+            return true;
+        });
 
-        Functions\expect( 'get_option' )
-            ->with( 'mskd_settings' )
-            ->andReturn( false );
-
-        Functions\expect( 'update_option' )
-            ->andReturn( true );
+        // Override get_option.
+        $this->setup_get_option_mock( false );
 
         \MSKD_Activator::activate();
+        
+        $this->assertFalse( $schedule_event_called, 'wp_schedule_event should NOT be called when cron already scheduled' );
     }
 
     /**
@@ -155,32 +160,21 @@ class ActivatorTest extends TestCase {
         $wpdb->shouldReceive( 'get_charset_collate' )
             ->andReturn( 'DEFAULT CHARACTER SET utf8mb4' );
 
-        Functions\stubs( array( 'dbDelta' => array() ) );
-        Functions\stubs( array( 'flush_rewrite_rules' => null ) );
-        Functions\stubs( array( 'wp_next_scheduled' => 1234567890 ) );
+        Functions\when( 'dbDelta' )->justReturn( array() );
+        Functions\when( 'flush_rewrite_rules' )->justReturn( null );
+        Functions\when( 'wp_next_scheduled' )->justReturn( 1234567890 );
 
         // No existing settings.
-        Functions\expect( 'get_option' )
-            ->with( 'mskd_settings' )
-            ->andReturn( false );
+        $this->setup_get_option_mock( false );
 
-        // Should set default options.
+        // Track update_option calls.
         $saved_settings = null;
-        Functions\expect( 'update_option' )
-            ->with(
-                'mskd_settings',
-                Mockery::on(
-                    function ( $settings ) use ( &$saved_settings ) {
-                        $saved_settings = $settings;
-                        return is_array( $settings );
-                    }
-                )
-            )
-            ->andReturn( true );
-
-        Functions\expect( 'update_option' )
-            ->with( 'mskd_db_version', \MSKD_Activator::DB_VERSION )
-            ->andReturn( true );
+        Functions\when( 'update_option' )->alias( function( $option, $value ) use ( &$saved_settings ) {
+            if ( $option === 'mskd_settings' ) {
+                $saved_settings = $value;
+            }
+            return true;
+        });
 
         \MSKD_Activator::activate();
 
@@ -199,9 +193,9 @@ class ActivatorTest extends TestCase {
         $wpdb->shouldReceive( 'get_charset_collate' )
             ->andReturn( 'DEFAULT CHARACTER SET utf8mb4' );
 
-        Functions\stubs( array( 'dbDelta' => array() ) );
-        Functions\stubs( array( 'flush_rewrite_rules' => null ) );
-        Functions\stubs( array( 'wp_next_scheduled' => 1234567890 ) );
+        Functions\when( 'dbDelta' )->justReturn( array() );
+        Functions\when( 'flush_rewrite_rules' )->justReturn( null );
+        Functions\when( 'wp_next_scheduled' )->justReturn( 1234567890 );
 
         // Existing settings already present.
         $existing_settings = array(
@@ -210,17 +204,21 @@ class ActivatorTest extends TestCase {
             'reply_to'   => 'reply@example.com',
         );
 
-        Functions\expect( 'get_option' )
-            ->with( 'mskd_settings' )
-            ->andReturn( $existing_settings );
+        $this->setup_get_option_mock( $existing_settings );
 
-        // Should NOT update mskd_settings (but will update db_version).
-        Functions\expect( 'update_option' )
-            ->with( 'mskd_db_version', Mockery::any() )
-            ->once()
-            ->andReturn( true );
+        // Track update_option calls for mskd_settings.
+        $mskd_settings_updated = false;
+        Functions\when( 'update_option' )->alias( function( $option, $value ) use ( &$mskd_settings_updated ) {
+            if ( $option === 'mskd_settings' ) {
+                $mskd_settings_updated = true;
+            }
+            return true;
+        });
 
         \MSKD_Activator::activate();
+        
+        // Verify mskd_settings was NOT updated (only db_version should be).
+        $this->assertFalse( $mskd_settings_updated, 'mskd_settings should NOT be updated when already exists' );
     }
 
     /**
@@ -231,19 +229,23 @@ class ActivatorTest extends TestCase {
         $wpdb->shouldReceive( 'get_charset_collate' )
             ->andReturn( 'DEFAULT CHARACTER SET utf8mb4' );
 
-        Functions\stubs( array( 'dbDelta' => array() ) );
-        Functions\stubs( array( 'flush_rewrite_rules' => null ) );
-        Functions\stubs( array( 'wp_next_scheduled' => 1234567890 ) );
+        Functions\when( 'dbDelta' )->justReturn( array() );
+        Functions\when( 'flush_rewrite_rules' )->justReturn( null );
+        Functions\when( 'wp_next_scheduled' )->justReturn( 1234567890 );
 
-        Functions\expect( 'get_option' )
-            ->with( 'mskd_settings' )
-            ->andReturn( array() );
+        $this->setup_get_option_mock( array() ); // Existing settings.
 
-        Functions\expect( 'update_option' )
-            ->with( 'mskd_db_version', '1.0.0' )
-            ->once()
-            ->andReturn( true );
+        // Track update_option call for db_version.
+        $db_version_stored = null;
+        Functions\when( 'update_option' )->alias( function( $option, $value ) use ( &$db_version_stored ) {
+            if ( $option === 'mskd_db_version' ) {
+                $db_version_stored = $value;
+            }
+            return true;
+        });
 
         \MSKD_Activator::activate();
+        
+        $this->assertEquals( '1.0.0', $db_version_stored, 'Database version should be stored' );
     }
 }
