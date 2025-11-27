@@ -852,6 +852,46 @@ msgstr "Sie werden keine E-Mails mehr von uns erhalten."
 msgid "Back to site"
 msgstr "Zurück zur Website"
 
+#: includes/services/class-list-provider.php
+msgid "External"
+msgstr "Extern"
+
+#: admin/partials/lists.php
+msgid "Source"
+msgstr "Quelle"
+
+#: admin/partials/lists.php
+msgid "Automated list from external plugin"
+msgstr "Automatische Liste von externem Plugin"
+
+#: admin/partials/lists.php admin/partials/compose.php
+msgid "Automated"
+msgstr "Automatisch"
+
+#: admin/partials/lists.php
+msgid "Local"
+msgstr "Lokal"
+
+#: admin/partials/lists.php
+msgid "Automated lists cannot be edited"
+msgstr "Automatische Listen können nicht bearbeitet werden"
+
+#: admin/partials/lists.php admin/partials/subscribers.php
+msgid "Read-only"
+msgstr "Schreibgeschützt"
+
+#: admin/partials/subscribers.php
+msgid "External subscriber from plugin"
+msgstr "Externer Abonnent von Plugin"
+
+#: admin/partials/subscribers.php
+msgid "External subscribers cannot be edited"
+msgstr "Externe Abonnenten können nicht bearbeitet werden"
+
+#: admin/partials/subscribers.php
+msgid "External subscribers are managed by third-party plugins and appear as read-only."
+msgstr "Externe Abonnenten werden von Drittanbieter-Plugins verwaltet und werden als schreibgeschützt angezeigt."
+
 #: admin/partials/lists.php
 msgid "Send email"
 msgstr "E-Mail senden"
@@ -860,3 +900,79 @@ msgstr "E-Mail senden"
 #: admin/partials/lists.php
 msgid "... and %d more"
 msgstr "... und %d weitere"
+
+#: admin/class-admin.php
+msgid "Processing..."
+msgstr "Verarbeitung..."
+
+#: admin/class-admin.php
+msgid "Are you sure you want to delete ALL subscribers? This action cannot be undone!"
+msgstr "Sind Sie sicher, dass Sie ALLE Abonnenten löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
+
+#: admin/class-admin.php
+msgid "Are you sure you want to delete ALL lists? This action cannot be undone!"
+msgstr "Sind Sie sicher, dass Sie ALLE Listen löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
+
+#: admin/class-admin.php
+msgid "Are you sure you want to delete ALL queued emails? This action cannot be undone!"
+msgstr "Sind Sie sicher, dass Sie ALLE E-Mails aus der Warteschlange löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
+
+#: admin/class-admin.php
+msgid "All subscribers deleted successfully."
+msgstr "Alle Abonnenten wurden erfolgreich gelöscht."
+
+#: admin/class-admin.php
+msgid "All lists deleted successfully."
+msgstr "Alle Listen wurden erfolgreich gelöscht."
+
+#: admin/class-admin.php
+msgid "All queued emails deleted successfully."
+msgstr "Alle E-Mails aus der Warteschlange wurden erfolgreich gelöscht."
+
+#: admin/partials/settings.php
+msgid "Danger Zone"
+msgstr "Gefahrenzone"
+
+#: admin/partials/settings.php
+msgid "These actions are irreversible. Use with caution."
+msgstr "Diese Aktionen sind unwiderruflich. Mit Vorsicht verwenden."
+
+#: admin/partials/settings.php
+msgid "Truncate Subscribers"
+msgstr "Abonnenten löschen"
+
+#: admin/partials/settings.php
+msgid "Delete all subscribers"
+msgstr "Alle Abonnenten löschen"
+
+#: admin/partials/settings.php
+msgid "Permanently deletes all subscribers and their list associations."
+msgstr "Löscht dauerhaft alle Abonnenten und ihre Listenverknüpfungen."
+
+#: admin/partials/settings.php
+msgid "Truncate Lists"
+msgstr "Listen löschen"
+
+#: admin/partials/settings.php
+msgid "Delete all lists"
+msgstr "Alle Listen löschen"
+
+#: admin/partials/settings.php
+msgid "Permanently deletes all mailing lists and subscriber associations."
+msgstr "Löscht dauerhaft alle Mailinglisten und Abonnentenverknüpfungen."
+
+#: admin/partials/settings.php
+msgid "Truncate Queue"
+msgstr "Warteschlange löschen"
+
+#: admin/partials/settings.php
+msgid "Delete all queued emails"
+msgstr "Alle E-Mails aus der Warteschlange löschen"
+
+#: admin/partials/settings.php
+msgid "Permanently deletes all emails from the queue (pending, processing, sent, and failed)."
+msgstr "Löscht dauerhaft alle E-Mails aus der Warteschlange (ausstehend, in Bearbeitung, gesendet und fehlgeschlagen)."
+
+#: admin/partials/queue.php
+msgid "External"
+msgstr "Extern"

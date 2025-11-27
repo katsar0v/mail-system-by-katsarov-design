@@ -246,6 +246,6 @@ class ActivatorTest extends TestCase {
 
         \MSKD_Activator::activate();
         
-        $this->assertEquals( '1.0.0', $db_version_stored, 'Database version should be stored' );
+        $this->assertEquals( '1.1.0', $db_version_stored, 'Database version should be stored' );
     }
 }

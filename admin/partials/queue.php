@@ -176,7 +176,20 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                     <tr>
                         <td><?php echo esc_html( $item->id ); ?></td>
                         <td>
-                            <?php if ( $item->subscriber_id == MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID ) : ?>
+                            <?php 
+                            // Check for external/dynamic list subscriber (subscriber_id = 0 with subscriber_data)
+                            $external_data = null;
+                            if ( $item->subscriber_id == MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID && ! empty( $item->subscriber_data ) ) {
+                                $external_data = json_decode( $item->subscriber_data );
+                            }
+                            ?>
+                            <?php if ( $external_data && ! empty( $external_data->email ) ) : ?>
+                                <?php echo esc_html( $external_data->email ); ?>
+                                <?php if ( ! empty( $external_data->first_name ) || ! empty( $external_data->last_name ) ) : ?>
+                                    <br><small><?php echo esc_html( trim( ( $external_data->first_name ?? '' ) . ' ' . ( $external_data->last_name ?? '' ) ) ); ?></small>
+                                <?php endif; ?>
+                                <br><span class="mskd-external-badge"><?php _e( 'External', 'mail-system-by-katsarov-design' ); ?></span>
+                            <?php elseif ( $item->subscriber_id == MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID ) : ?>
                                 <em class="mskd-one-time-email"><?php _e( 'One-time email', 'mail-system-by-katsarov-design' ); ?></em>
                             <?php elseif ( $item->email ) : ?>
                                 <?php echo esc_html( $item->email ); ?>

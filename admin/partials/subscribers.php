@@ -173,21 +173,39 @@ if ( $action === 'edit' && $subscriber_id ) {
         // Filter by status
         $status_filter = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '';
 
-        // Get subscribers using List Provider (database + external).
-        $all_subscribers = MSKD_List_Provider::get_all_subscribers( array(
-            'status'           => $status_filter,
-            'per_page'         => $per_page,
-            'page'             => $current_page,
-            'include_external' => true,
-        ) );
+        // Get total counts for proper pagination.
+        $db_count       = MSKD_List_Provider::get_database_subscriber_count( $status_filter );
+        $external_subs  = MSKD_List_Provider::get_external_subscribers( array( 'status' => $status_filter ) );
+        $ext_count      = count( $external_subs );
+        $total_items    = $db_count + $ext_count;
+        $total_pages    = ceil( $total_items / $per_page );
+        $has_external   = $ext_count > 0;
 
-        // Get total count for pagination (database subscribers only for now, external are appended).
-        $total_items = MSKD_List_Provider::get_total_subscriber_count( $status_filter );
-        $total_pages = ceil( $total_items / $per_page );
+        // Calculate pagination across database + external subscribers.
+        $offset = ( $current_page - 1 ) * $per_page;
+        $all_subscribers = array();
 
-        // Get external subscribers to append (they're shown on every page for visibility).
-        $external_subscribers = MSKD_List_Provider::get_external_subscribers( array( 'status' => $status_filter ) );
-        $has_external = ! empty( $external_subscribers );
+        if ( $offset < $db_count ) {
+            // We need some database subscribers for this page.
+            $db_subscribers = MSKD_List_Provider::get_database_subscribers( array(
+                'status'   => $status_filter,
+                'per_page' => $per_page,
+                'page'     => $current_page,
+            ) );
+            $all_subscribers = $db_subscribers;
+            $remaining = $per_page - count( $db_subscribers );
+
+            // If we have room left on this page, add external subscribers.
+            if ( $remaining > 0 && $ext_count > 0 ) {
+                $all_subscribers = array_merge( $all_subscribers, array_slice( $external_subs, 0, $remaining ) );
+            }
+        } else {
+            // We've passed all database subscribers, show external only.
+            $ext_offset = $offset - $db_count;
+            if ( $ext_offset < $ext_count ) {
+                $all_subscribers = array_slice( $external_subs, $ext_offset, $per_page );
+            }
+        }
         ?>
 
         <!-- Filters -->
@@ -222,10 +240,7 @@ if ( $action === 'edit' && $subscriber_id ) {
             <thead>
                 <tr>
                     <th scope="col"><?php _e( 'Email', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Name', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Status', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Source', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Lists', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Date', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Actions', 'mail-system-by-katsarov-design' ); ?></th>
                 </tr>
@@ -236,25 +251,6 @@ if ( $action === 'edit' && $subscriber_id ) {
                         <?php
                         $is_external = isset( $sub->source ) && $sub->source === 'external';
                         $is_editable = isset( $sub->is_editable ) ? $sub->is_editable : true;
-                        
-                        // Get lists for database subscribers.
-                        $sub_lists = array();
-                        if ( ! $is_external && isset( $sub->id ) ) {
-                            $sub_lists = $wpdb->get_col( $wpdb->prepare(
-                                "SELECT l.name FROM {$wpdb->prefix}mskd_lists l
-                                INNER JOIN {$wpdb->prefix}mskd_subscriber_list sl ON l.id = sl.list_id
-                                WHERE sl.subscriber_id = %d",
-                                $sub->id
-                            ) );
-                        } elseif ( $is_external && isset( $sub->lists ) && is_array( $sub->lists ) ) {
-                            // For external subscribers, show their list names.
-                            foreach ( $sub->lists as $list_id ) {
-                                $list = MSKD_List_Provider::get_list( $list_id );
-                                if ( $list ) {
-                                    $sub_lists[] = $list->name;
-                                }
-                            }
-                        }
                         ?>
                         <tr<?php echo $is_external ? ' class="mskd-external-list"' : ''; ?>>
                             <td>
@@ -264,9 +260,6 @@ if ( $action === 'edit' && $subscriber_id ) {
                                         <?php _e( 'External', 'mail-system-by-katsarov-design' ); ?>
                                     </span>
                                 <?php endif; ?>
-                            </td>
-                            <td>
-                                <?php echo esc_html( trim( ( $sub->first_name ?? '' ) . ' ' . ( $sub->last_name ?? '' ) ) ); ?>
                             </td>
                             <td>
                                 <span class="mskd-status mskd-status-<?php echo esc_attr( $sub->status ); ?>">
@@ -279,16 +272,6 @@ if ( $action === 'edit' && $subscriber_id ) {
                                     echo esc_html( $statuses[ $sub->status ] ?? $sub->status );
                                     ?>
                                 </span>
-                            </td>
-                            <td>
-                                <?php if ( $is_external ) : ?>
-                                    <?php echo esc_html( $sub->provider ?? __( 'External', 'mail-system-by-katsarov-design' ) ); ?>
-                                <?php else : ?>
-                                    <?php _e( 'Local', 'mail-system-by-katsarov-design' ); ?>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <?php echo ! empty( $sub_lists ) ? esc_html( implode( ', ', $sub_lists ) ) : '—'; ?>
                             </td>
                             <td>
                                 <?php if ( isset( $sub->created_at ) && $sub->created_at ) : ?>
@@ -316,7 +299,7 @@ if ( $action === 'edit' && $subscriber_id ) {
                     <?php endforeach; ?>
                 <?php else : ?>
                     <tr>
-                        <td colspan="7"><?php _e( 'No subscribers found.', 'mail-system-by-katsarov-design' ); ?></td>
+                        <td colspan="4"><?php _e( 'No subscribers found.', 'mail-system-by-katsarov-design' ); ?></td>
                     </tr>
                 <?php endif; ?>
             </tbody>

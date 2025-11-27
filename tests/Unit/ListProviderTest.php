@@ -660,13 +660,11 @@ class ListProviderTest extends TestCase {
 			'status'     => 'active',
 		);
 
-		$this->wpdb->shouldReceive( 'prepare' )
-			->once()
-			->andReturn( 'prepared_query' );
-
 		$this->wpdb->shouldReceive( 'get_row' )
 			->once()
-			->with( 'prepared_query' )
+			->with( Mockery::on( function ( $query ) {
+				return strpos( $query, 'mskd_subscribers' ) !== false && strpos( $query, '42' ) !== false;
+			} ) )
 			->andReturn( $db_subscriber );
 
 		$subscriber = \MSKD_List_Provider::get_subscriber( 42 );
@@ -734,13 +732,13 @@ class ListProviderTest extends TestCase {
 			),
 		);
 
-		$this->wpdb->shouldReceive( 'prepare' )
-			->once()
-			->andReturn( 'prepared_query' );
-
 		$this->wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( 'prepared_query' )
+			->with( Mockery::on( function ( $query ) {
+				return strpos( $query, 'mskd_subscribers' ) !== false 
+					&& strpos( $query, 'mskd_subscriber_list' ) !== false 
+					&& strpos( $query, "status = 'active'" ) !== false;
+			} ) )
 			->andReturn( $db_subscribers );
 
 		$list = (object) array(

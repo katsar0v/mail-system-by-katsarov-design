@@ -1,0 +1,69 @@
+// ==========================================================================
+// Settings Page Styles
+// ==========================================================================
+
+@use 'sass:color';
+@use '../abstracts' as *;
+
+// Danger Zone Section
+.mskd-danger-heading {
+  color: $color-error;
+  margin-top: $spacing-6;
+}
+
+.mskd-danger-description {
+  color: $color-error-text;
+}
+
+.mskd-danger-zone {
+  border: 1px solid $color-error-bg;
+  border-radius: $border-radius;
+  background: rgba($color-error-bg, 0.3);
+  padding: $spacing-6;
+  margin-top: $spacing-4;
+
+  th,
+  td {
+    padding: $spacing-4 $spacing-3;
+  }
+
+  th {
+    color: $color-error-text;
+  }
+
+  .description {
+    margin-top: $spacing-2;
+  }
+}
+
+// Danger Button
+.mskd-button-danger {
+  background: $color-error !important;
+  border-color: color.adjust($color-error, $lightness: -10%) !important;
+  color: $color-white !important;
+
+  &:hover,
+  &:focus {
+    background: color.adjust($color-error, $lightness: -10%) !important;
+    border-color: color.adjust($color-error, $lightness: -15%) !important;
+    color: $color-white !important;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Truncate Result Messages
+.mskd-truncate-success {
+  color: $color-success;
+  font-weight: 600;
+  margin-left: $spacing-3;
+}
+
+.mskd-truncate-error {
+  color: $color-error;
+  font-weight: 600;
+  margin-left: $spacing-3;
+}

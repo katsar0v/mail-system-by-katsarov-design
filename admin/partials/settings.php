@@ -226,5 +226,49 @@ $smtp_password = isset( $settings['smtp_password'] ) ? base64_decode( $settings[
                        value="<?php _e( 'Save settings', 'mail-system-by-katsarov-design' ); ?>">
             </p>
         </form>
+
+        <hr>
+
+        <h2 class="mskd-danger-heading"><?php _e( 'Danger Zone', 'mail-system-by-katsarov-design' ); ?></h2>
+        <p class="description mskd-danger-description"><?php _e( 'These actions are irreversible. Use with caution.', 'mail-system-by-katsarov-design' ); ?></p>
+
+        <table class="form-table mskd-danger-zone">
+            <tr>
+                <th scope="row">
+                    <label><?php _e( 'Truncate Subscribers', 'mail-system-by-katsarov-design' ); ?></label>
+                </th>
+                <td>
+                    <button type="button" id="mskd-truncate-subscribers" class="button mskd-button-danger">
+                        <?php _e( 'Delete all subscribers', 'mail-system-by-katsarov-design' ); ?>
+                    </button>
+                    <span id="mskd-truncate-subscribers-result"></span>
+                    <p class="description"><?php _e( 'Permanently deletes all subscribers and their list associations.', 'mail-system-by-katsarov-design' ); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label><?php _e( 'Truncate Lists', 'mail-system-by-katsarov-design' ); ?></label>
+                </th>
+                <td>
+                    <button type="button" id="mskd-truncate-lists" class="button mskd-button-danger">
+                        <?php _e( 'Delete all lists', 'mail-system-by-katsarov-design' ); ?>
+                    </button>
+                    <span id="mskd-truncate-lists-result"></span>
+                    <p class="description"><?php _e( 'Permanently deletes all mailing lists and subscriber associations.', 'mail-system-by-katsarov-design' ); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label><?php _e( 'Truncate Queue', 'mail-system-by-katsarov-design' ); ?></label>
+                </th>
+                <td>
+                    <button type="button" id="mskd-truncate-queue" class="button mskd-button-danger">
+                        <?php _e( 'Delete all queued emails', 'mail-system-by-katsarov-design' ); ?>
+                    </button>
+                    <span id="mskd-truncate-queue-result"></span>
+                    <p class="description"><?php _e( 'Permanently deletes all emails from the queue (pending, processing, sent, and failed).', 'mail-system-by-katsarov-design' ); ?></p>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>

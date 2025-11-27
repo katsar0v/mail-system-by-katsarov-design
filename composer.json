@@ -50,7 +50,7 @@
         "phpcbf": "phpcbf --standard=WordPress --extensions=php .",
         "test": "phpunit --configuration tests/phpunit.xml",
         "test:unit": "phpunit --configuration tests/phpunit.xml --testsuite Unit",
-        "translations": "cd languages && msgfmt -o mail-system-by-katsarov-design-bg_BG.mo mail-system-by-katsarov-design-bg_BG.po && msgfmt -o mail-system-by-katsarov-design-de_DE.mo mail-system-by-katsarov-design-de_DE.po && echo 'Translations compiled successfully!'",
+        "translations": "wp i18n make-mo languages/ --allow-root",
         "build": [
             "@composer install --no-dev --optimize-autoloader",
             "@translations",

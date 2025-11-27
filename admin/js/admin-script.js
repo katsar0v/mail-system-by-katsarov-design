@@ -179,6 +179,70 @@
                 }
             });
         });
+
+        // Truncate Subscribers Button
+        $(document).on('click', '#mskd-truncate-subscribers', function(e) {
+            e.preventDefault();
+            handleTruncate($(this), 'mskd_truncate_subscribers', '#mskd-truncate-subscribers-result', mskd_admin.strings.confirm_truncate_subscribers);
+        });
+
+        // Truncate Lists Button
+        $(document).on('click', '#mskd-truncate-lists', function(e) {
+            e.preventDefault();
+            handleTruncate($(this), 'mskd_truncate_lists', '#mskd-truncate-lists-result', mskd_admin.strings.confirm_truncate_lists);
+        });
+
+        // Truncate Queue Button
+        $(document).on('click', '#mskd-truncate-queue', function(e) {
+            e.preventDefault();
+            handleTruncate($(this), 'mskd_truncate_queue', '#mskd-truncate-queue-result', mskd_admin.strings.confirm_truncate_queue);
+        });
+
+        /**
+         * Handle truncate action with confirmation
+         */
+        function handleTruncate($button, action, resultSelector, confirmMessage) {
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+
+            var $result = $(resultSelector);
+            var originalText = $button.data('original-text');
+
+            // Store original text if not already stored
+            if (!originalText) {
+                originalText = $button.text();
+                $button.data('original-text', originalText);
+            }
+
+            $button.prop('disabled', true).text(mskd_admin.strings.processing);
+            $result.removeClass('mskd-truncate-success mskd-truncate-error').text('');
+
+            $.ajax({
+                url: mskd_admin.ajax_url,
+                type: 'POST',
+                timeout: 30000,
+                data: {
+                    action: action,
+                    nonce: mskd_admin.nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $result.addClass('mskd-truncate-success').text(response.data.message);
+                    } else {
+                        var errorMsg = (response.data && response.data.message) ? response.data.message : mskd_admin.strings.error;
+                        $result.addClass('mskd-truncate-error').text(errorMsg);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errorMsg = mskd_admin.strings.error;
+                    $result.addClass('mskd-truncate-error').text(errorMsg);
+                },
+                complete: function() {
+                    $button.prop('disabled', false).text($button.data('original-text'));
+                }
+            });
+        }
     });
 
 })(jQuery);

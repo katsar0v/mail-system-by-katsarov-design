@@ -873,8 +873,20 @@ msgstr ""
 msgid "Automated lists cannot be edited"
 msgstr ""
 
-#: admin/partials/lists.php
+#: admin/partials/lists.php admin/partials/subscribers.php
 msgid "Read-only"
+msgstr ""
+
+#: admin/partials/subscribers.php
+msgid "External subscriber from plugin"
+msgstr ""
+
+#: admin/partials/subscribers.php
+msgid "External subscribers cannot be edited"
+msgstr ""
+
+#: admin/partials/subscribers.php
+msgid "External subscribers are managed by third-party plugins and appear as read-only."
 msgstr ""
 
 #: admin/partials/lists.php
@@ -884,4 +896,80 @@ msgstr ""
 #. translators: %d: number of additional subscribers
 #: admin/partials/lists.php
 msgid "... and %d more"
+msgstr ""
+
+#: admin/class-admin.php
+msgid "Processing..."
+msgstr ""
+
+#: admin/class-admin.php
+msgid "Are you sure you want to delete ALL subscribers? This action cannot be undone!"
+msgstr ""
+
+#: admin/class-admin.php
+msgid "Are you sure you want to delete ALL lists? This action cannot be undone!"
+msgstr ""
+
+#: admin/class-admin.php
+msgid "Are you sure you want to delete ALL queued emails? This action cannot be undone!"
+msgstr ""
+
+#: admin/class-admin.php
+msgid "All subscribers deleted successfully."
+msgstr ""
+
+#: admin/class-admin.php
+msgid "All lists deleted successfully."
+msgstr ""
+
+#: admin/class-admin.php
+msgid "All queued emails deleted successfully."
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Danger Zone"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "These actions are irreversible. Use with caution."
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Truncate Subscribers"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Delete all subscribers"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Permanently deletes all subscribers and their list associations."
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Truncate Lists"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Delete all lists"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Permanently deletes all mailing lists and subscriber associations."
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Truncate Queue"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Delete all queued emails"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Permanently deletes all emails from the queue (pending, processing, sent, and failed)."
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "External"
 msgstr ""

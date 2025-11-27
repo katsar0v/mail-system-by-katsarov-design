@@ -876,9 +876,21 @@ msgstr "Локален"
 msgid "Automated lists cannot be edited"
 msgstr "Автоматичните списъци не могат да бъдат редактирани"
 
-#: admin/partials/lists.php
+#: admin/partials/lists.php admin/partials/subscribers.php
 msgid "Read-only"
 msgstr "Само за четене"
+
+#: admin/partials/subscribers.php
+msgid "External subscriber from plugin"
+msgstr "Външен абонат от плъгин"
+
+#: admin/partials/subscribers.php
+msgid "External subscribers cannot be edited"
+msgstr "Външните абонати не могат да бъдат редактирани"
+
+#: admin/partials/subscribers.php
+msgid "External subscribers are managed by third-party plugins and appear as read-only."
+msgstr "Външните абонати се управляват от други плъгини и се показват само за четене."
 
 #: admin/partials/lists.php
 msgid "Send email"
@@ -888,3 +900,79 @@ msgstr "Изпрати имейл"
 #: admin/partials/lists.php
 msgid "... and %d more"
 msgstr "... и още %d"
+
+#: admin/class-admin.php
+msgid "Processing..."
+msgstr "Обработка..."
+
+#: admin/class-admin.php
+msgid "Are you sure you want to delete ALL subscribers? This action cannot be undone!"
+msgstr "Сигурни ли сте, че искате да изтриете ВСИЧКИ абонати? Това действие не може да бъде отменено!"
+
+#: admin/class-admin.php
+msgid "Are you sure you want to delete ALL lists? This action cannot be undone!"
+msgstr "Сигурни ли сте, че искате да изтриете ВСИЧКИ списъци? Това действие не може да бъде отменено!"
+
+#: admin/class-admin.php
+msgid "Are you sure you want to delete ALL queued emails? This action cannot be undone!"
+msgstr "Сигурни ли сте, че искате да изтриете ВСИЧКИ имейли от опашката? Това действие не може да бъде отменено!"
+
+#: admin/class-admin.php
+msgid "All subscribers deleted successfully."
+msgstr "Всички абонати са изтрити успешно."
+
+#: admin/class-admin.php
+msgid "All lists deleted successfully."
+msgstr "Всички списъци са изтрити успешно."
+
+#: admin/class-admin.php
+msgid "All queued emails deleted successfully."
+msgstr "Всички имейли от опашката са изтрити успешно."
+
+#: admin/partials/settings.php
+msgid "Danger Zone"
+msgstr "Опасна зона"
+
+#: admin/partials/settings.php
+msgid "These actions are irreversible. Use with caution."
+msgstr "Тези действия са необратими. Използвайте с повишено внимание."
+
+#: admin/partials/settings.php
+msgid "Truncate Subscribers"
+msgstr "Изтриване на абонати"
+
+#: admin/partials/settings.php
+msgid "Delete all subscribers"
+msgstr "Изтрий всички абонати"
+
+#: admin/partials/settings.php
+msgid "Permanently deletes all subscribers and their list associations."
+msgstr "Изтрива завинаги всички абонати и техните връзки със списъци."
+
+#: admin/partials/settings.php
+msgid "Truncate Lists"
+msgstr "Изтриване на списъци"
+
+#: admin/partials/settings.php
+msgid "Delete all lists"
+msgstr "Изтрий всички списъци"
+
+#: admin/partials/settings.php
+msgid "Permanently deletes all mailing lists and subscriber associations."
+msgstr "Изтрива завинаги всички мейлинг списъци и връзки с абонати."
+
+#: admin/partials/settings.php
+msgid "Truncate Queue"
+msgstr "Изтриване на опашката"
+
+#: admin/partials/settings.php
+msgid "Delete all queued emails"
+msgstr "Изтрий всички имейли от опашката"
+
+#: admin/partials/settings.php
+msgid "Permanently deletes all emails from the queue (pending, processing, sent, and failed)."
+msgstr "Изтрива завинаги всички имейли от опашката (чакащи, обработвани, изпратени и неуспешни)."
+
+#: admin/partials/queue.php
+msgid "External"
+msgstr "Външен"

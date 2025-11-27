@@ -47,6 +47,7 @@ class CronHandlerTest extends TestCase {
             (object) array(
                 'id'                => 1,
                 'subscriber_id'     => 100,
+                'subscriber_data'   => null,
                 'email'             => 'user1@example.com',
                 'first_name'        => 'User',
                 'last_name'         => 'One',
@@ -66,10 +67,21 @@ class CronHandlerTest extends TestCase {
             } ) )
             ->andReturn( array() );
 
-        // Second get_results is for pending queue items.
+        // Second get_results is for pending DB subscriber queue items.
         $wpdb->shouldReceive( 'get_results' )
             ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, 'subscriber_id > 0' ) !== false;
+            } ) )
             ->andReturn( $queue_items );
+
+        // Third get_results is for pending external subscriber queue items.
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, 'subscriber_id = 0' ) !== false;
+            } ) )
+            ->andReturn( array() );
 
         // Mark as processing.
         $wpdb->shouldReceive( 'update' )
@@ -113,13 +125,23 @@ class CronHandlerTest extends TestCase {
             } ) )
             ->andReturn( array() );
 
-        // Verify the SQL query includes the batch size limit.
+        // Verify the SQL query includes the batch size limit (DB subscribers).
         $wpdb->shouldReceive( 'get_results' )
             ->once()
             ->with( Mockery::on(
                 function ( $query ) {
                     // The query should contain LIMIT with MSKD_BATCH_SIZE (10).
-                    return strpos( $query, 'LIMIT' ) !== false;
+                    return strpos( $query, 'LIMIT' ) !== false && strpos( $query, 'subscriber_id > 0' ) !== false;
+                }
+            ) )
+            ->andReturn( array() );
+
+        // Third get_results is for external subscribers (also has LIMIT).
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on(
+                function ( $query ) {
+                    return strpos( $query, 'LIMIT' ) !== false && strpos( $query, 'subscriber_id = 0' ) !== false;
                 }
             ) )
             ->andReturn( array() );
@@ -144,7 +166,7 @@ class CronHandlerTest extends TestCase {
             } ) )
             ->andReturn( array() );
 
-        // Verify the SQL query filters by active status.
+        // Verify the SQL query filters by active status (DB subscribers).
         $wpdb->shouldReceive( 'get_results' )
             ->once()
             ->with( Mockery::on(
@@ -153,6 +175,14 @@ class CronHandlerTest extends TestCase {
                     return strpos( $query, "s.status = 'active'" ) !== false;
                 }
             ) )
+            ->andReturn( array() );
+
+        // Third get_results is for external subscribers.
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, 'subscriber_id = 0' ) !== false;
+            } ) )
             ->andReturn( array() );
 
         $this->cron_handler->process_queue();
@@ -171,6 +201,7 @@ class CronHandlerTest extends TestCase {
             (object) array(
                 'id'                => 1,
                 'subscriber_id'     => 100,
+                'subscriber_data'   => null,
                 'email'             => 'user@example.com',
                 'first_name'        => 'Test',
                 'last_name'         => 'User',
@@ -190,9 +221,21 @@ class CronHandlerTest extends TestCase {
             } ) )
             ->andReturn( array() );
 
+        // Second get_results is for DB subscriber queue items.
         $wpdb->shouldReceive( 'get_results' )
             ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, 'subscriber_id > 0' ) !== false;
+            } ) )
             ->andReturn( $queue_items );
+
+        // Third get_results is for external subscriber queue items.
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, 'subscriber_id = 0' ) !== false;
+            } ) )
+            ->andReturn( array() );
 
         // First update: mark as processing.
         $wpdb->shouldReceive( 'update' )
@@ -259,6 +302,7 @@ class CronHandlerTest extends TestCase {
             (object) array(
                 'id'                => 1,
                 'subscriber_id'     => 100,
+                'subscriber_data'   => null,
                 'email'             => 'user@example.com',
                 'first_name'        => 'Test',
                 'last_name'         => 'User',
@@ -278,9 +322,21 @@ class CronHandlerTest extends TestCase {
             } ) )
             ->andReturn( array() );
 
+        // Second get_results is for DB subscriber queue items.
         $wpdb->shouldReceive( 'get_results' )
             ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, 'subscriber_id > 0' ) !== false;
+            } ) )
             ->andReturn( $queue_items );
+
+        // Third get_results is for external subscriber queue items.
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, 'subscriber_id = 0' ) !== false;
+            } ) )
+            ->andReturn( array() );
 
         // First update: mark as processing.
         $wpdb->shouldReceive( 'update' )
@@ -343,6 +399,7 @@ class CronHandlerTest extends TestCase {
             (object) array(
                 'id'                => 1,
                 'subscriber_id'     => 100,
+                'subscriber_data'   => null,
                 'email'             => 'john@example.com',
                 'first_name'        => 'John',
                 'last_name'         => 'Doe',
@@ -362,9 +419,21 @@ class CronHandlerTest extends TestCase {
             } ) )
             ->andReturn( array() );
 
+        // Second get_results is for DB subscriber queue items.
         $wpdb->shouldReceive( 'get_results' )
             ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, 'subscriber_id > 0' ) !== false;
+            } ) )
             ->andReturn( $queue_items );
+
+        // Third get_results is for external subscriber queue items.
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, 'subscriber_id = 0' ) !== false;
+            } ) )
+            ->andReturn( array() );
 
         $wpdb->shouldReceive( 'update' )
             ->twice()
@@ -404,6 +473,7 @@ class CronHandlerTest extends TestCase {
             (object) array(
                 'id'                => 1,
                 'subscriber_id'     => 100,
+                'subscriber_data'   => null,
                 'email'             => 'user@example.com',
                 'first_name'        => 'Test',
                 'last_name'         => 'User',
@@ -423,9 +493,21 @@ class CronHandlerTest extends TestCase {
             } ) )
             ->andReturn( array() );
 
+        // Second get_results is for DB subscriber queue items.
         $wpdb->shouldReceive( 'get_results' )
             ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, 'subscriber_id > 0' ) !== false;
+            } ) )
             ->andReturn( $queue_items );
+
+        // Third get_results is for external subscriber queue items.
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, 'subscriber_id = 0' ) !== false;
+            } ) )
+            ->andReturn( array() );
 
         // Verify attempts is incremented.
         $wpdb->shouldReceive( 'update' )
@@ -480,8 +562,20 @@ class CronHandlerTest extends TestCase {
             } ) )
             ->andReturn( array() );
 
+        // Second get_results is for DB subscriber queue items (empty).
         $wpdb->shouldReceive( 'get_results' )
             ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, 'subscriber_id > 0' ) !== false;
+            } ) )
+            ->andReturn( array() );
+
+        // Third get_results is for external subscriber queue items (empty).
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, 'subscriber_id = 0' ) !== false;
+            } ) )
             ->andReturn( array() );
 
         // Should not call any other methods.

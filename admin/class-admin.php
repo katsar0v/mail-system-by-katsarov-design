@@ -49,6 +49,9 @@ class MSKD_Admin {
         add_action( 'admin_notices', array( $this, 'show_cron_notice' ) );
         add_action( 'admin_init', array( $this, 'handle_actions' ) );
         add_action( 'wp_ajax_mskd_test_smtp', array( $this, 'ajax_test_smtp' ) );
+        add_action( 'wp_ajax_mskd_truncate_subscribers', array( $this, 'ajax_truncate_subscribers' ) );
+        add_action( 'wp_ajax_mskd_truncate_lists', array( $this, 'ajax_truncate_lists' ) );
+        add_action( 'wp_ajax_mskd_truncate_queue', array( $this, 'ajax_truncate_queue' ) );
     }
 
     /**
@@ -165,12 +168,16 @@ class MSKD_Admin {
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'nonce'    => wp_create_nonce( 'mskd_admin_nonce' ),
             'strings'  => array(
-                'confirm_delete' => __( 'Are you sure you want to delete?', 'mail-system-by-katsarov-design' ),
-                'sending'        => __( 'Sending...', 'mail-system-by-katsarov-design' ),
-                'success'        => __( 'Success!', 'mail-system-by-katsarov-design' ),
-                'error'          => __( 'Error!', 'mail-system-by-katsarov-design' ),
-                'timeout'        => __( 'Connection timed out. Check SMTP settings.', 'mail-system-by-katsarov-design' ),
-                'datetime_past'  => __( 'Please select a future date and time.', 'mail-system-by-katsarov-design' ),
+                'confirm_delete'              => __( 'Are you sure you want to delete?', 'mail-system-by-katsarov-design' ),
+                'sending'                     => __( 'Sending...', 'mail-system-by-katsarov-design' ),
+                'success'                     => __( 'Success!', 'mail-system-by-katsarov-design' ),
+                'error'                       => __( 'Error!', 'mail-system-by-katsarov-design' ),
+                'timeout'                     => __( 'Connection timed out. Check SMTP settings.', 'mail-system-by-katsarov-design' ),
+                'datetime_past'               => __( 'Please select a future date and time.', 'mail-system-by-katsarov-design' ),
+                'processing'                  => __( 'Processing...', 'mail-system-by-katsarov-design' ),
+                'confirm_truncate_subscribers' => __( 'Are you sure you want to delete ALL subscribers? This action cannot be undone!', 'mail-system-by-katsarov-design' ),
+                'confirm_truncate_lists'       => __( 'Are you sure you want to delete ALL lists? This action cannot be undone!', 'mail-system-by-katsarov-design' ),
+                'confirm_truncate_queue'       => __( 'Are you sure you want to delete ALL queued emails? This action cannot be undone!', 'mail-system-by-katsarov-design' ),
             ),
         ) );
     }
@@ -904,19 +911,29 @@ class MSKD_Admin {
             }
         } else {
             // Schedule for later - add to queue with pending status
+            // One-time emails use subscriber_id = 0 and store recipient data in subscriber_data JSON
+            $subscriber_data = wp_json_encode( array(
+                'email'             => $recipient_email,
+                'first_name'        => $recipient_name,
+                'last_name'         => '',
+                'unsubscribe_token' => '',
+                'source'            => 'one-time-email',
+            ) );
+
             $result = $wpdb->insert(
                 $wpdb->prefix . 'mskd_queue',
                 array(
-                    'subscriber_id' => self::ONE_TIME_EMAIL_SUBSCRIBER_ID,
-                    'subject'       => $subject,
-                    'body'          => $body,
-                    'status'        => 'pending',
-                    'scheduled_at'  => $scheduled_at,
-                    'sent_at'       => null,
-                    'attempts'      => 0,
-                    'error_message' => null,
+                    'subscriber_id'   => self::ONE_TIME_EMAIL_SUBSCRIBER_ID,
+                    'subscriber_data' => $subscriber_data,
+                    'subject'         => $subject,
+                    'body'            => $body,
+                    'status'          => 'pending',
+                    'scheduled_at'    => $scheduled_at,
+                    'sent_at'         => null,
+                    'attempts'        => 0,
+                    'error_message'   => null,
                 ),
-                array( '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s' )
+                array( '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s' )
             );
 
             if ( $result ) {
@@ -1032,5 +1049,76 @@ class MSKD_Admin {
     public function render_one_time_email() {
         $form_data = $this->get_one_time_email_form_data();
         include MSKD_PLUGIN_DIR . 'admin/partials/one-time-email.php';
+    }
+
+    /**
+     * AJAX handler: Truncate subscribers table
+     */
+    public function ajax_truncate_subscribers() {
+        check_ajax_referer( 'mskd_admin_nonce', 'nonce' );
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array(
+                'message' => __( 'You do not have permission for this operation.', 'mail-system-by-katsarov-design' ),
+            ) );
+        }
+
+        global $wpdb;
+
+        // First truncate the pivot table (subscriber_list)
+        $wpdb->query( "TRUNCATE TABLE {$wpdb->prefix}mskd_subscriber_list" );
+
+        // Then truncate the subscribers table
+        $wpdb->query( "TRUNCATE TABLE {$wpdb->prefix}mskd_subscribers" );
+
+        wp_send_json_success( array(
+            'message' => __( 'All subscribers deleted successfully.', 'mail-system-by-katsarov-design' ),
+        ) );
+    }
+
+    /**
+     * AJAX handler: Truncate lists table
+     */
+    public function ajax_truncate_lists() {
+        check_ajax_referer( 'mskd_admin_nonce', 'nonce' );
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array(
+                'message' => __( 'You do not have permission for this operation.', 'mail-system-by-katsarov-design' ),
+            ) );
+        }
+
+        global $wpdb;
+
+        // First truncate the pivot table (subscriber_list)
+        $wpdb->query( "TRUNCATE TABLE {$wpdb->prefix}mskd_subscriber_list" );
+
+        // Then truncate the lists table
+        $wpdb->query( "TRUNCATE TABLE {$wpdb->prefix}mskd_lists" );
+
+        wp_send_json_success( array(
+            'message' => __( 'All lists deleted successfully.', 'mail-system-by-katsarov-design' ),
+        ) );
+    }
+
+    /**
+     * AJAX handler: Truncate queue table
+     */
+    public function ajax_truncate_queue() {
+        check_ajax_referer( 'mskd_admin_nonce', 'nonce' );
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array(
+                'message' => __( 'You do not have permission for this operation.', 'mail-system-by-katsarov-design' ),
+            ) );
+        }
+
+        global $wpdb;
+
+        $wpdb->query( "TRUNCATE TABLE {$wpdb->prefix}mskd_queue" );
+
+        wp_send_json_success( array(
+            'message' => __( 'All queued emails deleted successfully.', 'mail-system-by-katsarov-design' ),
+        ) );
     }
 }

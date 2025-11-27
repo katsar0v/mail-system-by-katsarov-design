@@ -491,6 +491,60 @@ class MSKD_List_Provider {
 	 * @return array Array of external subscriber objects.
 	 */
 	public static function get_external_subscribers( $args = array() ) {
+		$formatted_subscribers = array();
+		$seen_emails           = array();
+
+		// 1. Get subscribers from external lists' subscriber_callback functions.
+		$external_lists = self::get_external_lists();
+		foreach ( $external_lists as $list ) {
+			if ( ! isset( $list->subscriber_callback ) || ! is_callable( $list->subscriber_callback ) ) {
+				continue;
+			}
+
+			$result = call_user_func( $list->subscriber_callback );
+
+			if ( ! MSKD_List_Subscriber::is_valid_callback_result( $result ) ) {
+				continue;
+			}
+
+			$subscribers = MSKD_List_Subscriber::from_callback_result( $result );
+
+			foreach ( $subscribers as $sub ) {
+				$email = $sub->get_email();
+
+				// Avoid duplicates across lists.
+				if ( isset( $seen_emails[ $email ] ) ) {
+					// Add this list to the existing subscriber's lists.
+					foreach ( $formatted_subscribers as $existing ) {
+						if ( $existing->email === $email ) {
+							$existing->lists[] = $list->id;
+							break;
+						}
+					}
+					continue;
+				}
+
+				$seen_emails[ $email ] = true;
+
+				// Convert MSKD_List_Subscriber to formatted subscriber object.
+				$subscriber                    = $sub->to_object();
+				$subscriber->id                = 'ext_' . sanitize_key( $email );
+				$subscriber->status            = 'active'; // External list subscribers are considered active.
+				$subscriber->created_at        = null;
+				$subscriber->provider          = $list->provider;
+				$subscriber->lists             = array( $list->id );
+				$subscriber->unsubscribe_token = 'ext_' . md5( $email . wp_salt() );
+
+				// Apply status filter if set.
+				if ( ! empty( $args['status'] ) && $subscriber->status !== $args['status'] ) {
+					continue;
+				}
+
+				$formatted_subscribers[] = $subscriber;
+			}
+		}
+
+		// 2. Also get subscribers from the direct filter (for backwards compatibility).
 		/**
 		 * Filter to register external subscribers.
 		 *
@@ -501,22 +555,24 @@ class MSKD_List_Provider {
 		 *                                    last_name (optional), status (optional), provider (optional).
 		 * @param array $args                 Query arguments passed to get_all_subscribers().
 		 */
-		$external_subscribers = apply_filters( 'mskd_register_external_subscribers', array(), $args );
+		$filter_subscribers = apply_filters( 'mskd_register_external_subscribers', array(), $args );
 
-		if ( ! is_array( $external_subscribers ) ) {
-			return array();
-		}
-
-		$formatted_subscribers = array();
-
-		foreach ( $external_subscribers as $subscriber_data ) {
-			$formatted_subscriber = self::format_external_subscriber( $subscriber_data );
-			if ( $formatted_subscriber ) {
-				// Apply status filter if set.
-				if ( ! empty( $args['status'] ) && $formatted_subscriber->status !== $args['status'] ) {
+		if ( is_array( $filter_subscribers ) ) {
+			foreach ( $filter_subscribers as $subscriber_data ) {
+				// Avoid duplicates.
+				if ( isset( $subscriber_data['email'] ) && isset( $seen_emails[ $subscriber_data['email'] ] ) ) {
 					continue;
 				}
-				$formatted_subscribers[] = $formatted_subscriber;
+
+				$formatted_subscriber = self::format_external_subscriber( $subscriber_data );
+				if ( $formatted_subscriber ) {
+					// Apply status filter if set.
+					if ( ! empty( $args['status'] ) && $formatted_subscriber->status !== $args['status'] ) {
+						continue;
+					}
+					$seen_emails[ $formatted_subscriber->email ] = true;
+					$formatted_subscribers[]                     = $formatted_subscriber;
+				}
 			}
 		}
 
