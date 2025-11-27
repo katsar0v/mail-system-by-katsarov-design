@@ -48,7 +48,8 @@
         "phpcbf": "phpcbf --standard=WordPress --extensions=php .",
         "test": "phpunit --configuration tests/phpunit.xml",
         "test:unit": "phpunit --configuration tests/phpunit.xml --testsuite Unit",
-        "translations": "wp i18n make-mo languages/ --allow-root"
+        "translations": "wp i18n make-mo languages/ --allow-root",
+        "create-release": "bin/create-release.sh"
     },
     "config": {
         "allow-plugins": {
