@@ -15,6 +15,7 @@ Email newsletter management system with subscribers, lists, and sending queue. S
 - **Subscriber Management** - Add, edit, and delete subscribers
 - **Subscriber Statuses** - Active, Inactive, Unsubscribed
 - **Lists** - Organize your subscribers into different lists
+- **Import/Export** - Import and export subscribers and lists via CSV or JSON
 - **Sending Queue** - Emails are added to a queue and sent automatically
 - **WP-Cron Integration** - Automatic email sending via WP-Cron
 - **SMTP Support** - Configure an external SMTP server for reliable sending
@@ -205,6 +206,41 @@ After activation, you will see a new **"Emails"** menu with submenus:
 - **New email** - Create and send emails
 - **Queue** - View the sending queue
 - **Settings** - Plugin configuration
+- **Import/Export** - Import and export subscribers and lists
+
+### Import/Export
+
+The Import/Export feature allows you to easily migrate or back up your subscribers and lists.
+
+#### Export
+
+Go to **Emails → Import/Export** to export data:
+
+- **Subscribers** - Export all subscribers or filter by list and status
+- **Lists** - Export all mailing lists
+- **Formats** - CSV (Excel-compatible) or JSON
+
+#### Import
+
+Import subscribers or lists from CSV or JSON files:
+
+**Subscribers CSV Format:**
+```csv
+email,first_name,last_name,status,lists
+john@example.com,John,Doe,active,Newsletter;Updates
+jane@example.com,Jane,Smith,active,Newsletter
+```
+
+**Lists CSV Format:**
+```csv
+name,description
+Newsletter,Weekly newsletter subscribers
+Updates,Product update notifications
+```
+
+**Import Options:**
+- **Update existing subscribers** - Updates information for subscribers that already exist
+- **Assign to lists from file** - Creates lists from the file if they don't exist and assigns subscribers
 
 ## 🗄️ Database
 
