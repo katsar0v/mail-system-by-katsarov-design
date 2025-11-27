@@ -350,8 +350,265 @@ When providing subscriber callbacks:
 | `get_list_subscriber_count( $list )` | Get total subscriber count | int |
 | `get_list_active_subscriber_count( $list )` | Get active subscriber count | int |
 | `get_list_subscriber_ids( $list )` | Get active subscriber IDs | array |
+| `get_list_subscribers_full( $list )` | Get full subscriber objects | array |
 | `list_exists( $list_id )` | Check if list exists | bool |
 | `invalidate_cache()` | Clear external lists cache | void |
+| `get_all_subscribers( $args )` | Get all subscribers (database + external) | array |
+| `get_database_subscribers( $args )` | Get only database subscribers | array |
+| `get_external_subscribers( $args )` | Get external subscribers from filter | array |
+| `get_subscriber( $id )` | Get a single subscriber by ID | object\|null |
+| `is_external_id( $id )` | Check if ID is external (ext_*) | bool |
+| `is_subscriber_editable( $id )` | Check if subscriber can be edited | bool |
+| `get_total_subscriber_count( $status )` | Get total subscriber count | int |
+
+---
+
+# Extending Subscribers with Hooks
+
+This section describes how third-party plugins can register external subscribers that appear in the Mail System alongside database subscribers.
+
+## Overview
+
+External subscribers:
+- Appear in the Subscribers admin page with an "External" badge
+- Are marked as read-only (cannot be edited or deleted)
+- Can receive emails when included in external lists
+- Do not require storage in the `mskd_subscribers` table
+
+## Available Hooks
+
+### `mskd_register_external_subscribers`
+
+**Type:** Filter
+
+**Description:** Register external subscribers that will be merged with database subscribers.
+
+**Parameters:**
+- `$external_subscribers` (array) - Array of external subscriber definitions
+- `$args` (array) - Query arguments (status filter, pagination)
+
+**Returns:** array - Modified array of external subscribers
+
+### `mskd_subscriber_is_editable`
+
+**Type:** Filter
+
+**Description:** Control whether a database subscriber can be edited. External subscribers are never editable.
+
+**Parameters:**
+- `$is_editable` (bool) - Whether the subscriber is editable (default: true for database)
+- `$subscriber_id` (int) - The subscriber ID
+
+**Returns:** bool
+
+### `mskd_external_list_subscribers_full`
+
+**Type:** Filter
+
+**Description:** Get full subscriber data for an external list. Used when queuing emails.
+
+**Parameters:**
+- `$subscribers` (array) - Array from subscriber_callback
+- `$list` (object) - The external list object
+
+**Returns:** array - Array of subscriber data arrays/objects with email, first_name, last_name
+
+## Registering External Subscribers
+
+### Basic Example
+
+```php
+add_filter( 'mskd_register_external_subscribers', 'my_plugin_register_subscribers', 10, 2 );
+
+function my_plugin_register_subscribers( $subscribers, $args ) {
+    // Add WordPress users as external subscribers
+    $users = get_users( array( 'role' => 'subscriber' ) );
+    
+    foreach ( $users as $user ) {
+        $subscribers[] = array(
+            'id'         => 'wp_user_' . $user->ID,
+            'email'      => $user->user_email,
+            'first_name' => $user->first_name,
+            'last_name'  => $user->last_name,
+            'status'     => 'active',
+            'provider'   => 'WordPress Users',
+            'lists'      => array( 'ext_wp_subscribers' ), // Optional: link to external lists
+        );
+    }
+    
+    return $subscribers;
+}
+```
+
+### Subscriber Definition Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | string\|int | Yes | Unique identifier. Will be prefixed with `ext_` automatically. |
+| `email` | string | Yes | Valid email address. |
+| `first_name` | string | No | Subscriber's first name. |
+| `last_name` | string | No | Subscriber's last name. |
+| `status` | string | No | Status: `active`, `inactive`, `unsubscribed`. Default: `active`. |
+| `provider` | string | No | Name of the plugin/provider. Default: "External". |
+| `lists` | array | No | Array of list IDs this subscriber belongs to. |
+
+### WooCommerce Customer Example
+
+```php
+add_filter( 'mskd_register_external_subscribers', 'woo_register_customers', 10, 2 );
+
+function woo_register_customers( $subscribers, $args ) {
+    if ( ! class_exists( 'WooCommerce' ) ) {
+        return $subscribers;
+    }
+    
+    // Get customers with orders
+    $customers = get_users( array(
+        'role'   => 'customer',
+        'number' => 100,
+    ) );
+    
+    foreach ( $customers as $customer ) {
+        $subscribers[] = array(
+            'id'         => 'woo_customer_' . $customer->ID,
+            'email'      => $customer->user_email,
+            'first_name' => get_user_meta( $customer->ID, 'billing_first_name', true ),
+            'last_name'  => get_user_meta( $customer->ID, 'billing_last_name', true ),
+            'status'     => 'active',
+            'provider'   => 'WooCommerce',
+            'lists'      => array( 'ext_woo_customers' ),
+        );
+    }
+    
+    return $subscribers;
+}
+```
+
+## External List with Full Subscriber Data
+
+When your external list contains subscribers who don't exist in the MSKD database, you need to provide full subscriber data for email sending:
+
+```php
+// Register the external list
+add_filter( 'mskd_register_external_lists', function( $lists ) {
+    $lists[] = array(
+        'id'                  => 'crm_contacts',
+        'name'                => 'CRM Contacts',
+        'description'         => 'Contacts from external CRM',
+        'provider'            => 'My CRM Plugin',
+        'subscriber_callback' => 'get_crm_contacts',
+    );
+    return $lists;
+});
+
+// Provide full subscriber data for queuing
+add_filter( 'mskd_external_list_subscribers_full', function( $subscribers, $list ) {
+    if ( $list->id !== 'ext_crm_contacts' ) {
+        return $subscribers;
+    }
+    
+    // Return array of subscriber data
+    return array(
+        array(
+            'id'         => 'crm_1',
+            'email'      => 'contact1@example.com',
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+        ),
+        array(
+            'id'         => 'crm_2',
+            'email'      => 'contact2@example.com',
+            'first_name' => 'Jane',
+            'last_name'  => 'Smith',
+        ),
+    );
+}, 10, 2 );
+
+function get_crm_contacts() {
+    // This can return IDs, emails, or full data
+    // The mskd_external_list_subscribers_full filter handles the conversion
+    return array( 'contact1@example.com', 'contact2@example.com' );
+}
+```
+
+## How External Subscribers Are Sent Emails
+
+When composing an email to an external list:
+
+1. The system calls `get_list_subscribers_full()` to get complete subscriber data
+2. For external subscribers, data is stored inline in the queue (JSON in `subscriber_data` column)
+3. During cron processing, the inline data is used directly (no database lookup needed)
+4. Placeholders like `{first_name}`, `{email}` work normally with inline data
+
+This means external subscribers can receive emails even if they don't exist in `mskd_subscribers`.
+
+## UI Display
+
+External subscribers appear in the Subscribers admin page with:
+- An **"External"** badge next to their email
+- A **Source** column showing the provider name
+- **"Read-only"** in the Actions column (no Edit/Delete links)
+- A subtle background color to distinguish from database subscribers
+
+## Best Practices
+
+### 1. Use Unique IDs
+
+Prefix your subscriber IDs with your plugin slug:
+
+```php
+'id' => 'myplugin_user_' . $user_id,  // Good
+'id' => 'user_' . $user_id,            // Risky - may collide
+```
+
+### 2. Cache Expensive Queries
+
+```php
+function get_crm_subscribers() {
+    $cached = wp_cache_get( 'myplugin_crm_subs', 'mskd_external' );
+    
+    if ( false !== $cached ) {
+        return $cached;
+    }
+    
+    $subscribers = fetch_from_crm_api();
+    
+    wp_cache_set( 'myplugin_crm_subs', $subscribers, 'mskd_external', HOUR_IN_SECONDS );
+    
+    return $subscribers;
+}
+```
+
+### 3. Respect Status Filters
+
+```php
+add_filter( 'mskd_register_external_subscribers', function( $subscribers, $args ) {
+    $my_subscribers = get_my_subscribers();
+    
+    // Apply status filter if provided
+    if ( ! empty( $args['status'] ) ) {
+        $my_subscribers = array_filter( $my_subscribers, function( $sub ) use ( $args ) {
+            return $sub['status'] === $args['status'];
+        });
+    }
+    
+    return array_merge( $subscribers, $my_subscribers );
+}, 10, 2 );
+```
+
+### 4. Handle Unsubscribes
+
+External subscribers have temporary unsubscribe tokens. Listen for unsubscribe actions:
+
+```php
+add_action( 'mskd_subscriber_unsubscribed', function( $email, $token ) {
+    if ( strpos( $token, 'ext_' ) === 0 ) {
+        // This is an external subscriber unsubscribing
+        // Update your external system accordingly
+        my_crm_mark_unsubscribed( $email );
+    }
+}, 10, 2 );
+```
 
 ---
 

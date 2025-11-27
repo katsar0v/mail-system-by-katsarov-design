@@ -443,4 +443,316 @@ class ListProviderTest extends TestCase {
 		$this->assertIsArray( $subscriber_ids );
 		$this->assertEmpty( $subscriber_ids );
 	}
+
+	// =========================================================================
+	// External Subscribers Tests
+	// =========================================================================
+
+	/**
+	 * Test is_external_id correctly identifies external IDs.
+	 */
+	public function test_is_external_id_identifies_external_ids() {
+		$this->assertTrue( \MSKD_List_Provider::is_external_id( 'ext_user_123' ) );
+		$this->assertTrue( \MSKD_List_Provider::is_external_id( 'ext_woo_customer' ) );
+		$this->assertFalse( \MSKD_List_Provider::is_external_id( 123 ) );
+		$this->assertFalse( \MSKD_List_Provider::is_external_id( '123' ) );
+		$this->assertFalse( \MSKD_List_Provider::is_external_id( 'user_123' ) );
+	}
+
+	/**
+	 * Test get_external_subscribers returns registered subscribers.
+	 */
+	public function test_get_external_subscribers_returns_registered_subscribers() {
+		$this->setup_wpdb_mock();
+
+		Functions\expect( 'apply_filters' )
+			->once()
+			->with( 'mskd_register_external_subscribers', array(), Mockery::any() )
+			->andReturn(
+				array(
+					array(
+						'id'         => 'wp_user_1',
+						'email'      => 'user1@example.com',
+						'first_name' => 'John',
+						'last_name'  => 'Doe',
+						'status'     => 'active',
+						'provider'   => 'WordPress',
+					),
+					array(
+						'id'         => 'wp_user_2',
+						'email'      => 'user2@example.com',
+						'first_name' => 'Jane',
+						'last_name'  => 'Smith',
+						'status'     => 'active',
+						'provider'   => 'WordPress',
+					),
+				)
+			);
+
+		Functions\expect( 'is_email' )->andReturn( true );
+		Functions\expect( 'sanitize_key' )->andReturnUsing( function( $key ) {
+			return $key;
+		} );
+		Functions\expect( 'sanitize_email' )->andReturnUsing( function( $email ) {
+			return $email;
+		} );
+		Functions\expect( 'sanitize_text_field' )->andReturnUsing( function( $str ) {
+			return $str;
+		} );
+		Functions\expect( 'wp_salt' )->andReturn( 'test_salt' );
+
+		$subscribers = \MSKD_List_Provider::get_external_subscribers();
+
+		$this->assertCount( 2, $subscribers );
+		$this->assertEquals( 'ext_wp_user_1', $subscribers[0]->id );
+		$this->assertEquals( 'user1@example.com', $subscribers[0]->email );
+		$this->assertEquals( 'external', $subscribers[0]->source );
+		$this->assertFalse( $subscribers[0]->is_editable );
+		$this->assertEquals( 'WordPress', $subscribers[0]->provider );
+	}
+
+	/**
+	 * Test get_external_subscribers filters by status.
+	 */
+	public function test_get_external_subscribers_filters_by_status() {
+		$this->setup_wpdb_mock();
+
+		Functions\expect( 'apply_filters' )
+			->once()
+			->with( 'mskd_register_external_subscribers', array(), Mockery::any() )
+			->andReturn(
+				array(
+					array(
+						'id'     => 'user_1',
+						'email'  => 'active@example.com',
+						'status' => 'active',
+					),
+					array(
+						'id'     => 'user_2',
+						'email'  => 'inactive@example.com',
+						'status' => 'inactive',
+					),
+				)
+			);
+
+		Functions\expect( 'is_email' )->andReturn( true );
+		Functions\expect( 'sanitize_key' )->andReturnUsing( function( $key ) {
+			return $key;
+		} );
+		Functions\expect( 'sanitize_email' )->andReturnUsing( function( $email ) {
+			return $email;
+		} );
+		Functions\expect( 'sanitize_text_field' )->andReturnUsing( function( $str ) {
+			return $str;
+		} );
+		Functions\expect( 'wp_salt' )->andReturn( 'test_salt' );
+
+		$subscribers = \MSKD_List_Provider::get_external_subscribers( array( 'status' => 'active' ) );
+
+		$this->assertCount( 1, $subscribers );
+		$this->assertEquals( 'active@example.com', $subscribers[0]->email );
+	}
+
+	/**
+	 * Test get_external_subscribers rejects invalid emails.
+	 */
+	public function test_get_external_subscribers_rejects_invalid_emails() {
+		$this->setup_wpdb_mock();
+
+		Functions\expect( 'apply_filters' )
+			->once()
+			->with( 'mskd_register_external_subscribers', array(), Mockery::any() )
+			->andReturn(
+				array(
+					array(
+						'id'    => 'user_1',
+						'email' => 'invalid-email',
+					),
+				)
+			);
+
+		Functions\expect( 'is_email' )->with( 'invalid-email' )->andReturn( false );
+		Functions\expect( 'sanitize_key' )->andReturnUsing( function( $key ) {
+			return $key;
+		} );
+		Functions\expect( 'sanitize_email' )->andReturnUsing( function( $email ) {
+			return $email;
+		} );
+
+		$subscribers = \MSKD_List_Provider::get_external_subscribers();
+
+		$this->assertEmpty( $subscribers );
+	}
+
+	/**
+	 * Test is_subscriber_editable returns false for external subscribers.
+	 */
+	public function test_is_subscriber_editable_returns_false_for_external() {
+		$editable = \MSKD_List_Provider::is_subscriber_editable( 'ext_user_123' );
+
+		$this->assertFalse( $editable );
+	}
+
+	/**
+	 * Test is_subscriber_editable returns true for database subscribers.
+	 */
+	public function test_is_subscriber_editable_returns_true_for_database() {
+		Functions\expect( 'apply_filters' )
+			->once()
+			->with( 'mskd_subscriber_is_editable', true, 123 )
+			->andReturn( true );
+
+		$editable = \MSKD_List_Provider::is_subscriber_editable( 123 );
+
+		$this->assertTrue( $editable );
+	}
+
+	/**
+	 * Test get_subscriber returns external subscriber.
+	 */
+	public function test_get_subscriber_returns_external_subscriber() {
+		$this->setup_wpdb_mock();
+
+		Functions\expect( 'apply_filters' )
+			->once()
+			->with( 'mskd_register_external_subscribers', array(), Mockery::any() )
+			->andReturn(
+				array(
+					array(
+						'id'         => 'crm_contact_1',
+						'email'      => 'contact@example.com',
+						'first_name' => 'Test',
+						'last_name'  => 'Contact',
+					),
+				)
+			);
+
+		Functions\expect( 'is_email' )->andReturn( true );
+		Functions\expect( 'sanitize_key' )->andReturnUsing( function( $key ) {
+			return $key;
+		} );
+		Functions\expect( 'sanitize_email' )->andReturnUsing( function( $email ) {
+			return $email;
+		} );
+		Functions\expect( 'sanitize_text_field' )->andReturnUsing( function( $str ) {
+			return $str;
+		} );
+		Functions\expect( 'wp_salt' )->andReturn( 'test_salt' );
+
+		$subscriber = \MSKD_List_Provider::get_subscriber( 'ext_crm_contact_1' );
+
+		$this->assertNotNull( $subscriber );
+		$this->assertEquals( 'contact@example.com', $subscriber->email );
+		$this->assertEquals( 'external', $subscriber->source );
+	}
+
+	/**
+	 * Test get_subscriber returns database subscriber.
+	 */
+	public function test_get_subscriber_returns_database_subscriber() {
+		$this->setup_wpdb_mock();
+
+		$db_subscriber = (object) array(
+			'id'         => 42,
+			'email'      => 'db@example.com',
+			'first_name' => 'Database',
+			'last_name'  => 'User',
+			'status'     => 'active',
+		);
+
+		$this->wpdb->shouldReceive( 'prepare' )
+			->once()
+			->andReturn( 'prepared_query' );
+
+		$this->wpdb->shouldReceive( 'get_row' )
+			->once()
+			->with( 'prepared_query' )
+			->andReturn( $db_subscriber );
+
+		$subscriber = \MSKD_List_Provider::get_subscriber( 42 );
+
+		$this->assertNotNull( $subscriber );
+		$this->assertEquals( 'db@example.com', $subscriber->email );
+		$this->assertEquals( 'database', $subscriber->source );
+		$this->assertTrue( $subscriber->is_editable );
+	}
+
+	/**
+	 * Test get_total_subscriber_count includes external subscribers.
+	 */
+	public function test_get_total_subscriber_count_includes_external() {
+		$this->setup_wpdb_mock();
+
+		// Database count
+		$this->wpdb->shouldReceive( 'get_var' )
+			->once()
+			->andReturn( 10 );
+
+		// External subscribers
+		Functions\expect( 'apply_filters' )
+			->once()
+			->with( 'mskd_register_external_subscribers', array(), Mockery::any() )
+			->andReturn(
+				array(
+					array( 'id' => 'ext_1', 'email' => 'ext1@example.com' ),
+					array( 'id' => 'ext_2', 'email' => 'ext2@example.com' ),
+					array( 'id' => 'ext_3', 'email' => 'ext3@example.com' ),
+				)
+			);
+
+		Functions\expect( 'is_email' )->andReturn( true );
+		Functions\expect( 'sanitize_key' )->andReturnUsing( function( $key ) {
+			return $key;
+		} );
+		Functions\expect( 'sanitize_email' )->andReturnUsing( function( $email ) {
+			return $email;
+		} );
+		Functions\expect( 'sanitize_text_field' )->andReturnUsing( function( $str ) {
+			return $str;
+		} );
+		Functions\expect( 'wp_salt' )->andReturn( 'test_salt' );
+
+		$total = \MSKD_List_Provider::get_total_subscriber_count();
+
+		$this->assertEquals( 13, $total ); // 10 database + 3 external
+	}
+
+	/**
+	 * Test get_list_subscribers_full returns complete subscriber objects.
+	 */
+	public function test_get_list_subscribers_full_returns_complete_objects() {
+		$this->setup_wpdb_mock();
+
+		$db_subscribers = array(
+			(object) array(
+				'id'                => 1,
+				'email'             => 'sub1@example.com',
+				'first_name'        => 'Sub',
+				'last_name'         => 'One',
+				'status'            => 'active',
+				'unsubscribe_token' => 'token1',
+			),
+		);
+
+		$this->wpdb->shouldReceive( 'prepare' )
+			->once()
+			->andReturn( 'prepared_query' );
+
+		$this->wpdb->shouldReceive( 'get_results' )
+			->once()
+			->with( 'prepared_query' )
+			->andReturn( $db_subscribers );
+
+		$list = (object) array(
+			'id'     => 1,
+			'name'   => 'Test List',
+			'source' => 'database',
+		);
+
+		$subscribers = \MSKD_List_Provider::get_list_subscribers_full( $list );
+
+		$this->assertCount( 1, $subscribers );
+		$this->assertEquals( 'sub1@example.com', $subscribers[0]->email );
+		$this->assertEquals( 'database', $subscribers[0]->source );
+	}
 }

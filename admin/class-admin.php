@@ -562,18 +562,22 @@ class MSKD_Admin {
             return;
         }
 
-        // Get active subscribers from selected lists (supports both database and external lists).
-        $subscribers = array();
+        // Get active subscribers from selected lists with full data (supports external subscribers).
+        $all_subscribers = array();
+        $seen_emails     = array();
         
         foreach ( $list_ids as $list_id ) {
-            $list_subscribers = MSKD_List_Provider::get_list_subscriber_ids( $list_id );
-            $subscribers = array_merge( $subscribers, $list_subscribers );
+            $list_subscribers = MSKD_List_Provider::get_list_subscribers_full( $list_id );
+            foreach ( $list_subscribers as $subscriber ) {
+                // Dedupe by email.
+                if ( ! in_array( $subscriber->email, $seen_emails, true ) ) {
+                    $all_subscribers[] = $subscriber;
+                    $seen_emails[]     = $subscriber->email;
+                }
+            }
         }
-        
-        // Remove duplicates.
-        $subscribers = array_unique( $subscribers );
 
-        if ( empty( $subscribers ) ) {
+        if ( empty( $all_subscribers ) ) {
             add_settings_error( 'mskd_messages', 'mskd_error', __( 'No active subscribers in the selected lists.', 'mail-system-by-katsarov-design' ), 'error' );
             return;
         }
@@ -584,17 +588,37 @@ class MSKD_Admin {
 
         // Add to queue
         $queued = 0;
-        foreach ( $subscribers as $subscriber_id ) {
+        foreach ( $all_subscribers as $subscriber ) {
+            $is_external = MSKD_List_Provider::is_external_id( $subscriber->id ?? '' );
+            
+            // For external subscribers, store their data inline as JSON.
+            // For database subscribers, use subscriber_id reference.
+            $queue_data = array(
+                'subscriber_id' => $is_external ? 0 : intval( $subscriber->id ),
+                'subject'       => $subject,
+                'body'          => $body,
+                'status'        => 'pending',
+                'scheduled_at'  => $scheduled_at,
+            );
+            
+            // Store inline subscriber data for external subscribers.
+            if ( $is_external ) {
+                $queue_data['subscriber_data'] = wp_json_encode( array(
+                    'email'             => $subscriber->email,
+                    'first_name'        => $subscriber->first_name ?? '',
+                    'last_name'         => $subscriber->last_name ?? '',
+                    'unsubscribe_token' => $subscriber->unsubscribe_token ?? '',
+                    'source'            => 'external',
+                    'provider'          => $subscriber->provider ?? '',
+                ) );
+            }
+            
             $result = $wpdb->insert(
                 $wpdb->prefix . 'mskd_queue',
-                array(
-                    'subscriber_id' => $subscriber_id,
-                    'subject'       => $subject,
-                    'body'          => $body,
-                    'status'        => 'pending',
-                    'scheduled_at'  => $scheduled_at,
-                ),
-                array( '%d', '%s', '%s', '%s', '%s' )
+                $queue_data,
+                $is_external 
+                    ? array( '%d', '%s', '%s', '%s', '%s', '%s' )
+                    : array( '%d', '%s', '%s', '%s', '%s' )
             );
             
             if ( $result ) {

@@ -432,4 +432,388 @@ class MSKD_List_Provider {
 	public static function invalidate_cache() {
 		delete_transient( self::EXTERNAL_LISTS_CACHE_KEY );
 	}
+
+	// =========================================================================
+	// External Subscribers Support
+	// =========================================================================
+
+	/**
+	 * Get all subscribers (database + external).
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param array $args Optional. Query arguments.
+	 *                    - 'status' (string) Filter by status.
+	 *                    - 'per_page' (int) Number of results per page.
+	 *                    - 'page' (int) Page number.
+	 *                    - 'include_external' (bool) Include external subscribers. Default true.
+	 * @return array Array of subscriber objects with 'source' property indicating origin.
+	 */
+	public static function get_all_subscribers( $args = array() ) {
+		$defaults = array(
+			'status'           => '',
+			'per_page'         => 20,
+			'page'             => 1,
+			'include_external' => true,
+		);
+		$args = wp_parse_args( $args, $defaults );
+
+		$database_subscribers = self::get_database_subscribers( $args );
+
+		if ( ! $args['include_external'] ) {
+			return $database_subscribers;
+		}
+
+		$external_subscribers = self::get_external_subscribers( $args );
+
+		return array_merge( $database_subscribers, $external_subscribers );
+	}
+
+	/**
+	 * Get subscribers from the database.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param array $args Query arguments.
+	 * @return array Array of database subscriber objects.
+	 */
+	public static function get_database_subscribers( $args = array() ) {
+		global $wpdb;
+
+		$where  = '';
+		$params = array();
+
+		if ( ! empty( $args['status'] ) ) {
+			$where    = 'WHERE status = %s';
+			$params[] = $args['status'];
+		}
+
+		$offset   = ( max( 1, intval( $args['page'] ) ) - 1 ) * intval( $args['per_page'] );
+		$params[] = intval( $args['per_page'] );
+		$params[] = $offset;
+
+		$query = "SELECT * FROM {$wpdb->prefix}mskd_subscribers {$where} ORDER BY created_at DESC LIMIT %d OFFSET %d";
+
+		$subscribers = $wpdb->get_results( $wpdb->prepare( $query, $params ) );
+
+		if ( ! $subscribers ) {
+			return array();
+		}
+
+		// Add metadata for database subscribers.
+		foreach ( $subscribers as $subscriber ) {
+			$subscriber->source      = 'database';
+			$subscriber->is_editable = true;
+			$subscriber->provider    = null;
+		}
+
+		return $subscribers;
+	}
+
+	/**
+	 * Get external subscribers registered via filter.
+	 *
+	 * Third-party plugins can register subscribers using the 'mskd_register_external_subscribers' filter.
+	 *
+	 * Each external subscriber should be an array with the following keys:
+	 * - 'id' (string|int) - Unique identifier (required, will be prefixed with 'ext_')
+	 * - 'email' (string) - Email address (required)
+	 * - 'first_name' (string) - First name (optional)
+	 * - 'last_name' (string) - Last name (optional)
+	 * - 'status' (string) - Status: active, inactive (optional, default: active)
+	 * - 'provider' (string) - Name of the plugin/provider (optional)
+	 * - 'lists' (array) - Array of list IDs this subscriber belongs to (optional)
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param array $args Query arguments (status filter applied).
+	 * @return array Array of external subscriber objects.
+	 */
+	public static function get_external_subscribers( $args = array() ) {
+		/**
+		 * Filter to register external subscribers.
+		 *
+		 * @since 1.2.0
+		 *
+		 * @param array $external_subscribers Array of external subscriber definitions.
+		 *                                    Each subscriber should have: id, email, first_name (optional),
+		 *                                    last_name (optional), status (optional), provider (optional).
+		 * @param array $args                 Query arguments passed to get_all_subscribers().
+		 */
+		$external_subscribers = apply_filters( 'mskd_register_external_subscribers', array(), $args );
+
+		if ( ! is_array( $external_subscribers ) ) {
+			return array();
+		}
+
+		$formatted_subscribers = array();
+
+		foreach ( $external_subscribers as $subscriber_data ) {
+			$formatted_subscriber = self::format_external_subscriber( $subscriber_data );
+			if ( $formatted_subscriber ) {
+				// Apply status filter if set.
+				if ( ! empty( $args['status'] ) && $formatted_subscriber->status !== $args['status'] ) {
+					continue;
+				}
+				$formatted_subscribers[] = $formatted_subscriber;
+			}
+		}
+
+		return $formatted_subscribers;
+	}
+
+	/**
+	 * Format and validate external subscriber data.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param array $subscriber_data Raw subscriber data from filter.
+	 * @return object|null Formatted subscriber object or null if invalid.
+	 */
+	private static function format_external_subscriber( $subscriber_data ) {
+		// Validate required fields.
+		if ( ! isset( $subscriber_data['id'] ) || ! isset( $subscriber_data['email'] ) ) {
+			return null;
+		}
+
+		if ( ! is_email( $subscriber_data['email'] ) ) {
+			return null;
+		}
+
+		$subscriber = new stdClass();
+
+		// External subscriber IDs are prefixed with 'ext_' to avoid collision with database IDs.
+		$subscriber->id          = 'ext_' . sanitize_key( $subscriber_data['id'] );
+		$subscriber->email       = sanitize_email( $subscriber_data['email'] );
+		$subscriber->first_name  = isset( $subscriber_data['first_name'] ) ? sanitize_text_field( $subscriber_data['first_name'] ) : '';
+		$subscriber->last_name   = isset( $subscriber_data['last_name'] ) ? sanitize_text_field( $subscriber_data['last_name'] ) : '';
+		$subscriber->status      = isset( $subscriber_data['status'] ) && in_array( $subscriber_data['status'], array( 'active', 'inactive', 'unsubscribed' ), true )
+			? $subscriber_data['status']
+			: 'active';
+		$subscriber->created_at  = null; // External subscribers don't have a creation date.
+		$subscriber->source      = 'external';
+		$subscriber->is_editable = false;
+		$subscriber->provider    = isset( $subscriber_data['provider'] ) ? sanitize_text_field( $subscriber_data['provider'] ) : __( 'External', 'mail-system-by-katsarov-design' );
+		$subscriber->lists       = isset( $subscriber_data['lists'] ) && is_array( $subscriber_data['lists'] ) ? $subscriber_data['lists'] : array();
+
+		// Generate a temporary unsubscribe token for external subscribers.
+		$subscriber->unsubscribe_token = 'ext_' . md5( $subscriber->email . wp_salt() );
+
+		return $subscriber;
+	}
+
+	/**
+	 * Get a single subscriber by ID.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param string|int $subscriber_id Subscriber ID (numeric for database, 'ext_*' for external).
+	 * @return object|null Subscriber object or null if not found.
+	 */
+	public static function get_subscriber( $subscriber_id ) {
+		// Check if it's an external subscriber.
+		if ( self::is_external_id( $subscriber_id ) ) {
+			$external_subscribers = self::get_external_subscribers();
+			foreach ( $external_subscribers as $subscriber ) {
+				if ( $subscriber->id === $subscriber_id ) {
+					return $subscriber;
+				}
+			}
+			return null;
+		}
+
+		// Database subscriber.
+		global $wpdb;
+		$subscriber = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$wpdb->prefix}mskd_subscribers WHERE id = %d",
+				intval( $subscriber_id )
+			)
+		);
+
+		if ( $subscriber ) {
+			$subscriber->source      = 'database';
+			$subscriber->is_editable = true;
+			$subscriber->provider    = null;
+		}
+
+		return $subscriber;
+	}
+
+	/**
+	 * Check if an ID is external (not from database).
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param string|int $id ID to check.
+	 * @return bool True if external, false otherwise.
+	 */
+	public static function is_external_id( $id ) {
+		return is_string( $id ) && strpos( $id, 'ext_' ) === 0;
+	}
+
+	/**
+	 * Check if a subscriber is editable.
+	 *
+	 * Database subscribers are editable by default.
+	 * External subscribers are not editable.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param string|int $subscriber_id Subscriber ID.
+	 * @return bool True if editable, false otherwise.
+	 */
+	public static function is_subscriber_editable( $subscriber_id ) {
+		// External subscribers are never editable.
+		if ( self::is_external_id( $subscriber_id ) ) {
+			return false;
+		}
+
+		/**
+		 * Filter whether a database subscriber is editable.
+		 *
+		 * @since 1.2.0
+		 *
+		 * @param bool       $is_editable   Whether the subscriber is editable. Default true for database subscribers.
+		 * @param string|int $subscriber_id The subscriber ID.
+		 */
+		return apply_filters( 'mskd_subscriber_is_editable', true, $subscriber_id );
+	}
+
+	/**
+	 * Get total subscriber count (database + external).
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param string $status Optional. Filter by status.
+	 * @return int Total subscriber count.
+	 */
+	public static function get_total_subscriber_count( $status = '' ) {
+		$db_count       = self::get_database_subscriber_count( $status );
+		$external_count = count( self::get_external_subscribers( array( 'status' => $status ) ) );
+
+		return $db_count + $external_count;
+	}
+
+	/**
+	 * Get database subscriber count.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param string $status Optional. Filter by status.
+	 * @return int Database subscriber count.
+	 */
+	public static function get_database_subscriber_count( $status = '' ) {
+		global $wpdb;
+
+		$where = '';
+		if ( ! empty( $status ) ) {
+			$where = $wpdb->prepare( 'WHERE status = %s', $status );
+		}
+
+		return (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_subscribers {$where}" );
+	}
+
+	/**
+	 * Get subscribers for an external list with full data.
+	 *
+	 * For external lists, returns complete subscriber objects (not just IDs).
+	 * This is useful when queuing emails to external subscribers who may not exist
+	 * in the mskd_subscribers table.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param object|string|int $list List object or list ID.
+	 * @return array Array of subscriber objects with email, first_name, last_name, etc.
+	 */
+	public static function get_list_subscribers_full( $list ) {
+		if ( ! is_object( $list ) ) {
+			$list = self::get_list( $list );
+		}
+
+		if ( ! $list ) {
+			return array();
+		}
+
+		// For database lists, get full subscriber data.
+		if ( $list->source === 'database' ) {
+			global $wpdb;
+			$subscribers = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT s.* FROM {$wpdb->prefix}mskd_subscribers s
+					INNER JOIN {$wpdb->prefix}mskd_subscriber_list sl ON s.id = sl.subscriber_id
+					WHERE sl.list_id = %d AND s.status = 'active'",
+					intval( $list->id )
+				)
+			);
+
+			foreach ( $subscribers as $sub ) {
+				$sub->source      = 'database';
+				$sub->is_editable = true;
+			}
+
+			return $subscribers;
+		}
+
+		// For external lists, call the subscriber callback.
+		if ( ! isset( $list->subscriber_callback ) || ! is_callable( $list->subscriber_callback ) ) {
+			return array();
+		}
+
+		/**
+		 * Filter to get full subscriber data for an external list.
+		 *
+		 * If the callback returns arrays with subscriber data, those will be used.
+		 * If it returns IDs or emails, we'll try to look them up in the database.
+		 *
+		 * @since 1.2.0
+		 *
+		 * @param array  $subscribers Array of subscriber IDs, emails, or subscriber data arrays.
+		 * @param object $list        The external list object.
+		 */
+		$result = apply_filters( 'mskd_external_list_subscribers_full', call_user_func( $list->subscriber_callback ), $list );
+
+		if ( ! is_array( $result ) || empty( $result ) ) {
+			return array();
+		}
+
+		$first = reset( $result );
+
+		// If result contains full subscriber data (arrays/objects with email key).
+		if ( is_array( $first ) && isset( $first['email'] ) ) {
+			return array_filter( array_map( array( __CLASS__, 'format_external_subscriber' ), $result ) );
+		}
+
+		if ( is_object( $first ) && isset( $first->email ) ) {
+			return array_values( $result );
+		}
+
+		// If result is numeric IDs, look them up in database.
+		if ( is_numeric( $first ) ) {
+			global $wpdb;
+			$placeholders = implode( ',', array_fill( 0, count( $result ), '%d' ) );
+			return $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT s.*, 'database' as source, 1 as is_editable FROM {$wpdb->prefix}mskd_subscribers s
+					WHERE id IN ($placeholders) AND status = 'active'",
+					$result
+				)
+			);
+		}
+
+		// If result is emails, look them up in database.
+		if ( is_string( $first ) && strpos( $first, '@' ) !== false ) {
+			global $wpdb;
+			$placeholders = implode( ',', array_fill( 0, count( $result ), '%s' ) );
+			return $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT s.*, 'database' as source, 1 as is_editable FROM {$wpdb->prefix}mskd_subscribers s
+					WHERE email IN ($placeholders) AND status = 'active'",
+					$result
+				)
+			);
+		}
+
+		return array();
+	}
 }

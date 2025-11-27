@@ -43,7 +43,9 @@ class MSKD_Cron_Handler {
     /**
      * Process email queue
      * 
-     * Sends up to MSKD_BATCH_SIZE emails per run
+     * Sends up to MSKD_BATCH_SIZE emails per run.
+     * Supports both database subscribers (subscriber_id > 0) and 
+     * external subscribers (subscriber_id = 0 with subscriber_data JSON).
      */
     public function process_queue() {
         global $wpdb;
@@ -51,12 +53,13 @@ class MSKD_Cron_Handler {
         // First, recover stuck emails (processing for too long)
         $this->recover_stuck_emails();
 
-        // Get pending emails (including retries)
-        $queue_items = $wpdb->get_results( $wpdb->prepare(
+        // Get pending emails for database subscribers (subscriber_id > 0).
+        $db_queue_items = $wpdb->get_results( $wpdb->prepare(
             "SELECT q.*, s.email, s.first_name, s.last_name, s.unsubscribe_token
             FROM {$wpdb->prefix}mskd_queue q
             INNER JOIN {$wpdb->prefix}mskd_subscribers s ON q.subscriber_id = s.id
             WHERE q.status = 'pending' 
+            AND q.subscriber_id > 0
             AND q.scheduled_at <= %s
             AND s.status = 'active'
             ORDER BY q.scheduled_at ASC
@@ -64,6 +67,39 @@ class MSKD_Cron_Handler {
             current_time( 'mysql' ),
             MSKD_BATCH_SIZE
         ) );
+
+        // Get pending emails for external subscribers (subscriber_id = 0).
+        $remaining_slots = MSKD_BATCH_SIZE - count( $db_queue_items );
+        $ext_queue_items = array();
+        
+        if ( $remaining_slots > 0 ) {
+            $ext_queue_items = $wpdb->get_results( $wpdb->prepare(
+                "SELECT q.*
+                FROM {$wpdb->prefix}mskd_queue q
+                WHERE q.status = 'pending' 
+                AND q.subscriber_id = 0
+                AND q.subscriber_data IS NOT NULL
+                AND q.scheduled_at <= %s
+                ORDER BY q.scheduled_at ASC
+                LIMIT %d",
+                current_time( 'mysql' ),
+                $remaining_slots
+            ) );
+
+            // Parse subscriber_data JSON for external subscribers.
+            foreach ( $ext_queue_items as $item ) {
+                $data = json_decode( $item->subscriber_data, false );
+                if ( $data ) {
+                    $item->email             = $data->email ?? '';
+                    $item->first_name        = $data->first_name ?? '';
+                    $item->last_name         = $data->last_name ?? '';
+                    $item->unsubscribe_token = $data->unsubscribe_token ?? '';
+                    $item->is_external       = true;
+                }
+            }
+        }
+
+        $queue_items = array_merge( $db_queue_items, $ext_queue_items );
 
         if ( empty( $queue_items ) ) {
             return;
@@ -83,6 +119,21 @@ class MSKD_Cron_Handler {
         }
 
         foreach ( $queue_items as $item ) {
+            // Skip external items with invalid email.
+            if ( empty( $item->email ) || ! is_email( $item->email ) ) {
+                $wpdb->update(
+                    $wpdb->prefix . 'mskd_queue',
+                    array(
+                        'status'        => 'failed',
+                        'error_message' => __( 'Invalid or missing email address', 'mail-system-by-katsarov-design' ),
+                    ),
+                    array( 'id' => $item->id ),
+                    array( '%s', '%s' ),
+                    array( '%d' )
+                );
+                continue;
+            }
+
             // Mark as processing
             $wpdb->update(
                 $wpdb->prefix . 'mskd_queue',

@@ -19,7 +19,7 @@ class MSKD_Activator {
     /**
      * Database version for tracking schema updates
      */
-    const DB_VERSION = '1.0.0';
+    const DB_VERSION = '1.1.0';
 
     /**
      * Activate the plugin
@@ -88,7 +88,8 @@ class MSKD_Activator {
         $table_queue = $wpdb->prefix . 'mskd_queue';
         $sql_queue = "CREATE TABLE $table_queue (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-            subscriber_id bigint(20) UNSIGNED NOT NULL,
+            subscriber_id bigint(20) UNSIGNED NOT NULL DEFAULT 0,
+            subscriber_data text DEFAULT NULL,
             subject varchar(255) NOT NULL,
             body longtext NOT NULL,
             status enum('pending','processing','sent','failed') DEFAULT 'pending',
