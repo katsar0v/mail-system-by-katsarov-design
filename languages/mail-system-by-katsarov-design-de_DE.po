@@ -1173,3 +1173,278 @@ msgstr "Fortschritt"
 msgid "Scheduled for"
 msgstr "Geplant für"
 
+#: includes/Admin/class-admin.php
+msgid "Import / Export"
+msgstr "Import / Export"
+
+#: admin/partials/import-export.php
+msgid "Export"
+msgstr "Export"
+
+#: admin/partials/import-export.php
+msgid "Export subscribers or lists to a CSV or JSON file for backup or migration."
+msgstr "Exportieren Sie Abonnenten oder Listen in eine CSV- oder JSON-Datei für Backup oder Migration."
+
+#: admin/partials/import-export.php
+msgid "Export type"
+msgstr "Exporttyp"
+
+#: admin/partials/import-export.php
+msgid "Format"
+msgstr "Format"
+
+#: admin/partials/import-export.php
+msgid "CSV is recommended for Excel and spreadsheet applications."
+msgstr "CSV wird für Excel und Tabellenkalkulationsanwendungen empfohlen."
+
+#: admin/partials/import-export.php
+msgid "Filter by list"
+msgstr "Nach Liste filtern"
+
+#: admin/partials/import-export.php
+msgid "All lists"
+msgstr "Alle Listen"
+
+#: admin/partials/import-export.php
+msgid "Filter by status"
+msgstr "Nach Status filtern"
+
+#: admin/partials/import-export.php
+msgid "All statuses"
+msgstr "Alle Status"
+
+#: admin/partials/import-export.php
+msgid "Import"
+msgstr "Import"
+
+#: admin/partials/import-export.php
+msgid "Import subscribers or lists from a CSV or JSON file."
+msgstr "Importieren Sie Abonnenten oder Listen aus einer CSV- oder JSON-Datei."
+
+#: admin/partials/import-export.php
+msgid "Import type"
+msgstr "Importtyp"
+
+#: admin/partials/import-export.php
+msgid "File"
+msgstr "Datei"
+
+#: admin/partials/import-export.php
+msgid "Maximum file size: 5MB."
+msgstr "Maximale Dateigröße: 5MB."
+
+#: admin/partials/import-export.php
+msgid "Options"
+msgstr "Optionen"
+
+#: admin/partials/import-export.php
+msgid "Update existing subscribers"
+msgstr "Bestehende Abonnenten aktualisieren"
+
+#: admin/partials/import-export.php
+msgid "If a subscriber with the same email already exists, update their information."
+msgstr "Wenn ein Abonnent mit derselben E-Mail bereits existiert, aktualisieren Sie seine Informationen."
+
+#: admin/partials/import-export.php
+msgid "Assign to lists from file"
+msgstr "Listen aus Datei zuweisen"
+
+#: admin/partials/import-export.php
+msgid "If the file contains a \"lists\" column, assign subscribers to those lists. Lists will be created if they do not exist."
+msgstr "Wenn die Datei eine \"lists\"-Spalte enthält, weisen Sie Abonnenten diesen Listen zu. Listen werden erstellt, wenn sie nicht existieren."
+
+#: admin/partials/import-export.php
+msgid "File format requirements"
+msgstr "Dateiformatanforderungen"
+
+#: admin/partials/import-export.php
+msgid "Subscribers CSV format"
+msgstr "Abonnenten CSV-Format"
+
+#: admin/partials/import-export.php
+msgid "The CSV file must contain at minimum an \"email\" column. Optional columns:"
+msgstr "Die CSV-Datei muss mindestens eine \"email\"-Spalte enthalten. Optionale Spalten:"
+
+#: admin/partials/import-export.php
+msgid "Email address (required)"
+msgstr "E-Mail-Adresse (erforderlich)"
+
+#: admin/partials/import-export.php
+msgid "Status: active, inactive, or unsubscribed (default: active)"
+msgstr "Status: active, inactive oder unsubscribed (Standard: active)"
+
+#: admin/partials/import-export.php
+msgid "List names separated by semicolon (;)"
+msgstr "Listennamen durch Semikolon (;) getrennt"
+
+#: admin/partials/import-export.php
+msgid "Example:"
+msgstr "Beispiel:"
+
+#: admin/partials/import-export.php
+msgid "Lists CSV format"
+msgstr "Listen CSV-Format"
+
+#: admin/partials/import-export.php
+msgid "The CSV file must contain at minimum a \"name\" column. Optional columns:"
+msgstr "Die CSV-Datei muss mindestens eine \"name\"-Spalte enthalten. Optionale Spalten:"
+
+#: admin/partials/import-export.php
+msgid "List name (required)"
+msgstr "Listenname (erforderlich)"
+
+#: admin/partials/import-export.php
+msgid "List description"
+msgstr "Listenbeschreibung"
+
+#: admin/partials/import-export.php
+msgid "JSON format"
+msgstr "JSON-Format"
+
+#: admin/partials/import-export.php
+msgid "JSON files should contain an array of objects with the same field names as the CSV columns."
+msgstr "JSON-Dateien sollten ein Array von Objekten mit denselben Feldnamen wie die CSV-Spalten enthalten."
+
+#: includes/Services/class-import-export-service.php
+msgid "File size exceeds the maximum limit of 5MB."
+msgstr "Die Dateigröße überschreitet das maximale Limit von 5MB."
+
+#. translators: %s: expected format
+#: includes/Services/class-import-export-service.php
+msgid "Invalid file format. Expected %s file."
+msgstr "Ungültiges Dateiformat. %s-Datei erwartet."
+
+#: includes/Services/class-import-export-service.php
+msgid "Invalid file type. The file content does not match the expected format."
+msgstr "Ungültiger Dateityp. Der Dateiinhalt entspricht nicht dem erwarteten Format."
+
+#: includes/Services/class-import-export-service.php
+msgid "Could not read the file."
+msgstr "Die Datei konnte nicht gelesen werden."
+
+#: includes/Services/class-import-export-service.php
+msgid "Could not read CSV headers."
+msgstr "CSV-Header konnten nicht gelesen werden."
+
+#: includes/Services/class-import-export-service.php
+msgid "The CSV file must contain an \"email\" column."
+msgstr "Die CSV-Datei muss eine \"email\"-Spalte enthalten."
+
+#. translators: 1: row number, 2: email value
+#: includes/Services/class-import-export-service.php
+msgid "Row %1$d: Invalid email address \"%2$s\"."
+msgstr "Zeile %1$d: Ungültige E-Mail-Adresse \"%2$s\"."
+
+#. translators: %d: row number
+#: includes/Services/class-import-export-service.php
+msgid "Row %d: Invalid data format."
+msgstr "Zeile %d: Ungültiges Datenformat."
+
+#. translators: %s: JSON error message
+#: includes/Services/class-import-export-service.php
+msgid "Invalid JSON format: %s"
+msgstr "Ungültiges JSON-Format: %s"
+
+#: includes/Services/class-import-export-service.php
+msgid "JSON must contain an array of subscribers."
+msgstr "JSON muss ein Array von Abonnenten enthalten."
+
+#. translators: %s: email address
+#: includes/Services/class-import-export-service.php
+msgid "Failed to import subscriber: %s"
+msgstr "Import des Abonnenten fehlgeschlagen: %s"
+
+#: includes/Services/class-import-export-service.php
+msgid "The CSV file must contain a \"name\" column."
+msgstr "Die CSV-Datei muss eine \"name\"-Spalte enthalten."
+
+#. translators: %d: row number
+#: includes/Services/class-import-export-service.php
+msgid "Row %d: List name is required."
+msgstr "Zeile %d: Listenname ist erforderlich."
+
+#. translators: %s: list name
+#: includes/Services/class-import-export-service.php
+msgid "Failed to import list: %s"
+msgstr "Import der Liste fehlgeschlagen: %s"
+
+#: includes/Services/class-import-export-service.php
+msgid "File exceeds the maximum upload size."
+msgstr "Die Datei überschreitet die maximale Upload-Größe."
+
+#: includes/Services/class-import-export-service.php
+msgid "File exceeds the maximum form size."
+msgstr "Die Datei überschreitet die maximale Formulargröße."
+
+#: includes/Services/class-import-export-service.php
+msgid "File was only partially uploaded."
+msgstr "Die Datei wurde nur teilweise hochgeladen."
+
+#: includes/Services/class-import-export-service.php
+msgid "No file was uploaded."
+msgstr "Keine Datei wurde hochgeladen."
+
+#: includes/Services/class-import-export-service.php
+msgid "Missing temporary folder."
+msgstr "Temporärer Ordner fehlt."
+
+#: includes/Services/class-import-export-service.php
+msgid "Failed to write file to disk."
+msgstr "Datei konnte nicht auf Festplatte geschrieben werden."
+
+#: includes/Services/class-import-export-service.php
+msgid "A PHP extension stopped the file upload."
+msgstr "Eine PHP-Erweiterung hat den Datei-Upload gestoppt."
+
+#: includes/Services/class-import-export-service.php
+msgid "Unknown upload error."
+msgstr "Unbekannter Upload-Fehler."
+
+#: includes/Admin/class-admin-import-export.php
+msgid "Please select a file to import."
+msgstr "Bitte wählen Sie eine Datei zum Importieren aus."
+
+#. translators: %d: number of additional errors
+#: includes/Admin/class-admin-import-export.php
+msgid "... and %d more validation errors."
+msgstr "... und %d weitere Validierungsfehler."
+
+#: includes/Admin/class-admin-import-export.php
+msgid "No valid records found to import."
+msgstr "Keine gültigen Datensätze zum Importieren gefunden."
+
+#. translators: %d: number of imported subscribers
+#: includes/Admin/class-admin-import-export.php
+msgid "%d subscriber imported."
+msgid_plural "%d subscribers imported."
+msgstr[0] "%d Abonnent importiert."
+msgstr[1] "%d Abonnenten importiert."
+
+#. translators: %d: number of updated subscribers
+#: includes/Admin/class-admin-import-export.php
+msgid "%d subscriber updated."
+msgid_plural "%d subscribers updated."
+msgstr[0] "%d Abonnent aktualisiert."
+msgstr[1] "%d Abonnenten aktualisiert."
+
+#. translators: %d: number of skipped subscribers
+#: includes/Admin/class-admin-import-export.php
+msgid "%d subscriber skipped (already exists)."
+msgid_plural "%d subscribers skipped (already exist)."
+msgstr[0] "%d Abonnent übersprungen (existiert bereits)."
+msgstr[1] "%d Abonnenten übersprungen (existieren bereits)."
+
+#. translators: %d: number of imported lists
+#: includes/Admin/class-admin-import-export.php
+msgid "%d list imported."
+msgid_plural "%d lists imported."
+msgstr[0] "%d Liste importiert."
+msgstr[1] "%d Listen importiert."
+
+#. translators: %d: number of skipped lists
+#: includes/Admin/class-admin-import-export.php
+msgid "%d list skipped (already exists)."
+msgid_plural "%d lists skipped (already exist)."
+msgstr[0] "%d Liste übersprungen (existiert bereits)."
+msgstr[1] "%d Listen übersprungen (existieren bereits)."
+
