@@ -119,7 +119,16 @@ if ( $action === 'edit' && $list_id ) {
                         ?>
                         <tr<?php echo $is_external ? ' class="mskd-external-list"' : ''; ?>>
                             <td>
-                                <strong><?php echo esc_html( $item->name ); ?></strong>
+                                <?php
+                                $max_name_length = 35;
+                                $display_name    = $item->name;
+                                $name_truncated  = false;
+                                if ( mb_strlen( $display_name ) > $max_name_length ) {
+                                    $display_name   = mb_substr( $display_name, 0, $max_name_length ) . '...';
+                                    $name_truncated = true;
+                                }
+                                ?>
+                                <strong<?php echo $name_truncated ? ' title="' . esc_attr( $item->name ) . '"' : ''; ?>><?php echo esc_html( $display_name ); ?></strong>
                                 <?php if ( $is_external ) : ?>
                                     <span class="mskd-badge mskd-badge-external" title="<?php esc_attr_e( 'Automated list from external plugin', 'mail-system-by-katsarov-design' ); ?>">
                                         <?php _e( 'Automated', 'mail-system-by-katsarov-design' ); ?>
