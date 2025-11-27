@@ -1439,12 +1439,12 @@ msgstr[1] "%d абонати пропуснати (вече съществува
 msgid "%d list imported."
 msgid_plural "%d lists imported."
 msgstr[0] "%d списък импортиран."
-msgstr[1] "%d списъка импортирани."
+msgstr[1] "%d списъци импортирани."
 
 #. translators: %d: number of skipped lists
 #: includes/Admin/class-admin-import-export.php
 msgid "%d list skipped (already exists)."
 msgid_plural "%d lists skipped (already exist)."
 msgstr[0] "%d списък пропуснат (вече съществува)."
-msgstr[1] "%d списъка пропуснати (вече съществуват)."
+msgstr[1] "%d списъци пропуснати (вече съществуват)."
 
