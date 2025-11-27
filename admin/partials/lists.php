@@ -98,8 +98,6 @@ if ( $action === 'edit' && $list_id ) {
             <thead>
                 <tr>
                     <th scope="col"><?php _e( 'Name', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Description', 'mail-system-by-katsarov-design' ); ?></th>
-                    <th scope="col"><?php _e( 'Source', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Subscribers', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Actions', 'mail-system-by-katsarov-design' ); ?></th>
                 </tr>
@@ -118,16 +116,6 @@ if ( $action === 'edit' && $list_id ) {
                                     <span class="mskd-badge mskd-badge-external" title="<?php esc_attr_e( 'Automated list from external plugin', 'mail-system-by-katsarov-design' ); ?>">
                                         <?php _e( 'Automated', 'mail-system-by-katsarov-design' ); ?>
                                     </span>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <?php echo esc_html( wp_trim_words( $item->description, 10, '...' ) ); ?>
-                            </td>
-                            <td>
-                                <?php if ( $is_external ) : ?>
-                                    <?php echo esc_html( $item->provider ); ?>
-                                <?php else : ?>
-                                    <?php _e( 'Local', 'mail-system-by-katsarov-design' ); ?>
                                 <?php endif; ?>
                             </td>
                             <td>
@@ -151,7 +139,7 @@ if ( $action === 'edit' && $list_id ) {
                     <?php endforeach; ?>
                 <?php else : ?>
                     <tr>
-                        <td colspan="6"><?php _e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?></td>
+                        <td colspan="3"><?php _e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?></td>
                     </tr>
                 <?php endif; ?>
             </tbody>
