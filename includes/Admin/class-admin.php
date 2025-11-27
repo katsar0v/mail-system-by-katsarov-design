@@ -244,7 +244,7 @@ class Admin {
                 'processing'                   => __( 'Processing...', 'mail-system-by-katsarov-design' ),
                 'confirm_truncate_subscribers' => __( 'Are you sure you want to delete ALL subscribers? This action cannot be undone!', 'mail-system-by-katsarov-design' ),
                 'confirm_truncate_lists'       => __( 'Are you sure you want to delete ALL lists? This action cannot be undone!', 'mail-system-by-katsarov-design' ),
-                'confirm_truncate_queue'       => __( 'Are you sure you want to delete ALL queued emails? This action cannot be undone!', 'mail-system-by-katsarov-design' ),
+                'confirm_truncate_queue'       => __( 'Are you sure you want to delete ALL campaigns? This action cannot be undone!', 'mail-system-by-katsarov-design' ),
                 'select_lists_placeholder'     => __( 'Select lists...', 'mail-system-by-katsarov-design' ),
                 'no_results'                   => __( 'No results found', 'mail-system-by-katsarov-design' ),
             ),

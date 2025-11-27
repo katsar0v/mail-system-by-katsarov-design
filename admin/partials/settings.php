@@ -259,14 +259,14 @@ $smtp_password = isset( $settings['smtp_password'] ) ? base64_decode( $settings[
             </tr>
             <tr>
                 <th scope="row">
-                    <label><?php _e( 'Truncate Queue', 'mail-system-by-katsarov-design' ); ?></label>
+                    <label><?php _e( 'Truncate Campaigns', 'mail-system-by-katsarov-design' ); ?></label>
                 </th>
                 <td>
                     <button type="button" id="mskd-truncate-queue" class="button mskd-button-danger">
-                        <?php _e( 'Delete all queued emails', 'mail-system-by-katsarov-design' ); ?>
+                        <?php _e( 'Delete all campaigns', 'mail-system-by-katsarov-design' ); ?>
                     </button>
                     <span id="mskd-truncate-queue-result"></span>
-                    <p class="description"><?php _e( 'Permanently deletes all emails from the queue (pending, processing, sent, and failed).', 'mail-system-by-katsarov-design' ); ?></p>
+                    <p class="description"><?php _e( 'Permanently deletes all campaigns and their queued emails (pending, processing, sent, and failed).', 'mail-system-by-katsarov-design' ); ?></p>
                 </td>
             </tr>
         </table>

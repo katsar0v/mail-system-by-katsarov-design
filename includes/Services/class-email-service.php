@@ -491,12 +491,13 @@ class Email_Service {
     }
 
     /**
-     * Truncate queue table (for admin use).
+     * Truncate queue and campaigns tables (for admin use).
      *
      * @return bool True on success.
      */
     public function truncate_queue(): bool {
         $this->wpdb->query( "TRUNCATE TABLE {$this->queue_table}" );
+        $this->wpdb->query( "TRUNCATE TABLE {$this->campaigns_table}" );
         return true;
     }
 }

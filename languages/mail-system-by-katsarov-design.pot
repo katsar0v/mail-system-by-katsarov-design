@@ -914,6 +914,22 @@ msgstr ""
 msgid "Are you sure you want to delete ALL queued emails? This action cannot be undone!"
 msgstr ""
 
+#: includes/Admin/class-admin.php
+msgid "Select lists..."
+msgstr ""
+
+#: includes/Admin/class-admin.php
+msgid "No results found"
+msgstr ""
+
+#: admin/partials/compose.php
+msgid "%d subscribers"
+msgstr ""
+
+#: admin/partials/compose.php
+msgid "Start typing to search. You can select multiple lists."
+msgstr ""
+
 #: admin/class-admin.php
 msgid "All subscribers deleted successfully."
 msgstr ""

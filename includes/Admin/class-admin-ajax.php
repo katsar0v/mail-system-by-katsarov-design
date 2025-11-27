@@ -138,7 +138,7 @@ class Admin_Ajax {
         $service->truncate_queue();
 
         wp_send_json_success( array(
-            'message' => __( 'All queued emails deleted successfully.', 'mail-system-by-katsarov-design' ),
+            'message' => __( 'All campaigns deleted successfully.', 'mail-system-by-katsarov-design' ),
         ) );
     }
 
