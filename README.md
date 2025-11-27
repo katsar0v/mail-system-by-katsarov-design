@@ -300,20 +300,6 @@ mail-system-by-katsarov-design/
 | Tables | `mskd_` | `wp_mskd_subscribers` |
 | Hooks | `mskd_` | `mskd_process_queue` |
 
-## 📝 Changelog
-
-See [CHANGELOG.md](CHANGELOG.md) for full change history.
-
-### Version 1.0.0
-
-- Initial version
-- Subscriber management (active/inactive/unsubscribed)
-- List management
-- Sending queue with WP-Cron
-- Subscription form (shortcode)
-- Unsubscribe link
-- Multi-language support (English, Bulgarian, German)
-
 ## 📄 License
 
 This plugin is licensed under [GPL v2 or later](https://www.gnu.org/licenses/gpl-2.0.html).
