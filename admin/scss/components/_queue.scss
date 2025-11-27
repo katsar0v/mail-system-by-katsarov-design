@@ -3,6 +3,7 @@
 // ==========================================================================
 // Styles for the email queue section.
 
+@use 'sass:color';
 @use '../abstracts' as *;
 
 // Queue Status Bar
@@ -191,7 +192,7 @@
 
   &:hover,
   &:focus {
-    background: lighten($color-error, 45%) !important;
+    background: color.adjust($color-error, $lightness: 45%) !important;
     color: $color-error !important;
   }
 }
