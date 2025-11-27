@@ -45,3 +45,104 @@
     max-width: 100%;
   }
 }
+
+// ==========================================================================
+// Select2 Customization
+// ==========================================================================
+// Custom styles for Select2 to match WordPress admin UI.
+
+.mskd-select2-lists {
+  min-height: 38px;
+}
+
+// Select2 container customization
+.select2-container--default {
+  // Selection box
+  .select2-selection--multiple {
+    border: 1px solid $color-wp-border;
+    border-radius: $border-radius;
+    min-height: 38px;
+    padding: $spacing-1;
+    background-color: #fff;
+
+    &:focus,
+    &:focus-within {
+      border-color: $color-primary;
+      box-shadow: 0 0 0 1px $color-primary;
+      outline: none;
+    }
+
+    // Selected items (tags)
+    .select2-selection__choice {
+      background-color: $color-primary;
+      border: none;
+      border-radius: $border-radius;
+      color: #fff;
+      padding: $spacing-1 $spacing-2;
+      margin: 2px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    // Remove button on tags
+    .select2-selection__choice__remove {
+      color: rgba(255, 255, 255, 0.7);
+      margin-right: $spacing-1;
+      font-weight: bold;
+
+      &:hover {
+        color: #fff;
+        background: transparent;
+      }
+    }
+
+    // Search input inside
+    .select2-search--inline {
+      .select2-search__field {
+        margin-top: 4px;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+    }
+  }
+
+  // Dropdown
+  .select2-dropdown {
+    border: 1px solid $color-wp-border;
+    border-radius: $border-radius;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  // Search box in dropdown
+  .select2-search--dropdown {
+    padding: $spacing-2;
+
+    .select2-search__field {
+      border: 1px solid $color-wp-border;
+      border-radius: $border-radius;
+      padding: $spacing-2;
+
+      &:focus {
+        border-color: $color-primary;
+        box-shadow: 0 0 0 1px $color-primary;
+        outline: none;
+      }
+    }
+  }
+
+  // Results list
+  .select2-results__option {
+    padding: $spacing-2 $spacing-3;
+    font-size: 13px;
+
+    &[aria-selected="true"] {
+      background-color: rgba($color-primary, 0.1);
+      color: $color-primary;
+    }
+
+    &--highlighted[aria-selected] {
+      background-color: $color-primary;
+      color: #fff;
+    }
+  }
+}
