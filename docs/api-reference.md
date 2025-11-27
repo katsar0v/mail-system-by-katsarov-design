@@ -59,13 +59,12 @@ function my_plugin_register_lists( $lists ) {
 }
 
 function my_plugin_get_vip_subscribers() {
-    global $wpdb;
-    // Return array of subscriber IDs or email addresses
-    return $wpdb->get_col(
-        "SELECT email FROM {$wpdb->users} WHERE ID IN (
-            SELECT user_id FROM {$wpdb->usermeta} 
-            WHERE meta_key = 'vip_member' AND meta_value = '1'
-        )"
+    // Return array of email addresses or subscriber IDs
+    // These can be fetched from any source: database, API, etc.
+    return array(
+        'vip1@example.com',
+        'vip2@example.com',
+        'vip3@example.com',
     );
 }
 ```
