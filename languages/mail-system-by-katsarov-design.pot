@@ -919,6 +919,10 @@ msgid "Select lists..."
 msgstr ""
 
 #: includes/Admin/class-admin.php
+msgid "Search..."
+msgstr ""
+
+#: includes/Admin/class-admin.php
 msgid "No results found"
 msgstr ""
 

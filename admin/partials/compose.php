@@ -61,7 +61,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
                     </th>
                     <td>
                         <?php if ( ! empty( $lists ) ) : ?>
-                            <select name="lists[]" id="mskd-lists-select" class="mskd-select2-lists" multiple="multiple" style="width: 100%;" required>
+                            <select name="lists[]" id="mskd-lists-select" class="mskd-slimselect-lists" multiple required>
                                 <?php foreach ( $lists as $list ) : ?>
                                     <?php
                                     $subscriber_count = MSKD_List_Provider::get_list_active_subscriber_count( $list );

@@ -47,80 +47,113 @@
 }
 
 // ==========================================================================
-// Select2 Customization
+// SlimSelect Customization
 // ==========================================================================
-// Custom styles for Select2 to match WordPress admin UI.
+// Custom styles for SlimSelect to match WordPress admin UI.
 
-.mskd-select2-lists {
-  min-height: 38px;
+.mskd-slimselect-lists {
+  width: 100%;
 }
 
-// Select2 container customization
-.select2-container--default {
-  // Selection box
-  .select2-selection--multiple {
-    border: 1px solid $color-wp-border;
-    border-radius: $border-radius;
-    min-height: 38px;
-    padding: $spacing-1;
-    background-color: #fff;
+// SlimSelect container customization
+.ss-main {
+  border: 1px solid $color-wp-border;
+  border-radius: $border-radius;
+  min-height: 38px;
+  background-color: #fff;
+  font-size: 13px;
 
-    &:focus,
-    &:focus-within {
-      border-color: $color-primary;
-      box-shadow: 0 0 0 1px $color-primary;
-      outline: none;
-    }
+  &:focus,
+  &.ss-open-below,
+  &.ss-open-above {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 1px $color-primary;
+  }
+
+  // Multi-select values container
+  .ss-values {
+    padding: 4px;
+    gap: 4px;
 
     // Selected items (tags)
-    .select2-selection__choice {
+    .ss-value {
       background-color: $color-primary;
       border: none;
       border-radius: $border-radius;
       color: #fff;
-      padding: $spacing-1 $spacing-2;
-      margin: 2px;
+      padding: 4px 8px;
+      margin: 0;
       font-size: 13px;
       line-height: 1.4;
-    }
+      display: flex;
+      align-items: center;
+      gap: 6px;
 
-    // Remove button on tags
-    .select2-selection__choice__remove {
-      color: rgba(255, 255, 255, 0.7);
-      margin-right: $spacing-1;
-      font-weight: bold;
-
-      &:hover {
+      // Tag text
+      .ss-value-text {
         color: #fff;
-        background: transparent;
-      }
-    }
-
-    // Search input inside
-    .select2-search--inline {
-      .select2-search__field {
-        margin-top: 4px;
         font-size: 13px;
-        line-height: 1.4;
+      }
+
+      // Remove button
+      .ss-value-delete {
+        border: none;
+        background: transparent;
+        padding: 0;
+        margin: 0;
+        width: auto;
+        height: auto;
+
+        svg {
+          width: 10px;
+          height: 10px;
+
+          path {
+            stroke: rgba(255, 255, 255, 0.8);
+            stroke-width: 20;
+          }
+        }
+
+        &:hover svg path {
+          stroke: #fff;
+        }
       }
     }
   }
 
-  // Dropdown
-  .select2-dropdown {
-    border: 1px solid $color-wp-border;
-    border-radius: $border-radius;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  // Placeholder
+  .ss-placeholder {
+    color: #757575;
+    font-size: 13px;
+    padding: 8px 12px;
   }
 
-  // Search box in dropdown
-  .select2-search--dropdown {
+  // Arrow
+  .ss-arrow {
+    margin-right: 8px;
+
+    path {
+      stroke: $color-wp-border;
+    }
+  }
+}
+
+// Dropdown content
+.ss-content {
+  border: 1px solid $color-wp-border;
+  border-radius: $border-radius;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  background: #fff;
+
+  // Search box
+  .ss-search {
     padding: $spacing-2;
 
-    .select2-search__field {
+    input {
       border: 1px solid $color-wp-border;
       border-radius: $border-radius;
       padding: $spacing-2;
+      font-size: 13px;
 
       &:focus {
         border-color: $color-primary;
@@ -130,19 +163,33 @@
     }
   }
 
-  // Results list
-  .select2-results__option {
+  // Options list
+  .ss-list {
+    .ss-option {
+      padding: $spacing-2 $spacing-3;
+      font-size: 13px;
+
+      &:hover {
+        background-color: rgba($color-primary, 0.1);
+        color: $color-primary;
+      }
+
+      &.ss-selected {
+        background-color: rgba($color-primary, 0.15);
+        color: $color-primary;
+      }
+
+      &.ss-highlighted {
+        background-color: $color-primary;
+        color: #fff;
+      }
+    }
+  }
+
+  // No results message
+  .ss-search-no-results {
     padding: $spacing-2 $spacing-3;
     font-size: 13px;
-
-    &[aria-selected="true"] {
-      background-color: rgba($color-primary, 0.1);
-      color: $color-primary;
-    }
-
-    &--highlighted[aria-selected] {
-      background-color: $color-primary;
-      color: #fff;
-    }
+    color: #757575;
   }
 }

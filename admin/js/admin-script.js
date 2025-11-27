@@ -7,20 +7,40 @@
 (function($) {
     'use strict';
 
-    $(document).ready(function() {
-        // Initialize Select2 for lists multi-select
-        if ($('.mskd-select2-lists').length && typeof $.fn.select2 === 'function') {
-            $('.mskd-select2-lists').select2({
-                placeholder: mskd_admin.strings.select_lists_placeholder || 'Select lists...',
-                allowClear: true,
-                width: '100%',
-                language: {
-                    noResults: function() {
-                        return mskd_admin.strings.no_results || 'No results found';
-                    }
-                }
-            });
+    /**
+     * Initialize SlimSelect on list dropdowns
+     */
+    function initSlimSelect() {
+        var selectElement = document.querySelector('.mskd-slimselect-lists');
+        
+        if (!selectElement) {
+            return;
         }
+
+        // Check if SlimSelect is available
+        if (typeof SlimSelect === 'undefined') {
+            console.warn('MSKD: SlimSelect not loaded, retrying...');
+            setTimeout(initSlimSelect, 100);
+            return;
+        }
+
+        // Initialize SlimSelect
+        new SlimSelect({
+            select: selectElement,
+            settings: {
+                placeholderText: (typeof mskd_admin !== 'undefined' && mskd_admin.strings.select_lists_placeholder) || 'Select lists...',
+                searchPlaceholderText: (typeof mskd_admin !== 'undefined' && mskd_admin.strings.search_placeholder) || 'Search...',
+                searchText: (typeof mskd_admin !== 'undefined' && mskd_admin.strings.no_results) || 'No results found',
+                allowDeselect: true,
+                closeOnSelect: false,
+                showSearch: true
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        // Initialize SlimSelect for lists multi-select
+        initSlimSelect();
 
         // Confirm delete
         $('.mskd-delete-link').on('click', function(e) {

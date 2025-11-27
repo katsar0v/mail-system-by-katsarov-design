@@ -922,6 +922,10 @@ msgid "Select lists..."
 msgstr "Изберете списъци..."
 
 #: includes/Admin/class-admin.php
+msgid "Search..."
+msgstr "Търсене..."
+
+#: includes/Admin/class-admin.php
 msgid "No results found"
 msgstr "Няма намерени резултати"
 
