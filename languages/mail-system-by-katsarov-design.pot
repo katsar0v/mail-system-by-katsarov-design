@@ -1129,3 +1129,24 @@ msgstr ""
 #: admin/class-admin.php
 msgid "Nah, I do not like the plugin"
 msgstr ""
+
+#: admin/partials/queue.php
+msgid "Created"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "Type"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "Recipients"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "Progress"
+msgstr ""
+
+#: admin/partials/queue.php
+msgid "Scheduled for"
+msgstr ""
+

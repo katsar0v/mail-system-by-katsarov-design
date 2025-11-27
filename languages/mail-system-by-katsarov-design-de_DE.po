@@ -1132,3 +1132,24 @@ msgstr "Ja, natürlich!"
 #: admin/class-admin.php
 msgid "Nah, I do not like the plugin"
 msgstr "Nein, das Plugin gefällt mir nicht"
+
+#: admin/partials/queue.php
+msgid "Created"
+msgstr "Erstellt"
+
+#: admin/partials/queue.php
+msgid "Type"
+msgstr "Typ"
+
+#: admin/partials/queue.php
+msgid "Recipients"
+msgstr "Empfänger"
+
+#: admin/partials/queue.php
+msgid "Progress"
+msgstr "Fortschritt"
+
+#: admin/partials/queue.php
+msgid "Scheduled for"
+msgstr "Geplant für"
+

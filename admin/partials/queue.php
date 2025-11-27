@@ -220,7 +220,7 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                 <th scope="col" style="width: 180px;"><?php _e( 'Progress', 'mail-system-by-katsarov-design' ); ?></th>
                 <th scope="col" style="width: 100px;"><?php _e( 'Status', 'mail-system-by-katsarov-design' ); ?></th>
                 <th scope="col" style="width: 140px;"><?php _e( 'Created', 'mail-system-by-katsarov-design' ); ?></th>
-                <th scope="col" style="width: 140px;"><?php _e( 'Scheduled', 'mail-system-by-katsarov-design' ); ?></th>
+                <th scope="col" style="width: 140px;"><?php _e( 'Scheduled for', 'mail-system-by-katsarov-design' ); ?></th>
                 <th scope="col" style="width: 120px;"><?php _e( 'Actions', 'mail-system-by-katsarov-design' ); ?></th>
             </tr>
         </thead>
