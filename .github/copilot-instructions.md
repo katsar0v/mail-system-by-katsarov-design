@@ -86,8 +86,19 @@ admin/scss/
 
 ## Composer Scripts
 
+All composer and PHP commands must run **inside the Docker PHP container**:
+
 ```bash
-composer test        # Run PHPUnit tests
-composer phpcs       # WordPress coding standards check
-composer phpcbf      # Auto-fix coding standards
+# From host: run commands via docker exec
+docker exec -it <php-container> bash -c "cd /var/www/html/wp-content/plugins/mail-system-by-katsarov-design && composer test"
+
+# Or enter the container first, then navigate to plugin dir:
+docker exec -it <php-container> bash
+cd /var/www/html/wp-content/plugins/mail-system-by-katsarov-design
+
+# Available composer scripts:
+composer test          # Run PHPUnit tests
+composer phpcs         # WordPress coding standards check
+composer phpcbf        # Auto-fix coding standards
+composer translations  # Compile .po to .mo translation files
 ```

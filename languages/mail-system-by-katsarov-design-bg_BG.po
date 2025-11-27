@@ -424,6 +424,10 @@ msgstr "След определено време"
 msgid "Timezone: %s. Select time in 10-minute intervals."
 msgstr "Часова зона: %s. Изберете време на всеки 10 минути."
 
+#: admin/partials/compose.php admin/partials/one-time-email.php
+msgid "Current server time: %s"
+msgstr "Текущо сървърно време: %s"
+
 #: admin/partials/compose.php
 msgid "minutes"
 msgstr "минути"
@@ -470,11 +474,11 @@ msgstr "%d имейла/мин"
 
 #: admin/partials/queue.php
 msgid "Scheduled"
-msgstr "Насрочени"
+msgstr "Насрочен"
 
 #: admin/partials/queue.php
 msgid "Pending"
-msgstr "Чакащи"
+msgstr "Чакащ"
 
 #: admin/partials/queue.php
 msgid "Processing"

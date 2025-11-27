@@ -421,6 +421,10 @@ msgstr ""
 msgid "Timezone: %s. Select time in 10-minute intervals."
 msgstr ""
 
+#: admin/partials/compose.php admin/partials/one-time-email.php
+msgid "Current server time: %s"
+msgstr ""
+
 #: admin/partials/compose.php
 msgid "minutes"
 msgstr ""

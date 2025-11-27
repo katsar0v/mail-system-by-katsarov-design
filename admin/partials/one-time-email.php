@@ -120,6 +120,14 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
                                     '<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
                                 ); 
                                 ?>
+                                <br>
+                                <?php
+                                $current_time = new DateTime( 'now', $wp_timezone );
+                                printf(
+                                    __( 'Current server time: %s', 'mail-system-by-katsarov-design' ),
+                                    '<strong>' . esc_html( $current_time->format( 'H:i' ) ) . '</strong>'
+                                );
+                                ?>
                             </p>
                         </div>
                         
