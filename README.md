@@ -51,11 +51,7 @@ Email newsletter management system with subscribers, lists, and sending queue. S
 2. Activate the plugin from the "Plugins" menu in WordPress
 3. Go to the "Emails" menu to start using the plugin
 
-### Via Composer
-
-```bash
-composer require katsarov-design/mail-system
-```
+**Note:** No Composer or `vendor/` directory is required. The plugin includes its own autoloader and works out of the box.
 
 ## 🌍 Internationalization (i18n)
 
@@ -287,11 +283,34 @@ The interface language automatically follows your WordPress site language settin
 
 ## 🔧 Development
 
-### Development Requirements
+### Requirements
 
+**For End Users (Clients):**
 - PHP 7.4+
 - WordPress 5.0+
-- Composer (optional)
+- No Composer required - the plugin works without the `vendor/` directory
+
+**For Developers:**
+- All of the above, plus:
+- Composer (for running tests and coding standards checks)
+- Docker (recommended for development environment)
+
+### Installing Development Dependencies
+
+```bash
+# Inside Docker PHP container
+docker exec -it <php-container> bash -c "cd /var/www/html/wp-content/plugins/mail-system-by-katsarov-design && composer install"
+```
+
+### Available Composer Scripts (Development Only)
+
+```bash
+composer test          # Run PHPUnit tests
+composer test:unit     # Run only unit tests
+composer phpcs         # Check WordPress coding standards
+composer phpcbf        # Auto-fix coding standards violations
+composer translations  # Compile .po to .mo translation files
+```
 
 ### Project Structure
 

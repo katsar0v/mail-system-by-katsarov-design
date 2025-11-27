@@ -29,44 +29,84 @@ define( 'MSKD_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'MSKD_BATCH_SIZE', 10 ); // Number of emails to send per minute
 
 /**
- * Load Composer autoloader for PSR-4 namespaced classes (MSKD\*)
- */
-if ( file_exists( MSKD_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
-    require_once MSKD_PLUGIN_DIR . 'vendor/autoload.php';
-}
-
-/**
- * Legacy autoloader for MSKD_ prefixed classes (backward compatibility)
- * This will be removed in a future version once all classes are migrated to PSR-4.
+ * Plugin autoloader.
  *
- * @deprecated Will be removed after full migration to PSR-4 namespaces.
+ * This autoloader handles all plugin classes without requiring Composer.
+ * It supports both legacy MSKD_ prefixed classes and PSR-4 namespaced classes.
+ *
+ * Composer autoloader is only used for development (tests, coding standards).
+ * The plugin works completely without the vendor/ directory.
+ *
+ * Class patterns handled:
+ * - MSKD_* (legacy): MSKD_Admin, MSKD_Cron_Handler, etc.
+ * - MSKD\Admin\* (PSR-4): MSKD\Admin\Admin, MSKD\Admin\Admin_Email, etc.
+ * - MSKD\Services\* (PSR-4): MSKD\Services\List_Service, etc.
  */
 spl_autoload_register( function( $class ) {
-    // Only autoload MSKD_ prefixed classes
-    if ( strpos( $class, 'MSKD_' ) !== 0 ) {
-        return;
-    }
+    // Handle PSR-4 namespaced classes (MSKD\*)
+    if ( strpos( $class, 'MSKD\\' ) === 0 ) {
+        // Skip test classes - they require Composer autoloader (dev only).
+        if ( strpos( $class, 'MSKD\\Tests\\' ) === 0 ) {
+            return;
+        }
 
-    // Convert class name to file path
-    $class_name = str_replace( 'MSKD_', '', $class );
-    $class_name = strtolower( str_replace( '_', '-', $class_name ) );
-    
-    // Possible file locations
-    $locations = array(
-        MSKD_PLUGIN_DIR . 'includes/class-' . $class_name . '.php',
-        MSKD_PLUGIN_DIR . 'includes/models/class-' . $class_name . '.php',
-        MSKD_PLUGIN_DIR . 'includes/services/class-' . $class_name . '.php',
-        MSKD_PLUGIN_DIR . 'admin/class-' . $class_name . '.php',
-        MSKD_PLUGIN_DIR . 'public/class-' . $class_name . '.php',
-    );
+        // Convert namespace to file path.
+        // MSKD\Admin\Admin_Email -> includes/Admin/class-admin-email.php
+        // MSKD\Services\List_Service -> includes/Services/class-list-service.php
+        $relative_class = substr( $class, 5 ); // Remove 'MSKD\' prefix.
+        $parts          = explode( '\\', $relative_class );
 
-    foreach ( $locations as $file ) {
+        // Get class name (last part) and namespace parts.
+        $class_name      = array_pop( $parts );
+        $namespace_path  = implode( '/', $parts );
+
+        // Convert class name to file name (Admin_Email -> admin-email).
+        $file_name = strtolower( str_replace( '_', '-', $class_name ) );
+        $file      = MSKD_PLUGIN_DIR . 'includes/' . $namespace_path . '/class-' . $file_name . '.php';
+
         if ( file_exists( $file ) ) {
             require_once $file;
             return;
         }
     }
+
+    // Handle legacy MSKD_ prefixed classes.
+    if ( strpos( $class, 'MSKD_' ) === 0 ) {
+        // Convert class name to file path.
+        $class_name = str_replace( 'MSKD_', '', $class );
+        $class_name = strtolower( str_replace( '_', '-', $class_name ) );
+
+        // Possible file locations for legacy classes.
+        $locations = array(
+            MSKD_PLUGIN_DIR . 'includes/class-' . $class_name . '.php',
+            MSKD_PLUGIN_DIR . 'includes/models/class-' . $class_name . '.php',
+            MSKD_PLUGIN_DIR . 'includes/services/class-' . $class_name . '.php',
+            MSKD_PLUGIN_DIR . 'admin/class-' . $class_name . '.php',
+            MSKD_PLUGIN_DIR . 'public/class-' . $class_name . '.php',
+        );
+
+        foreach ( $locations as $file ) {
+            if ( file_exists( $file ) ) {
+                require_once $file;
+                return;
+            }
+        }
+    }
 });
+
+/**
+ * Load Composer autoloader if available (development only).
+ *
+ * This is only needed for:
+ * - Running tests (PHPUnit, Brain Monkey)
+ * - Coding standards checks (PHPCS)
+ * - Other dev dependencies
+ *
+ * The plugin works without this in production.
+ */
+if ( file_exists( MSKD_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
+    require_once MSKD_PLUGIN_DIR . 'vendor/autoload.php';
+}
 
 /**
  * Plugin activation hook

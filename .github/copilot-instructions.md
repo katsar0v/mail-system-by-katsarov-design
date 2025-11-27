@@ -5,16 +5,21 @@ WordPress plugin for email newsletter management with subscribers, lists, and qu
 ## Architecture Overview
 
 ```
-mail-system-by-katsarov-design.php  → Entry point, constants (MSKD_*), autoloader
+mail-system-by-katsarov-design.php  → Entry point, constants (MSKD_*), built-in autoloader
 ├── admin/class-admin.php           → All admin logic (1000+ lines, handles CRUD, AJAX, forms)
 ├── public/class-public.php         → Public shortcodes, AJAX subscription, unsubscribe handling
 ├── includes/
 │   ├── class-activator.php         → DB table creation, cron scheduling, default options
 │   ├── class-deactivator.php       → Cron cleanup
+│   ├── Admin/                      → PSR-4 namespaced admin classes (MSKD\Admin\*)
+│   ├── Services/                   → PSR-4 namespaced service classes (MSKD\Services\*)
 │   └── services/
 │       ├── class-cron-handler.php  → Queue processing (10 emails/min via MSKD_BATCH_SIZE)
 │       └── class-smtp-mailer.php   → PHPMailer wrapper for SMTP sending
 ```
+
+**Important**: The plugin has a built-in autoloader and does **NOT require Composer** to run.
+Composer is only needed for development (tests, coding standards).
 
 **Database Tables** (all prefixed `mskd_`):
 - `mskd_subscribers` - email, first/last name, status (active/inactive/unsubscribed), unsubscribe_token
@@ -84,24 +89,37 @@ admin/scss/
 - **Modify queue processing**: Edit `MSKD_Cron_Handler::process_queue()`, constant `MSKD_BATCH_SIZE` controls batch size
 - **Add subscriber field**: Update `class-activator.php` schema, `MSKD_Admin` CRUD methods, partials
 
-## Composer Scripts
+## Composer Scripts (Development Only)
+
+**Note**: Composer is only required for development. The plugin works without `vendor/` directory for end users.
 
 All composer and PHP commands must run **inside the Docker PHP container**:
 
 ```bash
 # From host: run commands via docker exec
+docker exec -it <php-container> bash -c "cd /var/www/html/wp-content/plugins/mail-system-by-katsarov-design && composer install"
 docker exec -it <php-container> bash -c "cd /var/www/html/wp-content/plugins/mail-system-by-katsarov-design && composer test"
 
 # Or enter the container first, then navigate to plugin dir:
 docker exec -it <php-container> bash
 cd /var/www/html/wp-content/plugins/mail-system-by-katsarov-design
 
-# Available composer scripts:
+# Available composer scripts (development only):
+composer install       # Install dev dependencies (required before running tests)
 composer test          # Run PHPUnit tests
+composer test:unit     # Run only unit tests
 composer phpcs         # WordPress coding standards check
 composer phpcbf        # Auto-fix coding standards
 composer translations  # Compile .po to .mo translation files
 ```
+
+### Autoloading
+
+The plugin uses a **built-in autoloader** that handles both:
+- Legacy classes (`MSKD_*`): `MSKD_Admin`, `MSKD_Cron_Handler`, etc.
+- PSR-4 namespaced classes (`MSKD\*`): `MSKD\Admin\Admin`, `MSKD\Services\List_Service`, etc.
+
+Composer's autoloader is loaded only if `vendor/autoload.php` exists (for dev dependencies like PHPUnit).
 
 ## WordPress Coding Standards (WPCS)
 
