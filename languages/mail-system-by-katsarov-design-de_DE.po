@@ -914,8 +914,24 @@ msgid "Are you sure you want to delete ALL lists? This action cannot be undone!"
 msgstr "Sind Sie sicher, dass Sie ALLE Listen löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
 
 #: admin/class-admin.php
-msgid "Are you sure you want to delete ALL queued emails? This action cannot be undone!"
-msgstr "Sind Sie sicher, dass Sie ALLE E-Mails aus der Warteschlange löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
+msgid "Are you sure you want to delete ALL campaigns? This action cannot be undone!"
+msgstr "Sind Sie sicher, dass Sie ALLE Kampagnen löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
+
+#: includes/Admin/class-admin.php
+msgid "Select lists..."
+msgstr "Listen auswählen..."
+
+#: includes/Admin/class-admin.php
+msgid "No results found"
+msgstr "Keine Ergebnisse gefunden"
+
+#: admin/partials/compose.php
+msgid "%d subscribers"
+msgstr "%d Abonnenten"
+
+#: admin/partials/compose.php
+msgid "Start typing to search. You can select multiple lists."
+msgstr "Beginnen Sie zu tippen, um zu suchen. Sie können mehrere Listen auswählen."
 
 #: admin/class-admin.php
 msgid "All subscribers deleted successfully."
@@ -926,8 +942,8 @@ msgid "All lists deleted successfully."
 msgstr "Alle Listen wurden erfolgreich gelöscht."
 
 #: admin/class-admin.php
-msgid "All queued emails deleted successfully."
-msgstr "Alle E-Mails aus der Warteschlange wurden erfolgreich gelöscht."
+msgid "All campaigns deleted successfully."
+msgstr "Alle Kampagnen wurden erfolgreich gelöscht."
 
 #: admin/class-admin.php
 msgid "Campaign not found."
@@ -982,16 +998,16 @@ msgid "Permanently deletes all mailing lists and subscriber associations."
 msgstr "Löscht dauerhaft alle Mailinglisten und Abonnentenverknüpfungen."
 
 #: admin/partials/settings.php
-msgid "Truncate Queue"
-msgstr "Warteschlange löschen"
+msgid "Truncate Campaigns"
+msgstr "Kampagnen löschen"
 
 #: admin/partials/settings.php
-msgid "Delete all queued emails"
-msgstr "Alle E-Mails aus der Warteschlange löschen"
+msgid "Delete all campaigns"
+msgstr "Alle Kampagnen löschen"
 
 #: admin/partials/settings.php
-msgid "Permanently deletes all emails from the queue (pending, processing, sent, and failed)."
-msgstr "Löscht dauerhaft alle E-Mails aus der Warteschlange (ausstehend, in Bearbeitung, gesendet und fehlgeschlagen)."
+msgid "Permanently deletes all campaigns and their queued emails (pending, processing, sent, and failed)."
+msgstr "Löscht dauerhaft alle Kampagnen und ihre E-Mails aus der Warteschlange (ausstehend, in Bearbeitung, gesendet und fehlgeschlagen)."
 
 #: admin/partials/queue.php
 msgid "External"
