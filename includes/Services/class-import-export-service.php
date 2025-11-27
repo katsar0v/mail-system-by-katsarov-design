@@ -2,7 +2,7 @@
 /**
  * Import/Export Service
  *
- * Handles import and export of subscribers and lists in CSV/JSON formats.
+ * Handles import and export of subscribers and lists in CSV format.
  *
  * @package MSKD\Services
  * @since   1.2.0
@@ -27,7 +27,7 @@ class Import_Export_Service {
 	 *
 	 * @var array
 	 */
-	const SUPPORTED_FORMATS = array( 'csv', 'json' );
+	const SUPPORTED_FORMATS = array( 'csv' );
 
 	/**
 	 * CSV delimiter.
@@ -139,40 +139,6 @@ class Import_Export_Service {
 	}
 
 	/**
-	 * Export subscribers to JSON format.
-	 *
-	 * @param array $args Export arguments.
-	 * @return string JSON content.
-	 */
-	public function export_subscribers_json( array $args = array() ): string {
-		$subscribers = $this->get_subscribers_for_export( $args );
-
-		$export_data = array();
-
-		foreach ( $subscribers as $subscriber ) {
-			$lists      = $this->subscriber_service->get_lists( (int) $subscriber->id );
-			$list_names = array();
-			foreach ( $lists as $list_id ) {
-				$list = $this->list_service->get_by_id( (int) $list_id );
-				if ( $list ) {
-					$list_names[] = $list->name;
-				}
-			}
-
-			$export_data[] = array(
-				'email'      => $subscriber->email,
-				'first_name' => $subscriber->first_name,
-				'last_name'  => $subscriber->last_name,
-				'status'     => $subscriber->status,
-				'lists'      => $list_names,
-				'created_at' => $subscriber->created_at,
-			);
-		}
-
-		return wp_json_encode( $export_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
-	}
-
-	/**
 	 * Export lists to CSV format.
 	 *
 	 * @return string CSV content.
@@ -211,28 +177,6 @@ class Import_Export_Service {
 		fclose( $output );
 
 		return $csv;
-	}
-
-	/**
-	 * Export lists to JSON format.
-	 *
-	 * @return string JSON content.
-	 */
-	public function export_lists_json(): string {
-		$lists = $this->list_service->get_all_with_counts();
-
-		$export_data = array();
-
-		foreach ( $lists as $list ) {
-			$export_data[] = array(
-				'name'             => $list->name,
-				'description'      => $list->description,
-				'subscriber_count' => (int) $list->subscriber_count,
-				'created_at'       => $list->created_at,
-			);
-		}
-
-		return wp_json_encode( $export_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
 	}
 
 	/**
@@ -307,8 +251,7 @@ class Import_Export_Service {
 
 		// Validate MIME type.
 		$allowed_mimes = array(
-			'csv'  => array( 'text/csv', 'text/plain', 'application/csv', 'application/vnd.ms-excel' ),
-			'json' => array( 'application/json', 'text/json', 'text/plain' ),
+			'csv' => array( 'text/csv', 'text/plain', 'application/csv', 'application/vnd.ms-excel' ),
 		);
 
 		$finfo = new \finfo( FILEINFO_MIME_TYPE );
@@ -429,109 +372,6 @@ class Import_Export_Service {
 		return array(
 			'valid'   => true,
 			'headers' => $headers,
-			'rows'    => $rows,
-			'total'   => count( $rows ),
-			'errors'  => $errors,
-		);
-	}
-
-	/**
-	 * Parse and validate JSON file for subscriber import.
-	 *
-	 * @param string $file_path Path to the JSON file.
-	 * @return array Same structure as parse_subscribers_csv.
-	 */
-	public function parse_subscribers_json( string $file_path ): array {
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading local uploaded file, not remote URL.
-		$content = file_get_contents( $file_path );
-
-		if ( false === $content ) {
-			return array(
-				'valid' => false,
-				'error' => __( 'Could not read the file.', 'mail-system-by-katsarov-design' ),
-			);
-		}
-
-		$data = json_decode( $content, true );
-
-		if ( JSON_ERROR_NONE !== json_last_error() ) {
-			return array(
-				'valid' => false,
-				'error' => sprintf(
-					/* translators: %s: JSON error message */
-					__( 'Invalid JSON format: %s', 'mail-system-by-katsarov-design' ),
-					json_last_error_msg()
-				),
-			);
-		}
-
-		if ( ! is_array( $data ) ) {
-			return array(
-				'valid' => false,
-				'error' => __( 'JSON must contain an array of subscribers.', 'mail-system-by-katsarov-design' ),
-			);
-		}
-
-		$rows       = array();
-		$errors     = array();
-		$row_number = 0;
-
-		foreach ( $data as $item ) {
-			++$row_number;
-
-			if ( ! is_array( $item ) ) {
-				$errors[] = sprintf(
-					/* translators: %d: row number */
-					__( 'Row %d: Invalid data format.', 'mail-system-by-katsarov-design' ),
-					$row_number
-				);
-				continue;
-			}
-
-			// Validate email.
-			$email = isset( $item['email'] ) ? trim( $item['email'] ) : '';
-			if ( empty( $email ) || ! is_email( $email ) ) {
-				$errors[] = sprintf(
-					/* translators: 1: row number, 2: email value */
-					__( 'Row %1$d: Invalid email address "%2$s".', 'mail-system-by-katsarov-design' ),
-					$row_number,
-					$email
-				);
-				continue;
-			}
-
-			// Build normalized row.
-			$row_data = array(
-				'email'      => $email,
-				'first_name' => isset( $item['first_name'] ) ? trim( $item['first_name'] ) : '',
-				'last_name'  => isset( $item['last_name'] ) ? trim( $item['last_name'] ) : '',
-				'status'     => 'active',
-				'lists'      => '',
-			);
-
-			// Validate status if provided.
-			if ( ! empty( $item['status'] ) ) {
-				$allowed_statuses = array( 'active', 'inactive', 'unsubscribed' );
-				if ( in_array( strtolower( $item['status'] ), $allowed_statuses, true ) ) {
-					$row_data['status'] = strtolower( $item['status'] );
-				}
-			}
-
-			// Handle lists.
-			if ( ! empty( $item['lists'] ) ) {
-				if ( is_array( $item['lists'] ) ) {
-					$row_data['lists'] = implode( ';', $item['lists'] );
-				} else {
-					$row_data['lists'] = $item['lists'];
-				}
-			}
-
-			$rows[] = $row_data;
-		}
-
-		return array(
-			'valid'   => true,
-			'headers' => array( 'email', 'first_name', 'last_name', 'status', 'lists' ),
 			'rows'    => $rows,
 			'total'   => count( $rows ),
 			'errors'  => $errors,

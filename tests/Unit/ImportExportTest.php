@@ -100,41 +100,6 @@ class ImportExportTest extends TestCase {
 	}
 
 	/**
-	 * Test export subscribers to JSON format.
-	 */
-	public function test_export_subscribers_json_returns_valid_json(): void {
-		// Mock subscriber results.
-		$subscribers = array(
-			(object) array(
-				'id'         => 1,
-				'email'      => 'john@example.com',
-				'first_name' => 'John',
-				'last_name'  => 'Doe',
-				'status'     => 'active',
-				'created_at' => '2024-01-15 10:00:00',
-			),
-		);
-
-		$this->wpdb->shouldReceive( 'get_var' )
-			->andReturn( 1 );
-
-		$this->wpdb->shouldReceive( 'get_results' )
-			->andReturn( $subscribers );
-
-		$this->wpdb->shouldReceive( 'get_col' )
-			->andReturn( array() );
-
-		$json = $this->service->export_subscribers_json();
-
-		// Check that JSON is valid.
-		$data = json_decode( $json, true );
-		$this->assertNotNull( $data );
-		$this->assertIsArray( $data );
-		$this->assertCount( 1, $data );
-		$this->assertEquals( 'john@example.com', $data[0]['email'] );
-	}
-
-	/**
 	 * Test export lists to CSV format.
 	 */
 	public function test_export_lists_csv_returns_valid_csv(): void {
@@ -213,51 +178,6 @@ class ImportExportTest extends TestCase {
 		$this->assertCount( 1, $result['rows'] ); // Only valid row.
 		$this->assertCount( 1, $result['errors'] ); // One error for invalid email.
 		$this->assertStringContainsString( 'Invalid email', $result['errors'][0] );
-
-		unlink( $temp_file );
-	}
-
-	/**
-	 * Test parse subscribers JSON with valid data.
-	 */
-	public function test_parse_subscribers_json_with_valid_data(): void {
-		$json_content = json_encode( array(
-			array(
-				'email'      => 'john@example.com',
-				'first_name' => 'John',
-				'last_name'  => 'Doe',
-				'status'     => 'active',
-			),
-			array(
-				'email'      => 'jane@example.com',
-				'first_name' => 'Jane',
-			),
-		) );
-
-		$temp_file = tempnam( sys_get_temp_dir(), 'mskd_test' );
-		file_put_contents( $temp_file, $json_content );
-
-		$result = $this->service->parse_subscribers_json( $temp_file );
-
-		$this->assertTrue( $result['valid'] );
-		$this->assertCount( 2, $result['rows'] );
-		$this->assertEquals( 'john@example.com', $result['rows'][0]['email'] );
-		$this->assertEquals( 'active', $result['rows'][0]['status'] );
-
-		unlink( $temp_file );
-	}
-
-	/**
-	 * Test parse subscribers JSON handles invalid JSON.
-	 */
-	public function test_parse_subscribers_json_handles_invalid_json(): void {
-		$temp_file = tempnam( sys_get_temp_dir(), 'mskd_test' );
-		file_put_contents( $temp_file, 'not valid json {' );
-
-		$result = $this->service->parse_subscribers_json( $temp_file );
-
-		$this->assertFalse( $result['valid'] );
-		$this->assertStringContainsString( 'JSON', $result['error'] );
 
 		unlink( $temp_file );
 	}

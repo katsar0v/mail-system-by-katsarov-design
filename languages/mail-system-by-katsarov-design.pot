@@ -1179,7 +1179,7 @@ msgid "Export"
 msgstr ""
 
 #: admin/partials/import-export.php
-msgid "Export subscribers or lists to a CSV or JSON file for backup or migration."
+msgid "Export subscribers or lists to a CSV file for backup or migration."
 msgstr ""
 
 #: admin/partials/import-export.php
@@ -1215,7 +1215,7 @@ msgid "Import"
 msgstr ""
 
 #: admin/partials/import-export.php
-msgid "Import subscribers or lists from a CSV or JSON file."
+msgid "Import subscribers or lists from a CSV file."
 msgstr ""
 
 #: admin/partials/import-export.php
@@ -1294,14 +1294,6 @@ msgstr ""
 msgid "List description"
 msgstr ""
 
-#: admin/partials/import-export.php
-msgid "JSON format"
-msgstr ""
-
-#: admin/partials/import-export.php
-msgid "JSON files should contain an array of objects with the same field names as the CSV columns."
-msgstr ""
-
 #: includes/Services/class-import-export-service.php
 msgid "File size exceeds the maximum limit of 5MB."
 msgstr ""
@@ -1330,20 +1322,6 @@ msgstr ""
 #. translators: 1: row number, 2: email value
 #: includes/Services/class-import-export-service.php
 msgid "Row %1$d: Invalid email address \"%2$s\"."
-msgstr ""
-
-#. translators: %d: row number
-#: includes/Services/class-import-export-service.php
-msgid "Row %d: Invalid data format."
-msgstr ""
-
-#. translators: %s: JSON error message
-#: includes/Services/class-import-export-service.php
-msgid "Invalid JSON format: %s"
-msgstr ""
-
-#: includes/Services/class-import-export-service.php
-msgid "JSON must contain an array of subscribers."
 msgstr ""
 
 #. translators: %s: email address

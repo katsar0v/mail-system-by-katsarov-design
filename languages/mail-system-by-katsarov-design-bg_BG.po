@@ -1182,8 +1182,8 @@ msgid "Export"
 msgstr "Експорт"
 
 #: admin/partials/import-export.php
-msgid "Export subscribers or lists to a CSV or JSON file for backup or migration."
-msgstr "Експортирайте абонати или списъци в CSV или JSON файл за архивиране или миграция."
+msgid "Export subscribers or lists to a CSV file for backup or migration."
+msgstr "Експортирайте абонати или списъци в CSV файл за архивиране или миграция."
 
 #: admin/partials/import-export.php
 msgid "Export type"
@@ -1218,8 +1218,8 @@ msgid "Import"
 msgstr "Импорт"
 
 #: admin/partials/import-export.php
-msgid "Import subscribers or lists from a CSV or JSON file."
-msgstr "Импортирайте абонати или списъци от CSV или JSON файл."
+msgid "Import subscribers or lists from a CSV file."
+msgstr "Импортирайте абонати или списъци от CSV файл."
 
 #: admin/partials/import-export.php
 msgid "Import type"
@@ -1297,14 +1297,6 @@ msgstr "Име на списък (задължително)"
 msgid "List description"
 msgstr "Описание на списък"
 
-#: admin/partials/import-export.php
-msgid "JSON format"
-msgstr "JSON формат"
-
-#: admin/partials/import-export.php
-msgid "JSON files should contain an array of objects with the same field names as the CSV columns."
-msgstr "JSON файловете трябва да съдържат масив от обекти със същите имена на полета като CSV колоните."
-
 #: includes/Services/class-import-export-service.php
 msgid "File size exceeds the maximum limit of 5MB."
 msgstr "Размерът на файла надвишава максималния лимит от 5MB."
@@ -1334,20 +1326,6 @@ msgstr "CSV файлът трябва да съдържа колона \"email\"
 #: includes/Services/class-import-export-service.php
 msgid "Row %1$d: Invalid email address \"%2$s\"."
 msgstr "Ред %1$d: Невалиден имейл адрес \"%2$s\"."
-
-#. translators: %d: row number
-#: includes/Services/class-import-export-service.php
-msgid "Row %d: Invalid data format."
-msgstr "Ред %d: Невалиден формат на данните."
-
-#. translators: %s: JSON error message
-#: includes/Services/class-import-export-service.php
-msgid "Invalid JSON format: %s"
-msgstr "Невалиден JSON формат: %s"
-
-#: includes/Services/class-import-export-service.php
-msgid "JSON must contain an array of subscribers."
-msgstr "JSON файлът трябва да съдържа масив от абонати."
 
 #. translators: %s: email address
 #: includes/Services/class-import-export-service.php

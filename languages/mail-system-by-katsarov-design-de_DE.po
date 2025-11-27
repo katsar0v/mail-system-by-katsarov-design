@@ -1182,8 +1182,8 @@ msgid "Export"
 msgstr "Export"
 
 #: admin/partials/import-export.php
-msgid "Export subscribers or lists to a CSV or JSON file for backup or migration."
-msgstr "Exportieren Sie Abonnenten oder Listen in eine CSV- oder JSON-Datei für Backup oder Migration."
+msgid "Export subscribers or lists to a CSV file for backup or migration."
+msgstr "Exportieren Sie Abonnenten oder Listen in eine CSV-Datei für Backup oder Migration."
 
 #: admin/partials/import-export.php
 msgid "Export type"
@@ -1218,8 +1218,8 @@ msgid "Import"
 msgstr "Import"
 
 #: admin/partials/import-export.php
-msgid "Import subscribers or lists from a CSV or JSON file."
-msgstr "Importieren Sie Abonnenten oder Listen aus einer CSV- oder JSON-Datei."
+msgid "Import subscribers or lists from a CSV file."
+msgstr "Importieren Sie Abonnenten oder Listen aus einer CSV-Datei."
 
 #: admin/partials/import-export.php
 msgid "Import type"
@@ -1297,14 +1297,6 @@ msgstr "Listenname (erforderlich)"
 msgid "List description"
 msgstr "Listenbeschreibung"
 
-#: admin/partials/import-export.php
-msgid "JSON format"
-msgstr "JSON-Format"
-
-#: admin/partials/import-export.php
-msgid "JSON files should contain an array of objects with the same field names as the CSV columns."
-msgstr "JSON-Dateien sollten ein Array von Objekten mit denselben Feldnamen wie die CSV-Spalten enthalten."
-
 #: includes/Services/class-import-export-service.php
 msgid "File size exceeds the maximum limit of 5MB."
 msgstr "Die Dateigröße überschreitet das maximale Limit von 5MB."
@@ -1334,20 +1326,6 @@ msgstr "Die CSV-Datei muss eine \"email\"-Spalte enthalten."
 #: includes/Services/class-import-export-service.php
 msgid "Row %1$d: Invalid email address \"%2$s\"."
 msgstr "Zeile %1$d: Ungültige E-Mail-Adresse \"%2$s\"."
-
-#. translators: %d: row number
-#: includes/Services/class-import-export-service.php
-msgid "Row %d: Invalid data format."
-msgstr "Zeile %d: Ungültiges Datenformat."
-
-#. translators: %s: JSON error message
-#: includes/Services/class-import-export-service.php
-msgid "Invalid JSON format: %s"
-msgstr "Ungültiges JSON-Format: %s"
-
-#: includes/Services/class-import-export-service.php
-msgid "JSON must contain an array of subscribers."
-msgstr "JSON muss ein Array von Abonnenten enthalten."
 
 #. translators: %s: email address
 #: includes/Services/class-import-export-service.php

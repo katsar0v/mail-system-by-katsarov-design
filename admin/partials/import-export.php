@@ -28,7 +28,7 @@ $lists = $list_service->get_all();
 				<?php esc_html_e( 'Export', 'mail-system-by-katsarov-design' ); ?>
 			</h2>
 			<p class="description">
-				<?php esc_html_e( 'Export subscribers or lists to a CSV or JSON file for backup or migration.', 'mail-system-by-katsarov-design' ); ?>
+				<?php esc_html_e( 'Export subscribers or lists to a CSV file for backup or migration.', 'mail-system-by-katsarov-design' ); ?>
 			</p>
 
 			<form method="post" action="">
@@ -46,20 +46,7 @@ $lists = $list_service->get_all();
 							</select>
 						</td>
 					</tr>
-					<tr>
-						<th scope="row">
-							<label for="export_format"><?php esc_html_e( 'Format', 'mail-system-by-katsarov-design' ); ?></label>
-						</th>
-						<td>
-							<select name="export_format" id="export_format" class="regular-text">
-								<option value="csv">CSV</option>
-								<option value="json">JSON</option>
-							</select>
-							<p class="description">
-								<?php esc_html_e( 'CSV is recommended for Excel and spreadsheet applications.', 'mail-system-by-katsarov-design' ); ?>
-							</p>
-						</td>
-					</tr>
+					<input type="hidden" name="export_format" value="csv">
 					<tr class="mskd-export-subscribers-options">
 						<th scope="row">
 							<label for="export_list_id"><?php esc_html_e( 'Filter by list', 'mail-system-by-katsarov-design' ); ?></label>
@@ -103,7 +90,7 @@ $lists = $list_service->get_all();
 				<?php esc_html_e( 'Import', 'mail-system-by-katsarov-design' ); ?>
 			</h2>
 			<p class="description">
-				<?php esc_html_e( 'Import subscribers or lists from a CSV or JSON file.', 'mail-system-by-katsarov-design' ); ?>
+				<?php esc_html_e( 'Import subscribers or lists from a CSV file.', 'mail-system-by-katsarov-design' ); ?>
 			</p>
 
 			<form method="post" action="" enctype="multipart/form-data">
@@ -121,23 +108,13 @@ $lists = $list_service->get_all();
 							</select>
 						</td>
 					</tr>
-					<tr>
-						<th scope="row">
-							<label for="import_format"><?php esc_html_e( 'Format', 'mail-system-by-katsarov-design' ); ?></label>
-						</th>
-						<td>
-							<select name="import_format" id="import_format" class="regular-text">
-								<option value="csv">CSV</option>
-								<option value="json">JSON</option>
-							</select>
-						</td>
-					</tr>
+					<input type="hidden" name="import_format" value="csv">
 					<tr>
 						<th scope="row">
 							<label for="import_file"><?php esc_html_e( 'File', 'mail-system-by-katsarov-design' ); ?></label>
 						</th>
 						<td>
-							<input type="file" name="import_file" id="import_file" accept=".csv,.json" required>
+							<input type="file" name="import_file" id="import_file" accept=".csv" required>
 							<p class="description">
 								<?php esc_html_e( 'Maximum file size: 5MB.', 'mail-system-by-katsarov-design' ); ?>
 							</p>
@@ -212,22 +189,6 @@ jane@example.com,Jane,Smith,active,Newsletter</pre>
 			<pre class="mskd-code-example">name,description
 Newsletter,Weekly newsletter subscribers
 Updates,Product update notifications</pre>
-
-			<h3><?php esc_html_e( 'JSON format', 'mail-system-by-katsarov-design' ); ?></h3>
-			<p class="description">
-				<?php esc_html_e( 'JSON files should contain an array of objects with the same field names as the CSV columns.', 'mail-system-by-katsarov-design' ); ?>
-			</p>
-
-			<h4><?php esc_html_e( 'Example:', 'mail-system-by-katsarov-design' ); ?></h4>
-			<pre class="mskd-code-example">[
-  {
-    "email": "john@example.com",
-    "first_name": "John",
-    "last_name": "Doe",
-    "status": "active",
-    "lists": ["Newsletter", "Updates"]
-  }
-]</pre>
 		</div>
 	</div>
 </div>

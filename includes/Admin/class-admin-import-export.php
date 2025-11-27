@@ -104,19 +104,9 @@ class Admin_Import_Export {
 
 		// Generate export content.
 		if ( 'subscribers' === $type ) {
-			if ( 'json' === $format ) {
-				$content  = $this->service->export_subscribers_json( $args );
-				$filename = 'subscribers-' . gmdate( 'Y-m-d' ) . '.json';
-				$mime     = 'application/json';
-			} else {
-				$content  = $this->service->export_subscribers_csv( $args );
-				$filename = 'subscribers-' . gmdate( 'Y-m-d' ) . '.csv';
-				$mime     = 'text/csv';
-			}
-		} elseif ( 'json' === $format ) {
-			$content  = $this->service->export_lists_json();
-			$filename = 'lists-' . gmdate( 'Y-m-d' ) . '.json';
-			$mime     = 'application/json';
+			$content  = $this->service->export_subscribers_csv( $args );
+			$filename = 'subscribers-' . gmdate( 'Y-m-d' ) . '.csv';
+			$mime     = 'text/csv';
 		} else {
 			$content  = $this->service->export_lists_csv();
 			$filename = 'lists-' . gmdate( 'Y-m-d' ) . '.csv';
@@ -136,7 +126,7 @@ class Admin_Import_Export {
 			ob_end_clean();
 		}
 
-		// Direct output is safe here: this is a binary file download (CSV/JSON)
+		// Direct output is safe here: this is a binary file download (CSV)
 		// with appropriate Content-Type and Content-Disposition headers set above.
 		// The content is generated internally by the service, not from user input.
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Binary file download, content is generated internally.
@@ -155,12 +145,8 @@ class Admin_Import_Export {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
 		$type = isset( $_POST['import_type'] ) ? sanitize_text_field( wp_unslash( $_POST['import_type'] ) ) : 'subscribers';
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
-		$format = isset( $_POST['import_format'] ) ? sanitize_text_field( wp_unslash( $_POST['import_format'] ) ) : 'csv';
-
-		// Validate format.
-		if ( ! in_array( $format, array( 'csv', 'json' ), true ) ) {
-			$format = 'csv';
-		}
+		// Force CSV format.
+		$format = 'csv';
 
 		// Check for uploaded file.
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
@@ -192,11 +178,7 @@ class Admin_Import_Export {
 
 		// Parse file.
 		if ( 'subscribers' === $type ) {
-			if ( 'json' === $format ) {
-				$parsed = $this->service->parse_subscribers_json( $file_path );
-			} else {
-				$parsed = $this->service->parse_subscribers_csv( $file_path );
-			}
+			$parsed = $this->service->parse_subscribers_csv( $file_path );
 		} else {
 			$parsed = $this->service->parse_lists_csv( $file_path );
 		}
