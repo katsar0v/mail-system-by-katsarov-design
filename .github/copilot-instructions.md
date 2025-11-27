@@ -103,6 +103,36 @@ composer phpcbf        # Auto-fix coding standards
 composer translations  # Compile .po to .mo translation files
 ```
 
+## WordPress Coding Standards (WPCS)
+
+**All PHP code MUST follow WordPress Coding Standards.** Before submitting PRs:
+
+1. **Check for violations**: `composer phpcs`
+2. **Auto-fix what's possible**: `composer phpcbf`
+3. **Manually fix remaining issues**
+
+### Key WPCS Rules to Follow
+
+| Rule | Example |
+|------|---------|
+| **Yoda conditions** | `if ( 'value' === $var )` NOT `if ( $var === 'value' )` |
+| **wp_unslash before sanitize** | `sanitize_text_field( wp_unslash( $_POST['field'] ) )` |
+| **Pre-increment** | `++$counter;` NOT `$counter++;` |
+| **Nonce verification** | Always check `isset()` before `wp_verify_nonce()` |
+| **Direct file operations** | Add `// phpcs:ignore` comment with reason if `fopen()`/`file_get_contents()` is needed for local files |
+
+### phpcs:ignore Usage
+
+For legitimate exceptions (e.g., reading uploaded temp files), use inline comments:
+
+```php
+// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading local uploaded file.
+$content = file_get_contents( $file_path );
+
+// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition -- Standard CSV reading pattern.
+while ( false !== ( $row = fgetcsv( $handle ) ) ) {
+```
+
 ## Translation Workflow
 
 **IMPORTANT**: When adding or modifying user-facing strings, always update translations:

@@ -58,12 +58,12 @@ class Admin_Import_Export {
 		}
 
 		// Handle export request.
-		if ( isset( $_POST['mskd_export'] ) && wp_verify_nonce( $_POST['mskd_nonce'], 'mskd_export' ) ) {
+		if ( isset( $_POST['mskd_export'], $_POST['mskd_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mskd_nonce'] ) ), 'mskd_export' ) ) {
 			$this->handle_export();
 		}
 
 		// Handle import request.
-		if ( isset( $_POST['mskd_import'] ) && wp_verify_nonce( $_POST['mskd_nonce'], 'mskd_import' ) ) {
+		if ( isset( $_POST['mskd_import'], $_POST['mskd_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mskd_nonce'] ) ), 'mskd_import' ) ) {
 			$this->handle_import();
 		}
 	}
@@ -71,11 +71,15 @@ class Admin_Import_Export {
 	/**
 	 * Handle export action.
 	 *
+	 * Called after nonce verification in handle_actions().
+	 *
 	 * @return void
 	 */
 	private function handle_export(): void {
-		$type   = isset( $_POST['export_type'] ) ? sanitize_text_field( $_POST['export_type'] ) : 'subscribers';
-		$format = isset( $_POST['export_format'] ) ? sanitize_text_field( $_POST['export_format'] ) : 'csv';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
+		$type = isset( $_POST['export_type'] ) ? sanitize_text_field( wp_unslash( $_POST['export_type'] ) ) : 'subscribers';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
+		$format = isset( $_POST['export_format'] ) ? sanitize_text_field( wp_unslash( $_POST['export_format'] ) ) : 'csv';
 
 		// Validate format.
 		if ( ! in_array( $format, array( 'csv', 'json' ), true ) ) {
@@ -85,18 +89,22 @@ class Admin_Import_Export {
 		$args = array();
 
 		// Get filter options for subscribers.
-		if ( $type === 'subscribers' ) {
+		if ( 'subscribers' === $type ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
 			if ( ! empty( $_POST['export_list_id'] ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
 				$args['list_id'] = intval( $_POST['export_list_id'] );
 			}
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
 			if ( ! empty( $_POST['export_status'] ) ) {
-				$args['status'] = sanitize_text_field( $_POST['export_status'] );
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
+				$args['status'] = sanitize_text_field( wp_unslash( $_POST['export_status'] ) );
 			}
 		}
 
 		// Generate export content.
-		if ( $type === 'subscribers' ) {
-			if ( $format === 'json' ) {
+		if ( 'subscribers' === $type ) {
+			if ( 'json' === $format ) {
 				$content  = $this->service->export_subscribers_json( $args );
 				$filename = 'subscribers-' . gmdate( 'Y-m-d' ) . '.json';
 				$mime     = 'application/json';
@@ -105,16 +113,14 @@ class Admin_Import_Export {
 				$filename = 'subscribers-' . gmdate( 'Y-m-d' ) . '.csv';
 				$mime     = 'text/csv';
 			}
+		} elseif ( 'json' === $format ) {
+			$content  = $this->service->export_lists_json();
+			$filename = 'lists-' . gmdate( 'Y-m-d' ) . '.json';
+			$mime     = 'application/json';
 		} else {
-			if ( $format === 'json' ) {
-				$content  = $this->service->export_lists_json();
-				$filename = 'lists-' . gmdate( 'Y-m-d' ) . '.json';
-				$mime     = 'application/json';
-			} else {
-				$content  = $this->service->export_lists_csv();
-				$filename = 'lists-' . gmdate( 'Y-m-d' ) . '.csv';
-				$mime     = 'text/csv';
-			}
+			$content  = $this->service->export_lists_csv();
+			$filename = 'lists-' . gmdate( 'Y-m-d' ) . '.csv';
+			$mime     = 'text/csv';
 		}
 
 		// Send file download.
@@ -133,6 +139,7 @@ class Admin_Import_Export {
 		// Direct output is safe here: this is a binary file download (CSV/JSON)
 		// with appropriate Content-Type and Content-Disposition headers set above.
 		// The content is generated internally by the service, not from user input.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Binary file download, content is generated internally.
 		echo $content;
 		exit;
 	}
@@ -140,11 +147,15 @@ class Admin_Import_Export {
 	/**
 	 * Handle import action.
 	 *
+	 * Called after nonce verification in handle_actions().
+	 *
 	 * @return void
 	 */
 	private function handle_import(): void {
-		$type   = isset( $_POST['import_type'] ) ? sanitize_text_field( $_POST['import_type'] ) : 'subscribers';
-		$format = isset( $_POST['import_format'] ) ? sanitize_text_field( $_POST['import_format'] ) : 'csv';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
+		$type = isset( $_POST['import_type'] ) ? sanitize_text_field( wp_unslash( $_POST['import_type'] ) ) : 'subscribers';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
+		$format = isset( $_POST['import_format'] ) ? sanitize_text_field( wp_unslash( $_POST['import_format'] ) ) : 'csv';
 
 		// Validate format.
 		if ( ! in_array( $format, array( 'csv', 'json' ), true ) ) {
@@ -152,6 +163,7 @@ class Admin_Import_Export {
 		}
 
 		// Check for uploaded file.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
 		if ( ! isset( $_FILES['import_file'] ) || empty( $_FILES['import_file']['name'] ) ) {
 			add_settings_error(
 				'mskd_messages',
@@ -162,7 +174,8 @@ class Admin_Import_Export {
 			return;
 		}
 
-		// Validate file.
+		// Validate file. The service validates file type, size, and MIME type.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce verified in handle_actions(). File array is validated by service.
 		$validation = $this->service->validate_import_file( $_FILES['import_file'], $format );
 
 		if ( ! $validation['valid'] ) {
@@ -178,8 +191,8 @@ class Admin_Import_Export {
 		$file_path = $validation['path'];
 
 		// Parse file.
-		if ( $type === 'subscribers' ) {
-			if ( $format === 'json' ) {
+		if ( 'subscribers' === $type ) {
+			if ( 'json' === $format ) {
 				$parsed = $this->service->parse_subscribers_json( $file_path );
 			} else {
 				$parsed = $this->service->parse_subscribers_csv( $file_path );
@@ -234,14 +247,16 @@ class Admin_Import_Export {
 		}
 
 		// Import options.
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
 		$options = array(
-			'update_existing' => isset( $_POST['update_existing'] ) && $_POST['update_existing'] === '1',
-			'assign_lists'    => isset( $_POST['assign_lists'] ) && $_POST['assign_lists'] === '1',
+			'update_existing' => isset( $_POST['update_existing'] ) && '1' === $_POST['update_existing'],
+			'assign_lists'    => isset( $_POST['assign_lists'] ) && '1' === $_POST['assign_lists'],
 			'skip_existing'   => true,
 		);
+		// phpcs:enable
 
 		// Perform import.
-		if ( $type === 'subscribers' ) {
+		if ( 'subscribers' === $type ) {
 			$result = $this->service->import_subscribers( $parsed['rows'], $options );
 
 			// Build success message.
@@ -291,7 +306,6 @@ class Admin_Import_Export {
 					'success'
 				);
 			}
-
 		} else {
 			$result = $this->service->import_lists( $parsed['rows'], $options );
 

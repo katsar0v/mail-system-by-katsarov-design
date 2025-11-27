@@ -110,7 +110,7 @@ class Import_Export_Service {
 
 		// Write data rows.
 		foreach ( $subscribers as $subscriber ) {
-			$lists = $this->subscriber_service->get_lists( (int) $subscriber->id );
+			$lists      = $this->subscriber_service->get_lists( (int) $subscriber->id );
 			$list_names = array();
 			foreach ( $lists as $list_id ) {
 				$list = $this->list_service->get_by_id( (int) $list_id );
@@ -150,7 +150,7 @@ class Import_Export_Service {
 		$export_data = array();
 
 		foreach ( $subscribers as $subscriber ) {
-			$lists = $this->subscriber_service->get_lists( (int) $subscriber->id );
+			$lists      = $this->subscriber_service->get_lists( (int) $subscriber->id );
 			$list_names = array();
 			foreach ( $lists as $list_id ) {
 				$list = $this->list_service->get_by_id( (int) $list_id );
@@ -277,7 +277,7 @@ class Import_Export_Service {
 	 */
 	public function validate_import_file( array $file, string $format ): array {
 		// Check for upload errors.
-		if ( $file['error'] !== UPLOAD_ERR_OK ) {
+		if ( UPLOAD_ERR_OK !== $file['error'] ) {
 			return array(
 				'valid' => false,
 				'error' => $this->get_upload_error_message( $file['error'] ),
@@ -352,7 +352,7 @@ class Import_Export_Service {
 
 		// Skip UTF-8 BOM if present.
 		$bom = fread( $handle, 3 );
-		if ( $bom !== "\xEF\xBB\xBF" ) {
+		if ( "\xEF\xBB\xBF" !== $bom ) {
 			rewind( $handle );
 		}
 
@@ -383,8 +383,9 @@ class Import_Export_Service {
 		$errors     = array();
 		$row_number = 1;
 
-		while ( ( $row = fgetcsv( $handle, 0, self::CSV_DELIMITER, self::CSV_ENCLOSURE ) ) !== false ) {
-			$row_number++;
+		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition -- Standard CSV reading pattern.
+		while ( false !== ( $row = fgetcsv( $handle, 0, self::CSV_DELIMITER, self::CSV_ENCLOSURE ) ) ) {
+			++$row_number;
 
 			// Skip empty rows.
 			if ( count( $row ) === 1 && empty( $row[0] ) ) {
@@ -441,9 +442,10 @@ class Import_Export_Service {
 	 * @return array Same structure as parse_subscribers_csv.
 	 */
 	public function parse_subscribers_json( string $file_path ): array {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading local uploaded file, not remote URL.
 		$content = file_get_contents( $file_path );
 
-		if ( $content === false ) {
+		if ( false === $content ) {
 			return array(
 				'valid' => false,
 				'error' => __( 'Could not read the file.', 'mail-system-by-katsarov-design' ),
@@ -452,7 +454,7 @@ class Import_Export_Service {
 
 		$data = json_decode( $content, true );
 
-		if ( json_last_error() !== JSON_ERROR_NONE ) {
+		if ( JSON_ERROR_NONE !== json_last_error() ) {
 			return array(
 				'valid' => false,
 				'error' => sprintf(
@@ -475,7 +477,7 @@ class Import_Export_Service {
 		$row_number = 0;
 
 		foreach ( $data as $item ) {
-			$row_number++;
+			++$row_number;
 
 			if ( ! is_array( $item ) ) {
 				$errors[] = sprintf(
@@ -558,7 +560,7 @@ class Import_Export_Service {
 			'update_existing' => false,
 			'assign_lists'    => true,
 		);
-		$options = wp_parse_args( $options, $defaults );
+		$options  = wp_parse_args( $options, $defaults );
 
 		$imported = 0;
 		$updated  = 0;
@@ -601,9 +603,9 @@ class Import_Export_Service {
 						}
 					}
 
-					$updated++;
+					++$updated;
 				} else {
-					$skipped++;
+					++$skipped;
 				}
 				continue;
 			}
@@ -635,7 +637,7 @@ class Import_Export_Service {
 				}
 			}
 
-			$imported++;
+			++$imported;
 		}
 
 		return array(
@@ -664,7 +666,7 @@ class Import_Export_Service {
 
 		// Skip UTF-8 BOM if present.
 		$bom = fread( $handle, 3 );
-		if ( $bom !== "\xEF\xBB\xBF" ) {
+		if ( "\xEF\xBB\xBF" !== $bom ) {
 			rewind( $handle );
 		}
 
@@ -695,8 +697,9 @@ class Import_Export_Service {
 		$errors     = array();
 		$row_number = 1;
 
-		while ( ( $row = fgetcsv( $handle, 0, self::CSV_DELIMITER, self::CSV_ENCLOSURE ) ) !== false ) {
-			$row_number++;
+		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition -- Standard CSV reading pattern.
+		while ( false !== ( $row = fgetcsv( $handle, 0, self::CSV_DELIMITER, self::CSV_ENCLOSURE ) ) ) {
+			++$row_number;
 
 			// Skip empty rows.
 			if ( count( $row ) === 1 && empty( $row[0] ) ) {
@@ -748,7 +751,7 @@ class Import_Export_Service {
 		$defaults = array(
 			'skip_existing' => true,
 		);
-		$options = wp_parse_args( $options, $defaults );
+		$options  = wp_parse_args( $options, $defaults );
 
 		$imported = 0;
 		$skipped  = 0;
@@ -762,7 +765,7 @@ class Import_Export_Service {
 
 			if ( $existing ) {
 				if ( $options['skip_existing'] ) {
-					$skipped++;
+					++$skipped;
 					continue;
 				}
 			}
@@ -784,7 +787,7 @@ class Import_Export_Service {
 				continue;
 			}
 
-			$imported++;
+			++$imported;
 		}
 
 		return array(
@@ -810,7 +813,7 @@ class Import_Export_Service {
 	 */
 	private function sanitize_csv_value( $value ): string {
 		// Ensure we have a string to work with.
-		if ( $value === null || $value === '' ) {
+		if ( null === $value || '' === $value ) {
 			return '';
 		}
 
