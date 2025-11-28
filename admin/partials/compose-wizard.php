@@ -337,7 +337,12 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 										</a>
 									</div>
 									<div class="mskd-content-preview-body">
-										<?php echo wp_kses_post( $session_data['content'] ); ?>
+										<iframe 
+											srcdoc="<?php echo esc_attr( $session_data['content'] ); ?>" 
+											style="width: 100%; height: 300px; border: 1px solid #ddd; border-radius: 4px; background: #fff;"
+											sandbox="allow-same-origin"
+											title="<?php esc_attr_e( 'Email content preview', 'mail-system-by-katsarov-design' ); ?>"
+										></iframe>
 									</div>
 								</div>
 								<input type="hidden" name="body" value="<?php echo esc_attr( $session_data['content'] ); ?>">
