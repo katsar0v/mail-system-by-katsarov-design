@@ -91,11 +91,11 @@ class Admin_Visual_Editor {
 
 		// Determine return URL based on context.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only parameter.
-		$return_to  = isset( $_GET['return_to'] ) ? sanitize_text_field( $_GET['return_to'] ) : '';
+		$return_to = isset( $_GET['return_to'] ) ? sanitize_text_field( $_GET['return_to'] ) : '';
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only parameter.
 		$campaign_mode = isset( $_GET['campaign_mode'] ) && '1' === $_GET['campaign_mode'];
-		$return_url = admin_url( 'admin.php?page=mskd-templates' );
-		
+		$return_url    = admin_url( 'admin.php?page=mskd-templates' );
+
 		if ( 'compose_wizard' === $return_to ) {
 			$return_url = admin_url( 'admin.php?page=mskd-compose&step=3' );
 		}
@@ -142,7 +142,7 @@ class Admin_Visual_Editor {
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><?php echo esc_html( $template ? $template->name : __( 'New Template', 'mail-system-by-katsarov-design' ) ); ?> - <?php bloginfo( 'name' ); ?></title>
-	<?php if ( $css_exists ) : ?>
+		<?php if ( $css_exists ) : ?>
 	<link rel="stylesheet" href="<?php echo esc_url( MSKD_PLUGIN_URL . 'admin/js/editor/visual-editor.css?ver=' . MSKD_VERSION ); ?>">
 	<?php endif; ?>
 	<style>
@@ -243,9 +243,11 @@ class Admin_Visual_Editor {
 		}
 
 		// Get data.
-		$template_id  = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
-		$subject      = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
-		$content      = isset( $_POST['content'] ) ? wp_kses_post( wp_unslash( $_POST['content'] ) ) : '';
+		$template_id = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
+		$subject     = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
+		// Use mskd_kses_email() instead of wp_kses_post() to preserve email HTML structure including <style> tags.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- mskd_kses_email() is our custom sanitization function.
+		$content      = isset( $_POST['content'] ) ? mskd_kses_email( wp_unslash( $_POST['content'] ) ) : '';
 		$json_content = isset( $_POST['json_content'] ) ? sanitize_text_field( wp_unslash( $_POST['json_content'] ) ) : '';
 
 		// Validate JSON content.
@@ -271,10 +273,12 @@ class Admin_Visual_Editor {
 
 			$result = $this->template_service->update( $template_id, $data );
 			if ( $result ) {
-				wp_send_json_success( array(
-					'message'  => __( 'Template saved successfully.', 'mail-system-by-katsarov-design' ),
-					'redirect' => false,
-				) );
+				wp_send_json_success(
+					array(
+						'message'  => __( 'Template saved successfully.', 'mail-system-by-katsarov-design' ),
+						'redirect' => false,
+					)
+				);
 			} else {
 				wp_send_json_error( array( 'message' => __( 'Failed to save template.', 'mail-system-by-katsarov-design' ) ) );
 			}
@@ -286,11 +290,13 @@ class Admin_Visual_Editor {
 
 			$new_id = $this->template_service->create( $data );
 			if ( $new_id ) {
-				wp_send_json_success( array(
-					'message'     => __( 'Template created successfully.', 'mail-system-by-katsarov-design' ),
-					'template_id' => $new_id,
-					'redirect'    => true,
-				) );
+				wp_send_json_success(
+					array(
+						'message'     => __( 'Template created successfully.', 'mail-system-by-katsarov-design' ),
+						'template_id' => $new_id,
+						'redirect'    => true,
+					)
+				);
 			} else {
 				wp_send_json_error( array( 'message' => __( 'Failed to create template.', 'mail-system-by-katsarov-design' ) ) );
 			}
@@ -316,8 +322,10 @@ class Admin_Visual_Editor {
 		}
 
 		// Get data.
-		$subject      = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
-		$content      = isset( $_POST['content'] ) ? wp_kses_post( wp_unslash( $_POST['content'] ) ) : '';
+		$subject = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
+		// Use mskd_kses_email() instead of wp_kses_post() to preserve email HTML structure including <style> tags.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- mskd_kses_email() is our custom sanitization function.
+		$content      = isset( $_POST['content'] ) ? mskd_kses_email( wp_unslash( $_POST['content'] ) ) : '';
 		$json_content = isset( $_POST['json_content'] ) ? sanitize_text_field( wp_unslash( $_POST['json_content'] ) ) : '';
 
 		// Validate JSON content.
@@ -352,10 +360,12 @@ class Admin_Visual_Editor {
 		// Save session.
 		set_transient( $session_key, $session_data, HOUR_IN_SECONDS );
 
-		wp_send_json_success( array(
-			'message'  => __( 'Content saved successfully.', 'mail-system-by-katsarov-design' ),
-			'redirect' => true,
-		) );
+		wp_send_json_success(
+			array(
+				'message'  => __( 'Content saved successfully.', 'mail-system-by-katsarov-design' ),
+				'redirect' => true,
+			)
+		);
 	}
 
 	/**

@@ -6,119 +6,119 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 /**
  * Class MSKD_Activator
- * 
+ *
  * Handles plugin activation tasks including database table creation
  */
 class MSKD_Activator {
 
-    /**
-     * Database version for tracking schema updates
-     */
-    const DB_VERSION = '1.3.0';
+	/**
+	 * Database version for tracking schema updates
+	 */
+	const DB_VERSION = '1.3.0';
 
-    /**
-     * Activate the plugin
-     */
-    public static function activate() {
-        self::create_tables();
-        self::schedule_cron();
-        self::set_default_options();
-        
-        // Store database version
-        update_option( 'mskd_db_version', self::DB_VERSION );
-        
-        // Flush rewrite rules
-        flush_rewrite_rules();
-    }
+	/**
+	 * Activate the plugin
+	 */
+	public static function activate() {
+		self::create_tables();
+		self::schedule_cron();
+		self::set_default_options();
 
-    /**
-     * Check and perform database upgrades if needed
-     */
-    public static function maybe_upgrade() {
-        $installed_version = get_option( 'mskd_db_version', '1.0.0' );
+		// Store database version
+		update_option( 'mskd_db_version', self::DB_VERSION );
 
-        if ( version_compare( $installed_version, self::DB_VERSION, '<' ) ) {
-            self::upgrade( $installed_version );
-            update_option( 'mskd_db_version', self::DB_VERSION );
-        }
-    }
+		// Flush rewrite rules
+		flush_rewrite_rules();
+	}
 
-    /**
-     * Perform database upgrades based on current version
-     *
-     * @param string $from_version The version being upgraded from.
-     */
-    private static function upgrade( $from_version ) {
-        global $wpdb;
+	/**
+	 * Check and perform database upgrades if needed
+	 */
+	public static function maybe_upgrade() {
+		$installed_version = get_option( 'mskd_db_version', '1.0.0' );
 
-        // Upgrade from 1.0.0 to 1.1.0: Add subscriber_data column to queue table.
-        if ( version_compare( $from_version, '1.1.0', '<' ) ) {
-            $table_queue = $wpdb->prefix . 'mskd_queue';
+		if ( version_compare( $installed_version, self::DB_VERSION, '<' ) ) {
+			self::upgrade( $installed_version );
+			update_option( 'mskd_db_version', self::DB_VERSION );
+		}
+	}
 
-            // Check if column exists.
-            $column_exists = $wpdb->get_results(
-                $wpdb->prepare(
-                    "SHOW COLUMNS FROM {$table_queue} LIKE %s",
-                    'subscriber_data'
-                )
-            );
+	/**
+	 * Perform database upgrades based on current version
+	 *
+	 * @param string $from_version The version being upgraded from.
+	 */
+	private static function upgrade( $from_version ) {
+		global $wpdb;
 
-            if ( empty( $column_exists ) ) {
+		// Upgrade from 1.0.0 to 1.1.0: Add subscriber_data column to queue table.
+		if ( version_compare( $from_version, '1.1.0', '<' ) ) {
+			$table_queue = $wpdb->prefix . 'mskd_queue';
+
+			// Check if column exists.
+			$column_exists = $wpdb->get_results(
+				$wpdb->prepare(
+					"SHOW COLUMNS FROM {$table_queue} LIKE %s",
+					'subscriber_data'
+				)
+			);
+
+			if ( empty( $column_exists ) ) {
                 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
-                $wpdb->query(
-                    "ALTER TABLE {$table_queue} ADD COLUMN subscriber_data text DEFAULT NULL AFTER subscriber_id"
-                );
-            }
-        }
+				$wpdb->query(
+					"ALTER TABLE {$table_queue} ADD COLUMN subscriber_data text DEFAULT NULL AFTER subscriber_id"
+				);
+			}
+		}
 
-        // Upgrade from 1.1.0 to 1.2.0: Add campaigns table and campaign_id to queue.
-        if ( version_compare( $from_version, '1.2.0', '<' ) ) {
-            self::create_campaigns_table();
+		// Upgrade from 1.1.0 to 1.2.0: Add campaigns table and campaign_id to queue.
+		if ( version_compare( $from_version, '1.2.0', '<' ) ) {
+			self::create_campaigns_table();
 
-            $table_queue = $wpdb->prefix . 'mskd_queue';
+			$table_queue = $wpdb->prefix . 'mskd_queue';
 
-            // Add campaign_id column to queue table.
-            $column_exists = $wpdb->get_results(
-                $wpdb->prepare(
-                    "SHOW COLUMNS FROM {$table_queue} LIKE %s",
-                    'campaign_id'
-                )
-            );
+			// Add campaign_id column to queue table.
+			$column_exists = $wpdb->get_results(
+				$wpdb->prepare(
+					"SHOW COLUMNS FROM {$table_queue} LIKE %s",
+					'campaign_id'
+				)
+			);
 
-            if ( empty( $column_exists ) ) {
+			if ( empty( $column_exists ) ) {
                 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
-                $wpdb->query(
-                    "ALTER TABLE {$table_queue} ADD COLUMN campaign_id bigint(20) UNSIGNED DEFAULT NULL AFTER id"
-                );
+				$wpdb->query(
+					"ALTER TABLE {$table_queue} ADD COLUMN campaign_id bigint(20) UNSIGNED DEFAULT NULL AFTER id"
+				);
                 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
-                $wpdb->query(
-                    "ALTER TABLE {$table_queue} ADD KEY campaign_id (campaign_id)"
-                );
-            }
-        }
+				$wpdb->query(
+					"ALTER TABLE {$table_queue} ADD KEY campaign_id (campaign_id)"
+				);
+			}
+		}
 
-        // Upgrade from 1.2.0 to 1.3.0: Add templates table.
-        if ( version_compare( $from_version, '1.3.0', '<' ) ) {
-            self::create_templates_table();
-        }
-    }
+		// Upgrade from 1.2.0 to 1.3.0: Add templates table.
+		if ( version_compare( $from_version, '1.3.0', '<' ) ) {
+			self::create_templates_table();
+		}
+	}
 
-    /**
-     * Create database tables
-     */
-    private static function create_tables() {
-        global $wpdb;
-        
-        $charset_collate = $wpdb->get_charset_collate();
-        
-        // Subscribers table
-        $table_subscribers = $wpdb->prefix . 'mskd_subscribers';
-        $sql_subscribers = "CREATE TABLE $table_subscribers (
+	/**
+	 * Create database tables
+	 */
+	private static function create_tables() {
+		global $wpdb;
+
+		$charset_collate = $wpdb->get_charset_collate();
+
+		// Subscribers table
+		$table_subscribers = $wpdb->prefix . 'mskd_subscribers';
+		$sql_subscribers   = "CREATE TABLE $table_subscribers (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             email varchar(255) NOT NULL,
             first_name varchar(100) DEFAULT '',
@@ -133,9 +133,9 @@ class MSKD_Activator {
             KEY unsubscribe_token (unsubscribe_token)
         ) $charset_collate;";
 
-        // Lists table
-        $table_lists = $wpdb->prefix . 'mskd_lists';
-        $sql_lists = "CREATE TABLE $table_lists (
+		// Lists table
+		$table_lists = $wpdb->prefix . 'mskd_lists';
+		$sql_lists   = "CREATE TABLE $table_lists (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             name varchar(255) NOT NULL,
             description text,
@@ -143,9 +143,9 @@ class MSKD_Activator {
             PRIMARY KEY (id)
         ) $charset_collate;";
 
-        // Subscriber-List pivot table
-        $table_subscriber_list = $wpdb->prefix . 'mskd_subscriber_list';
-        $sql_subscriber_list = "CREATE TABLE $table_subscriber_list (
+		// Subscriber-List pivot table
+		$table_subscriber_list = $wpdb->prefix . 'mskd_subscriber_list';
+		$sql_subscriber_list   = "CREATE TABLE $table_subscriber_list (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             subscriber_id bigint(20) UNSIGNED NOT NULL,
             list_id bigint(20) UNSIGNED NOT NULL,
@@ -156,9 +156,9 @@ class MSKD_Activator {
             KEY list_id (list_id)
         ) $charset_collate;";
 
-        // Campaigns table (groups emails by send operation)
-        $table_campaigns = $wpdb->prefix . 'mskd_campaigns';
-        $sql_campaigns = "CREATE TABLE $table_campaigns (
+		// Campaigns table (groups emails by send operation)
+		$table_campaigns = $wpdb->prefix . 'mskd_campaigns';
+		$sql_campaigns   = "CREATE TABLE $table_campaigns (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             subject varchar(255) NOT NULL,
             body longtext NOT NULL,
@@ -175,9 +175,9 @@ class MSKD_Activator {
             KEY type (type)
         ) $charset_collate;";
 
-        // Queue table
-        $table_queue = $wpdb->prefix . 'mskd_queue';
-        $sql_queue = "CREATE TABLE $table_queue (
+		// Queue table
+		$table_queue = $wpdb->prefix . 'mskd_queue';
+		$sql_queue   = "CREATE TABLE $table_queue (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             campaign_id bigint(20) UNSIGNED DEFAULT NULL,
             subscriber_id bigint(20) UNSIGNED NOT NULL DEFAULT 0,
@@ -197,9 +197,9 @@ class MSKD_Activator {
             KEY scheduled_at (scheduled_at)
         ) $charset_collate;";
 
-        // Templates table
-        $table_templates = $wpdb->prefix . 'mskd_templates';
-        $sql_templates = "CREATE TABLE $table_templates (
+		// Templates table
+		$table_templates = $wpdb->prefix . 'mskd_templates';
+		$sql_templates   = "CREATE TABLE $table_templates (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             name varchar(255) NOT NULL,
             subject varchar(255) DEFAULT '',
@@ -215,26 +215,26 @@ class MSKD_Activator {
             KEY status (status)
         ) $charset_collate;";
 
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        
-        dbDelta( $sql_subscribers );
-        dbDelta( $sql_lists );
-        dbDelta( $sql_subscriber_list );
-        dbDelta( $sql_campaigns );
-        dbDelta( $sql_queue );
-        dbDelta( $sql_templates );
-    }
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-    /**
-     * Create campaigns table (used for upgrades)
-     */
-    private static function create_campaigns_table() {
-        global $wpdb;
+		dbDelta( $sql_subscribers );
+		dbDelta( $sql_lists );
+		dbDelta( $sql_subscriber_list );
+		dbDelta( $sql_campaigns );
+		dbDelta( $sql_queue );
+		dbDelta( $sql_templates );
+	}
 
-        $charset_collate = $wpdb->get_charset_collate();
+	/**
+	 * Create campaigns table (used for upgrades)
+	 */
+	private static function create_campaigns_table() {
+		global $wpdb;
 
-        $table_campaigns = $wpdb->prefix . 'mskd_campaigns';
-        $sql_campaigns = "CREATE TABLE $table_campaigns (
+		$charset_collate = $wpdb->get_charset_collate();
+
+		$table_campaigns = $wpdb->prefix . 'mskd_campaigns';
+		$sql_campaigns   = "CREATE TABLE $table_campaigns (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             subject varchar(255) NOT NULL,
             body longtext NOT NULL,
@@ -251,20 +251,20 @@ class MSKD_Activator {
             KEY type (type)
         ) $charset_collate;";
 
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        dbDelta( $sql_campaigns );
-    }
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		dbDelta( $sql_campaigns );
+	}
 
-    /**
-     * Create templates table (used for upgrades)
-     */
-    private static function create_templates_table() {
-        global $wpdb;
+	/**
+	 * Create templates table (used for upgrades)
+	 */
+	private static function create_templates_table() {
+		global $wpdb;
 
-        $charset_collate = $wpdb->get_charset_collate();
+		$charset_collate = $wpdb->get_charset_collate();
 
-        $table_templates = $wpdb->prefix . 'mskd_templates';
-        $sql_templates = "CREATE TABLE $table_templates (
+		$table_templates = $wpdb->prefix . 'mskd_templates';
+		$sql_templates   = "CREATE TABLE $table_templates (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             name varchar(255) NOT NULL,
             subject varchar(255) DEFAULT '',
@@ -280,33 +280,33 @@ class MSKD_Activator {
             KEY status (status)
         ) $charset_collate;";
 
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        dbDelta( $sql_templates );
-    }
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		dbDelta( $sql_templates );
+	}
 
-    /**
-     * Schedule cron events
-     */
-    private static function schedule_cron() {
-        if ( ! wp_next_scheduled( 'mskd_process_queue' ) ) {
-            // Schedule at the start of the next minute (00 seconds)
-            $next_minute = mskd_normalize_timestamp( time() + 60 );
-            wp_schedule_event( $next_minute, 'mskd_every_minute', 'mskd_process_queue' );
-        }
-    }
+	/**
+	 * Schedule cron events
+	 */
+	private static function schedule_cron() {
+		if ( ! wp_next_scheduled( 'mskd_process_queue' ) ) {
+			// Schedule at the start of the next minute (00 seconds)
+			$next_minute = mskd_normalize_timestamp( time() + 60 );
+			wp_schedule_event( $next_minute, 'mskd_every_minute', 'mskd_process_queue' );
+		}
+	}
 
-    /**
-     * Set default plugin options
-     */
-    private static function set_default_options() {
-        $defaults = array(
-            'from_name'    => get_bloginfo( 'name' ),
-            'from_email'   => get_bloginfo( 'admin_email' ),
-            'reply_to'     => get_bloginfo( 'admin_email' ),
-        );
+	/**
+	 * Set default plugin options
+	 */
+	private static function set_default_options() {
+		$defaults = array(
+			'from_name'  => get_bloginfo( 'name' ),
+			'from_email' => get_bloginfo( 'admin_email' ),
+			'reply_to'   => get_bloginfo( 'admin_email' ),
+		);
 
-        if ( ! get_option( 'mskd_settings' ) ) {
-            update_option( 'mskd_settings', $defaults );
-        }
-    }
+		if ( ! get_option( 'mskd_settings' ) ) {
+			update_option( 'mskd_settings', $defaults );
+		}
+	}
 }

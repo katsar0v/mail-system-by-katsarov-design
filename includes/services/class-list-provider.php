@@ -417,7 +417,7 @@ class MSKD_List_Provider {
 			'page'             => 1,
 			'include_external' => true,
 		);
-		$args = wp_parse_args( $args, $defaults );
+		$args     = wp_parse_args( $args, $defaults );
 
 		$database_subscribers = self::get_database_subscribers( $args );
 

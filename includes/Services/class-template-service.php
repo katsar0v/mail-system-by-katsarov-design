@@ -73,7 +73,7 @@ class Template_Service {
 		$orderby         = in_array( $args['orderby'], $allowed_orderby, true ) ? $args['orderby'] : 'name';
 		$order           = 'DESC' === strtoupper( $args['order'] ) ? 'DESC' : 'ASC';
 
-		$where = array();
+		$where  = array();
 		$values = array();
 
 		if ( ! empty( $args['type'] ) ) {
