@@ -29,6 +29,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="mskd-form-gallery">
 			<?php foreach ( $lists as $list ) : ?>
+				<?php
+				// Build the shortcode string for this list.
+				$shortcode = sprintf(
+					'[mskd_subscribe_form list_id="%d" title="%s"]',
+					absint( $list->id ),
+					esc_attr( $list->name )
+				);
+				?>
 				<div class="mskd-gallery-item">
 					<div class="mskd-gallery-item-header">
 						<h4 class="mskd-gallery-item-title"><?php echo esc_html( $list->name ); ?></h4>
@@ -39,8 +47,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php endif; ?>
 
 					<div class="mskd-shortcode-container">
-						<code class="mskd-shortcode-code">[mskd_subscribe_form list_id="<?php echo esc_attr( $list->id ); ?>" title="<?php echo esc_attr( $list->name ); ?>"]</code>
-						<button type="button" class="mskd-copy-btn" data-shortcode='[mskd_subscribe_form list_id="<?php echo esc_attr( $list->id ); ?>" title="<?php echo esc_attr( $list->name ); ?>"]'>
+						<code class="mskd-shortcode-code"><?php echo esc_html( $shortcode ); ?></code>
+						<button type="button" class="mskd-copy-btn" data-shortcode="<?php echo esc_attr( $shortcode ); ?>">
 							<?php esc_html_e( 'Copy', 'mail-system-by-katsarov-design' ); ?>
 						</button>
 					</div>
@@ -58,7 +66,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				<div class="mskd-shortcode-container">
 					<code class="mskd-shortcode-code">[mskd_subscribe_form]</code>
-					<button type="button" class="mskd-copy-btn" data-shortcode='[mskd_subscribe_form]'>
+					<button type="button" class="mskd-copy-btn" data-shortcode="[mskd_subscribe_form]">
 						<?php esc_html_e( 'Copy', 'mail-system-by-katsarov-design' ); ?>
 					</button>
 				</div>

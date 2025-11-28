@@ -176,9 +176,15 @@ class MSKD_Public {
 			$atts
 		);
 
-		// Fetch all mailing lists.
-		$list_service = new \MSKD\Services\List_Service();
-		$lists        = $list_service->get_all();
+		// Fetch all mailing lists with error handling.
+		$lists = array();
+		try {
+			$list_service = new \MSKD\Services\List_Service();
+			$lists        = $list_service->get_all();
+		} catch ( \Exception $e ) {
+			// If service fails, show empty list (graceful degradation).
+			$lists = array();
+		}
 
 		ob_start();
 		include MSKD_PLUGIN_DIR . 'public/partials/form-gallery.php';
