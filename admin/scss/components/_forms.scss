@@ -47,6 +47,55 @@
 }
 
 // ==========================================================================
+// Bulk Actions Bar
+// ==========================================================================
+// Styles for the bulk actions bar on subscribers page.
+
+.mskd-bulk-actions-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+  padding: $spacing-2 0;
+  margin-bottom: $spacing-2;
+}
+
+.mskd-bulk-actions-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+}
+
+.mskd-bulk-list-wrapper {
+  min-width: 280px;
+  max-width: 400px;
+}
+
+.mskd-bulk-result {
+  display: inline-block;
+  margin-left: $spacing-2;
+  padding: $spacing-1 $spacing-2;
+  border-radius: $border-radius;
+  font-size: $font-size-sm;
+
+  &.mskd-bulk-success {
+    background-color: $color-success-bg;
+    color: $color-success-text;
+  }
+
+  &.mskd-bulk-error {
+    background-color: $color-error-bg;
+    color: $color-error-text;
+  }
+}
+
+.mskd-selected-count {
+  font-size: $font-size-sm;
+  color: $color-wp-text-light;
+}
+
+// ==========================================================================
 // SlimSelect Customization
 // ==========================================================================
 // Custom styles for SlimSelect to match WordPress admin UI.

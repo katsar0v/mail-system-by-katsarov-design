@@ -1979,3 +1979,54 @@ msgstr ""
 msgid "The title displayed above the form. Defaults to \"Subscribe\"."
 msgstr ""
 "Заглавието, показвано над формуляра. По подразбиране е \"Абонирайте се\"."
+
+#: includes/Admin/class-admin.php
+msgid "No subscribers selected."
+msgstr "Не са избрани абонати."
+
+#: includes/Admin/class-admin.php
+msgid "No lists selected."
+msgstr "Не са избрани списъци."
+
+#: admin/partials/subscribers.php
+msgid "Bulk actions"
+msgstr "Групови действия"
+
+#: admin/partials/subscribers.php
+msgid "Add to lists"
+msgstr "Добави към списъци"
+
+#: admin/partials/subscribers.php
+msgid "Remove from lists"
+msgstr "Премахни от списъци"
+
+#: admin/partials/subscribers.php
+msgid "Apply"
+msgstr "Приложи"
+
+#: admin/partials/subscribers.php
+msgid "selected"
+msgstr "избрани"
+
+#. translators: %d: number of subscribers updated
+#: includes/Admin/class-admin-ajax.php
+msgid "%d subscriber updated successfully."
+msgid_plural "%d subscribers updated successfully."
+msgstr[0] "%d абонат е обновен успешно."
+msgstr[1] "%d абоната са обновени успешно."
+
+#. translators: %d: number of subscribers that failed
+#: includes/Admin/class-admin-ajax.php
+msgid "%d subscriber failed."
+msgid_plural "%d subscribers failed."
+msgstr[0] "%d абонат не успя."
+msgstr[1] "%d абоната не успяха."
+
+#: includes/Admin/class-admin-ajax.php
+msgid "No subscribers were updated."
+msgstr "Нито един абонат не беше обновен."
+
+#. translators: %d: subscriber ID
+#: includes/Services/class-subscriber-service.php
+msgid "Subscriber ID %d not found."
+msgstr "Абонат с ID %d не е намерен."

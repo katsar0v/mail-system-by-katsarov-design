@@ -315,6 +315,8 @@ class Admin {
                 'no_results'                   => __( 'No results found', 'mail-system-by-katsarov-design' ),
                 'copied'                       => __( 'Copied!', 'mail-system-by-katsarov-design' ),
                 'copy_error'                   => __( 'Copy failed', 'mail-system-by-katsarov-design' ),
+                'no_subscribers_selected'      => __( 'No subscribers selected.', 'mail-system-by-katsarov-design' ),
+                'no_lists_selected'            => __( 'No lists selected.', 'mail-system-by-katsarov-design' ),
             ),
         ) );
     }

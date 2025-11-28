@@ -1999,3 +1999,54 @@ msgstr ""
 #: admin/partials/shortcodes.php
 msgid "The title displayed above the form. Defaults to \"Subscribe\"."
 msgstr "Der über dem Formular angezeigte Titel. Standard ist \"Abonnieren\"."
+
+#: includes/Admin/class-admin.php
+msgid "No subscribers selected."
+msgstr "Keine Abonnenten ausgewählt."
+
+#: includes/Admin/class-admin.php
+msgid "No lists selected."
+msgstr "Keine Listen ausgewählt."
+
+#: admin/partials/subscribers.php
+msgid "Bulk actions"
+msgstr "Massenaktionen"
+
+#: admin/partials/subscribers.php
+msgid "Add to lists"
+msgstr "Zu Listen hinzufügen"
+
+#: admin/partials/subscribers.php
+msgid "Remove from lists"
+msgstr "Aus Listen entfernen"
+
+#: admin/partials/subscribers.php
+msgid "Apply"
+msgstr "Anwenden"
+
+#: admin/partials/subscribers.php
+msgid "selected"
+msgstr "ausgewählt"
+
+#. translators: %d: number of subscribers updated
+#: includes/Admin/class-admin-ajax.php
+msgid "%d subscriber updated successfully."
+msgid_plural "%d subscribers updated successfully."
+msgstr[0] "%d Abonnent erfolgreich aktualisiert."
+msgstr[1] "%d Abonnenten erfolgreich aktualisiert."
+
+#. translators: %d: number of subscribers that failed
+#: includes/Admin/class-admin-ajax.php
+msgid "%d subscriber failed."
+msgid_plural "%d subscribers failed."
+msgstr[0] "%d Abonnent fehlgeschlagen."
+msgstr[1] "%d Abonnenten fehlgeschlagen."
+
+#: includes/Admin/class-admin-ajax.php
+msgid "No subscribers were updated."
+msgstr "Keine Abonnenten wurden aktualisiert."
+
+#. translators: %d: subscriber ID
+#: includes/Services/class-subscriber-service.php
+msgid "Subscriber ID %d not found."
+msgstr "Abonnenten-ID %d nicht gefunden."
