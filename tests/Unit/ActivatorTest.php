@@ -24,7 +24,7 @@ class ActivatorTest extends TestCase {
         parent::setUp();
 
         // Load the activator class.
-        require_once MSKD_PLUGIN_DIR . 'includes/class-activator.php';
+        require_once \MSKD_PLUGIN_DIR . 'includes/class-activator.php';
     }
 
     /**

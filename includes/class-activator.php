@@ -300,9 +300,10 @@ class MSKD_Activator {
 	 */
 	private static function set_default_options() {
 		$defaults = array(
-			'from_name'  => get_bloginfo( 'name' ),
-			'from_email' => get_bloginfo( 'admin_email' ),
-			'reply_to'   => get_bloginfo( 'admin_email' ),
+			'from_name'         => get_bloginfo( 'name' ),
+			'from_email'        => get_bloginfo( 'admin_email' ),
+			'reply_to'          => get_bloginfo( 'admin_email' ),
+			'emails_per_minute' => MSKD_BATCH_SIZE,
 		);
 
 		if ( ! get_option( 'mskd_settings' ) ) {

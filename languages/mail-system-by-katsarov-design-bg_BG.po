@@ -678,6 +678,18 @@ msgid "wp_mail() (default)"
 msgstr "wp_mail() (по подразбиране)"
 
 #: admin/partials/settings.php
+msgid "Sending settings"
+msgstr "Настройки за изпращане"
+
+#: admin/partials/settings.php
+msgid "Emails per minute"
+msgstr "Имейли на минута"
+
+#: admin/partials/settings.php
+msgid "Maximum number of emails to send per minute. Higher values may exceed your hosting provider limits."
+msgstr "Максимален брой имейли за изпращане на минута. По-високи стойности могат да надвишат лимитите на вашия хостинг доставчик."
+
+#: admin/partials/settings.php
 msgid "Sending speed"
 msgstr "Скорост на изпращане"
 
