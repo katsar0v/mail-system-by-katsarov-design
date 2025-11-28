@@ -1426,6 +1426,97 @@ msgid_plural "%d lists skipped (already exist)."
 msgstr[0] "%d списък пропуснат (вече съществува)."
 msgstr[1] "%d списъци пропуснати (вече съществуват)."
 
+#: admin/partials/import-export.php
+msgid "Manage your subscriber data with easy import and export functionality."
+msgstr "Управлявайте данните на абонатите с лесна функционалност за импорт и експорт."
+
+#: admin/partials/import-export.php
+msgid "Export Data"
+msgstr "Експорт на данни"
+
+#: admin/partials/import-export.php
+msgid "Download subscribers or lists as CSV"
+msgstr "Изтеглете абонати или списъци като CSV"
+
+#: admin/partials/import-export.php
+msgid "Export to CSV"
+msgstr "Експорт в CSV"
+
+#: admin/partials/import-export.php
+msgid "Import Data"
+msgstr "Импорт на данни"
+
+#: admin/partials/import-export.php
+msgid "Upload subscribers or lists from CSV"
+msgstr "Качете абонати или списъци от CSV"
+
+#: admin/partials/import-export.php
+msgid "CSV File"
+msgstr "CSV файл"
+
+#: admin/partials/import-export.php
+msgid "Drag & drop your CSV file here or"
+msgstr "Плъзнете и пуснете CSV файл тук или"
+
+#: admin/partials/import-export.php
+msgid "browse"
+msgstr "изберете"
+
+#: admin/partials/import-export.php
+msgid "Maximum file size: 5MB"
+msgstr "Максимален размер: 5MB"
+
+#: admin/partials/import-export.php
+msgid "Import options"
+msgstr "Опции за импорт"
+
+#: admin/partials/import-export.php
+msgid "Assign subscribers to lists specified in the \"lists\" column. New lists will be created automatically."
+msgstr "Добавете абонатите към списъците, посочени в колоната \"lists\". Новите списъци ще бъдат създадени автоматично."
+
+#: admin/partials/import-export.php
+msgid "Import from CSV"
+msgstr "Импорт от CSV"
+
+#: admin/partials/import-export.php
+msgid "File Format Guide"
+msgstr "Ръководство за формат на файла"
+
+#: admin/partials/import-export.php
+msgid "Learn how to format your CSV files for successful imports"
+msgstr "Научете как да форматирате CSV файловете си за успешен импорт"
+
+#: admin/partials/import-export.php
+msgid "Subscribers CSV Format"
+msgstr "CSV формат за абонати"
+
+#: admin/partials/import-export.php
+msgid "The CSV file must contain at minimum an \"email\" column."
+msgstr "CSV файлът трябва да съдържа минимум колона \"email\"."
+
+#: admin/partials/import-export.php
+msgid "Lists CSV Format"
+msgstr "CSV формат за списъци"
+
+#: admin/partials/import-export.php
+msgid "The CSV file must contain at minimum a \"name\" column."
+msgstr "CSV файлът трябва да съдържа минимум колона \"name\"."
+
+#: admin/partials/import-export.php
+msgid "Required"
+msgstr "Задължително"
+
+#: admin/partials/import-export.php
+msgid "Optional"
+msgstr "Незадължително"
+
+#: admin/partials/import-export.php
+msgid "Example"
+msgstr "Пример"
+
+#: admin/partials/import-export.php
+msgid "Remove selected file"
+msgstr "Премахни избрания файл"
 
 #: includes/Admin/class-admin.php
 msgid "Templates"
