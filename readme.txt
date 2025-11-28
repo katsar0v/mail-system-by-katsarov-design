@@ -3,7 +3,7 @@ Contributors: katsarovdesign
 Tags: email, newsletter, mailing list, subscribers, bulgarian, български
 Requires at least: 5.0
 Tested up to: 6.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -88,6 +88,16 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 == Changelog ==
 
+= 1.1.0 =
+* Система за управление на шаблони за имейли
+* Импорт/експорт на абонати и списъци (CSV/JSON)
+* Групово редактиране на абонати
+* Настройка за брой имейли на минута
+* Административна страница с шорткодове
+* Подобрения в опашката за изпращане
+* Многоезична поддръжка (EN, BG, DE)
+* API за разработчици с хукове за външни списъци
+
 = 1.0.0 =
 * Първоначална версия
 * Управление на абонати (активен/неактивен/отписан)
@@ -98,6 +108,9 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 * Български интерфейс
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Нови функции: Шаблони за имейли, импорт/експорт, групово редактиране, настройки за скорост на изпращане.
 
 = 1.0.0 =
 Първоначална версия на плъгина.

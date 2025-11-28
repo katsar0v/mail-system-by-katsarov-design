@@ -96,7 +96,7 @@ To add a new translation:
 # Header
 msgid ""
 msgstr ""
-"Project-Id-Version: Mail System by Katsarov Design 1.0.0\n"
+"Project-Id-Version: Mail System by Katsarov Design 1.1.0\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
