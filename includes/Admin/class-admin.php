@@ -78,6 +78,13 @@ class Admin {
     private $import_export;
 
     /**
+     * Templates controller.
+     *
+     * @var Admin_Templates
+     */
+    private $templates;
+
+    /**
      * Constructor - initialize controllers.
      */
     public function __construct() {
@@ -88,6 +95,7 @@ class Admin {
         $this->settings      = new Admin_Settings();
         $this->ajax          = new Admin_Ajax();
         $this->import_export = new Admin_Import_Export();
+        $this->templates     = new Admin_Templates();
     }
 
     /**
@@ -152,6 +160,16 @@ class Admin {
             'manage_options',
             self::PAGE_PREFIX . 'lists',
             array( $this->lists, 'render' )
+        );
+
+        // Templates.
+        add_submenu_page(
+            self::PAGE_PREFIX . 'dashboard',
+            __( 'Templates', 'mail-system-by-katsarov-design' ),
+            __( 'Templates', 'mail-system-by-katsarov-design' ),
+            'manage_options',
+            self::PAGE_PREFIX . 'templates',
+            array( $this->templates, 'render' )
         );
 
         // Compose.
@@ -386,6 +404,7 @@ class Admin {
         $this->queue->handle_actions();
         $this->settings->handle_actions();
         $this->import_export->handle_actions();
+        $this->templates->handle_actions();
     }
 
     /**
@@ -458,5 +477,14 @@ class Admin {
      */
     public function get_import_export_controller(): Admin_Import_Export {
         return $this->import_export;
+    }
+
+    /**
+     * Get the templates controller.
+     *
+     * @return Admin_Templates
+     */
+    public function get_templates_controller(): Admin_Templates {
+        return $this->templates;
     }
 }

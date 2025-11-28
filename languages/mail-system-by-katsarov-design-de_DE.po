@@ -1426,3 +1426,157 @@ msgid_plural "%d lists skipped (already exist)."
 msgstr[0] "%d Liste übersprungen (existiert bereits)."
 msgstr[1] "%d Listen übersprungen (existieren bereits)."
 
+
+#: includes/Admin/class-admin.php
+msgid "Templates"
+msgstr "Vorlagen"
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template name is required."
+msgstr "Vorlagenname ist erforderlich."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template added successfully."
+msgstr "Vorlage erfolgreich hinzugefügt."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Error adding template."
+msgstr "Fehler beim Hinzufügen der Vorlage."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template not found."
+msgstr "Vorlage nicht gefunden."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template updated successfully."
+msgstr "Vorlage erfolgreich aktualisiert."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Predefined templates cannot be deleted."
+msgstr "Vordefinierte Vorlagen können nicht gelöscht werden."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template deleted successfully."
+msgstr "Vorlage erfolgreich gelöscht."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template duplicated successfully."
+msgstr "Vorlage erfolgreich dupliziert."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Error duplicating template."
+msgstr "Fehler beim Duplizieren der Vorlage."
+
+#: admin/partials/templates.php
+msgid "Email Templates"
+msgstr "E-Mail-Vorlagen"
+
+#: admin/partials/templates.php
+msgid "Add new template"
+msgstr "Neue Vorlage hinzufügen"
+
+#: admin/partials/templates.php
+msgid "Edit template"
+msgstr "Vorlage bearbeiten"
+
+#: admin/partials/templates.php
+msgid "Template name"
+msgstr "Vorlagenname"
+
+#: admin/partials/templates.php
+msgid "Default subject"
+msgstr "Standard-Betreff"
+
+#: admin/partials/templates.php
+msgid "Optional. This subject will be pre-filled when using this template."
+msgstr "Optional. Dieser Betreff wird bei Verwendung dieser Vorlage vorausgefüllt."
+
+#: admin/partials/templates.php
+msgid "Add template"
+msgstr "Vorlage hinzufügen"
+
+#: admin/partials/templates.php
+msgid "Predefined Templates"
+msgstr "Vordefinierte Vorlagen"
+
+#: admin/partials/templates.php
+msgid "These templates are provided by the system. You can duplicate them to create custom versions."
+msgstr "Diese Vorlagen werden vom System bereitgestellt. Sie können sie duplizieren, um benutzerdefinierte Versionen zu erstellen."
+
+#: admin/partials/templates.php
+msgid "Predefined"
+msgstr "Vordefiniert"
+
+#: admin/partials/templates.php
+msgid "Duplicate"
+msgstr "Duplizieren"
+
+#: admin/partials/templates.php
+msgid "Use template"
+msgstr "Vorlage verwenden"
+
+#: admin/partials/templates.php
+msgid "Use"
+msgstr "Verwenden"
+
+#: admin/partials/templates.php
+msgid "Custom Templates"
+msgstr "Benutzerdefinierte Vorlagen"
+
+#: admin/partials/templates.php
+msgid "Templates you have created. You can edit, duplicate, or delete these."
+msgstr "Von Ihnen erstellte Vorlagen. Sie können diese bearbeiten, duplizieren oder löschen."
+
+#: admin/partials/templates.php
+msgid "Custom"
+msgstr "Benutzerdefiniert"
+
+#. translators: %s: date
+#: admin/partials/templates.php
+msgid "Created: %s"
+msgstr "Erstellt: %s"
+
+#: admin/partials/templates.php
+msgid "No custom templates yet."
+msgstr "Noch keine benutzerdefinierten Vorlagen."
+
+#: admin/partials/templates.php
+msgid "Create your first template"
+msgstr "Erstellen Sie Ihre erste Vorlage"
+
+#: includes/Services/class-template-service.php
+msgid " (Copy)"
+msgstr " (Kopie)"
+
+#: includes/Services/class-template-service.php
+msgid "Blank Template"
+msgstr "Leere Vorlage"
+
+#: includes/Services/class-template-service.php
+msgid "Newsletter"
+msgstr "Newsletter"
+
+#: includes/Services/class-template-service.php
+msgid "Your Newsletter Title"
+msgstr "Ihr Newsletter-Titel"
+
+#: includes/Services/class-template-service.php
+msgid "Welcome Email"
+msgstr "Willkommens-E-Mail"
+
+#: includes/Services/class-template-service.php
+msgid "Welcome to {site_name}!"
+msgstr "Willkommen bei {site_name}!"
+
+#: includes/Services/class-template-service.php
+msgid "Promotional"
+msgstr "Werbeangebot"
+
+#: includes/Services/class-template-service.php
+msgid "Special Offer Just for You!"
+msgstr "Sonderangebot nur für Sie!"
+
+#. translators: %s: template name
+#: admin/partials/compose.php
+msgid "Using template: %s"
+msgstr "Verwendete Vorlage: %s"

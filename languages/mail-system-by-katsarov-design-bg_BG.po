@@ -1426,3 +1426,157 @@ msgid_plural "%d lists skipped (already exist)."
 msgstr[0] "%d списък пропуснат (вече съществува)."
 msgstr[1] "%d списъци пропуснати (вече съществуват)."
 
+
+#: includes/Admin/class-admin.php
+msgid "Templates"
+msgstr "Шаблони"
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template name is required."
+msgstr "Името на шаблона е задължително."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template added successfully."
+msgstr "Шаблонът е добавен успешно."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Error adding template."
+msgstr "Грешка при добавяне на шаблон."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template not found."
+msgstr "Шаблонът не е намерен."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template updated successfully."
+msgstr "Шаблонът е актуализиран успешно."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Predefined templates cannot be deleted."
+msgstr "Предварително дефинираните шаблони не могат да бъдат изтрити."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template deleted successfully."
+msgstr "Шаблонът е изтрит успешно."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template duplicated successfully."
+msgstr "Шаблонът е дублиран успешно."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Error duplicating template."
+msgstr "Грешка при дублиране на шаблон."
+
+#: admin/partials/templates.php
+msgid "Email Templates"
+msgstr "Имейл шаблони"
+
+#: admin/partials/templates.php
+msgid "Add new template"
+msgstr "Добавяне на нов шаблон"
+
+#: admin/partials/templates.php
+msgid "Edit template"
+msgstr "Редактиране на шаблон"
+
+#: admin/partials/templates.php
+msgid "Template name"
+msgstr "Име на шаблона"
+
+#: admin/partials/templates.php
+msgid "Default subject"
+msgstr "Тема по подразбиране"
+
+#: admin/partials/templates.php
+msgid "Optional. This subject will be pre-filled when using this template."
+msgstr "Незадължително. Тази тема ще бъде предварително попълнена при използване на този шаблон."
+
+#: admin/partials/templates.php
+msgid "Add template"
+msgstr "Добави шаблон"
+
+#: admin/partials/templates.php
+msgid "Predefined Templates"
+msgstr "Предварително дефинирани шаблони"
+
+#: admin/partials/templates.php
+msgid "These templates are provided by the system. You can duplicate them to create custom versions."
+msgstr "Тези шаблони се предоставят от системата. Можете да ги дублирате, за да създадете персонализирани версии."
+
+#: admin/partials/templates.php
+msgid "Predefined"
+msgstr "Предварително дефиниран"
+
+#: admin/partials/templates.php
+msgid "Duplicate"
+msgstr "Дублирай"
+
+#: admin/partials/templates.php
+msgid "Use template"
+msgstr "Използвай шаблона"
+
+#: admin/partials/templates.php
+msgid "Use"
+msgstr "Използвай"
+
+#: admin/partials/templates.php
+msgid "Custom Templates"
+msgstr "Персонализирани шаблони"
+
+#: admin/partials/templates.php
+msgid "Templates you have created. You can edit, duplicate, or delete these."
+msgstr "Шаблони, които сте създали. Можете да ги редактирате, дублирате или изтриете."
+
+#: admin/partials/templates.php
+msgid "Custom"
+msgstr "Персонализиран"
+
+#. translators: %s: date
+#: admin/partials/templates.php
+msgid "Created: %s"
+msgstr "Създаден: %s"
+
+#: admin/partials/templates.php
+msgid "No custom templates yet."
+msgstr "Все още няма персонализирани шаблони."
+
+#: admin/partials/templates.php
+msgid "Create your first template"
+msgstr "Създайте първия си шаблон"
+
+#: includes/Services/class-template-service.php
+msgid " (Copy)"
+msgstr " (Копие)"
+
+#: includes/Services/class-template-service.php
+msgid "Blank Template"
+msgstr "Празен шаблон"
+
+#: includes/Services/class-template-service.php
+msgid "Newsletter"
+msgstr "Бюлетин"
+
+#: includes/Services/class-template-service.php
+msgid "Your Newsletter Title"
+msgstr "Заглавие на вашия бюлетин"
+
+#: includes/Services/class-template-service.php
+msgid "Welcome Email"
+msgstr "Поздравително писмо"
+
+#: includes/Services/class-template-service.php
+msgid "Welcome to {site_name}!"
+msgstr "Добре дошли в {site_name}!"
+
+#: includes/Services/class-template-service.php
+msgid "Promotional"
+msgstr "Промоционален"
+
+#: includes/Services/class-template-service.php
+msgid "Special Offer Just for You!"
+msgstr "Специална оферта само за вас!"
+
+#. translators: %s: template name
+#: admin/partials/compose.php
+msgid "Using template: %s"
+msgstr "Използване на шаблон: %s"

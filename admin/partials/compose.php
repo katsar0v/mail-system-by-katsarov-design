@@ -6,7 +6,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 global $wpdb;
@@ -14,39 +14,54 @@ global $wpdb;
 // Load the List Provider service.
 require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
 
+use MSKD\Services\Template_Service;
+
 // Get all lists (database + external).
 $lists = MSKD_List_Provider::get_all_lists();
 
 // Get pre-selected list IDs from URL parameter (supports both single and multiple).
 $preselected_list_ids = array();
 if ( isset( $_GET['list_id'] ) ) {
-    $list_id_param = sanitize_text_field( wp_unslash( $_GET['list_id'] ) );
-    // Support comma-separated list IDs.
-    $raw_ids = array_map( 'trim', explode( ',', $list_id_param ) );
-    foreach ( $raw_ids as $raw_id ) {
-        // Validate that the list exists (works for both numeric and ext_* IDs).
-        $list = MSKD_List_Provider::get_list( $raw_id );
-        if ( $list ) {
-            $preselected_list_ids[] = $list->id;
-        }
-    }
+	$list_id_param = sanitize_text_field( wp_unslash( $_GET['list_id'] ) );
+	// Support comma-separated list IDs.
+	$raw_ids = array_map( 'trim', explode( ',', $list_id_param ) );
+	foreach ( $raw_ids as $raw_id ) {
+		// Validate that the list exists (works for both numeric and ext_* IDs).
+		$list = MSKD_List_Provider::get_list( $raw_id );
+		if ( $list ) {
+			$preselected_list_ids[] = $list->id;
+		}
+	}
+}
+
+// Get template if specified.
+$selected_template = null;
+$prefilled_subject = '';
+$prefilled_content = '';
+if ( isset( $_GET['template_id'] ) ) {
+	$template_service  = new Template_Service();
+	$selected_template = $template_service->get_by_id( intval( $_GET['template_id'] ) );
+	if ( $selected_template ) {
+		$prefilled_subject = $selected_template->subject;
+		$prefilled_content = $selected_template->content;
+	}
 }
 
 // Get minimum datetime for picker (now + 10 minutes, rounded to nearest 10 min)
-$wp_timezone = wp_timezone();
-$now = new DateTime( 'now', $wp_timezone );
-$minutes = (int) $now->format( 'i' );
+$wp_timezone     = wp_timezone();
+$now             = new DateTime( 'now', $wp_timezone );
+$minutes         = (int) $now->format( 'i' );
 $rounded_minutes = ceil( ( $minutes + 1 ) / 10 ) * 10;
 if ( $rounded_minutes >= 60 ) {
-    $now->modify( '+1 hour' );
-    $rounded_minutes = 0;
+	$now->modify( '+1 hour' );
+	$rounded_minutes = 0;
 }
 $now->setTime( (int) $now->format( 'H' ), $rounded_minutes, 0 );
 $min_datetime = $now->format( 'Y-m-d\TH:i' );
 ?>
 
 <div class="wrap mskd-wrap">
-    <h1><?php _e( 'New email', 'mail-system-by-katsarov-design' ); ?></h1>
+	<h1><?php esc_html_e( 'New email', 'mail-system-by-katsarov-design' ); ?></h1>
 
     <?php settings_errors( 'mskd_messages' ); ?>
 
@@ -92,28 +107,40 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
                 </tr>
                 <tr>
                     <th scope="row">
-                        <label for="subject"><?php _e( 'Subject', 'mail-system-by-katsarov-design' ); ?> *</label>
+                        <label for="subject"><?php esc_html_e( 'Subject', 'mail-system-by-katsarov-design' ); ?> *</label>
                     </th>
                     <td>
-                        <input type="text" name="subject" id="subject" class="large-text" required>
+                        <input type="text" name="subject" id="subject" class="large-text" required value="<?php echo esc_attr( $prefilled_subject ); ?>">
+                        <?php if ( $selected_template ) : ?>
+                            <p class="description">
+                                <?php
+                                /* translators: %s: template name */
+                                printf( esc_html__( 'Using template: %s', 'mail-system-by-katsarov-design' ), '<strong>' . esc_html( $selected_template->name ) . '</strong>' );
+                                ?>
+                            </p>
+                        <?php endif; ?>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">
-                        <label for="body"><?php _e( 'Content', 'mail-system-by-katsarov-design' ); ?> *</label>
+                        <label for="body"><?php esc_html_e( 'Content', 'mail-system-by-katsarov-design' ); ?> *</label>
                     </th>
                     <td>
                         <?php
-                        wp_editor( '', 'body', array(
-                            'textarea_name' => 'body',
-                            'textarea_rows' => 15,
-                            'media_buttons' => true,
-                            'teeny'         => false,
-                            'quicktags'     => true,
-                        ) );
+                        wp_editor(
+                            $prefilled_content,
+                            'body',
+                            array(
+                                'textarea_name' => 'body',
+                                'textarea_rows' => 15,
+                                'media_buttons' => true,
+                                'teeny'         => false,
+                                'quicktags'     => true,
+                            )
+                        );
                         ?>
                         <p class="description">
-                            <?php _e( 'Available placeholders:', 'mail-system-by-katsarov-design' ); ?>
+                            <?php esc_html_e( 'Available placeholders:', 'mail-system-by-katsarov-design' ); ?>
                             <code>{first_name}</code>, <code>{last_name}</code>, <code>{email}</code>, <code>{unsubscribe_link}</code>
                         </p>
                     </td>

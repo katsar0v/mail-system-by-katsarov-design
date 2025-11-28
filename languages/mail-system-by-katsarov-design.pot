@@ -1423,4 +1423,158 @@ msgid_plural "%d lists skipped (already exist)."
 msgstr[0] ""
 msgstr[1] ""
 
+#: includes/Admin/class-admin.php
+msgid "Templates"
+msgstr ""
 
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template name is required."
+msgstr ""
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template added successfully."
+msgstr ""
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Error adding template."
+msgstr ""
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template not found."
+msgstr ""
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template updated successfully."
+msgstr ""
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Predefined templates cannot be deleted."
+msgstr ""
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template deleted successfully."
+msgstr ""
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template duplicated successfully."
+msgstr ""
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Error duplicating template."
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Email Templates"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Add new template"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Edit template"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Template name"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Default subject"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Optional. This subject will be pre-filled when using this template."
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Add template"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Predefined Templates"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "These templates are provided by the system. You can duplicate them to create custom versions."
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Predefined"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Duplicate"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Use template"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Use"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Custom Templates"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Templates you have created. You can edit, duplicate, or delete these."
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Custom"
+msgstr ""
+
+#. translators: %s: date
+#: admin/partials/templates.php
+msgid "Created: %s"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "No custom templates yet."
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Create your first template"
+msgstr ""
+
+#: includes/Services/class-template-service.php
+msgid " (Copy)"
+msgstr ""
+
+#: includes/Services/class-template-service.php
+msgid "Blank Template"
+msgstr ""
+
+#: includes/Services/class-template-service.php
+msgid "Newsletter"
+msgstr ""
+
+#: includes/Services/class-template-service.php
+msgid "Your Newsletter Title"
+msgstr ""
+
+#: includes/Services/class-template-service.php
+msgid "Welcome Email"
+msgstr ""
+
+#: includes/Services/class-template-service.php
+msgid "Welcome to {site_name}!"
+msgstr ""
+
+#: includes/Services/class-template-service.php
+msgid "Promotional"
+msgstr ""
+
+#: includes/Services/class-template-service.php
+msgid "Special Offer Just for You!"
+msgstr ""
+
+
+
+#. translators: %s: template name
+#: admin/partials/compose.php
+msgid "Using template: %s"
+msgstr ""

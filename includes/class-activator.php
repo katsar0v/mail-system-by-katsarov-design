@@ -19,7 +19,7 @@ class MSKD_Activator {
     /**
      * Database version for tracking schema updates
      */
-    const DB_VERSION = '1.2.0';
+    const DB_VERSION = '1.3.0';
 
     /**
      * Activate the plugin
@@ -100,6 +100,11 @@ class MSKD_Activator {
                     "ALTER TABLE {$table_queue} ADD KEY campaign_id (campaign_id)"
                 );
             }
+        }
+
+        // Upgrade from 1.2.0 to 1.3.0: Add templates table.
+        if ( version_compare( $from_version, '1.3.0', '<' ) ) {
+            self::create_templates_table();
         }
     }
 
@@ -192,6 +197,24 @@ class MSKD_Activator {
             KEY scheduled_at (scheduled_at)
         ) $charset_collate;";
 
+        // Templates table
+        $table_templates = $wpdb->prefix . 'mskd_templates';
+        $sql_templates = "CREATE TABLE $table_templates (
+            id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            name varchar(255) NOT NULL,
+            subject varchar(255) DEFAULT '',
+            content longtext NOT NULL,
+            json_content longtext DEFAULT NULL,
+            thumbnail varchar(500) DEFAULT '',
+            type enum('predefined','custom') DEFAULT 'custom',
+            status enum('active','inactive') DEFAULT 'active',
+            created_at datetime DEFAULT CURRENT_TIMESTAMP,
+            updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY type (type),
+            KEY status (status)
+        ) $charset_collate;";
+
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         
         dbDelta( $sql_subscribers );
@@ -199,6 +222,7 @@ class MSKD_Activator {
         dbDelta( $sql_subscriber_list );
         dbDelta( $sql_campaigns );
         dbDelta( $sql_queue );
+        dbDelta( $sql_templates );
     }
 
     /**
@@ -229,6 +253,35 @@ class MSKD_Activator {
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta( $sql_campaigns );
+    }
+
+    /**
+     * Create templates table (used for upgrades)
+     */
+    private static function create_templates_table() {
+        global $wpdb;
+
+        $charset_collate = $wpdb->get_charset_collate();
+
+        $table_templates = $wpdb->prefix . 'mskd_templates';
+        $sql_templates = "CREATE TABLE $table_templates (
+            id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            name varchar(255) NOT NULL,
+            subject varchar(255) DEFAULT '',
+            content longtext NOT NULL,
+            json_content longtext DEFAULT NULL,
+            thumbnail varchar(500) DEFAULT '',
+            type enum('predefined','custom') DEFAULT 'custom',
+            status enum('active','inactive') DEFAULT 'active',
+            created_at datetime DEFAULT CURRENT_TIMESTAMP,
+            updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY type (type),
+            KEY status (status)
+        ) $charset_collate;";
+
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        dbDelta( $sql_templates );
     }
 
     /**

@@ -75,8 +75,8 @@ class ActivatorTest extends TestCase {
         // Run activation.
         \MSKD_Activator::activate();
 
-        // Verify all 5 tables are created.
-        $this->assertCount( 5, $db_delta_calls, 'Should call dbDelta 5 times for 5 tables' );
+        // Verify all 6 tables are created.
+        $this->assertCount( 6, $db_delta_calls, 'Should call dbDelta 6 times for 6 tables' );
 
         // Check table names in SQL.
         $all_sql = implode( ' ', $db_delta_calls );
@@ -85,6 +85,7 @@ class ActivatorTest extends TestCase {
         $this->assertStringContainsString( 'wp_mskd_subscriber_list', $all_sql, 'Should create subscriber_list pivot table' );
         $this->assertStringContainsString( 'wp_mskd_campaigns', $all_sql, 'Should create campaigns table' );
         $this->assertStringContainsString( 'wp_mskd_queue', $all_sql, 'Should create queue table' );
+        $this->assertStringContainsString( 'wp_mskd_templates', $all_sql, 'Should create templates table' );
         
         // Verify update_option was called.
         $this->assertCount( 2, $update_option_calls, 'Should call update_option twice' );
@@ -247,6 +248,6 @@ class ActivatorTest extends TestCase {
 
         \MSKD_Activator::activate();
         
-        $this->assertEquals( '1.2.0', $db_version_stored, 'Database version should be stored' );
+        $this->assertEquals( '1.3.0', $db_version_stored, 'Database version should be stored' );
     }
 }
