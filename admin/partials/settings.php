@@ -17,6 +17,10 @@ $reply_to = isset( $settings['reply_to'] ) ? $settings['reply_to'] : get_bloginf
 // Sending settings.
 $emails_per_minute = isset( $settings['emails_per_minute'] ) ? absint( $settings['emails_per_minute'] ) : MSKD_BATCH_SIZE;
 
+// Email template settings.
+$email_header = isset( $settings['email_header'] ) ? $settings['email_header'] : '';
+$email_footer = isset( $settings['email_footer'] ) ? $settings['email_footer'] : '';
+
 // SMTP Settings.
 $smtp_enabled  = isset( $settings['smtp_enabled'] ) ? (bool) $settings['smtp_enabled'] : false;
 $smtp_host     = isset( $settings['smtp_host'] ) ? $settings['smtp_host'] : '';
@@ -85,6 +89,46 @@ $smtp_password = isset( $settings['smtp_password'] ) ? base64_decode( $settings[
                                value="<?php echo esc_attr( $emails_per_minute ); ?>"
                                min="1" max="1000">
                         <p class="description"><?php _e( 'Maximum number of emails to send per minute. Higher values may exceed your hosting provider limits.', 'mail-system-by-katsarov-design' ); ?></p>
+                    </td>
+                </tr>
+            </table>
+
+            <hr>
+
+            <h2><?php _e( 'Email Template Settings', 'mail-system-by-katsarov-design' ); ?></h2>
+            <p class="description"><?php _e( 'Configure custom header and footer that will be added to all outgoing emails. Supports HTML and template variables.', 'mail-system-by-katsarov-design' ); ?></p>
+
+            <table class="form-table">
+                <tr>
+                    <th scope="row">
+                        <label for="email_header"><?php _e( 'Email Header', 'mail-system-by-katsarov-design' ); ?></label>
+                    </th>
+                    <td>
+                        <textarea name="email_header" id="email_header" class="large-text code" rows="6"><?php echo esc_textarea( $email_header ); ?></textarea>
+                        <p class="description"><?php _e( 'HTML content to prepend to all emails. Leave empty to disable.', 'mail-system-by-katsarov-design' ); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="email_footer"><?php _e( 'Email Footer', 'mail-system-by-katsarov-design' ); ?></label>
+                    </th>
+                    <td>
+                        <textarea name="email_footer" id="email_footer" class="large-text code" rows="6"><?php echo esc_textarea( $email_footer ); ?></textarea>
+                        <p class="description"><?php _e( 'HTML content to append to all emails. Leave empty to disable.', 'mail-system-by-katsarov-design' ); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <?php _e( 'Available Variables', 'mail-system-by-katsarov-design' ); ?>
+                    </th>
+                    <td>
+                        <p class="description">
+                            <code>{first_name}</code> - <?php _e( 'Subscriber first name', 'mail-system-by-katsarov-design' ); ?><br>
+                            <code>{last_name}</code> - <?php _e( 'Subscriber last name', 'mail-system-by-katsarov-design' ); ?><br>
+                            <code>{email}</code> - <?php _e( 'Subscriber email address', 'mail-system-by-katsarov-design' ); ?><br>
+                            <code>{unsubscribe_link}</code> - <?php _e( 'Clickable unsubscribe link', 'mail-system-by-katsarov-design' ); ?><br>
+                            <code>{unsubscribe_url}</code> - <?php _e( 'Raw unsubscribe URL', 'mail-system-by-katsarov-design' ); ?>
+                        </p>
                     </td>
                 </tr>
             </table>

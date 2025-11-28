@@ -65,12 +65,21 @@ class Admin_Settings {
 			$emails_per_minute = 1000;
 		}
 
+		// Sanitize email header and footer (allow HTML for email templates).
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email HTML content.
+		$email_header = isset( $_POST['email_header'] ) ? mskd_kses_email( wp_unslash( $_POST['email_header'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email HTML content.
+		$email_footer = isset( $_POST['email_footer'] ) ? mskd_kses_email( wp_unslash( $_POST['email_footer'] ) ) : '';
+
 		$settings = array(
 			'from_name'         => sanitize_text_field( wp_unslash( $_POST['from_name'] ) ),
 			'from_email'        => sanitize_email( wp_unslash( $_POST['from_email'] ) ),
 			'reply_to'          => sanitize_email( wp_unslash( $_POST['reply_to'] ) ),
 			// Sending settings.
 			'emails_per_minute' => $emails_per_minute,
+			// Email template settings.
+			'email_header'      => $email_header,
+			'email_footer'      => $email_footer,
 			// SMTP Settings.
 			'smtp_enabled'      => isset( $_POST['smtp_enabled'] ) ? 1 : 0,
 			'smtp_host'         => sanitize_text_field( wp_unslash( $_POST['smtp_host'] ) ),
@@ -111,6 +120,8 @@ class Admin_Settings {
 			'from_email'        => get_bloginfo( 'admin_email' ),
 			'reply_to'          => get_bloginfo( 'admin_email' ),
 			'emails_per_minute' => MSKD_BATCH_SIZE,
+			'email_header'      => '',
+			'email_footer'      => '',
 			'smtp_enabled'      => 0,
 			'smtp_host'         => '',
 			'smtp_port'         => 587,

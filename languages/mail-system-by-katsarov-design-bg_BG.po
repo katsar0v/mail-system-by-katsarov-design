@@ -2058,3 +2058,51 @@ msgstr "Нито един абонат не беше обновен."
 #: includes/Services/class-subscriber-service.php
 msgid "Subscriber ID %d not found."
 msgstr "Абонат с ID %d не е намерен."
+
+#: admin/partials/settings.php
+msgid "Email Template Settings"
+msgstr "Настройки на шаблон за имейл"
+
+#: admin/partials/settings.php
+msgid "Configure custom header and footer that will be added to all outgoing emails. Supports HTML and template variables."
+msgstr "Конфигурирайте персонализиран хедър и футър, които ще бъдат добавени към всички изходящи имейли. Поддържа HTML и променливи на шаблона."
+
+#: admin/partials/settings.php
+msgid "Email Header"
+msgstr "Хедър на имейл"
+
+#: admin/partials/settings.php
+msgid "HTML content to prepend to all emails. Leave empty to disable."
+msgstr "HTML съдържание, което да се добави в началото на всички имейли. Оставете празно за деактивиране."
+
+#: admin/partials/settings.php
+msgid "Email Footer"
+msgstr "Футър на имейл"
+
+#: admin/partials/settings.php
+msgid "HTML content to append to all emails. Leave empty to disable."
+msgstr "HTML съдържание, което да се добави в края на всички имейли. Оставете празно за деактивиране."
+
+#: admin/partials/settings.php
+msgid "Available Variables"
+msgstr "Налични променливи"
+
+#: admin/partials/settings.php
+msgid "Subscriber first name"
+msgstr "Първо име на абонат"
+
+#: admin/partials/settings.php
+msgid "Subscriber last name"
+msgstr "Фамилия на абонат"
+
+#: admin/partials/settings.php
+msgid "Subscriber email address"
+msgstr "Имейл адрес на абонат"
+
+#: admin/partials/settings.php
+msgid "Clickable unsubscribe link"
+msgstr "Линк за отписване"
+
+#: admin/partials/settings.php
+msgid "Raw unsubscribe URL"
+msgstr "Чист URL за отписване"
