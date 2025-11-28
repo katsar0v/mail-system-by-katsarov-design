@@ -56,6 +56,21 @@ else
     exit 1
 fi
 
+# Build Visual Email Editor (if editor directory exists)
+if [ -d "$PLUGIN_DIR/admin/editor" ] && [ -f "$PLUGIN_DIR/admin/editor/package.json" ]; then
+    echo -e "${YELLOW}Building Visual Email Editor...${NC}"
+    cd "$PLUGIN_DIR/admin/editor"
+    npm install --silent
+    npm run build
+    echo -e "${GREEN}✓ Visual Editor built successfully${NC}"
+    
+    # Clean up node_modules after build
+    echo -e "${YELLOW}Cleaning up editor node_modules...${NC}"
+    rm -rf "$PLUGIN_DIR/admin/editor/node_modules"
+    echo -e "${GREEN}✓ Editor node_modules cleaned${NC}"
+    cd "$PLUGIN_DIR"
+fi
+
 # Check if zip file already exists
 if [ -f "$ZIP_FILE" ]; then
     echo -e "${YELLOW}Warning: ${ZIP_FILE} already exists. Overwriting...${NC}"
@@ -83,6 +98,13 @@ zip -r "$ZIP_FILE" "$PLUGIN_NAME" \
     -x "${PLUGIN_NAME}/.phpcs.xml.dist" \
     -x "${PLUGIN_NAME}/admin/scss/*" \
     -x "${PLUGIN_NAME}/public/scss/*" \
+    -x "${PLUGIN_NAME}/admin/editor/node_modules/*" \
+    -x "${PLUGIN_NAME}/admin/editor/src/*" \
+    -x "${PLUGIN_NAME}/admin/editor/package.json" \
+    -x "${PLUGIN_NAME}/admin/editor/package-lock.json" \
+    -x "${PLUGIN_NAME}/admin/editor/tsconfig.json" \
+    -x "${PLUGIN_NAME}/admin/editor/tsconfig.node.json" \
+    -x "${PLUGIN_NAME}/admin/editor/vite.config.ts" \
     > /dev/null
 
 # Get file size
