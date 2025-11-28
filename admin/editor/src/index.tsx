@@ -25,6 +25,7 @@ interface MSKDEditorConfig {
   htmlContent?: string;
   subject?: string;
   returnUrl: string;
+  campaignMode?: boolean;
   saveAction: string;
   strings: {
     save: string;
@@ -236,8 +237,9 @@ function VisualEmailEditor() {
 
       if (result.success) {
         setSaveMessage(config.strings.saved);
-        // Redirect back to templates list after save if specified
-        if (config.returnUrl && result.data?.redirect) {
+        // In campaign mode, always redirect after save.
+        // In template mode, redirect only if backend requests it.
+        if (config.campaignMode || (config.returnUrl && result.data?.redirect)) {
           window.location.href = config.returnUrl;
         }
       } else {

@@ -46,6 +46,7 @@ class Admin_Visual_Editor {
 	public function init(): void {
 		// AJAX handlers.
 		add_action( 'wp_ajax_mskd_save_visual_editor', array( $this, 'ajax_save' ) );
+		add_action( 'wp_ajax_mskd_save_campaign_content', array( $this, 'ajax_save_campaign_content' ) );
 		add_action( 'wp_ajax_mskd_upload_editor_image', array( $this, 'ajax_upload_image' ) );
 
 		// Intercept visual editor page early to render full-screen.
@@ -91,6 +92,8 @@ class Admin_Visual_Editor {
 		// Determine return URL based on context.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only parameter.
 		$return_to  = isset( $_GET['return_to'] ) ? sanitize_text_field( $_GET['return_to'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only parameter.
+		$campaign_mode = isset( $_GET['campaign_mode'] ) && '1' === $_GET['campaign_mode'];
 		$return_url = admin_url( 'admin.php?page=mskd-templates' );
 		
 		if ( 'compose_wizard' === $return_to ) {
@@ -99,17 +102,18 @@ class Admin_Visual_Editor {
 
 		// Prepare editor configuration.
 		$editor_config = array(
-			'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
-			'nonce'       => wp_create_nonce( 'mskd_visual_editor' ),
-			'templateId'  => $template_id,
-			'jsonContent' => $template && $template->json_content ? $template->json_content : '',
-			'htmlContent' => $template ? $template->content : '',
-			'subject'     => $template ? $template->subject : '',
+			'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
+			'nonce'        => wp_create_nonce( 'mskd_visual_editor' ),
+			'templateId'   => $template_id,
+			'jsonContent'  => $template && $template->json_content ? $template->json_content : '',
+			'htmlContent'  => $template ? $template->content : '',
+			'subject'      => $template ? $template->subject : '',
 			'templateName' => $template ? $template->name : '',
-			'returnUrl'   => $return_url,
-			'saveAction'  => 'mskd_save_visual_editor',
-			'strings'     => array(
-				'save'             => __( 'Save', 'mail-system-by-katsarov-design' ),
+			'returnUrl'    => $return_url,
+			'campaignMode' => $campaign_mode,
+			'saveAction'   => $campaign_mode ? 'mskd_save_campaign_content' : 'mskd_save_visual_editor',
+			'strings'      => array(
+				'save'             => $campaign_mode ? __( 'Save & Continue', 'mail-system-by-katsarov-design' ) : __( 'Save', 'mail-system-by-katsarov-design' ),
 				'saving'           => __( 'Saving...', 'mail-system-by-katsarov-design' ),
 				'saved'            => __( 'Saved!', 'mail-system-by-katsarov-design' ),
 				'error'            => __( 'Error saving template', 'mail-system-by-katsarov-design' ),
@@ -291,6 +295,67 @@ class Admin_Visual_Editor {
 				wp_send_json_error( array( 'message' => __( 'Failed to create template.', 'mail-system-by-katsarov-design' ) ) );
 			}
 		}
+	}
+
+	/**
+	 * AJAX handler for saving campaign content from visual editor.
+	 *
+	 * This saves content to the compose wizard session instead of creating a template.
+	 *
+	 * @return void
+	 */
+	public function ajax_save_campaign_content(): void {
+		// Verify nonce.
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'mskd_visual_editor' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'mail-system-by-katsarov-design' ) ) );
+		}
+
+		// Check permissions.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'mail-system-by-katsarov-design' ) ) );
+		}
+
+		// Get data.
+		$subject      = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
+		$content      = isset( $_POST['content'] ) ? wp_kses_post( wp_unslash( $_POST['content'] ) ) : '';
+		$json_content = isset( $_POST['json_content'] ) ? sanitize_text_field( wp_unslash( $_POST['json_content'] ) ) : '';
+
+		// Validate JSON content.
+		if ( ! empty( $json_content ) ) {
+			$decoded = json_decode( $json_content );
+			if ( null === $decoded && JSON_ERROR_NONE !== json_last_error() ) {
+				wp_send_json_error( array( 'message' => __( 'Invalid JSON content.', 'mail-system-by-katsarov-design' ) ) );
+			}
+		}
+
+		// Get session data.
+		$session_key  = 'mskd_compose_wizard_' . get_current_user_id();
+		$session_data = get_transient( $session_key );
+		if ( ! is_array( $session_data ) ) {
+			$session_data = array(
+				'template_id'   => 0,
+				'use_visual'    => true,
+				'subject'       => '',
+				'content'       => '',
+				'json_content'  => '',
+				'lists'         => array(),
+				'schedule_type' => 'now',
+			);
+		}
+
+		// Update session with visual editor content.
+		$session_data['subject']      = $subject;
+		$session_data['content']      = $content;
+		$session_data['json_content'] = $json_content;
+		$session_data['use_visual']   = true;
+
+		// Save session.
+		set_transient( $session_key, $session_data, HOUR_IN_SECONDS );
+
+		wp_send_json_success( array(
+			'message'  => __( 'Content saved successfully.', 'mail-system-by-katsarov-design' ),
+			'redirect' => true,
+		) );
 	}
 
 	/**
