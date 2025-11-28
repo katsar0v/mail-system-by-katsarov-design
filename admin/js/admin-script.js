@@ -374,17 +374,30 @@
         // Email Content Accordion Toggle
         // =====================================================================
 
-        $('.mskd-accordion-toggle').on('click', function() {
-            var $toggle = $(this);
+        function toggleAccordion($toggle) {
             var $content = $toggle.next('.mskd-accordion-content');
             var isExpanded = $toggle.attr('aria-expanded') === 'true';
 
             if (isExpanded) {
                 $content.slideUp(200);
                 $toggle.attr('aria-expanded', 'false');
+                $content.attr('aria-hidden', 'true');
             } else {
                 $content.slideDown(200);
                 $toggle.attr('aria-expanded', 'true');
+                $content.attr('aria-hidden', 'false');
+            }
+        }
+
+        $('.mskd-accordion-toggle').on('click', function() {
+            toggleAccordion($(this));
+        });
+
+        $('.mskd-accordion-toggle').on('keydown', function(e) {
+            // Toggle on Enter or Space key
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleAccordion($(this));
             }
         });
     });

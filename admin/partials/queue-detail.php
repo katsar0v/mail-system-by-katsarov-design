@@ -192,11 +192,11 @@ $can_cancel = in_array( $campaign->status, array( 'pending', 'processing' ), tru
 
     <!-- Email Content Accordion -->
     <div class="mskd-email-content-accordion">
-        <button type="button" class="mskd-accordion-toggle" aria-expanded="false">
+        <button type="button" class="mskd-accordion-toggle" aria-expanded="false" aria-controls="mskd-email-content">
             <span class="mskd-accordion-icon dashicons dashicons-arrow-right-alt2"></span>
             <?php esc_html_e( 'Email Content', 'mail-system-by-katsarov-design' ); ?>
         </button>
-        <div class="mskd-accordion-content" style="display: none;">
+        <div id="mskd-email-content" class="mskd-accordion-content" style="display: none;" aria-hidden="true">
             <div class="mskd-email-subject">
                 <strong><?php esc_html_e( 'Subject:', 'mail-system-by-katsarov-design' ); ?></strong>
                 <?php echo esc_html( $campaign->subject ); ?>
@@ -204,7 +204,7 @@ $can_cancel = in_array( $campaign->status, array( 'pending', 'processing' ), tru
             <div class="mskd-email-body">
                 <strong><?php esc_html_e( 'Body:', 'mail-system-by-katsarov-design' ); ?></strong>
                 <div class="mskd-email-body-preview">
-                    <iframe class="mskd-email-iframe" srcdoc="<?php echo esc_attr( $campaign->body ); ?>" sandbox="allow-same-origin" title="<?php esc_attr_e( 'Email Preview', 'mail-system-by-katsarov-design' ); ?>"></iframe>
+                    <iframe class="mskd-email-iframe" srcdoc="<?php echo esc_attr( $campaign->body ); ?>" sandbox="" title="<?php esc_attr_e( 'Email Preview', 'mail-system-by-katsarov-design' ); ?>"></iframe>
                 </div>
             </div>
         </div>
