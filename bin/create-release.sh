@@ -40,6 +40,22 @@ ZIP_FILE="${OUTPUT_DIR}/${PLUGIN_NAME}-v${VERSION}.zip"
 
 echo -e "${YELLOW}Creating release v${VERSION} for ${PLUGIN_NAME}...${NC}"
 
+# Build CSS from SCSS (required since CSS is gitignored)
+echo -e "${YELLOW}Building CSS from SCSS...${NC}"
+cd "$PLUGIN_DIR"
+if [ -f "package.json" ]; then
+    if command -v npm &> /dev/null; then
+        npm run build
+        echo -e "${GREEN}✓ CSS built successfully${NC}"
+    else
+        echo -e "${RED}Error: npm is required to build CSS. Please install Node.js.${NC}"
+        exit 1
+    fi
+else
+    echo -e "${RED}Error: package.json not found.${NC}"
+    exit 1
+fi
+
 # Check if zip file already exists
 if [ -f "$ZIP_FILE" ]; then
     echo -e "${YELLOW}Warning: ${ZIP_FILE} already exists. Overwriting...${NC}"
@@ -65,7 +81,8 @@ zip -r "$ZIP_FILE" "$PLUGIN_NAME" \
     -x "${PLUGIN_NAME}/phpcs.xml.dist" \
     -x "${PLUGIN_NAME}/.phpcs.xml" \
     -x "${PLUGIN_NAME}/.phpcs.xml.dist" \
-    -x "*.scss" \
+    -x "${PLUGIN_NAME}/admin/scss/*" \
+    -x "${PLUGIN_NAME}/public/scss/*" \
     > /dev/null
 
 # Get file size
