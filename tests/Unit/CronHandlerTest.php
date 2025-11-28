@@ -31,7 +31,7 @@ class CronHandlerTest extends TestCase {
         parent::setUp();
 
         // Load the cron handler class.
-        require_once MSKD_PLUGIN_DIR . 'includes/services/class-cron-handler.php';
+        require_once \MSKD_PLUGIN_DIR . 'includes/services/class-cron-handler.php';
 
         $this->cron_handler = new \MSKD_Cron_Handler();
     }
@@ -672,7 +672,7 @@ class CronHandlerTest extends TestCase {
             ->with( Mockery::on(
                 function ( $query ) {
                     // The query should contain LIMIT with MSKD_BATCH_SIZE (10).
-                    $batch_size = MSKD_BATCH_SIZE;
+                    $batch_size = \MSKD_BATCH_SIZE;
                     return strpos( $query, 'LIMIT' ) !== false
                         && strpos( $query, 'LIMIT ' . $batch_size ) !== false
                         && strpos( $query, 'subscriber_id > 0' ) !== false;
@@ -684,7 +684,7 @@ class CronHandlerTest extends TestCase {
         $wpdb->shouldReceive( 'get_results' )
             ->once()
             ->with( Mockery::on( function ( $query ) {
-                $batch_size = MSKD_BATCH_SIZE;
+                $batch_size = \MSKD_BATCH_SIZE;
                 return strpos( $query, 'subscriber_id = 0' ) !== false
                     && strpos( $query, 'LIMIT ' . $batch_size ) !== false;
             } ) )

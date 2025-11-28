@@ -31,7 +31,7 @@ class SmtpMailerTest extends TestCase {
         parent::setUp();
 
         // Load the SMTP mailer class.
-        require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+        require_once \MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
     }
 
     /**

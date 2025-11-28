@@ -24,7 +24,7 @@ class DeactivatorTest extends TestCase {
         parent::setUp();
 
         // Load the deactivator class.
-        require_once MSKD_PLUGIN_DIR . 'includes/class-deactivator.php';
+        require_once \MSKD_PLUGIN_DIR . 'includes/class-deactivator.php';
     }
 
     /**

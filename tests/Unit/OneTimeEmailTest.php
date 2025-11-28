@@ -36,7 +36,7 @@ class OneTimeEmailTest extends TestCase {
         $this->wpdb->shouldIgnoreMissing();
 
         // Load the admin class.
-        require_once MSKD_PLUGIN_DIR . 'admin/class-admin.php';
+        require_once \MSKD_PLUGIN_DIR . 'admin/class-admin.php';
 
         $this->admin = new \MSKD_Admin();
     }
