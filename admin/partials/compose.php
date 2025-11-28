@@ -65,6 +65,24 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 
     <?php settings_errors( 'mskd_messages' ); ?>
 
+    <!-- Editor type selection -->
+    <div class="mskd-editor-toggle" style="margin-bottom: 20px; padding: 15px; background: #fff; border: 1px solid #c3c4c7; border-radius: 4px;">
+        <p style="margin: 0 0 10px; font-weight: 600;"><?php esc_html_e( 'Choose how to compose your email:', 'mail-system-by-katsarov-design' ); ?></p>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-templates' ) ); ?>" class="button button-secondary" style="display: inline-flex; align-items: center; gap: 8px;">
+                <span class="dashicons dashicons-layout" style="margin: 0;"></span>
+                <?php esc_html_e( 'Use a Template', 'mail-system-by-katsarov-design' ); ?>
+            </a>
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-visual-editor' ) ); ?>" class="button button-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+                <span class="dashicons dashicons-welcome-widgets-menus" style="margin: 0;"></span>
+                <?php esc_html_e( 'Open Visual Editor', 'mail-system-by-katsarov-design' ); ?>
+            </a>
+        </div>
+        <p class="description" style="margin-top: 10px;">
+            <?php esc_html_e( 'Or use the standard editor below to compose your email with HTML.', 'mail-system-by-katsarov-design' ); ?>
+        </p>
+    </div>
+
     <div class="mskd-form-wrap mskd-compose-form">
         <form method="post" action="">
             <?php wp_nonce_field( 'mskd_send_email', 'mskd_nonce' ); ?>

@@ -1,0 +1,931 @@
+<?php
+/**
+ * Compose email wizard - Multi-step email creation
+ *
+ * Step 1: Choose template or start from scratch
+ * Step 2: Edit content in visual editor or HTML editor
+ * Step 3: Configure recipients, scheduling, and send
+ *
+ * @package MSKD
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+global $wpdb;
+
+// Load required services.
+require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
+
+use MSKD\Services\Template_Service;
+
+// Get all lists (database + external).
+$lists = MSKD_List_Provider::get_all_lists();
+
+// Get all templates.
+$template_service     = new Template_Service();
+$templates            = $template_service->get_all( array( 'orderby' => 'type', 'order' => 'ASC' ) );
+$predefined_templates = array_filter( $templates, function( $t ) { return 'predefined' === $t->type; } );
+$custom_templates     = array_filter( $templates, function( $t ) { return 'custom' === $t->type; } );
+
+// Get current step from URL or default to 1.
+$current_step = isset( $_GET['step'] ) ? intval( $_GET['step'] ) : 1;
+$current_step = max( 1, min( 3, $current_step ) );
+
+// Get session data.
+$session_key  = 'mskd_compose_wizard_' . get_current_user_id();
+$session_data = get_transient( $session_key );
+if ( ! is_array( $session_data ) ) {
+	$session_data = array(
+		'template_id'   => 0,
+		'use_visual'    => false,
+		'subject'       => '',
+		'content'       => '',
+		'json_content'  => '',
+		'lists'         => array(),
+		'schedule_type' => 'now',
+	);
+}
+
+// Handle step 1 submission (template selection).
+if ( isset( $_POST['mskd_wizard_step1'] ) && wp_verify_nonce( $_POST['mskd_wizard_nonce'], 'mskd_compose_wizard' ) ) {
+	$choice = sanitize_text_field( $_POST['template_choice'] );
+	
+	if ( 'template' === $choice && ! empty( $_POST['template_id'] ) ) {
+		$template_id = intval( $_POST['template_id'] );
+		$template    = $template_service->get_by_id( $template_id );
+		if ( $template ) {
+			$session_data['template_id']  = $template_id;
+			$session_data['subject']      = $template->subject;
+			$session_data['content']      = $template->content;
+			$session_data['json_content'] = $template->json_content;
+			$session_data['use_visual']   = ! empty( $template->json_content );
+		}
+	} elseif ( 'visual' === $choice ) {
+		$session_data['template_id']  = 0;
+		$session_data['subject']      = '';
+		$session_data['content']      = '';
+		$session_data['json_content'] = '';
+		$session_data['use_visual']   = true;
+	} else {
+		// Scratch / HTML editor.
+		$session_data['template_id']  = 0;
+		$session_data['subject']      = '';
+		$session_data['content']      = '';
+		$session_data['json_content'] = '';
+		$session_data['use_visual']   = false;
+	}
+	
+	set_transient( $session_key, $session_data, HOUR_IN_SECONDS );
+	wp_safe_redirect( admin_url( 'admin.php?page=mskd-compose&step=2' ) );
+	exit;
+}
+
+// Handle step 2 submission (content editing) - for HTML editor mode.
+if ( isset( $_POST['mskd_wizard_step2'] ) && wp_verify_nonce( $_POST['mskd_wizard_nonce'], 'mskd_compose_wizard' ) ) {
+	$session_data['subject'] = sanitize_text_field( $_POST['subject'] );
+	$session_data['content'] = wp_kses_post( $_POST['body'] );
+	
+	set_transient( $session_key, $session_data, HOUR_IN_SECONDS );
+	wp_safe_redirect( admin_url( 'admin.php?page=mskd-compose&step=3' ) );
+	exit;
+}
+
+// Get minimum datetime for picker (now + 10 minutes, rounded to nearest 10 min).
+$wp_timezone     = wp_timezone();
+$now             = new DateTime( 'now', $wp_timezone );
+$minutes         = (int) $now->format( 'i' );
+$rounded_minutes = ceil( ( $minutes + 1 ) / 10 ) * 10;
+if ( $rounded_minutes >= 60 ) {
+	$now->modify( '+1 hour' );
+	$rounded_minutes = 0;
+}
+$now->setTime( (int) $now->format( 'H' ), $rounded_minutes, 0 );
+$min_datetime = $now->format( 'Y-m-d\TH:i' );
+?>
+
+<div class="wrap mskd-wrap">
+	<h1><?php esc_html_e( 'New email', 'mail-system-by-katsarov-design' ); ?></h1>
+
+	<?php settings_errors( 'mskd_messages' ); ?>
+
+	<!-- Wizard Steps Navigation -->
+	<div class="mskd-wizard-steps">
+		<div class="mskd-wizard-step <?php echo $current_step >= 1 ? 'mskd-wizard-step-active' : ''; ?> <?php echo $current_step > 1 ? 'mskd-wizard-step-completed' : ''; ?>">
+			<span class="mskd-wizard-step-number">1</span>
+			<span class="mskd-wizard-step-label"><?php esc_html_e( 'Choose Template', 'mail-system-by-katsarov-design' ); ?></span>
+		</div>
+		<div class="mskd-wizard-step-connector <?php echo $current_step > 1 ? 'mskd-wizard-step-connector-active' : ''; ?>"></div>
+		<div class="mskd-wizard-step <?php echo $current_step >= 2 ? 'mskd-wizard-step-active' : ''; ?> <?php echo $current_step > 2 ? 'mskd-wizard-step-completed' : ''; ?>">
+			<span class="mskd-wizard-step-number">2</span>
+			<span class="mskd-wizard-step-label"><?php esc_html_e( 'Edit Content', 'mail-system-by-katsarov-design' ); ?></span>
+		</div>
+		<div class="mskd-wizard-step-connector <?php echo $current_step > 2 ? 'mskd-wizard-step-connector-active' : ''; ?>"></div>
+		<div class="mskd-wizard-step <?php echo 3 === $current_step ? 'mskd-wizard-step-active' : ''; ?>">
+			<span class="mskd-wizard-step-number">3</span>
+			<span class="mskd-wizard-step-label"><?php esc_html_e( 'Send', 'mail-system-by-katsarov-design' ); ?></span>
+		</div>
+	</div>
+
+	<?php if ( 1 === $current_step ) : ?>
+		<!-- STEP 1: Choose Template -->
+		<div class="mskd-wizard-content">
+			<div class="mskd-wizard-card">
+				<h2><?php esc_html_e( 'How would you like to create your email?', 'mail-system-by-katsarov-design' ); ?></h2>
+				<p class="description"><?php esc_html_e( 'Choose a starting point for your email campaign.', 'mail-system-by-katsarov-design' ); ?></p>
+
+				<form method="post" action="">
+					<?php wp_nonce_field( 'mskd_compose_wizard', 'mskd_wizard_nonce' ); ?>
+					<input type="hidden" name="template_choice" id="template_choice" value="scratch">
+					<input type="hidden" name="template_id" id="selected_template_id" value="0">
+
+					<div class="mskd-template-choices">
+						<!-- Start from scratch -->
+						<div class="mskd-template-choice" data-choice="scratch">
+							<div class="mskd-template-choice-icon">
+								<span class="dashicons dashicons-edit"></span>
+							</div>
+							<div class="mskd-template-choice-content">
+								<h3><?php esc_html_e( 'Start from Scratch', 'mail-system-by-katsarov-design' ); ?></h3>
+								<p><?php esc_html_e( 'Create your email using the HTML editor with full control over the code.', 'mail-system-by-katsarov-design' ); ?></p>
+							</div>
+							<span class="mskd-template-choice-check dashicons dashicons-yes-alt"></span>
+						</div>
+
+						<!-- Use Visual Editor -->
+						<div class="mskd-template-choice" data-choice="visual">
+							<div class="mskd-template-choice-icon mskd-template-choice-icon-primary">
+								<span class="dashicons dashicons-welcome-widgets-menus"></span>
+							</div>
+							<div class="mskd-template-choice-content">
+								<h3><?php esc_html_e( 'Visual Editor', 'mail-system-by-katsarov-design' ); ?></h3>
+								<p><?php esc_html_e( 'Build your email with our drag-and-drop visual editor. No coding required.', 'mail-system-by-katsarov-design' ); ?></p>
+							</div>
+							<span class="mskd-template-choice-check dashicons dashicons-yes-alt"></span>
+						</div>
+
+						<!-- Use a Template -->
+						<div class="mskd-template-choice" data-choice="template">
+							<div class="mskd-template-choice-icon mskd-template-choice-icon-secondary">
+								<span class="dashicons dashicons-layout"></span>
+							</div>
+							<div class="mskd-template-choice-content">
+								<h3><?php esc_html_e( 'Use a Template', 'mail-system-by-katsarov-design' ); ?></h3>
+								<p><?php esc_html_e( 'Start with one of your saved templates and customize it.', 'mail-system-by-katsarov-design' ); ?></p>
+							</div>
+							<span class="mskd-template-choice-check dashicons dashicons-yes-alt"></span>
+						</div>
+					</div>
+
+					<!-- Template Selection (shown when "Use a Template" is selected) -->
+					<div class="mskd-template-selection" style="display: none;">
+						<h3><?php esc_html_e( 'Select a Template', 'mail-system-by-katsarov-design' ); ?></h3>
+						
+						<?php if ( ! empty( $templates ) ) : ?>
+							<div class="mskd-template-selection-grid">
+								<?php foreach ( $templates as $template ) : ?>
+									<div class="mskd-template-select-card" data-template-id="<?php echo esc_attr( $template->id ); ?>">
+										<div class="mskd-template-select-preview">
+											<?php if ( ! empty( $template->thumbnail ) ) : ?>
+												<img src="<?php echo esc_url( $template->thumbnail ); ?>" alt="<?php echo esc_attr( $template->name ); ?>">
+											<?php else : ?>
+												<div class="mskd-template-placeholder">
+													<span class="dashicons dashicons-email-alt"></span>
+												</div>
+											<?php endif; ?>
+										</div>
+										<div class="mskd-template-select-info">
+											<h4><?php echo esc_html( $template->name ); ?></h4>
+											<span class="mskd-template-badge mskd-template-badge-<?php echo esc_attr( $template->type ); ?>">
+												<?php echo 'predefined' === $template->type ? esc_html__( 'Predefined', 'mail-system-by-katsarov-design' ) : esc_html__( 'Custom', 'mail-system-by-katsarov-design' ); ?>
+											</span>
+										</div>
+										<span class="mskd-template-select-check dashicons dashicons-yes-alt"></span>
+									</div>
+								<?php endforeach; ?>
+							</div>
+						<?php else : ?>
+							<p class="mskd-no-templates-msg">
+								<?php esc_html_e( 'No templates available.', 'mail-system-by-katsarov-design' ); ?>
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-templates&action=add' ) ); ?>"><?php esc_html_e( 'Create your first template', 'mail-system-by-katsarov-design' ); ?></a>
+							</p>
+						<?php endif; ?>
+					</div>
+
+					<div class="mskd-wizard-actions">
+						<button type="submit" name="mskd_wizard_step1" class="button button-primary button-hero">
+							<?php esc_html_e( 'Continue', 'mail-system-by-katsarov-design' ); ?>
+							<span class="dashicons dashicons-arrow-right-alt"></span>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	<?php elseif ( 2 === $current_step ) : ?>
+		<!-- STEP 2: Edit Content -->
+		<div class="mskd-wizard-content">
+			<?php if ( $session_data['use_visual'] ) : ?>
+				<!-- Visual Editor Mode - Redirect to visual editor with return URL -->
+				<div class="mskd-wizard-card">
+					<h2><?php esc_html_e( 'Edit Your Email', 'mail-system-by-katsarov-design' ); ?></h2>
+					<p class="description"><?php esc_html_e( 'Use the visual editor to design your email. Click the button below to open the editor.', 'mail-system-by-katsarov-design' ); ?></p>
+					
+					<div class="mskd-visual-editor-launch">
+						<div class="mskd-visual-editor-preview">
+							<span class="dashicons dashicons-welcome-widgets-menus"></span>
+							<p><?php esc_html_e( 'The visual editor will open in a new window. When you save your template, you can continue to the next step.', 'mail-system-by-katsarov-design' ); ?></p>
+						</div>
+						
+						<?php
+						$editor_url = admin_url( 'admin.php?page=mskd-visual-editor' );
+						if ( $session_data['template_id'] > 0 ) {
+							$editor_url = add_query_arg( 'template_id', $session_data['template_id'], $editor_url );
+						}
+						$editor_url = add_query_arg( 'return_to', 'compose_wizard', $editor_url );
+						?>
+						
+						<a href="<?php echo esc_url( $editor_url ); ?>" class="button button-primary button-hero" target="_blank">
+							<span class="dashicons dashicons-external"></span>
+							<?php esc_html_e( 'Open Visual Editor', 'mail-system-by-katsarov-design' ); ?>
+						</a>
+					</div>
+					
+					<div class="mskd-wizard-actions">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&step=1' ) ); ?>" class="button">
+							<span class="dashicons dashicons-arrow-left-alt"></span>
+							<?php esc_html_e( 'Back', 'mail-system-by-katsarov-design' ); ?>
+						</a>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&step=3' ) ); ?>" class="button button-primary button-hero">
+							<?php esc_html_e( 'Continue to Send Settings', 'mail-system-by-katsarov-design' ); ?>
+							<span class="dashicons dashicons-arrow-right-alt"></span>
+						</a>
+					</div>
+				</div>
+			<?php else : ?>
+				<!-- HTML Editor Mode -->
+				<div class="mskd-wizard-card mskd-wizard-card-wide">
+					<h2><?php esc_html_e( 'Edit Your Email Content', 'mail-system-by-katsarov-design' ); ?></h2>
+					<p class="description"><?php esc_html_e( 'Write your email content using the editor below.', 'mail-system-by-katsarov-design' ); ?></p>
+
+					<form method="post" action="">
+						<?php wp_nonce_field( 'mskd_compose_wizard', 'mskd_wizard_nonce' ); ?>
+
+						<table class="form-table">
+							<tr>
+								<th scope="row">
+									<label for="subject"><?php esc_html_e( 'Subject', 'mail-system-by-katsarov-design' ); ?> *</label>
+								</th>
+								<td>
+									<input type="text" name="subject" id="subject" class="large-text" required 
+										   value="<?php echo esc_attr( $session_data['subject'] ); ?>">
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">
+									<label for="body"><?php esc_html_e( 'Content', 'mail-system-by-katsarov-design' ); ?> *</label>
+								</th>
+								<td>
+									<?php
+									wp_editor(
+										$session_data['content'],
+										'body',
+										array(
+											'textarea_name' => 'body',
+											'textarea_rows' => 20,
+											'media_buttons' => true,
+											'teeny'         => false,
+											'quicktags'     => true,
+										)
+									);
+									?>
+									<p class="description">
+										<?php esc_html_e( 'Available placeholders:', 'mail-system-by-katsarov-design' ); ?>
+										<code>{first_name}</code>, <code>{last_name}</code>, <code>{email}</code>, <code>{unsubscribe_link}</code>
+									</p>
+								</td>
+							</tr>
+						</table>
+
+						<div class="mskd-wizard-actions">
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&step=1' ) ); ?>" class="button">
+								<span class="dashicons dashicons-arrow-left-alt"></span>
+								<?php esc_html_e( 'Back', 'mail-system-by-katsarov-design' ); ?>
+							</a>
+							<button type="submit" name="mskd_wizard_step2" class="button button-primary button-hero">
+								<?php esc_html_e( 'Continue', 'mail-system-by-katsarov-design' ); ?>
+								<span class="dashicons dashicons-arrow-right-alt"></span>
+							</button>
+						</div>
+					</form>
+				</div>
+			<?php endif; ?>
+		</div>
+
+	<?php elseif ( 3 === $current_step ) : ?>
+		<!-- STEP 3: Recipients, Scheduling & Send -->
+		<div class="mskd-wizard-content">
+			<div class="mskd-wizard-card mskd-wizard-card-wide">
+				<h2><?php esc_html_e( 'Configure & Send', 'mail-system-by-katsarov-design' ); ?></h2>
+				<p class="description"><?php esc_html_e( 'Select recipients, set scheduling options, and send your email.', 'mail-system-by-katsarov-design' ); ?></p>
+
+				<form method="post" action="">
+					<?php wp_nonce_field( 'mskd_send_email', 'mskd_nonce' ); ?>
+					
+					<!-- Pass through content from session -->
+					<input type="hidden" name="wizard_mode" value="1">
+
+					<table class="form-table">
+						<!-- Subject (editable) -->
+						<tr>
+							<th scope="row">
+								<label for="subject"><?php esc_html_e( 'Subject', 'mail-system-by-katsarov-design' ); ?> *</label>
+							</th>
+							<td>
+								<input type="text" name="subject" id="subject" class="large-text" required 
+									   value="<?php echo esc_attr( $session_data['subject'] ); ?>">
+							</td>
+						</tr>
+						
+						<!-- Content preview -->
+						<tr>
+							<th scope="row">
+								<label><?php esc_html_e( 'Content', 'mail-system-by-katsarov-design' ); ?></label>
+							</th>
+							<td>
+								<?php if ( ! empty( $session_data['content'] ) ) : ?>
+									<div class="mskd-content-preview">
+										<div class="mskd-content-preview-header">
+											<span class="dashicons dashicons-visibility"></span>
+											<?php esc_html_e( 'Content Preview', 'mail-system-by-katsarov-design' ); ?>
+											<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&step=2' ) ); ?>" class="mskd-edit-link">
+												<span class="dashicons dashicons-edit"></span>
+												<?php esc_html_e( 'Edit', 'mail-system-by-katsarov-design' ); ?>
+											</a>
+										</div>
+										<div class="mskd-content-preview-body">
+											<?php echo wp_kses_post( wp_trim_words( wp_strip_all_tags( $session_data['content'] ), 50 ) ); ?>
+										</div>
+									</div>
+									<input type="hidden" name="body" value="<?php echo esc_attr( $session_data['content'] ); ?>">
+								<?php elseif ( $session_data['use_visual'] && $session_data['template_id'] > 0 ) : ?>
+									<?php 
+									$template = $template_service->get_by_id( $session_data['template_id'] );
+									if ( $template ) :
+									?>
+										<div class="mskd-content-preview">
+											<div class="mskd-content-preview-header">
+												<span class="dashicons dashicons-layout"></span>
+												<?php 
+												/* translators: %s: template name */
+												printf( esc_html__( 'Using template: %s', 'mail-system-by-katsarov-design' ), '<strong>' . esc_html( $template->name ) . '</strong>' );
+												?>
+											</div>
+										</div>
+										<input type="hidden" name="body" value="<?php echo esc_attr( $template->content ); ?>">
+									<?php endif; ?>
+								<?php else : ?>
+									<p class="description" style="color: #d63638;">
+										<?php esc_html_e( 'No content set. Please go back to Step 2 to add content.', 'mail-system-by-katsarov-design' ); ?>
+									</p>
+								<?php endif; ?>
+							</td>
+						</tr>
+
+						<!-- Recipients -->
+						<tr>
+							<th scope="row">
+								<label for="mskd-lists-select"><?php esc_html_e( 'Send to lists', 'mail-system-by-katsarov-design' ); ?> *</label>
+							</th>
+							<td>
+								<?php if ( ! empty( $lists ) ) : ?>
+									<select name="lists[]" id="mskd-lists-select" class="mskd-slimselect-lists" multiple required>
+										<?php foreach ( $lists as $list ) : ?>
+											<?php
+											$subscriber_count = MSKD_List_Provider::get_list_active_subscriber_count( $list );
+											$is_external      = 'external' === $list->source;
+											$badge            = $is_external ? ' [' . __( 'Automated', 'mail-system-by-katsarov-design' ) . ']' : '';
+											?>
+											<option value="<?php echo esc_attr( $list->id ); ?>" 
+													data-subscribers="<?php echo esc_attr( $subscriber_count ); ?>"
+													data-external="<?php echo esc_attr( $is_external ? '1' : '0' ); ?>">
+												<?php echo esc_html( $list->name . $badge . ' (' . sprintf( __( '%d subscribers', 'mail-system-by-katsarov-design' ), $subscriber_count ) . ')' ); ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
+									<p class="description" style="margin-top: 8px;">
+										<?php esc_html_e( 'Start typing to search. You can select multiple lists.', 'mail-system-by-katsarov-design' ); ?>
+									</p>
+								<?php else : ?>
+									<p class="description" style="color: #d63638;">
+										<?php esc_html_e( 'No lists available.', 'mail-system-by-katsarov-design' ); ?>
+										<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-lists&action=add' ) ); ?>">
+											<?php esc_html_e( 'Create a list', 'mail-system-by-katsarov-design' ); ?>
+										</a>
+									</p>
+								<?php endif; ?>
+							</td>
+						</tr>
+
+						<!-- Scheduling -->
+						<tr>
+							<th scope="row">
+								<label for="schedule_type"><?php esc_html_e( 'Scheduling', 'mail-system-by-katsarov-design' ); ?></label>
+							</th>
+							<td>
+								<select name="schedule_type" id="schedule_type" class="mskd-schedule-type">
+									<option value="now"><?php esc_html_e( 'Send now', 'mail-system-by-katsarov-design' ); ?></option>
+									<option value="absolute"><?php esc_html_e( 'Specific date and time', 'mail-system-by-katsarov-design' ); ?></option>
+									<option value="relative"><?php esc_html_e( 'After a set time', 'mail-system-by-katsarov-design' ); ?></option>
+								</select>
+								
+								<div class="mskd-schedule-absolute" style="display: none; margin-top: 10px;">
+									<input type="datetime-local" 
+										   name="scheduled_datetime" 
+										   id="scheduled_datetime" 
+										   class="mskd-datetime-picker"
+										   value="<?php echo esc_attr( $min_datetime ); ?>"
+										   min="<?php echo esc_attr( $min_datetime ); ?>"
+										   step="600">
+									<p class="description">
+										<?php 
+										printf( 
+											esc_html__( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ), 
+											'<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
+										); 
+										?>
+									</p>
+								</div>
+								
+								<div class="mskd-schedule-relative" style="display: none; margin-top: 10px;">
+									<input type="number" 
+										   name="delay_value" 
+										   id="delay_value" 
+										   class="small-text" 
+										   value="1" 
+										   min="1" 
+										   max="999">
+									<select name="delay_unit" id="delay_unit">
+										<option value="minutes"><?php esc_html_e( 'minutes', 'mail-system-by-katsarov-design' ); ?></option>
+										<option value="hours" selected><?php esc_html_e( 'hours', 'mail-system-by-katsarov-design' ); ?></option>
+										<option value="days"><?php esc_html_e( 'days', 'mail-system-by-katsarov-design' ); ?></option>
+									</select>
+									<p class="description"><?php esc_html_e( 'Emails will be sent after the specified time.', 'mail-system-by-katsarov-design' ); ?></p>
+								</div>
+							</td>
+						</tr>
+					</table>
+
+					<div class="mskd-wizard-actions">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&step=2' ) ); ?>" class="button">
+							<span class="dashicons dashicons-arrow-left-alt"></span>
+							<?php esc_html_e( 'Back', 'mail-system-by-katsarov-design' ); ?>
+						</a>
+						<button type="submit" name="mskd_send_email" class="button button-primary button-hero mskd-submit-btn"
+								data-send-now="<?php esc_attr_e( 'Send Now', 'mail-system-by-katsarov-design' ); ?>"
+								data-schedule="<?php esc_attr_e( 'Schedule Sending', 'mail-system-by-katsarov-design' ); ?>">
+							<span class="dashicons dashicons-email"></span>
+							<?php esc_html_e( 'Send Now', 'mail-system-by-katsarov-design' ); ?>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	<?php endif; ?>
+</div>
+
+<style>
+/* Wizard Steps Navigation */
+.mskd-wizard-steps {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 24px 0 32px;
+	padding: 20px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 8px;
+}
+
+.mskd-wizard-step {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 16px;
+	border-radius: 8px;
+	opacity: 0.5;
+	transition: all 0.2s ease;
+}
+
+.mskd-wizard-step-active {
+	opacity: 1;
+	background: #f0f6fc;
+}
+
+.mskd-wizard-step-completed {
+	opacity: 1;
+}
+
+.mskd-wizard-step-number {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: #c3c4c7;
+	color: #fff;
+	font-weight: 600;
+	font-size: 14px;
+}
+
+.mskd-wizard-step-active .mskd-wizard-step-number {
+	background: #2271b1;
+}
+
+.mskd-wizard-step-completed .mskd-wizard-step-number {
+	background: #00a32a;
+}
+
+.mskd-wizard-step-label {
+	font-size: 14px;
+	font-weight: 500;
+	color: #50575e;
+}
+
+.mskd-wizard-step-active .mskd-wizard-step-label {
+	color: #1d2327;
+}
+
+.mskd-wizard-step-connector {
+	width: 60px;
+	height: 2px;
+	background: #c3c4c7;
+	margin: 0 8px;
+}
+
+.mskd-wizard-step-connector-active {
+	background: #00a32a;
+}
+
+/* Wizard Content */
+.mskd-wizard-content {
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+.mskd-wizard-card {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 8px;
+	padding: 32px;
+	box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+
+.mskd-wizard-card-wide {
+	max-width: 100%;
+}
+
+.mskd-wizard-card h2 {
+	margin: 0 0 8px;
+	font-size: 20px;
+}
+
+.mskd-wizard-card > .description {
+	margin-bottom: 24px;
+	color: #50575e;
+}
+
+/* Template Choices */
+.mskd-template-choices {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin-bottom: 24px;
+}
+
+.mskd-template-choice {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 20px;
+	border: 2px solid #c3c4c7;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	position: relative;
+}
+
+.mskd-template-choice:hover {
+	border-color: #2271b1;
+	background: #f0f6fc;
+}
+
+.mskd-template-choice.selected {
+	border-color: #2271b1;
+	background: #f0f6fc;
+}
+
+.mskd-template-choice-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 48px;
+	height: 48px;
+	border-radius: 8px;
+	background: #f0f0f1;
+	flex-shrink: 0;
+}
+
+.mskd-template-choice-icon .dashicons {
+	font-size: 24px;
+	width: 24px;
+	height: 24px;
+	color: #50575e;
+}
+
+.mskd-template-choice-icon-primary {
+	background: #2271b1;
+}
+
+.mskd-template-choice-icon-primary .dashicons {
+	color: #fff;
+}
+
+.mskd-template-choice-icon-secondary {
+	background: #00a32a;
+}
+
+.mskd-template-choice-icon-secondary .dashicons {
+	color: #fff;
+}
+
+.mskd-template-choice-content {
+	flex: 1;
+}
+
+.mskd-template-choice-content h3 {
+	margin: 0 0 4px;
+	font-size: 15px;
+}
+
+.mskd-template-choice-content p {
+	margin: 0;
+	color: #50575e;
+	font-size: 13px;
+}
+
+.mskd-template-choice-check {
+	display: none;
+	color: #2271b1;
+	font-size: 24px;
+}
+
+.mskd-template-choice.selected .mskd-template-choice-check {
+	display: block;
+}
+
+/* Template Selection Grid */
+.mskd-template-selection {
+	margin-top: 24px;
+	padding-top: 24px;
+	border-top: 1px solid #c3c4c7;
+}
+
+.mskd-template-selection h3 {
+	margin: 0 0 16px;
+	font-size: 16px;
+}
+
+.mskd-template-selection-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 16px;
+}
+
+.mskd-template-select-card {
+	border: 2px solid #c3c4c7;
+	border-radius: 8px;
+	overflow: hidden;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	position: relative;
+}
+
+.mskd-template-select-card:hover {
+	border-color: #2271b1;
+}
+
+.mskd-template-select-card.selected {
+	border-color: #2271b1;
+	box-shadow: 0 0 0 1px #2271b1;
+}
+
+.mskd-template-select-preview {
+	height: 120px;
+	background: #f8f9fa;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.mskd-template-select-preview img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.mskd-template-select-info {
+	padding: 12px;
+}
+
+.mskd-template-select-info h4 {
+	margin: 0 0 8px;
+	font-size: 13px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.mskd-template-select-check {
+	display: none;
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	background: #2271b1;
+	color: #fff;
+	border-radius: 50%;
+	font-size: 20px;
+}
+
+.mskd-template-select-card.selected .mskd-template-select-check {
+	display: block;
+}
+
+/* Wizard Actions */
+.mskd-wizard-actions {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 24px;
+	padding-top: 24px;
+	border-top: 1px solid #c3c4c7;
+}
+
+.mskd-wizard-actions .button-hero {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.mskd-wizard-actions .button-hero .dashicons {
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+}
+
+/* Visual Editor Launch */
+.mskd-visual-editor-launch {
+	text-align: center;
+	padding: 40px 20px;
+	background: #f8f9fa;
+	border-radius: 8px;
+	margin-bottom: 24px;
+}
+
+.mskd-visual-editor-preview {
+	margin-bottom: 24px;
+}
+
+.mskd-visual-editor-preview .dashicons {
+	font-size: 64px;
+	width: 64px;
+	height: 64px;
+	color: #2271b1;
+	margin-bottom: 16px;
+}
+
+.mskd-visual-editor-preview p {
+	max-width: 400px;
+	margin: 0 auto;
+	color: #50575e;
+}
+
+/* Content Preview */
+.mskd-content-preview {
+	background: #f8f9fa;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+.mskd-content-preview-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 12px 16px;
+	background: #e9ecef;
+	font-size: 13px;
+	font-weight: 500;
+}
+
+.mskd-content-preview-header .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	color: #50575e;
+}
+
+.mskd-edit-link {
+	margin-left: auto;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	text-decoration: none;
+	font-size: 12px;
+}
+
+.mskd-content-preview-body {
+	padding: 16px;
+	font-size: 13px;
+	color: #50575e;
+	line-height: 1.6;
+}
+
+@media screen and (max-width: 782px) {
+	.mskd-wizard-steps {
+		flex-wrap: wrap;
+		gap: 12px;
+	}
+	
+	.mskd-wizard-step-connector {
+		display: none;
+	}
+	
+	.mskd-template-selection-grid {
+		grid-template-columns: 1fr;
+	}
+	
+	.mskd-wizard-actions {
+		flex-direction: column;
+		gap: 12px;
+	}
+	
+	.mskd-wizard-actions .button {
+		width: 100%;
+		text-align: center;
+		justify-content: center;
+	}
+}
+</style>
+
+<script>
+jQuery(document).ready(function($) {
+	// Template choice selection
+	$('.mskd-template-choice').on('click', function() {
+		$('.mskd-template-choice').removeClass('selected');
+		$(this).addClass('selected');
+		$('#template_choice').val($(this).data('choice'));
+		
+		// Show/hide template selection
+		if ($(this).data('choice') === 'template') {
+			$('.mskd-template-selection').slideDown();
+		} else {
+			$('.mskd-template-selection').slideUp();
+			$('#selected_template_id').val('0');
+			$('.mskd-template-select-card').removeClass('selected');
+		}
+	});
+	
+	// Template card selection
+	$('.mskd-template-select-card').on('click', function() {
+		$('.mskd-template-select-card').removeClass('selected');
+		$(this).addClass('selected');
+		$('#selected_template_id').val($(this).data('template-id'));
+	});
+	
+	// Select first choice by default
+	$('.mskd-template-choice').first().trigger('click');
+	
+	// Schedule type toggle
+	$('#schedule_type').on('change', function() {
+		var value = $(this).val();
+		$('.mskd-schedule-absolute, .mskd-schedule-relative').hide();
+		
+		if (value === 'absolute') {
+			$('.mskd-schedule-absolute').show();
+		} else if (value === 'relative') {
+			$('.mskd-schedule-relative').show();
+		}
+		
+		// Update button text
+		var $btn = $('.mskd-submit-btn');
+		if (value === 'now') {
+			$btn.html('<span class="dashicons dashicons-email"></span> ' + $btn.data('send-now'));
+		} else {
+			$btn.html('<span class="dashicons dashicons-calendar-alt"></span> ' + $btn.data('schedule'));
+		}
+	});
+});
+</script>

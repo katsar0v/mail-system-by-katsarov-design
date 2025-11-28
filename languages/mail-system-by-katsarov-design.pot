@@ -1667,5 +1667,189 @@ msgstr ""
 #. translators: %s: template name
 #: admin/partials/compose.php
 msgid "Using template: %s"
+msgstr ""
 
+#: admin/partials/compose.php
+msgid "Choose how to compose your email"
+msgstr ""
+
+#: admin/partials/compose.php
+msgid "Use a Template"
+msgstr ""
+
+#: admin/partials/compose.php
+msgid "Select from saved templates and customize"
+msgstr ""
+
+#: admin/partials/compose.php
+msgid "Browse Templates"
+msgstr ""
+
+#: admin/partials/compose.php
+msgid "Open Visual Editor"
+msgstr ""
+
+#: admin/partials/compose.php
+msgid "Create emails with drag-and-drop visual editor"
+msgstr ""
+
+#: admin/partials/compose.php
+msgid "Open Editor"
+msgstr ""
+
+#: admin/partials/templates.php
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Visual Editor"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Edit with Visual Editor"
+msgstr ""
+
+#: admin/partials/templates.php
+msgid "Edit HTML"
+msgstr ""
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Template saved successfully."
+msgstr ""
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Missing required fields."
+msgstr ""
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Failed to save template."
+msgstr ""
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "No file uploaded."
+msgstr ""
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Upload failed."
+msgstr ""
+
+#: admin/partials/visual-editor.php
+msgid "Loading email editor..."
+msgstr ""
+
+#: admin/partials/visual-editor.php
+msgid "Template not found."
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Choose Template"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Edit Content"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Send"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "How would you like to create your email?"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Choose a starting point for your email campaign."
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Start from Scratch"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Create your email using the HTML editor with full control over the code."
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Build your email with our drag-and-drop visual editor. No coding required."
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Start with one of your saved templates and customize it."
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Select a Template"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "No templates available."
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Create your first template"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Continue"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Edit Your Email"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Use the visual editor to design your email. Click the button below to open the editor."
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "The visual editor will open in a new window. When you save your template, you can continue to the next step."
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Open Visual Editor"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Continue to Send Settings"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Edit Your Email Content"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Write your email content using the editor below."
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Configure & Send"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Select recipients, set scheduling options, and send your email."
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Content Preview"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Edit"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "No content set. Please go back to Step 2 to add content."
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "No lists available."
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Create a list"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Send Now"
+msgstr ""
+
+#: admin/partials/compose-wizard.php
+msgid "Schedule Sending"
 msgstr ""

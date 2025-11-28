@@ -332,6 +332,15 @@ class Admin_Email {
      * @return void
      */
     public function render_compose(): void {
+        include MSKD_PLUGIN_DIR . 'admin/partials/compose-wizard.php';
+    }
+
+    /**
+     * Render the legacy compose page (direct access).
+     *
+     * @return void
+     */
+    public function render_compose_legacy(): void {
         include MSKD_PLUGIN_DIR . 'admin/partials/compose.php';
     }
 

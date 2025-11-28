@@ -10,13 +10,16 @@
     "sass:public": "sass public/scss/main.scss:public/css/public-style.css --style compressed",
     "sass:public:dev": "sass --watch public/scss/main.scss:public/css/public-style.css --style expanded --source-map",
     "build": "npm run sass:build && npm run sass:public",
+    "build:editor": "cd admin/editor && npm install && npm run build",
+    "build:all": "npm run build && npm run build:editor",
     "watch": "sass --watch admin/scss/main.scss:admin/css/admin-style.css public/scss/main.scss:public/css/public-style.css --style expanded --source-map"
   },
   "keywords": [
     "wordpress",
     "plugin",
     "mail",
-    "newsletter"
+    "newsletter",
+    "email-editor"
   ],
   "author": "Katsarov Design",
   "license": "GPL-2.0-or-later",

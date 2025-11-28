@@ -85,6 +85,13 @@ class Admin {
     private $templates;
 
     /**
+     * Visual Editor controller.
+     *
+     * @var Admin_Visual_Editor
+     */
+    private $visual_editor;
+
+    /**
      * Constructor - initialize controllers.
      */
     public function __construct() {
@@ -96,6 +103,7 @@ class Admin {
         $this->ajax          = new Admin_Ajax();
         $this->import_export = new Admin_Import_Export();
         $this->templates     = new Admin_Templates();
+        $this->visual_editor = new Admin_Visual_Editor();
     }
 
     /**
@@ -113,6 +121,7 @@ class Admin {
 
         // Initialize AJAX handlers.
         $this->ajax->init();
+        $this->visual_editor->init();
     }
 
     /**
@@ -170,6 +179,16 @@ class Admin {
             'manage_options',
             self::PAGE_PREFIX . 'templates',
             array( $this->templates, 'render' )
+        );
+
+        // Visual Editor (hidden from menu but accessible via URL).
+        add_submenu_page(
+            null, // No parent - hidden from menu.
+            __( 'Visual Editor', 'mail-system-by-katsarov-design' ),
+            __( 'Visual Editor', 'mail-system-by-katsarov-design' ),
+            'manage_options',
+            self::PAGE_PREFIX . 'visual-editor',
+            array( $this->visual_editor, 'render' )
         );
 
         // Compose.
@@ -486,5 +505,14 @@ class Admin {
      */
     public function get_templates_controller(): Admin_Templates {
         return $this->templates;
+    }
+
+    /**
+     * Get the visual editor controller.
+     *
+     * @return Admin_Visual_Editor
+     */
+    public function get_visual_editor_controller(): Admin_Visual_Editor {
+        return $this->visual_editor;
     }
 }

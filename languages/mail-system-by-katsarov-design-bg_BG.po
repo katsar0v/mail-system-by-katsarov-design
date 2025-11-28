@@ -357,6 +357,7 @@ msgid "Actions"
 msgstr "Действия"
 
 #: admin/partials/subscribers.php
+#: admin/partials/compose-wizard.php
 msgid "Edit"
 msgstr "Редактирай"
 
@@ -820,7 +821,7 @@ msgstr "Възникна грешка. Моля, опитайте отново."
 msgid "Invalid unsubscribe link."
 msgstr "Невалиден линк за отписване."
 
-#: public/class-public.php
+#: public/class-public.php admin/partials/queue-detail.php
 msgid "Error"
 msgstr "Грешка"
 
@@ -852,7 +853,7 @@ msgstr "Вече няма да получавате имейли от нас."
 msgid "Back to site"
 msgstr "Обратно към сайта"
 
-#: includes/services/class-list-provider.php
+#: includes/services/class-list-provider.php admin/partials/queue.php
 msgid "External"
 msgstr "Външен"
 
@@ -1014,10 +1015,6 @@ msgid "Permanently deletes all campaigns and their queued emails (pending, proce
 msgstr "Изтрива завинаги всички кампании и техните имейли от опашката (чакащи, обработвани, изпратени и неуспешни)."
 
 #: admin/partials/queue.php
-msgid "External"
-msgstr "Външен"
-
-#: admin/partials/queue.php
 msgid "Completed"
 msgstr "Завършена"
 
@@ -1118,10 +1115,6 @@ msgid "Are you sure you want to cancel this campaign? All pending emails will be
 msgstr "Сигурни ли сте, че искате да отмените тази кампания? Всички чакащи имейли ще бъдат отменени."
 
 #: admin/partials/queue-detail.php
-msgid "Error"
-msgstr "Грешка"
-
-#: admin/partials/queue-detail.php
 msgid "No emails in this campaign."
 msgstr "Няма имейли в тази кампания."
 
@@ -1152,26 +1145,6 @@ msgstr "Да, разбира се!"
 #: admin/class-admin.php
 msgid "Nah, I do not like the plugin"
 msgstr "Не, не харесвам плъгина"
-
-#: admin/partials/queue.php
-msgid "Created"
-msgstr "Създадена"
-
-#: admin/partials/queue.php
-msgid "Type"
-msgstr "Тип"
-
-#: admin/partials/queue.php
-msgid "Recipients"
-msgstr "Получатели"
-
-#: admin/partials/queue.php
-msgid "Progress"
-msgstr "Прогрес"
-
-#: admin/partials/queue.php
-msgid "Scheduled for"
-msgstr "Насрочен за"
 
 #: includes/Admin/class-admin.php
 msgid "Import / Export"
@@ -1534,7 +1507,7 @@ msgstr "Шаблонът е добавен успешно."
 msgid "Error adding template."
 msgstr "Грешка при добавяне на шаблон."
 
-#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php admin/partials/visual-editor.php
 msgid "Template not found."
 msgstr "Шаблонът не е намерен."
 
@@ -1632,6 +1605,7 @@ msgid "No custom templates yet."
 msgstr "Все още няма персонализирани шаблони."
 
 #: admin/partials/templates.php
+#: admin/partials/compose-wizard.php
 msgid "Create your first template"
 msgstr "Създайте първия си шаблон"
 
@@ -1671,3 +1645,169 @@ msgstr "Специална оферта само за вас!"
 #: admin/partials/compose.php
 msgid "Using template: %s"
 msgstr "Използване на шаблон: %s"
+
+#: admin/partials/compose.php
+msgid "Choose how to compose your email"
+msgstr "Изберете как да съставите вашия имейл"
+
+#: admin/partials/compose.php
+msgid "Use a Template"
+msgstr "Използвайте шаблон"
+
+#: admin/partials/compose.php
+msgid "Select from saved templates and customize"
+msgstr "Изберете от запазените шаблони и персонализирайте"
+
+#: admin/partials/compose.php
+msgid "Browse Templates"
+msgstr "Разгледайте шаблоните"
+
+#: admin/partials/compose.php
+#: admin/partials/compose-wizard.php
+msgid "Open Visual Editor"
+msgstr "Отворете визуалния редактор"
+
+#: admin/partials/compose.php
+msgid "Create emails with drag-and-drop visual editor"
+msgstr "Създавайте имейли с визуален редактор с плъзгане и пускане"
+
+#: admin/partials/compose.php
+msgid "Open Editor"
+msgstr "Отвори редактор"
+
+#: admin/partials/templates.php
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Visual Editor"
+msgstr "Визуален редактор"
+
+#: admin/partials/templates.php
+msgid "Edit with Visual Editor"
+msgstr "Редактирай с визуален редактор"
+
+#: admin/partials/templates.php
+msgid "Edit HTML"
+msgstr "Редактирай HTML"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Template saved successfully."
+msgstr "Шаблонът е запазен успешно."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Missing required fields."
+msgstr "Липсват задължителни полета."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Failed to save template."
+msgstr "Неуспешно запазване на шаблона."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "No file uploaded."
+msgstr "Няма качен файл."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Upload failed."
+msgstr "Качването е неуспешно."
+
+#: admin/partials/visual-editor.php
+msgid "Loading email editor..."
+msgstr "Зареждане на имейл редактора..."
+
+#: admin/partials/compose-wizard.php
+msgid "Choose Template"
+msgstr "Изберете шаблон"
+
+#: admin/partials/compose-wizard.php
+msgid "Edit Content"
+msgstr "Редактиране на съдържание"
+
+#: admin/partials/compose-wizard.php
+msgid "Send"
+msgstr "Изпращане"
+
+#: admin/partials/compose-wizard.php
+msgid "How would you like to create your email?"
+msgstr "Как искате да създадете своя имейл?"
+
+#: admin/partials/compose-wizard.php
+msgid "Choose a starting point for your email campaign."
+msgstr "Изберете начална точка за вашата имейл кампания."
+
+#: admin/partials/compose-wizard.php
+msgid "Start from Scratch"
+msgstr "Започнете от нулата"
+
+#: admin/partials/compose-wizard.php
+msgid "Create your email using the HTML editor with full control over the code."
+msgstr "Създайте своя имейл с HTML редактор с пълен контрол над кода."
+
+#: admin/partials/compose-wizard.php
+msgid "Build your email with our drag-and-drop visual editor. No coding required."
+msgstr "Създайте имейла си с нашия визуален редактор с плъзгане и пускане. Не се изисква програмиране."
+
+#: admin/partials/compose-wizard.php
+msgid "Start with one of your saved templates and customize it."
+msgstr "Започнете с един от запазените си шаблони и го персонализирайте."
+
+#: admin/partials/compose-wizard.php
+msgid "Select a Template"
+msgstr "Изберете шаблон"
+
+#: admin/partials/compose-wizard.php
+msgid "No templates available."
+msgstr "Няма налични шаблони."
+
+#: admin/partials/compose-wizard.php
+msgid "Edit Your Email"
+msgstr "Редактирайте имейла си"
+
+#: admin/partials/compose-wizard.php
+msgid "Use the visual editor to design your email. Click the button below to open the editor."
+msgstr "Използвайте визуалния редактор, за да проектирате имейла си. Кликнете върху бутона по-долу, за да отворите редактора."
+
+#: admin/partials/compose-wizard.php
+msgid "The visual editor will open in a new window. When you save your template, you can continue to the next step."
+msgstr "Визуалният редактор ще се отвори в нов прозорец. Когато запазите шаблона си, можете да продължите към следващата стъпка."
+
+#: admin/partials/compose-wizard.php
+msgid "Continue to Send Settings"
+msgstr "Продължи към настройки за изпращане"
+
+#: admin/partials/compose-wizard.php
+msgid "Edit Your Email Content"
+msgstr "Редактирайте съдържанието на имейла"
+
+#: admin/partials/compose-wizard.php
+msgid "Write your email content using the editor below."
+msgstr "Напишете съдържанието на имейла, използвайки редактора по-долу."
+
+#: admin/partials/compose-wizard.php
+msgid "Configure & Send"
+msgstr "Конфигуриране и изпращане"
+
+#: admin/partials/compose-wizard.php
+msgid "Select recipients, set scheduling options, and send your email."
+msgstr "Изберете получатели, настройте опции за планиране и изпратете имейла си."
+
+#: admin/partials/compose-wizard.php
+msgid "Content Preview"
+msgstr "Преглед на съдържанието"
+
+#: admin/partials/compose-wizard.php
+msgid "No content set. Please go back to Step 2 to add content."
+msgstr "Няма зададено съдържание. Моля, върнете се към Стъпка 2, за да добавите съдържание."
+
+#: admin/partials/compose-wizard.php
+msgid "No lists available."
+msgstr "Няма налични списъци."
+
+#: admin/partials/compose-wizard.php
+msgid "Create a list"
+msgstr "Създайте списък"
+
+#: admin/partials/compose-wizard.php
+msgid "Send Now"
+msgstr "Изпрати сега"
+
+#: admin/partials/compose-wizard.php
+msgid "Schedule Sending"
+msgstr "Планирай изпращане"

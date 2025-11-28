@@ -52,6 +52,10 @@ $custom_templates = array_filter(
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-templates&action=add' ) ); ?>" class="page-title-action">
 				<?php esc_html_e( 'Add New', 'mail-system-by-katsarov-design' ); ?>
 			</a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-visual-editor' ) ); ?>" class="page-title-action" style="background: #2271b1; color: #fff; border-color: #2271b1;">
+				<span class="dashicons dashicons-welcome-widgets-menus" style="vertical-align: middle; font-size: 16px; line-height: 1; margin-right: 4px;"></span>
+				<?php esc_html_e( 'Visual Editor', 'mail-system-by-katsarov-design' ); ?>
+			</a>
 		<?php endif; ?>
 	</h1>
 
@@ -207,8 +211,11 @@ $custom_templates = array_filter(
 								</span>
 							</div>
 							<div class="mskd-template-actions">
-								<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-templates&action=edit&id=' . $template->id ) ); ?>" class="button button-secondary" title="<?php esc_attr_e( 'Edit', 'mail-system-by-katsarov-design' ); ?>">
-									<span class="dashicons dashicons-edit"></span>
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-visual-editor&template_id=' . $template->id ) ); ?>" class="button button-secondary" title="<?php esc_attr_e( 'Edit with Visual Editor', 'mail-system-by-katsarov-design' ); ?>" style="background: #2271b1; color: #fff; border-color: #2271b1;">
+									<span class="dashicons dashicons-welcome-widgets-menus"></span>
+								</a>
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-templates&action=edit&id=' . $template->id ) ); ?>" class="button button-secondary" title="<?php esc_attr_e( 'Edit HTML', 'mail-system-by-katsarov-design' ); ?>">
+									<span class="dashicons dashicons-editor-code"></span>
 								</a>
 								<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=mskd-templates&action=duplicate_template&id=' . $template->id ), 'duplicate_template_' . $template->id ) ); ?>" class="button button-secondary" title="<?php esc_attr_e( 'Duplicate', 'mail-system-by-katsarov-design' ); ?>">
 									<span class="dashicons dashicons-admin-page"></span>

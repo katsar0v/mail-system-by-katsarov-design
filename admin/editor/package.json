@@ -1,0 +1,33 @@
+{
+  "name": "mskd-visual-editor",
+  "version": "1.0.0",
+  "description": "Visual Email Editor for Mail System by Katsarov Design",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@arco-design/web-react": "^2.64.0",
+    "@arco-themes/react-easy-email-theme": "^0.0.3",
+    "easy-email-core": "^4.16.3",
+    "easy-email-editor": "^4.16.3",
+    "easy-email-extensions": "^4.16.3",
+    "final-form": "^4.20.10",
+    "lodash": "^4.17.21",
+    "mjml-browser": "^4.15.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-final-form": "^6.5.9"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.13",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.2.25",
+    "@vitejs/plugin-react": "^4.2.1",
+    "terser": "^5.44.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.10"
+  }
+}
