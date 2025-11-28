@@ -167,7 +167,9 @@ class Admin_Email {
 		}
 
 		$session_data['subject'] = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
-		$session_data['content'] = isset( $_POST['body'] ) ? wp_kses_post( wp_unslash( $_POST['body'] ) ) : '';
+		// Email HTML content must be preserved exactly (including <style> tags for MJML output).
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
+		$session_data['content'] = isset( $_POST['body'] ) ? wp_unslash( $_POST['body'] ) : '';
 
 		set_transient( $session_key, $session_data, HOUR_IN_SECONDS );
 		wp_safe_redirect( admin_url( 'admin.php?page=mskd-compose&step=3' ) );
@@ -184,7 +186,9 @@ class Admin_Email {
 		require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
 
 		$subject  = sanitize_text_field( $_POST['subject'] );
-		$body     = wp_kses_post( $_POST['body'] );
+		// Email HTML content must be preserved exactly (including <style> tags for MJML output).
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
+		$body     = wp_unslash( $_POST['body'] );
 		$list_ids = isset( $_POST['lists'] ) ? array_map( 'sanitize_text_field', $_POST['lists'] ) : array();
 
 		if ( empty( $subject ) || empty( $body ) || empty( $list_ids ) ) {
@@ -287,7 +291,9 @@ class Admin_Email {
 		$recipient_email = sanitize_email( $_POST['recipient_email'] );
 		$recipient_name  = sanitize_text_field( $_POST['recipient_name'] );
 		$subject         = sanitize_text_field( $_POST['subject'] );
-		$body            = wp_kses_post( $_POST['body'] );
+		// Email HTML content must be preserved exactly (including <style> tags for MJML output).
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
+		$body            = wp_unslash( $_POST['body'] );
 		$schedule_type   = isset( $_POST['schedule_type'] ) ? sanitize_text_field( $_POST['schedule_type'] ) : 'now';
 
 		// Store form data for preservation on error.
