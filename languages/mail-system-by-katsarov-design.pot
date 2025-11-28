@@ -298,7 +298,7 @@ msgid "Sending: %d emails/min"
 msgstr ""
 
 #: admin/partials/subscribers.php
-msgid "Add new"
+msgid "Add New"
 msgstr ""
 
 #: admin/partials/subscribers.php

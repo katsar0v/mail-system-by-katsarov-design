@@ -531,7 +531,7 @@ class Template_Service {
                                     </td>
                                 </tr>
                             </table>
-                            <p style="color: #666666; font-size: 14px;">Offer expires soon. Do not miss out!</p>
+                            <p style="color: #666666; font-size: 14px;">Offer expires soon. Don\'t miss out!</p>
                         </td>
                     </tr>
                     <tr>

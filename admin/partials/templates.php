@@ -50,7 +50,7 @@ $custom_templates = array_filter(
 		<?php esc_html_e( 'Email Templates', 'mail-system-by-katsarov-design' ); ?>
 		<?php if ( 'list' === $action ) : ?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-templates&action=add' ) ); ?>" class="page-title-action">
-				<?php esc_html_e( 'Add new', 'mail-system-by-katsarov-design' ); ?>
+				<?php esc_html_e( 'Add New', 'mail-system-by-katsarov-design' ); ?>
 			</a>
 		<?php endif; ?>
 	</h1>
