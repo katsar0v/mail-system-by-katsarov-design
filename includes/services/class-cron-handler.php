@@ -374,8 +374,8 @@ class MSKD_Cron_Handler {
 	 * @return string Email content with header prepended and footer appended.
 	 */
 	private function apply_header_footer( $content, $settings ) {
-		$header = isset( $settings['email_header'] ) ? $settings['email_header'] : '';
-		$footer = isset( $settings['email_footer'] ) ? $settings['email_footer'] : '';
+		$header = $settings['email_header'] ?? '';
+		$footer = $settings['email_footer'] ?? '';
 
 		// Only modify content if header or footer is set.
 		if ( empty( $header ) && empty( $footer ) ) {

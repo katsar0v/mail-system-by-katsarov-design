@@ -66,10 +66,10 @@ class Admin_Settings {
 		}
 
 		// Sanitize email header and footer (allow HTML for email templates).
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email HTML content.
+		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email HTML content uses custom sanitizer.
 		$email_header = isset( $_POST['email_header'] ) ? mskd_kses_email( wp_unslash( $_POST['email_header'] ) ) : '';
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email HTML content.
 		$email_footer = isset( $_POST['email_footer'] ) ? mskd_kses_email( wp_unslash( $_POST['email_footer'] ) ) : '';
+		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		$settings = array(
 			'from_name'         => sanitize_text_field( wp_unslash( $_POST['from_name'] ) ),
