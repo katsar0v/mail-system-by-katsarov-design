@@ -51,24 +51,34 @@ class Admin_Settings {
 		}
 
 		// Validate SMTP security.
-		$smtp_security    = isset( $_POST['smtp_security'] ) ? sanitize_text_field( $_POST['smtp_security'] ) : '';
+		$smtp_security    = isset( $_POST['smtp_security'] ) ? sanitize_text_field( wp_unslash( $_POST['smtp_security'] ) ) : '';
 		$allowed_security = array( '', 'ssl', 'tls' );
 		if ( ! in_array( $smtp_security, $allowed_security, true ) ) {
 			$smtp_security = 'tls';
 		}
 
+		// Validate emails per minute (1-1000, default to MSKD_BATCH_SIZE).
+		$emails_per_minute = isset( $_POST['emails_per_minute'] ) ? absint( $_POST['emails_per_minute'] ) : MSKD_BATCH_SIZE;
+		if ( $emails_per_minute < 1 ) {
+			$emails_per_minute = 1;
+		} elseif ( $emails_per_minute > 1000 ) {
+			$emails_per_minute = 1000;
+		}
+
 		$settings = array(
-			'from_name'     => sanitize_text_field( $_POST['from_name'] ),
-			'from_email'    => sanitize_email( $_POST['from_email'] ),
-			'reply_to'      => sanitize_email( $_POST['reply_to'] ),
+			'from_name'         => sanitize_text_field( wp_unslash( $_POST['from_name'] ) ),
+			'from_email'        => sanitize_email( wp_unslash( $_POST['from_email'] ) ),
+			'reply_to'          => sanitize_email( wp_unslash( $_POST['reply_to'] ) ),
+			// Sending settings.
+			'emails_per_minute' => $emails_per_minute,
 			// SMTP Settings.
-			'smtp_enabled'  => isset( $_POST['smtp_enabled'] ) ? 1 : 0,
-			'smtp_host'     => sanitize_text_field( $_POST['smtp_host'] ),
-			'smtp_port'     => $smtp_port,
-			'smtp_security' => $smtp_security,
-			'smtp_auth'     => isset( $_POST['smtp_auth'] ) ? 1 : 0,
-			'smtp_username' => sanitize_text_field( $_POST['smtp_username'] ),
-			'smtp_password' => isset( $_POST['smtp_password'] ) ? base64_encode( sanitize_text_field( $_POST['smtp_password'] ) ) : '',
+			'smtp_enabled'      => isset( $_POST['smtp_enabled'] ) ? 1 : 0,
+			'smtp_host'         => sanitize_text_field( wp_unslash( $_POST['smtp_host'] ) ),
+			'smtp_port'         => $smtp_port,
+			'smtp_security'     => $smtp_security,
+			'smtp_auth'         => isset( $_POST['smtp_auth'] ) ? 1 : 0,
+			'smtp_username'     => sanitize_text_field( wp_unslash( $_POST['smtp_username'] ) ),
+			'smtp_password'     => isset( $_POST['smtp_password'] ) ? base64_encode( sanitize_text_field( wp_unslash( $_POST['smtp_password'] ) ) ) : '',
 		);
 
 		update_option( 'mskd_settings', $settings );
@@ -97,16 +107,17 @@ class Admin_Settings {
 	 */
 	public function get_settings(): array {
 		$defaults = array(
-			'from_name'     => get_bloginfo( 'name' ),
-			'from_email'    => get_bloginfo( 'admin_email' ),
-			'reply_to'      => get_bloginfo( 'admin_email' ),
-			'smtp_enabled'  => 0,
-			'smtp_host'     => '',
-			'smtp_port'     => 587,
-			'smtp_security' => 'tls',
-			'smtp_auth'     => 1,
-			'smtp_username' => '',
-			'smtp_password' => '',
+			'from_name'         => get_bloginfo( 'name' ),
+			'from_email'        => get_bloginfo( 'admin_email' ),
+			'reply_to'          => get_bloginfo( 'admin_email' ),
+			'emails_per_minute' => MSKD_BATCH_SIZE,
+			'smtp_enabled'      => 0,
+			'smtp_host'         => '',
+			'smtp_port'         => 587,
+			'smtp_security'     => 'tls',
+			'smtp_auth'         => 1,
+			'smtp_username'     => '',
+			'smtp_password'     => '',
 		);
 
 		$settings = get_option( 'mskd_settings', array() );

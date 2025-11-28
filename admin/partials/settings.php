@@ -14,6 +14,9 @@ $from_name = isset( $settings['from_name'] ) ? $settings['from_name'] : get_blog
 $from_email = isset( $settings['from_email'] ) ? $settings['from_email'] : get_bloginfo( 'admin_email' );
 $reply_to = isset( $settings['reply_to'] ) ? $settings['reply_to'] : get_bloginfo( 'admin_email' );
 
+// Sending settings.
+$emails_per_minute = isset( $settings['emails_per_minute'] ) ? absint( $settings['emails_per_minute'] ) : MSKD_BATCH_SIZE;
+
 // SMTP Settings.
 $smtp_enabled  = isset( $settings['smtp_enabled'] ) ? (bool) $settings['smtp_enabled'] : false;
 $smtp_host     = isset( $settings['smtp_host'] ) ? $settings['smtp_host'] : '';
@@ -64,6 +67,24 @@ $smtp_password = isset( $settings['smtp_password'] ) ? base64_decode( $settings[
                         <input type="email" name="reply_to" id="reply_to" class="regular-text"
                                value="<?php echo esc_attr( $reply_to ); ?>">
                         <p class="description"><?php _e( 'Email for replies from recipients.', 'mail-system-by-katsarov-design' ); ?></p>
+                    </td>
+                </tr>
+            </table>
+
+            <hr>
+
+            <h2><?php _e( 'Sending settings', 'mail-system-by-katsarov-design' ); ?></h2>
+
+            <table class="form-table">
+                <tr>
+                    <th scope="row">
+                        <label for="emails_per_minute"><?php _e( 'Emails per minute', 'mail-system-by-katsarov-design' ); ?></label>
+                    </th>
+                    <td>
+                        <input type="number" name="emails_per_minute" id="emails_per_minute" class="small-text"
+                               value="<?php echo esc_attr( $emails_per_minute ); ?>"
+                               min="1" max="1000">
+                        <p class="description"><?php _e( 'Maximum number of emails to send per minute. Higher values may exceed your hosting provider limits.', 'mail-system-by-katsarov-design' ); ?></p>
                     </td>
                 </tr>
             </table>
@@ -193,7 +214,7 @@ $smtp_password = isset( $settings['smtp_password'] ) ? base64_decode( $settings[
                 <tr>
                     <th scope="row"><?php _e( 'Sending speed', 'mail-system-by-katsarov-design' ); ?></th>
                     <td>
-                        <code><?php echo esc_html( MSKD_BATCH_SIZE ); ?> <?php _e( 'emails/minute', 'mail-system-by-katsarov-design' ); ?></code>
+                        <code><?php echo esc_html( $emails_per_minute ); ?> <?php _e( 'emails/minute', 'mail-system-by-katsarov-design' ); ?></code>
                     </td>
                 </tr>
                 <tr>

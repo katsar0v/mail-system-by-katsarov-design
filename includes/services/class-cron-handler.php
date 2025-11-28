@@ -43,7 +43,7 @@ class MSKD_Cron_Handler {
 	/**
 	 * Process email queue
 	 *
-	 * Sends up to MSKD_BATCH_SIZE emails per run.
+	 * Sends up to the configured emails_per_minute limit per run.
 	 * Supports both database subscribers (subscriber_id > 0) and
 	 * external subscribers (subscriber_id = 0 with subscriber_data JSON).
 	 */
@@ -52,6 +52,9 @@ class MSKD_Cron_Handler {
 
 		// First, recover stuck emails (processing for too long)
 		$this->recover_stuck_emails();
+
+		// Get the configured batch size (emails per minute).
+		$batch_size = $this->get_batch_size();
 
 		// Get pending emails for database subscribers (subscriber_id > 0).
 		$db_queue_items = $wpdb->get_results(
@@ -66,12 +69,12 @@ class MSKD_Cron_Handler {
             ORDER BY q.scheduled_at ASC
             LIMIT %d",
 				current_time( 'mysql' ),
-				MSKD_BATCH_SIZE
+				$batch_size
 			)
 		);
 
 		// Get pending emails for external subscribers (subscriber_id = 0).
-		$remaining_slots = MSKD_BATCH_SIZE - count( $db_queue_items );
+		$remaining_slots = $batch_size - count( $db_queue_items );
 		$ext_queue_items = array();
 
 		if ( $remaining_slots > 0 ) {
@@ -356,5 +359,22 @@ class MSKD_Cron_Handler {
 		);
 
 		return str_replace( array_keys( $placeholders ), array_values( $placeholders ), $content );
+	}
+
+	/**
+	 * Get the batch size (emails per minute) from settings.
+	 *
+	 * Falls back to MSKD_BATCH_SIZE constant if setting is not configured.
+	 *
+	 * @return int The number of emails to send per minute.
+	 */
+	private function get_batch_size() {
+		$settings = get_option( 'mskd_settings', array() );
+
+		if ( isset( $settings['emails_per_minute'] ) && absint( $settings['emails_per_minute'] ) > 0 ) {
+			return absint( $settings['emails_per_minute'] );
+		}
+
+		return MSKD_BATCH_SIZE;
 	}
 }
