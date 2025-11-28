@@ -48,6 +48,64 @@
                 }
             });
         });
+
+        // Copy shortcode button handler
+        $('.mskd-copy-btn').on('click', function() {
+            var $button = $(this);
+            var shortcode = $button.data('shortcode');
+            var originalText = $button.text();
+
+            // Copy to clipboard
+            if (navigator.clipboard && window.isSecureContext) {
+                // Modern async clipboard API
+                navigator.clipboard.writeText(shortcode).then(function() {
+                    showCopySuccess($button, originalText);
+                }).catch(function() {
+                    fallbackCopyToClipboard(shortcode, $button, originalText);
+                });
+            } else {
+                // Fallback for older browsers
+                fallbackCopyToClipboard(shortcode, $button, originalText);
+            }
+        });
+
+        /**
+         * Fallback copy method for older browsers
+         */
+        function fallbackCopyToClipboard(text, $button, originalText) {
+            var textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            textArea.style.top = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                document.execCommand('copy');
+                showCopySuccess($button, originalText);
+            } catch (err) {
+                $button.text(mskd_public.strings.copy_error || 'Error');
+                setTimeout(function() {
+                    $button.text(originalText);
+                }, 2000);
+            }
+
+            document.body.removeChild(textArea);
+        }
+
+        /**
+         * Show copy success feedback
+         */
+        function showCopySuccess($button, originalText) {
+            $button.text(mskd_public.strings.copied || 'Copied!');
+            $button.addClass('mskd-copy-success');
+            setTimeout(function() {
+                $button.text(originalText);
+                $button.removeClass('mskd-copy-success');
+            }, 2000);
+        }
     });
 
 })(jQuery);

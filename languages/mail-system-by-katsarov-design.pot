@@ -1429,6 +1429,38 @@ msgstr[1] ""
 #: admin/partials/import-export.php
 msgid "Manage your subscriber data with easy import and export functionality."
 msgstr ""
+#: public/class-public.php
+msgid "Copied!"
+msgstr ""
+
+#: public/class-public.php
+msgid "Copy failed"
+msgstr ""
+
+#: public/class-public.php
+msgid "Available Subscription Forms"
+msgstr ""
+
+#: public/partials/form-gallery.php
+msgid "No subscription forms available yet."
+msgstr ""
+
+#: public/partials/form-gallery.php
+msgid "Copy any shortcode below and paste it into your page or post to display the subscription form."
+msgstr ""
+
+#: public/partials/form-gallery.php
+msgid "Copy"
+msgstr ""
+
+#: public/partials/form-gallery.php
+msgid "General Subscription Form"
+msgstr ""
+
+#: public/partials/form-gallery.php
+msgid "Subscribe without assigning to a specific list."
+msgstr ""
+
 
 #: admin/partials/import-export.php
 msgid "Export Data"

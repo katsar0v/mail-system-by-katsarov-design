@@ -1830,3 +1830,35 @@ msgstr "Използвайте шаблон"
 #: admin/partials/compose-wizard.php
 msgid "Using template: %s"
 msgstr "Използва се шаблон: %s"
+#: public/class-public.php
+msgid "Copied!"
+msgstr "Копирано!"
+
+#: public/class-public.php
+msgid "Copy failed"
+msgstr "Копирането не успя"
+
+#: public/class-public.php
+msgid "Available Subscription Forms"
+msgstr "Налични формуляри за абонамент"
+
+#: public/partials/form-gallery.php
+msgid "No subscription forms available yet."
+msgstr "Все още няма налични формуляри за абонамент."
+
+#: public/partials/form-gallery.php
+msgid "Copy any shortcode below and paste it into your page or post to display the subscription form."
+msgstr "Копирайте който и да е шорткод по-долу и го поставете във вашата страница или публикация, за да покажете формуляра за абонамент."
+
+#: public/partials/form-gallery.php
+msgid "Copy"
+msgstr "Копирай"
+
+#: public/partials/form-gallery.php
+msgid "General Subscription Form"
+msgstr "Общ формуляр за абонамент"
+
+#: public/partials/form-gallery.php
+msgid "Subscribe without assigning to a specific list."
+msgstr "Абонирайте се без да се присъединявате към конкретен списък."
+

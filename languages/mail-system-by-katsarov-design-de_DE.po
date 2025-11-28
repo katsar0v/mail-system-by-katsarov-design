@@ -1834,3 +1834,35 @@ msgstr "Vorlage verwenden"
 #: admin/partials/compose-wizard.php
 msgid "Using template: %s"
 msgstr "Vorlage wird verwendet: %s"
+
+#: public/class-public.php
+msgid "Copied!"
+msgstr "Kopiert!"
+
+#: public/class-public.php
+msgid "Copy failed"
+msgstr "Kopieren fehlgeschlagen"
+
+#: public/class-public.php
+msgid "Available Subscription Forms"
+msgstr "Verfügbare Anmeldeformulare"
+
+#: public/partials/form-gallery.php
+msgid "No subscription forms available yet."
+msgstr "Noch keine Anmeldeformulare verfügbar."
+
+#: public/partials/form-gallery.php
+msgid "Copy any shortcode below and paste it into your page or post to display the subscription form."
+msgstr "Kopieren Sie einen beliebigen Shortcode unten und fügen Sie ihn in Ihre Seite oder Ihren Beitrag ein, um das Anmeldeformular anzuzeigen."
+
+#: public/partials/form-gallery.php
+msgid "Copy"
+msgstr "Kopieren"
+
+#: public/partials/form-gallery.php
+msgid "General Subscription Form"
+msgstr "Allgemeines Anmeldeformular"
+
+#: public/partials/form-gallery.php
+msgid "Subscribe without assigning to a specific list."
+msgstr "Abonnieren ohne Zuweisung zu einer bestimmten Liste."
