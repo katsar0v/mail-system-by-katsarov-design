@@ -1831,34 +1831,63 @@ msgstr "Използвайте шаблон"
 msgid "Using template: %s"
 msgstr "Използва се шаблон: %s"
 #: public/class-public.php
+
+#: includes/Admin/class-admin.php
+msgid "Shortcodes"
+msgstr "Шорткодове"
+
+#: includes/Admin/class-admin.php
 msgid "Copied!"
 msgstr "Копирано!"
 
-#: public/class-public.php
+#: includes/Admin/class-admin.php
 msgid "Copy failed"
 msgstr "Копирането не успя"
 
-#: public/class-public.php
-msgid "Available Subscription Forms"
-msgstr "Налични формуляри за абонамент"
-
-#: public/partials/form-gallery.php
-msgid "No subscription forms available yet."
-msgstr "Все още няма налични формуляри за абонамент."
-
-#: public/partials/form-gallery.php
+#: admin/partials/shortcodes.php
 msgid "Copy any shortcode below and paste it into your page or post to display the subscription form."
 msgstr "Копирайте който и да е шорткод по-долу и го поставете във вашата страница или публикация, за да покажете формуляра за абонамент."
 
-#: public/partials/form-gallery.php
-msgid "Copy"
-msgstr "Копирай"
-
-#: public/partials/form-gallery.php
+#: admin/partials/shortcodes.php
 msgid "General Subscription Form"
 msgstr "Общ формуляр за абонамент"
 
-#: public/partials/form-gallery.php
+#: admin/partials/shortcodes.php
 msgid "Subscribe without assigning to a specific list."
 msgstr "Абонирайте се без да се присъединявате към конкретен списък."
 
+#: admin/partials/shortcodes.php
+msgid "Copy"
+msgstr "Копирай"
+
+#: admin/partials/shortcodes.php
+msgid "List-specific Forms"
+msgstr "Формуляри за конкретни списъци"
+
+#: admin/partials/shortcodes.php
+msgid "No lists available yet. %s to create subscription forms for specific lists."
+msgstr "Все още няма налични списъци. %s за да създадете формуляри за абонамент за конкретни списъци."
+
+#: admin/partials/shortcodes.php
+msgid "Create a list"
+msgstr "Създайте списък"
+
+#: admin/partials/shortcodes.php
+msgid "Shortcode Attributes"
+msgstr "Атрибути на шорткода"
+
+#: admin/partials/shortcodes.php
+msgid "Attribute"
+msgstr "Атрибут"
+
+#: admin/partials/shortcodes.php
+msgid "The ID of the list to subscribe to. If omitted, subscribers are added without a list."
+msgstr "ID на списъка за абониране. Ако е пропуснато, абонатите се добавят без списък."
+
+#: admin/partials/shortcodes.php
+msgid "The title displayed above the form. Defaults to \"Subscribe\"."
+msgstr "Заглавието, показвано над формуляра. По подразбиране е \"Абонирайте се\"."
+
+#: admin/partials/shortcodes.php
+msgid "Example"
+msgstr "Пример"

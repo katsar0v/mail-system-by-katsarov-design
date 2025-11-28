@@ -240,6 +240,16 @@ class Admin {
             self::PAGE_PREFIX . 'import-export',
             array( $this->import_export, 'render' )
         );
+
+        // Shortcodes.
+        add_submenu_page(
+            self::PAGE_PREFIX . 'dashboard',
+            __( 'Shortcodes', 'mail-system-by-katsarov-design' ),
+            __( 'Shortcodes', 'mail-system-by-katsarov-design' ),
+            'manage_options',
+            self::PAGE_PREFIX . 'shortcodes',
+            array( $this, 'render_shortcodes' )
+        );
     }
 
     /**
@@ -303,6 +313,8 @@ class Admin {
                 'select_lists_placeholder'     => __( 'Select lists...', 'mail-system-by-katsarov-design' ),
                 'search_placeholder'           => __( 'Search...', 'mail-system-by-katsarov-design' ),
                 'no_results'                   => __( 'No results found', 'mail-system-by-katsarov-design' ),
+                'copied'                       => __( 'Copied!', 'mail-system-by-katsarov-design' ),
+                'copy_error'                   => __( 'Copy failed', 'mail-system-by-katsarov-design' ),
             ),
         ) );
     }
@@ -499,6 +511,7 @@ class Admin {
     }
 
     /**
+    /**
      * Get the templates controller.
      *
      * @return Admin_Templates
@@ -514,5 +527,14 @@ class Admin {
      */
     public function get_visual_editor_controller(): Admin_Visual_Editor {
         return $this->visual_editor;
+    }
+
+    /**
+     * Render Shortcodes page.
+     *
+     * @return void
+     */
+    public function render_shortcodes(): void {
+        include MSKD_PLUGIN_DIR . 'admin/partials/shortcodes.php';
     }
 }

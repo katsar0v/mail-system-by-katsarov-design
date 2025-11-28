@@ -1430,37 +1430,35 @@ msgstr[1] ""
 msgid "Manage your subscriber data with easy import and export functionality."
 msgstr ""
 #: public/class-public.php
+
+
+#: includes/Admin/class-admin.php
+msgid "Shortcodes"
+msgstr ""
+
+#: includes/Admin/class-admin.php
 msgid "Copied!"
 msgstr ""
 
-#: public/class-public.php
+#: includes/Admin/class-admin.php
 msgid "Copy failed"
 msgstr ""
 
-#: public/class-public.php
-msgid "Available Subscription Forms"
-msgstr ""
-
-#: public/partials/form-gallery.php
-msgid "No subscription forms available yet."
-msgstr ""
-
-#: public/partials/form-gallery.php
+#: admin/partials/shortcodes.php
 msgid "Copy any shortcode below and paste it into your page or post to display the subscription form."
 msgstr ""
 
-#: public/partials/form-gallery.php
-msgid "Copy"
-msgstr ""
-
-#: public/partials/form-gallery.php
+#: admin/partials/shortcodes.php
 msgid "General Subscription Form"
 msgstr ""
 
-#: public/partials/form-gallery.php
+#: admin/partials/shortcodes.php
 msgid "Subscribe without assigning to a specific list."
 msgstr ""
 
+#: admin/partials/shortcodes.php
+msgid "Copy"
+msgstr ""
 
 #: admin/partials/import-export.php
 msgid "Export Data"
@@ -1887,4 +1885,34 @@ msgstr ""
 
 #: admin/partials/compose-wizard.php
 msgid "Schedule Sending"
+#: admin/partials/shortcodes.php
+msgid "List-specific Forms"
+msgstr ""
+
+#: admin/partials/shortcodes.php
+msgid "No lists available yet. %s to create subscription forms for specific lists."
+msgstr ""
+
+#: admin/partials/shortcodes.php
+msgid "Create a list"
+msgstr ""
+
+#: admin/partials/shortcodes.php
+msgid "Shortcode Attributes"
+msgstr ""
+
+#: admin/partials/shortcodes.php
+msgid "Attribute"
+msgstr ""
+
+#: admin/partials/shortcodes.php
+msgid "The ID of the list to subscribe to. If omitted, subscribers are added without a list."
+msgstr ""
+
+#: admin/partials/shortcodes.php
+msgid "The title displayed above the form. Defaults to \"Subscribe\"."
+msgstr ""
+
+#: admin/partials/shortcodes.php
+msgid "Example"
 msgstr ""

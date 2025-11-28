@@ -1835,34 +1835,62 @@ msgstr "Vorlage verwenden"
 msgid "Using template: %s"
 msgstr "Vorlage wird verwendet: %s"
 
-#: public/class-public.php
+#: includes/Admin/class-admin.php
+msgid "Shortcodes"
+msgstr "Shortcodes"
+
+#: includes/Admin/class-admin.php
 msgid "Copied!"
 msgstr "Kopiert!"
 
-#: public/class-public.php
+#: includes/Admin/class-admin.php
 msgid "Copy failed"
 msgstr "Kopieren fehlgeschlagen"
 
-#: public/class-public.php
-msgid "Available Subscription Forms"
-msgstr "Verfügbare Anmeldeformulare"
-
-#: public/partials/form-gallery.php
-msgid "No subscription forms available yet."
-msgstr "Noch keine Anmeldeformulare verfügbar."
-
-#: public/partials/form-gallery.php
+#: admin/partials/shortcodes.php
 msgid "Copy any shortcode below and paste it into your page or post to display the subscription form."
 msgstr "Kopieren Sie einen beliebigen Shortcode unten und fügen Sie ihn in Ihre Seite oder Ihren Beitrag ein, um das Anmeldeformular anzuzeigen."
 
-#: public/partials/form-gallery.php
-msgid "Copy"
-msgstr "Kopieren"
-
-#: public/partials/form-gallery.php
+#: admin/partials/shortcodes.php
 msgid "General Subscription Form"
 msgstr "Allgemeines Anmeldeformular"
 
-#: public/partials/form-gallery.php
+#: admin/partials/shortcodes.php
 msgid "Subscribe without assigning to a specific list."
 msgstr "Abonnieren ohne Zuweisung zu einer bestimmten Liste."
+
+#: admin/partials/shortcodes.php
+msgid "Copy"
+msgstr "Kopieren"
+
+#: admin/partials/shortcodes.php
+msgid "List-specific Forms"
+msgstr "Listenspezifische Formulare"
+
+#: admin/partials/shortcodes.php
+msgid "No lists available yet. %s to create subscription forms for specific lists."
+msgstr "Noch keine Listen verfügbar. %s um Anmeldeformulare für bestimmte Listen zu erstellen."
+
+#: admin/partials/shortcodes.php
+msgid "Create a list"
+msgstr "Liste erstellen"
+
+#: admin/partials/shortcodes.php
+msgid "Shortcode Attributes"
+msgstr "Shortcode-Attribute"
+
+#: admin/partials/shortcodes.php
+msgid "Attribute"
+msgstr "Attribut"
+
+#: admin/partials/shortcodes.php
+msgid "The ID of the list to subscribe to. If omitted, subscribers are added without a list."
+msgstr "Die ID der Liste, die abonniert werden soll. Wenn weggelassen, werden Abonnenten ohne Liste hinzugefügt."
+
+#: admin/partials/shortcodes.php
+msgid "The title displayed above the form. Defaults to \"Subscribe\"."
+msgstr "Der über dem Formular angezeigte Titel. Standard ist \"Abonnieren\"."
+
+#: admin/partials/shortcodes.php
+msgid "Example"
+msgstr "Beispiel"
