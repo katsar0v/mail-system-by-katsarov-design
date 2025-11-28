@@ -62,15 +62,116 @@ class Admin_Email {
             return;
         }
 
+        // Handle wizard step 1 submission (template selection).
+        $this->handle_wizard_step1();
+
+        // Handle wizard step 2 submission (HTML editor mode).
+        $this->handle_wizard_step2();
+
         // Handle compose/send action.
-        if ( isset( $_POST['mskd_send_email'] ) && wp_verify_nonce( $_POST['mskd_nonce'], 'mskd_send_email' ) ) {
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce check only.
+        if ( isset( $_POST['mskd_send_email'] ) && isset( $_POST['mskd_nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['mskd_nonce'] ), 'mskd_send_email' ) ) {
             $this->handle_queue_email();
         }
 
         // Handle one-time email send action.
-        if ( isset( $_POST['mskd_send_one_time_email'] ) && wp_verify_nonce( $_POST['mskd_nonce'], 'mskd_send_one_time_email' ) ) {
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce check only.
+        if ( isset( $_POST['mskd_send_one_time_email'] ) && isset( $_POST['mskd_nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['mskd_nonce'] ), 'mskd_send_one_time_email' ) ) {
             $this->handle_one_time_email();
         }
+    }
+
+    /**
+     * Handle wizard step 1 submission (template selection).
+     *
+     * @return void
+     */
+    private function handle_wizard_step1(): void {
+        if ( ! isset( $_POST['mskd_wizard_step1'] ) ) {
+            return;
+        }
+
+        if ( ! isset( $_POST['mskd_wizard_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mskd_wizard_nonce'] ) ), 'mskd_compose_wizard' ) ) {
+            return;
+        }
+
+        // Load Template Service.
+        $template_service = new \MSKD\Services\Template_Service();
+
+        // Get session data.
+        $session_key  = 'mskd_compose_wizard_' . get_current_user_id();
+        $session_data = get_transient( $session_key );
+        if ( ! is_array( $session_data ) ) {
+            $session_data = array(
+                'template_id'   => 0,
+                'use_visual'    => false,
+                'subject'       => '',
+                'content'       => '',
+                'json_content'  => '',
+                'lists'         => array(),
+                'schedule_type' => 'now',
+            );
+        }
+
+        $choice = isset( $_POST['template_choice'] ) ? sanitize_text_field( wp_unslash( $_POST['template_choice'] ) ) : 'scratch';
+
+        if ( 'template' === $choice && ! empty( $_POST['template_id'] ) ) {
+            $template_id = intval( $_POST['template_id'] );
+            $template    = $template_service->get_by_id( $template_id );
+            if ( $template ) {
+                $session_data['template_id']  = $template_id;
+                $session_data['subject']      = $template->subject;
+                $session_data['content']      = $template->content;
+                $session_data['json_content'] = $template->json_content;
+                $session_data['use_visual']   = ! empty( $template->json_content );
+            }
+        } elseif ( 'visual' === $choice ) {
+            $session_data['template_id']  = 0;
+            $session_data['subject']      = '';
+            $session_data['content']      = '';
+            $session_data['json_content'] = '';
+            $session_data['use_visual']   = true;
+        } else {
+            // Scratch / HTML editor.
+            $session_data['template_id']  = 0;
+            $session_data['subject']      = '';
+            $session_data['content']      = '';
+            $session_data['json_content'] = '';
+            $session_data['use_visual']   = false;
+        }
+
+        set_transient( $session_key, $session_data, HOUR_IN_SECONDS );
+        wp_safe_redirect( admin_url( 'admin.php?page=mskd-compose&step=2' ) );
+        exit;
+    }
+
+    /**
+     * Handle wizard step 2 submission (HTML editor content).
+     *
+     * @return void
+     */
+    private function handle_wizard_step2(): void {
+        if ( ! isset( $_POST['mskd_wizard_step2'] ) ) {
+            return;
+        }
+
+        if ( ! isset( $_POST['mskd_wizard_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mskd_wizard_nonce'] ) ), 'mskd_compose_wizard' ) ) {
+            return;
+        }
+
+        // Get session data.
+        $session_key  = 'mskd_compose_wizard_' . get_current_user_id();
+        $session_data = get_transient( $session_key );
+        if ( ! is_array( $session_data ) ) {
+            $session_data = array();
+        }
+
+        $session_data['subject'] = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
+        $session_data['content'] = isset( $_POST['body'] ) ? wp_kses_post( wp_unslash( $_POST['body'] ) ) : '';
+
+        set_transient( $session_key, $session_data, HOUR_IN_SECONDS );
+        wp_safe_redirect( admin_url( 'admin.php?page=mskd-compose&step=3' ) );
+        exit;
     }
 
     /**

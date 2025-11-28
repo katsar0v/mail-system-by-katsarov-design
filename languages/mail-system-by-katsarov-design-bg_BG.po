@@ -41,8 +41,11 @@ msgid "Lists"
 msgstr "Списъци"
 
 #: admin/class-admin.php
-msgid "New email"
-msgstr "Ново писмо"
+#: admin/partials/compose.php
+#: admin/partials/compose-wizard.php
+#: admin/partials/dashboard.php
+msgid "New campaign"
+msgstr "Нова кампания"
 
 #: admin/class-admin.php
 msgid "One-time email"
@@ -1725,6 +1728,10 @@ msgid "Send"
 msgstr "Изпращане"
 
 #: admin/partials/compose-wizard.php
+msgid "Continue"
+msgstr "Продължи"
+
+#: admin/partials/compose-wizard.php
 msgid "How would you like to create your email?"
 msgstr "Как искате да създадете своя имейл?"
 
@@ -1811,3 +1818,15 @@ msgstr "Изпрати сега"
 #: admin/partials/compose-wizard.php
 msgid "Schedule Sending"
 msgstr "Планирай изпращане"
+
+#: admin/partials/compose-wizard.php
+msgid "Back"
+msgstr "Назад"
+
+#: admin/partials/compose-wizard.php
+msgid "Use a Template"
+msgstr "Използвайте шаблон"
+
+#: admin/partials/compose-wizard.php
+msgid "Using template: %s"
+msgstr "Използва се шаблон: %s"

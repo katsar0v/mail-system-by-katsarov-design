@@ -30,6 +30,7 @@ $predefined_templates = array_filter( $templates, function( $t ) { return 'prede
 $custom_templates     = array_filter( $templates, function( $t ) { return 'custom' === $t->type; } );
 
 // Get current step from URL or default to 1.
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only step parameter.
 $current_step = isset( $_GET['step'] ) ? intval( $_GET['step'] ) : 1;
 $current_step = max( 1, min( 3, $current_step ) );
 
@@ -48,50 +49,6 @@ if ( ! is_array( $session_data ) ) {
 	);
 }
 
-// Handle step 1 submission (template selection).
-if ( isset( $_POST['mskd_wizard_step1'] ) && wp_verify_nonce( $_POST['mskd_wizard_nonce'], 'mskd_compose_wizard' ) ) {
-	$choice = sanitize_text_field( $_POST['template_choice'] );
-	
-	if ( 'template' === $choice && ! empty( $_POST['template_id'] ) ) {
-		$template_id = intval( $_POST['template_id'] );
-		$template    = $template_service->get_by_id( $template_id );
-		if ( $template ) {
-			$session_data['template_id']  = $template_id;
-			$session_data['subject']      = $template->subject;
-			$session_data['content']      = $template->content;
-			$session_data['json_content'] = $template->json_content;
-			$session_data['use_visual']   = ! empty( $template->json_content );
-		}
-	} elseif ( 'visual' === $choice ) {
-		$session_data['template_id']  = 0;
-		$session_data['subject']      = '';
-		$session_data['content']      = '';
-		$session_data['json_content'] = '';
-		$session_data['use_visual']   = true;
-	} else {
-		// Scratch / HTML editor.
-		$session_data['template_id']  = 0;
-		$session_data['subject']      = '';
-		$session_data['content']      = '';
-		$session_data['json_content'] = '';
-		$session_data['use_visual']   = false;
-	}
-	
-	set_transient( $session_key, $session_data, HOUR_IN_SECONDS );
-	wp_safe_redirect( admin_url( 'admin.php?page=mskd-compose&step=2' ) );
-	exit;
-}
-
-// Handle step 2 submission (content editing) - for HTML editor mode.
-if ( isset( $_POST['mskd_wizard_step2'] ) && wp_verify_nonce( $_POST['mskd_wizard_nonce'], 'mskd_compose_wizard' ) ) {
-	$session_data['subject'] = sanitize_text_field( $_POST['subject'] );
-	$session_data['content'] = wp_kses_post( $_POST['body'] );
-	
-	set_transient( $session_key, $session_data, HOUR_IN_SECONDS );
-	wp_safe_redirect( admin_url( 'admin.php?page=mskd-compose&step=3' ) );
-	exit;
-}
-
 // Get minimum datetime for picker (now + 10 minutes, rounded to nearest 10 min).
 $wp_timezone     = wp_timezone();
 $now             = new DateTime( 'now', $wp_timezone );
@@ -106,7 +63,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 ?>
 
 <div class="wrap mskd-wrap">
-	<h1><?php esc_html_e( 'New email', 'mail-system-by-katsarov-design' ); ?></h1>
+	<h1><?php esc_html_e( 'New campaign', 'mail-system-by-katsarov-design' ); ?></h1>
 
 	<?php settings_errors( 'mskd_messages' ); ?>
 
@@ -325,6 +282,14 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 
 	<?php elseif ( 3 === $current_step ) : ?>
 		<!-- STEP 3: Recipients, Scheduling & Send -->
+		<?php
+		// Check if we have content to send.
+		$has_content = ! empty( $session_data['content'] );
+		if ( ! $has_content && $session_data['use_visual'] && $session_data['template_id'] > 0 ) {
+			$template = $template_service->get_by_id( $session_data['template_id'] );
+			$has_content = $template && ! empty( $template->content );
+		}
+		?>
 		<div class="mskd-wizard-content">
 			<div class="mskd-wizard-card mskd-wizard-card-wide">
 				<h2><?php esc_html_e( 'Configure & Send', 'mail-system-by-katsarov-design' ); ?></h2>
@@ -484,7 +449,8 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 						</a>
 						<button type="submit" name="mskd_send_email" class="button button-primary button-hero mskd-submit-btn"
 								data-send-now="<?php esc_attr_e( 'Send Now', 'mail-system-by-katsarov-design' ); ?>"
-								data-schedule="<?php esc_attr_e( 'Schedule Sending', 'mail-system-by-katsarov-design' ); ?>">
+								data-schedule="<?php esc_attr_e( 'Schedule Sending', 'mail-system-by-katsarov-design' ); ?>"
+								<?php echo ! $has_content ? 'disabled' : ''; ?>>
 							<span class="dashicons dashicons-email"></span>
 							<?php esc_html_e( 'Send Now', 'mail-system-by-katsarov-design' ); ?>
 						</button>
@@ -773,6 +739,19 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 	border-top: 1px solid #c3c4c7;
 }
 
+.mskd-wizard-actions .button {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.mskd-wizard-actions .button .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	line-height: 1;
+}
+
 .mskd-wizard-actions .button-hero {
 	display: inline-flex;
 	align-items: center;
@@ -783,6 +762,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 	font-size: 18px;
 	width: 18px;
 	height: 18px;
+	line-height: 1;
 }
 
 /* Visual Editor Launch */
@@ -792,6 +772,19 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 	background: #f8f9fa;
 	border-radius: 8px;
 	margin-bottom: 24px;
+}
+
+.mskd-visual-editor-launch .button-hero {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.mskd-visual-editor-launch .button-hero .dashicons {
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+	line-height: 1;
 }
 
 .mskd-visual-editor-preview {

@@ -41,8 +41,11 @@ msgid "Lists"
 msgstr "Listen"
 
 #: admin/class-admin.php
-msgid "New email"
-msgstr "Neue E-Mail"
+#: admin/partials/compose.php
+#: admin/partials/compose-wizard.php
+#: admin/partials/dashboard.php
+msgid "New campaign"
+msgstr "Neue Kampagne"
 
 #: admin/class-admin.php
 msgid "One-time email"
@@ -1725,6 +1728,10 @@ msgid "Send"
 msgstr "Senden"
 
 #: admin/partials/compose-wizard.php
+msgid "Continue"
+msgstr "Weiter"
+
+#: admin/partials/compose-wizard.php
 msgid "How would you like to create your email?"
 msgstr "Wie möchten Sie Ihre E-Mail erstellen?"
 
@@ -1815,3 +1822,15 @@ msgstr "Jetzt senden"
 #: admin/partials/compose-wizard.php
 msgid "Schedule Sending"
 msgstr "Versand planen"
+
+#: admin/partials/compose-wizard.php
+msgid "Back"
+msgstr "Zurück"
+
+#: admin/partials/compose-wizard.php
+msgid "Use a Template"
+msgstr "Vorlage verwenden"
+
+#: admin/partials/compose-wizard.php
+msgid "Using template: %s"
+msgstr "Vorlage wird verwendet: %s"

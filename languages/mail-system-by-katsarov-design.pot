@@ -38,7 +38,10 @@ msgid "Lists"
 msgstr ""
 
 #: admin/class-admin.php
-msgid "New email"
+#: admin/partials/compose.php
+#: admin/partials/compose-wizard.php
+#: admin/partials/dashboard.php
+msgid "New campaign"
 msgstr ""
 
 #: admin/class-admin.php

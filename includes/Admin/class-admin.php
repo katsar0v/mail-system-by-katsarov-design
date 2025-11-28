@@ -194,8 +194,8 @@ class Admin {
         // Compose.
         add_submenu_page(
             self::PAGE_PREFIX . 'dashboard',
-            __( 'New email', 'mail-system-by-katsarov-design' ),
-            __( 'New email', 'mail-system-by-katsarov-design' ),
+            __( 'New campaign', 'mail-system-by-katsarov-design' ),
+            __( 'New campaign', 'mail-system-by-katsarov-design' ),
             'manage_options',
             self::PAGE_PREFIX . 'compose',
             array( $this->email, 'render_compose' )

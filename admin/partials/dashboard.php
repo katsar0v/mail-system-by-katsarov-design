@@ -65,7 +65,7 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                 <?php _e( 'Add list', 'mail-system-by-katsarov-design' ); ?>
             </a>
             <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose' ) ); ?>" class="button button-primary">
-                <?php _e( 'New email', 'mail-system-by-katsarov-design' ); ?>
+                <?php esc_html_e( 'New campaign', 'mail-system-by-katsarov-design' ); ?>
             </a>
             <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-one-time-email' ) ); ?>" class="button button-secondary">
                 <?php _e( 'One-time email', 'mail-system-by-katsarov-design' ); ?>

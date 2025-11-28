@@ -61,7 +61,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 ?>
 
 <div class="wrap mskd-wrap">
-	<h1><?php esc_html_e( 'New email', 'mail-system-by-katsarov-design' ); ?></h1>
+	<h1><?php esc_html_e( 'New campaign', 'mail-system-by-katsarov-design' ); ?></h1>
 
     <?php settings_errors( 'mskd_messages' ); ?>
 
