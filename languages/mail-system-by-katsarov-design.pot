@@ -1546,6 +1546,8 @@ msgstr ""
 
 #: admin/partials/import-export.php
 msgid "Remove selected file"
+msgstr ""
+
 #: includes/Admin/class-admin.php
 msgid "Templates"
 msgstr ""
@@ -1885,6 +1887,8 @@ msgstr ""
 
 #: admin/partials/compose-wizard.php
 msgid "Schedule Sending"
+msgstr ""
+
 #: admin/partials/shortcodes.php
 msgid "List-specific Forms"
 msgstr ""

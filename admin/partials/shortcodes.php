@@ -11,9 +11,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Load the List Service to get all lists.
-$list_service = new \MSKD\Services\List_Service();
-$lists        = $list_service->get_all();
+// Load the List Service to get all lists with error handling.
+$lists = array();
+try {
+	$list_service = new \MSKD\Services\List_Service();
+	$lists        = $list_service->get_all();
+} catch ( \Exception $e ) {
+	// If service fails, show empty list (graceful degradation).
+	$lists = array();
+}
 ?>
 
 <div class="wrap mskd-wrap">
