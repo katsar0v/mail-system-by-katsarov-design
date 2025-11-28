@@ -27,7 +27,7 @@ Email newsletter management system with subscribers, lists, and sending queue. S
 
 | Feature | Value |
 |---------|-------|
-| Sending Speed | 10 emails/minute |
+| Sending Speed | Configurable (default: 10 emails/minute) |
 | Sending Method | `wp_mail()` or SMTP (configurable) |
 | Supported Protocols | SSL, TLS (StartTLS), no encryption |
 | Minimum PHP Version | 7.4 |
@@ -257,7 +257,7 @@ Use the shortcode `[mskd_subscribe_form]` on a page or post.
 
 ### How many emails are sent per minute?
 
-By default, 10 emails are sent per minute (`MSKD_BATCH_SIZE`). This is to avoid hosting provider limitations.
+By default, 10 emails are sent per minute. This limit can be configured in the plugin settings (**Emails → Settings → Sending settings → Emails per minute**). You can adjust this value between 1 and 1000 emails per minute, depending on your hosting provider limits.
 
 ### Why aren't emails being sent?
 
@@ -275,7 +275,7 @@ Go to **Emails → Settings** and enable SMTP. Fill in the SMTP host, port, encr
 
 ### How do I change the sending speed?
 
-The `MSKD_BATCH_SIZE` constant is defined in the main plugin file. For v1.0.0 it is hardcoded at 10.
+Go to **Emails → Settings → Sending settings** and adjust the "Emails per minute" value. You can set any value between 1 and 1000. Higher values may exceed your hosting provider limits, so adjust according to your needs.
 
 ### How do I change the interface language?
 

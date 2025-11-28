@@ -586,4 +586,113 @@ class CronHandlerTest extends TestCase {
         // If we got here without errors, the empty queue was handled correctly.
         $this->assertTrue( true );
     }
+
+    /**
+     * Test that process_queue uses configured emails_per_minute setting.
+     */
+    public function test_process_queue_uses_configured_emails_per_minute(): void {
+        $wpdb = $this->setup_wpdb_mock();
+
+        // Configure a custom emails_per_minute setting.
+        $custom_batch_size = 25;
+        Functions\when( 'get_option' )->alias( function( $option, $default = false ) use ( $custom_batch_size ) {
+            if ( $option === 'mskd_settings' ) {
+                return array(
+                    'emails_per_minute' => $custom_batch_size,
+                    'smtp_enabled'      => false,
+                );
+            }
+            return $default;
+        });
+
+        // First get_results is for recover_stuck_emails (returns empty).
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, "status = 'processing'" ) !== false;
+            } ) )
+            ->andReturn( array() );
+
+        // Verify the SQL query includes LIMIT with the configured batch size.
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on(
+                function ( $query ) use ( $custom_batch_size ) {
+                    // The query should contain LIMIT with the configured batch size (25).
+                    return strpos( $query, 'LIMIT' ) !== false
+                        && strpos( $query, 'LIMIT ' . $custom_batch_size ) !== false
+                        && strpos( $query, 'subscriber_id > 0' ) !== false;
+                }
+            ) )
+            ->andReturn( array() );
+
+        // Third get_results is for external subscribers.
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) use ( $custom_batch_size ) {
+                return strpos( $query, 'subscriber_id = 0' ) !== false
+                    && strpos( $query, 'LIMIT ' . $custom_batch_size ) !== false;
+            } ) )
+            ->andReturn( array() );
+
+        $this->cron_handler->process_queue();
+
+        // If we got here without errors, the configured batch size was used.
+        $this->assertTrue( true );
+    }
+
+    /**
+     * Test that process_queue falls back to MSKD_BATCH_SIZE when setting is not configured.
+     */
+    public function test_process_queue_fallback_to_constant_when_setting_not_configured(): void {
+        $wpdb = $this->setup_wpdb_mock();
+
+        // Configure settings without emails_per_minute.
+        Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
+            if ( $option === 'mskd_settings' ) {
+                return array(
+                    'smtp_enabled' => false,
+                    // No emails_per_minute setting.
+                );
+            }
+            return $default;
+        });
+
+        // First get_results is for recover_stuck_emails (returns empty).
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                return strpos( $query, "status = 'processing'" ) !== false;
+            } ) )
+            ->andReturn( array() );
+
+        // Verify the SQL query includes LIMIT with MSKD_BATCH_SIZE (10).
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on(
+                function ( $query ) {
+                    // The query should contain LIMIT with MSKD_BATCH_SIZE (10).
+                    $batch_size = MSKD_BATCH_SIZE;
+                    return strpos( $query, 'LIMIT' ) !== false
+                        && strpos( $query, 'LIMIT ' . $batch_size ) !== false
+                        && strpos( $query, 'subscriber_id > 0' ) !== false;
+                }
+            ) )
+            ->andReturn( array() );
+
+        // Third get_results is for external subscribers.
+        $wpdb->shouldReceive( 'get_results' )
+            ->once()
+            ->with( Mockery::on( function ( $query ) {
+                $batch_size = MSKD_BATCH_SIZE;
+                return strpos( $query, 'subscriber_id = 0' ) !== false
+                    && strpos( $query, 'LIMIT ' . $batch_size ) !== false;
+            } ) )
+            ->andReturn( array() );
+
+        $this->cron_handler->process_queue();
+
+        // If we got here without errors, the constant was used as fallback.
+        $this->assertTrue( true );
+    }
 }
