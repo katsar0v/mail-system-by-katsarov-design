@@ -5,86 +5,556 @@
 
 @use '../abstracts' as *;
 
-// Container layout
+// ==========================================================================
+// PAGE HEADER
+// ==========================================================================
+
+.mskd-page-header {
+  margin-bottom: $spacing-6;
+  padding-bottom: $spacing-5;
+  border-bottom: $border-width solid $color-gray-200;
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    margin: 0 0 $spacing-2;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-semibold;
+
+    .dashicons {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+      color: $color-primary;
+    }
+  }
+}
+
+.mskd-page-description {
+  margin: 0;
+  font-size: $font-size-md;
+  color: $color-wp-text-light;
+}
+
+// ==========================================================================
+// CONTAINER LAYOUT
+// ==========================================================================
+
 .mskd-import-export-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: $grid-gap;
   margin-top: $spacing-5;
 }
 
-// Cards within import/export container
+// ==========================================================================
+// CARD STYLES
+// ==========================================================================
+
 .mskd-import-export-container .mskd-card {
-  @include card-padded;
-  flex: 1 1 400px;
-  max-width: 600px;
+  @include card;
+  @include hover-shadow;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-// Info card spans full width
-.mskd-import-export-container .mskd-card-info {
-  flex: 1 1 100%;
-  max-width: 100%;
+// Export card accent
+.mskd-card-export {
+  border-top: 3px solid $color-success;
 }
 
-// Card title styling
+// Import card accent
+.mskd-card-import {
+  border-top: 3px solid $color-primary;
+}
+
+// Docs card spans full width
+.mskd-card-docs {
+  grid-column: 1 / -1;
+  border-top: 3px solid $color-info;
+}
+
+// ==========================================================================
+// CARD HEADER
+// ==========================================================================
+
+.mskd-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-4;
+  padding: $spacing-6;
+  background: linear-gradient(to bottom, $color-gray-100, $color-white);
+  border-bottom: $border-width solid $color-gray-200;
+}
+
+.mskd-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: $border-radius-lg;
+  flex-shrink: 0;
+
+  .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: $color-white;
+  }
+}
+
+.mskd-card-icon-export {
+  background: linear-gradient(135deg, $color-success, darken($color-success, 10%));
+}
+
+.mskd-card-icon-import {
+  background: linear-gradient(135deg, $color-primary, $color-primary-hover);
+}
+
+.mskd-card-icon-info {
+  background: linear-gradient(135deg, $color-info, darken($color-info, 10%));
+}
+
+.mskd-card-header-content {
+  flex: 1;
+  min-width: 0;
+}
+
 .mskd-card-title {
+  margin: 0 0 $spacing-1;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-wp-text;
+}
+
+.mskd-card-subtitle {
+  margin: 0;
+  font-size: $font-size-base;
+  color: $color-wp-text-light;
+}
+
+// ==========================================================================
+// CARD BODY
+// ==========================================================================
+
+.mskd-card-body {
+  padding: $spacing-6;
+  flex: 1;
+}
+
+// ==========================================================================
+// FORM STYLES
+// ==========================================================================
+
+.mskd-form-group {
+  margin-bottom: $spacing-5;
+}
+
+.mskd-form-group-half {
+  flex: 1;
+  min-width: 0;
+}
+
+.mskd-form-row {
+  display: flex;
+  gap: $spacing-4;
+}
+
+.mskd-form-label {
   display: flex;
   align-items: center;
   gap: $spacing-2;
-  margin-top: 0;
-  margin-bottom: $spacing-3;
-  padding-bottom: $spacing-3;
-  border-bottom: $border-width solid $color-gray-200;
+  margin-bottom: $spacing-2;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $color-wp-text;
 
   .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: $color-wp-text-light;
+  }
+}
+
+.mskd-form-select {
+  display: block;
+  width: 100%;
+  padding: $spacing-3;
+  font-size: $font-size-base;
+  border: $border-width solid $color-wp-border;
+  border-radius: $border-radius;
+  background-color: $color-white;
+  @include transition(border-color);
+
+  &:focus {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 1px $color-primary;
+    outline: none;
+  }
+}
+
+// ==========================================================================
+// FILE UPLOAD AREA
+// ==========================================================================
+
+.mskd-file-upload-area {
+  position: relative;
+  border: 2px dashed $color-gray-400;
+  border-radius: $border-radius-lg;
+  padding: $spacing-8 $spacing-6;
+  text-align: center;
+  background: $color-gray-100;
+  cursor: pointer;
+  @include transition(all);
+
+  &:hover,
+  &.mskd-file-upload-area-dragover {
+    border-color: $color-primary;
+    background: rgba($color-primary, 0.05);
+
+    .dashicons {
+      color: $color-primary;
+      transform: translateY(-2px);
+    }
+  }
+
+  &.mskd-file-upload-area-has-file {
+    border-style: solid;
+    border-color: $color-success;
+    background: $color-success-bg;
+  }
+}
+
+.mskd-file-upload-content {
+  .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: $color-gray-500;
+    margin-bottom: $spacing-3;
+    @include transition(all);
+  }
+}
+
+.mskd-file-upload-text {
+  margin: 0 0 $spacing-2;
+  font-size: $font-size-md;
+  color: $color-wp-text;
+}
+
+.mskd-file-upload-link {
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: $color-primary-hover;
+  }
+}
+
+.mskd-file-upload-hint {
+  margin: 0;
+  font-size: $font-size-sm;
+  color: $color-wp-text-light;
+}
+
+.mskd-file-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.mskd-file-selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-3;
+
+  .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: $color-success;
+  }
+}
+
+.mskd-file-name {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-wp-text;
+}
+
+.mskd-file-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: $border-radius-full;
+  background: $color-error;
+  color: $color-white;
+  cursor: pointer;
+  @include transition(background);
+
+  .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: $color-white;
+  }
+
+  &:hover {
+    background: darken($color-error, 10%);
+  }
+}
+
+// ==========================================================================
+// CHECKBOX GROUP
+// ==========================================================================
+
+.mskd-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  background: $color-gray-100;
+  border-radius: $border-radius;
+}
+
+.mskd-checkbox-item {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-3;
+  padding: $spacing-3;
+  margin: 0;
+  background: $color-white;
+  border: $border-width solid $color-gray-200;
+  border-radius: $border-radius;
+  cursor: pointer;
+  @include transition(all);
+
+  &:hover {
+    border-color: $color-primary;
+    background: rgba($color-primary, 0.02);
+  }
+
+  input[type="checkbox"] {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+}
+
+.mskd-checkbox-label {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  flex: 1;
+
+  strong {
+    font-size: $font-size-base;
+    color: $color-wp-text;
+  }
+}
+
+.mskd-checkbox-description {
+  font-size: $font-size-sm;
+  color: $color-wp-text-light;
+  line-height: $line-height-normal;
+}
+
+// ==========================================================================
+// CARD ACTIONS
+// ==========================================================================
+
+.mskd-card-actions {
+  padding-top: $spacing-5;
+  border-top: $border-width solid $color-gray-200;
+  margin-top: auto;
+
+  .button-hero {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-2;
+    padding: $spacing-3 $spacing-6;
+    font-size: $font-size-md;
+
+    .dashicons {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+// ==========================================================================
+// DOCUMENTATION SECTION
+// ==========================================================================
+
+.mskd-docs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-8;
+}
+
+.mskd-docs-section {
+  padding: $spacing-5;
+  background: $color-gray-100;
+  border-radius: $border-radius-lg;
+}
+
+.mskd-docs-section-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  margin-bottom: $spacing-4;
+
+  .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
     color: $color-primary;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-wp-text;
+  }
+}
+
+.mskd-docs-intro {
+  margin: 0 0 $spacing-4;
+  font-size: $font-size-base;
+  color: $color-wp-text-light;
+}
+
+.mskd-docs-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+  margin-bottom: $spacing-5;
+}
+
+.mskd-docs-column {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-3;
+  background: $color-white;
+  border: $border-width solid $color-gray-200;
+  border-radius: $border-radius;
+  font-size: $font-size-sm;
+
+  code {
+    padding: $spacing-1 $spacing-2;
+    background: $color-gray-100;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.mskd-docs-column-required {
+  border-color: $color-success;
+  background: rgba($color-success, 0.05);
+}
+
+.mskd-docs-column-badge {
+  padding: 2px $spacing-2;
+  background: $color-success;
+  color: $color-white;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  text-transform: uppercase;
+}
+
+.mskd-docs-column-badge-optional {
+  background: $color-gray-500;
+}
+
+.mskd-docs-column-desc {
+  color: $color-wp-text-light;
+}
+
+.mskd-docs-example {
+  background: $color-white;
+  border: $border-width solid $color-gray-200;
+  border-radius: $border-radius;
+  overflow: hidden;
+}
+
+.mskd-docs-example-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-3;
+  background: $color-gray-200;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-wp-text-light;
+
+  .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
   }
 }
 
 // Code example blocks
 .mskd-code-example {
+  margin: 0;
   background: $color-gray-100;
-  border: $border-width solid $color-gray-300;
-  border-radius: $border-radius;
-  padding: $spacing-3;
+  border: none;
+  border-radius: 0;
+  padding: $spacing-3 $spacing-4;
   overflow-x: auto;
   font-family: $font-family-code;
   font-size: $font-size-sm;
-  line-height: $line-height-normal;
+  line-height: $line-height-relaxed;
   white-space: pre;
+  color: $color-wp-text;
 }
 
-// Info card headings
-.mskd-card-info {
-  h3 {
-    margin-top: $spacing-5;
-    margin-bottom: $spacing-3;
-  }
+// ==========================================================================
+// RESPONSIVE ADJUSTMENTS
+// ==========================================================================
 
-  h4 {
-    margin-top: $spacing-4;
-    margin-bottom: $spacing-1;
-  }
-
-  ul {
-    margin-left: $spacing-5;
-  }
-
-  ul li {
-    margin-bottom: $spacing-1;
-
-    code {
-      background: $color-wp-background;
-      padding: $spacing-1 $spacing-2;
-      border-radius: $border-radius-sm;
-    }
-  }
-}
-
-// Responsive adjustments
 @include mobile {
-  .mskd-import-export-container .mskd-card {
-    flex: 1 1 100%;
-    max-width: 100%;
+  .mskd-import-export-container {
+    grid-template-columns: 1fr;
+  }
+
+  .mskd-form-row {
+    flex-direction: column;
+  }
+
+  .mskd-docs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mskd-card-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .mskd-docs-columns {
+    flex-direction: column;
+  }
+
+  .mskd-docs-column {
+    flex-wrap: wrap;
   }
 }
