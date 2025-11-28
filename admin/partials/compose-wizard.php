@@ -201,6 +201,8 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 							$editor_url = add_query_arg( 'template_id', $session_data['template_id'], $editor_url );
 						}
 						$editor_url = add_query_arg( 'return_to', 'compose_wizard', $editor_url );
+						// Add campaign mode flag to prevent saving as template.
+						$editor_url = add_query_arg( 'campaign_mode', '1', $editor_url );
 						?>
 						
 						<a href="<?php echo esc_url( $editor_url ); ?>" class="button button-primary button-hero" target="_blank">
@@ -285,6 +287,11 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 		<?php
 		// Check if we have content to send.
 		$has_content = ! empty( $session_data['content'] );
+		// Also check json_content for visual editor mode.
+		if ( ! $has_content && $session_data['use_visual'] && ! empty( $session_data['json_content'] ) ) {
+			$has_content = true;
+		}
+		// Fallback to template content if using an existing template.
 		if ( ! $has_content && $session_data['use_visual'] && $session_data['template_id'] > 0 ) {
 			$template = $template_service->get_by_id( $session_data['template_id'] );
 			$has_content = $template && ! empty( $template->content );

@@ -1936,3 +1936,54 @@ msgstr ""
 #: admin/partials/queue-detail.php
 msgid "Email Preview"
 msgstr ""
+
+#: includes/Admin/class-admin.php
+msgid "No subscribers selected."
+msgstr ""
+
+#: includes/Admin/class-admin.php
+msgid "No lists selected."
+msgstr ""
+
+#: admin/partials/subscribers.php
+msgid "Bulk actions"
+msgstr ""
+
+#: admin/partials/subscribers.php
+msgid "Add to lists"
+msgstr ""
+
+#: admin/partials/subscribers.php
+msgid "Remove from lists"
+msgstr ""
+
+#: admin/partials/subscribers.php
+msgid "Apply"
+msgstr ""
+
+#: admin/partials/subscribers.php
+msgid "selected"
+msgstr ""
+
+#. translators: %d: number of subscribers updated
+#: includes/Admin/class-admin-ajax.php
+msgid "%d subscriber updated successfully."
+msgid_plural "%d subscribers updated successfully."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of subscribers that failed
+#: includes/Admin/class-admin-ajax.php
+msgid "%d subscriber failed."
+msgid_plural "%d subscribers failed."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Admin/class-admin-ajax.php
+msgid "No subscribers were updated."
+msgstr ""
+
+#. translators: %d: subscriber ID
+#: includes/Services/class-subscriber-service.php
+msgid "Subscriber ID %d not found."
+msgstr ""
