@@ -1920,3 +1920,19 @@ msgstr ""
 #: admin/partials/shortcodes.php
 msgid "Example"
 msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Email Content"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Subject:"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Body:"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Email Preview"
+msgstr ""

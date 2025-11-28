@@ -1999,3 +1999,19 @@ msgstr ""
 #: admin/partials/shortcodes.php
 msgid "The title displayed above the form. Defaults to \"Subscribe\"."
 msgstr "Der über dem Formular angezeigte Titel. Standard ist \"Abonnieren\"."
+
+#: admin/partials/queue-detail.php
+msgid "Email Content"
+msgstr "E-Mail-Inhalt"
+
+#: admin/partials/queue-detail.php
+msgid "Subject:"
+msgstr "Betreff:"
+
+#: admin/partials/queue-detail.php
+msgid "Body:"
+msgstr "Inhalt:"
+
+#: admin/partials/queue-detail.php
+msgid "Email Preview"
+msgstr "E-Mail-Vorschau"

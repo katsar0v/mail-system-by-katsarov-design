@@ -1979,3 +1979,19 @@ msgstr ""
 msgid "The title displayed above the form. Defaults to \"Subscribe\"."
 msgstr ""
 "Заглавието, показвано над формуляра. По подразбиране е \"Абонирайте се\"."
+
+#: admin/partials/queue-detail.php
+msgid "Email Content"
+msgstr "Съдържание на имейла"
+
+#: admin/partials/queue-detail.php
+msgid "Subject:"
+msgstr "Тема:"
+
+#: admin/partials/queue-detail.php
+msgid "Body:"
+msgstr "Съдържание:"
+
+#: admin/partials/queue-detail.php
+msgid "Email Preview"
+msgstr "Преглед на имейл"

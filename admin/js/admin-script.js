@@ -369,6 +369,24 @@
                 $button.removeClass('button-primary');
             }, 2000);
         }
+
+        // =====================================================================
+        // Email Content Accordion Toggle
+        // =====================================================================
+
+        $('.mskd-accordion-toggle').on('click', function() {
+            var $toggle = $(this);
+            var $content = $toggle.next('.mskd-accordion-content');
+            var isExpanded = $toggle.attr('aria-expanded') === 'true';
+
+            if (isExpanded) {
+                $content.slideUp(200);
+                $toggle.attr('aria-expanded', 'false');
+            } else {
+                $content.slideDown(200);
+                $toggle.attr('aria-expanded', 'true');
+            }
+        });
     });
 
 })(jQuery);

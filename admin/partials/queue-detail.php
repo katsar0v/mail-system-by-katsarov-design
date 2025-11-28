@@ -190,6 +190,26 @@ $can_cancel = in_array( $campaign->status, array( 'pending', 'processing' ), tru
         <?php endif; ?>
     </div>
 
+    <!-- Email Content Accordion -->
+    <div class="mskd-email-content-accordion">
+        <button type="button" class="mskd-accordion-toggle" aria-expanded="false">
+            <span class="mskd-accordion-icon dashicons dashicons-arrow-right-alt2"></span>
+            <?php esc_html_e( 'Email Content', 'mail-system-by-katsarov-design' ); ?>
+        </button>
+        <div class="mskd-accordion-content" style="display: none;">
+            <div class="mskd-email-subject">
+                <strong><?php esc_html_e( 'Subject:', 'mail-system-by-katsarov-design' ); ?></strong>
+                <?php echo esc_html( $campaign->subject ); ?>
+            </div>
+            <div class="mskd-email-body">
+                <strong><?php esc_html_e( 'Body:', 'mail-system-by-katsarov-design' ); ?></strong>
+                <div class="mskd-email-body-preview">
+                    <iframe class="mskd-email-iframe" srcdoc="<?php echo esc_attr( $campaign->body ); ?>" sandbox="allow-same-origin" title="<?php esc_attr_e( 'Email Preview', 'mail-system-by-katsarov-design' ); ?>"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Filters -->
     <ul class="subsubsub">
         <li>
