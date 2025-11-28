@@ -40,10 +40,8 @@ msgstr "Абонати"
 msgid "Lists"
 msgstr "Списъци"
 
-#: admin/class-admin.php
-#: admin/partials/compose.php
-#: admin/partials/compose-wizard.php
-#: admin/partials/dashboard.php
+#: admin/class-admin.php admin/partials/compose.php
+#: admin/partials/compose-wizard.php admin/partials/dashboard.php
 msgid "New campaign"
 msgstr "Нова кампания"
 
@@ -88,8 +86,12 @@ msgid "Recommendation for Mail System:"
 msgstr "Препоръка за Мейл Система:"
 
 #: admin/class-admin.php
-msgid "For more reliable email sending, we recommend using system cron instead of WP-Cron."
-msgstr "За по-надеждно изпращане на имейли препоръчваме да използвате системен cron вместо WP-Cron."
+msgid ""
+"For more reliable email sending, we recommend using system cron instead of "
+"WP-Cron."
+msgstr ""
+"За по-надеждно изпращане на имейли препоръчваме да използвате системен cron "
+"вместо WP-Cron."
 
 #: admin/class-admin.php
 msgid "Add to wp-config.php:"
@@ -359,8 +361,7 @@ msgstr "Дата"
 msgid "Actions"
 msgstr "Действия"
 
-#: admin/partials/subscribers.php
-#: admin/partials/compose-wizard.php
+#: admin/partials/subscribers.php admin/partials/compose-wizard.php
 msgid "Edit"
 msgstr "Редактирай"
 
@@ -585,8 +586,12 @@ msgid "Use SMTP for sending emails"
 msgstr "Използване на SMTP за изпращане на имейли"
 
 #: admin/partials/settings.php
-msgid "When enabled, emails will be sent via the specified SMTP server instead of wp_mail()."
-msgstr "Когато е активирано, имейлите ще се изпращат чрез посочения SMTP сървър вместо wp_mail()."
+msgid ""
+"When enabled, emails will be sent via the specified SMTP server instead of "
+"wp_mail()."
+msgstr ""
+"Когато е активирано, имейлите ще се изпращат чрез посочения SMTP сървър "
+"вместо wp_mail()."
 
 #: admin/partials/settings.php
 msgid "SMTP Host"
@@ -701,8 +706,12 @@ msgid "Save settings"
 msgstr "Запази настройките"
 
 #: admin/partials/one-time-email.php
-msgid "Send a one-time email directly to a specific recipient. The email can be sent immediately or scheduled for later."
-msgstr "Изпратете еднократен имейл директно до конкретен получател. Имейлът може да бъде изпратен незабавно или насрочен за по-късно."
+msgid ""
+"Send a one-time email directly to a specific recipient. The email can be "
+"sent immediately or scheduled for later."
+msgstr ""
+"Изпратете еднократен имейл директно до конкретен получател. Имейлът може да "
+"бъде изпратен незабавно или насрочен за по-късно."
 
 #: admin/partials/one-time-email.php
 msgid "Recipient email"
@@ -717,8 +726,11 @@ msgid "Recipient name"
 msgstr "Име на получателя"
 
 #: admin/partials/one-time-email.php
-msgid "Recipient name (optional). Can be used in content with {recipient_name}."
-msgstr "Име на получателя (по избор). Може да се използва в съдържанието с {recipient_name}."
+msgid ""
+"Recipient name (optional). Can be used in content with {recipient_name}."
+msgstr ""
+"Име на получателя (по избор). Може да се използва в съдържанието с "
+"{recipient_name}."
 
 #: admin/partials/one-time-email.php
 msgid "The email will be sent after the specified time."
@@ -730,7 +742,9 @@ msgstr "Информация"
 
 #: admin/partials/one-time-email.php
 msgid "One-time emails can be sent immediately or scheduled for later."
-msgstr "Еднократните имейли могат да бъдат изпратени незабавно или насрочени за по-късно."
+msgstr ""
+"Еднократните имейли могат да бъдат изпратени незабавно или насрочени за по-"
+"късно."
 
 #: admin/partials/one-time-email.php
 msgid "They are not saved as templates and do not repeat."
@@ -746,7 +760,8 @@ msgstr "Насрочените имейли могат да бъдат отме�
 
 #: admin/partials/one-time-email.php
 msgid "Suitable for: account activation, notifications, event reminders."
-msgstr "Подходящи за: активиране на акаунти, уведомления, напомняния за събития."
+msgstr ""
+"Подходящи за: активиране на акаунти, уведомления, напомняния за събития."
 
 #: includes/services/class-cron-handler.php
 msgid "SMTP sending failed"
@@ -778,7 +793,8 @@ msgstr "SMTP не е активиран или конфигуриран."
 
 #: includes/services/class-smtp-mailer.php
 msgid "SMTP is not enabled or configured. Please fill in SMTP settings."
-msgstr "SMTP не е активиран или конфигуриран. Моля, попълнете SMTP настройките."
+msgstr ""
+"SMTP не е активиран или конфигуриран. Моля, попълнете SMTP настройките."
 
 #: includes/services/class-smtp-mailer.php
 msgid "Invalid sender email address."
@@ -789,8 +805,14 @@ msgid "[%s] SMTP Test Email"
 msgstr "[%s] SMTP Тестов имейл"
 
 #: includes/services/class-smtp-mailer.php
-msgid "<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP server:</strong> %2$s:%3$s</p>"
-msgstr "<h2>SMTP Тестов имейл</h2><p>Този имейл потвърждава, че SMTP настройките работят правилно.</p><p><strong>Време:</strong> %1$s</p><p><strong>SMTP сървър:</strong> %2$s:%3$s</p>"
+msgid ""
+"<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are "
+"working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP "
+"server:</strong> %2$s:%3$s</p>"
+msgstr ""
+"<h2>SMTP Тестов имейл</h2><p>Този имейл потвърждава, че SMTP настройките "
+"работят правилно.</p><p><strong>Време:</strong> %1$s</p><p><strong>SMTP "
+"сървър:</strong> %2$s:%3$s</p>"
 
 #: includes/services/class-smtp-mailer.php
 msgid "Test email sent successfully to %s!"
@@ -893,8 +915,11 @@ msgid "External subscribers cannot be edited"
 msgstr "Външните абонати не могат да бъдат редактирани"
 
 #: admin/partials/subscribers.php
-msgid "External subscribers are managed by third-party plugins and appear as read-only."
-msgstr "Външните абонати се управляват от други плъгини и се показват само за четене."
+msgid ""
+"External subscribers are managed by third-party plugins and appear as read-"
+"only."
+msgstr ""
+"Външните абонати се управляват от други плъгини и се показват само за четене."
 
 #: admin/partials/lists.php
 msgid "Send email"
@@ -910,16 +935,26 @@ msgid "Processing..."
 msgstr "Обработка..."
 
 #: admin/class-admin.php
-msgid "Are you sure you want to delete ALL subscribers? This action cannot be undone!"
-msgstr "Сигурни ли сте, че искате да изтриете ВСИЧКИ абонати? Това действие не може да бъде отменено!"
+msgid ""
+"Are you sure you want to delete ALL subscribers? This action cannot be "
+"undone!"
+msgstr ""
+"Сигурни ли сте, че искате да изтриете ВСИЧКИ абонати? Това действие не може "
+"да бъде отменено!"
 
 #: admin/class-admin.php
-msgid "Are you sure you want to delete ALL lists? This action cannot be undone!"
-msgstr "Сигурни ли сте, че искате да изтриете ВСИЧКИ списъци? Това действие не може да бъде отменено!"
+msgid ""
+"Are you sure you want to delete ALL lists? This action cannot be undone!"
+msgstr ""
+"Сигурни ли сте, че искате да изтриете ВСИЧКИ списъци? Това действие не може "
+"да бъде отменено!"
 
 #: admin/class-admin.php
-msgid "Are you sure you want to delete ALL campaigns? This action cannot be undone!"
-msgstr "Сигурни ли сте, че искате да изтриете ВСИЧКИ кампании? Това действие не може да бъде отменено!"
+msgid ""
+"Are you sure you want to delete ALL campaigns? This action cannot be undone!"
+msgstr ""
+"Сигурни ли сте, че искате да изтриете ВСИЧКИ кампании? Това действие не може "
+"да бъде отменено!"
 
 #: includes/Admin/class-admin.php
 msgid "Select lists..."
@@ -939,7 +974,8 @@ msgstr "%d абонати"
 
 #: admin/partials/compose.php
 msgid "Start typing to search. You can select multiple lists."
-msgstr "Започнете да пишете, за да търсите. Можете да изберете няколко списъка."
+msgstr ""
+"Започнете да пишете, за да търсите. Можете да изберете няколко списъка."
 
 #: admin/class-admin.php
 msgid "All subscribers deleted successfully."
@@ -1014,8 +1050,12 @@ msgid "Delete all campaigns"
 msgstr "Изтрий всички кампании"
 
 #: admin/partials/settings.php
-msgid "Permanently deletes all campaigns and their queued emails (pending, processing, sent, and failed)."
-msgstr "Изтрива завинаги всички кампании и техните имейли от опашката (чакащи, обработвани, изпратени и неуспешни)."
+msgid ""
+"Permanently deletes all campaigns and their queued emails (pending, "
+"processing, sent, and failed)."
+msgstr ""
+"Изтрива завинаги всички кампании и техните имейли от опашката (чакащи, "
+"обработвани, изпратени и неуспешни)."
 
 #: admin/partials/queue.php
 msgid "Completed"
@@ -1114,8 +1154,12 @@ msgid "Cancel Campaign"
 msgstr "Отмени кампанията"
 
 #: admin/partials/queue-detail.php
-msgid "Are you sure you want to cancel this campaign? All pending emails will be cancelled."
-msgstr "Сигурни ли сте, че искате да отмените тази кампания? Всички чакащи имейли ще бъдат отменени."
+msgid ""
+"Are you sure you want to cancel this campaign? All pending emails will be "
+"cancelled."
+msgstr ""
+"Сигурни ли сте, че искате да отмените тази кампания? Всички чакащи имейли ще "
+"бъдат отменени."
 
 #: admin/partials/queue-detail.php
 msgid "No emails in this campaign."
@@ -1126,8 +1170,12 @@ msgid "Legacy Emails"
 msgstr "Стари имейли"
 
 #: admin/partials/queue-legacy.php
-msgid "These emails were sent before the campaign system was introduced. They are not grouped by campaign."
-msgstr "Тези имейли са изпратени преди въвеждането на системата за кампании. Те не са групирани по кампании."
+msgid ""
+"These emails were sent before the campaign system was introduced. They are "
+"not grouped by campaign."
+msgstr ""
+"Тези имейли са изпратени преди въвеждането на системата за кампании. Те не "
+"са групирани по кампании."
 
 #: admin/partials/queue-legacy.php
 msgid "No legacy emails."
@@ -1159,7 +1207,8 @@ msgstr "Експорт"
 
 #: admin/partials/import-export.php
 msgid "Export subscribers or lists to a CSV file for backup or migration."
-msgstr "Експортирайте абонати или списъци в CSV файл за архивиране или миграция."
+msgstr ""
+"Експортирайте абонати или списъци в CSV файл за архивиране или миграция."
 
 #: admin/partials/import-export.php
 msgid "Export type"
@@ -1218,16 +1267,22 @@ msgid "Update existing subscribers"
 msgstr "Актуализирай съществуващи абонати"
 
 #: admin/partials/import-export.php
-msgid "If a subscriber with the same email already exists, update their information."
-msgstr "Ако абонат със същия имейл вече съществува, актуализирай информацията му."
+msgid ""
+"If a subscriber with the same email already exists, update their information."
+msgstr ""
+"Ако абонат със същия имейл вече съществува, актуализирай информацията му."
 
 #: admin/partials/import-export.php
 msgid "Assign to lists from file"
 msgstr "Добави към списъци от файла"
 
 #: admin/partials/import-export.php
-msgid "If the file contains a \"lists\" column, assign subscribers to those lists. Lists will be created if they do not exist."
-msgstr "Ако файлът съдържа колона \"lists\", добави абонатите към тези списъци. Списъците ще бъдат създадени, ако не съществуват."
+msgid ""
+"If the file contains a \"lists\" column, assign subscribers to those lists. "
+"Lists will be created if they do not exist."
+msgstr ""
+"Ако файлът съдържа колона \"lists\", добави абонатите към тези списъци. "
+"Списъците ще бъдат създадени, ако не съществуват."
 
 #: admin/partials/import-export.php
 msgid "File format requirements"
@@ -1238,8 +1293,10 @@ msgid "Subscribers CSV format"
 msgstr "CSV формат за абонати"
 
 #: admin/partials/import-export.php
-msgid "The CSV file must contain at minimum an \"email\" column. Optional columns:"
-msgstr "CSV файлът трябва да съдържа минимум колона \"email\". Незадължителни колони:"
+msgid ""
+"The CSV file must contain at minimum an \"email\" column. Optional columns:"
+msgstr ""
+"CSV файлът трябва да съдържа минимум колона \"email\". Незадължителни колони:"
 
 #: admin/partials/import-export.php
 msgid "Email address (required)"
@@ -1262,8 +1319,10 @@ msgid "Lists CSV format"
 msgstr "CSV формат за списъци"
 
 #: admin/partials/import-export.php
-msgid "The CSV file must contain at minimum a \"name\" column. Optional columns:"
-msgstr "CSV файлът трябва да съдържа минимум колона \"name\". Незадължителни колони:"
+msgid ""
+"The CSV file must contain at minimum a \"name\" column. Optional columns:"
+msgstr ""
+"CSV файлът трябва да съдържа минимум колона \"name\". Незадължителни колони:"
 
 #: admin/partials/import-export.php
 msgid "List name (required)"
@@ -1284,7 +1343,8 @@ msgstr "Невалиден формат на файла. Очаква се %s ф
 
 #: includes/Services/class-import-export-service.php
 msgid "Invalid file type. The file content does not match the expected format."
-msgstr "Невалиден тип файл. Съдържанието на файла не съответства на очаквания формат."
+msgstr ""
+"Невалиден тип файл. Съдържанието на файла не съответства на очаквания формат."
 
 #: includes/Services/class-import-export-service.php
 msgid "Could not read the file."
@@ -1404,7 +1464,8 @@ msgstr[1] "%d списъци пропуснати (вече съществува
 
 #: admin/partials/import-export.php
 msgid "Manage your subscriber data with easy import and export functionality."
-msgstr "Управлявайте данните на абонатите с лесна функционалност за импорт и експорт."
+msgstr ""
+"Управлявайте данните на абонатите с лесна функционалност за импорт и експорт."
 
 #: admin/partials/import-export.php
 msgid "Export Data"
@@ -1447,8 +1508,12 @@ msgid "Import options"
 msgstr "Опции за импорт"
 
 #: admin/partials/import-export.php
-msgid "Assign subscribers to lists specified in the \"lists\" column. New lists will be created automatically."
-msgstr "Добавете абонатите към списъците, посочени в колоната \"lists\". Новите списъци ще бъдат създадени автоматично."
+msgid ""
+"Assign subscribers to lists specified in the \"lists\" column. New lists "
+"will be created automatically."
+msgstr ""
+"Добавете абонатите към списъците, посочени в колоната \"lists\". Новите "
+"списъци ще бъдат създадени автоматично."
 
 #: admin/partials/import-export.php
 msgid "Import from CSV"
@@ -1486,7 +1551,7 @@ msgstr "Задължително"
 msgid "Optional"
 msgstr "Незадължително"
 
-#: admin/partials/import-export.php
+#: admin/partials/import-export.php admin/partials/shortcodes.php
 msgid "Example"
 msgstr "Пример"
 
@@ -1510,7 +1575,8 @@ msgstr "Шаблонът е добавен успешно."
 msgid "Error adding template."
 msgstr "Грешка при добавяне на шаблон."
 
-#: includes/Admin/class-admin-templates.php admin/partials/templates.php admin/partials/visual-editor.php
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+#: admin/partials/visual-editor.php
 msgid "Template not found."
 msgstr "Шаблонът не е намерен."
 
@@ -1556,7 +1622,9 @@ msgstr "Тема по подразбиране"
 
 #: admin/partials/templates.php
 msgid "Optional. This subject will be pre-filled when using this template."
-msgstr "Незадължително. Тази тема ще бъде предварително попълнена при използване на този шаблон."
+msgstr ""
+"Незадължително. Тази тема ще бъде предварително попълнена при използване на "
+"този шаблон."
 
 #: admin/partials/templates.php
 msgid "Add template"
@@ -1567,8 +1635,12 @@ msgid "Predefined Templates"
 msgstr "Предварително дефинирани шаблони"
 
 #: admin/partials/templates.php
-msgid "These templates are provided by the system. You can duplicate them to create custom versions."
-msgstr "Тези шаблони се предоставят от системата. Можете да ги дублирате, за да създадете персонализирани версии."
+msgid ""
+"These templates are provided by the system. You can duplicate them to create "
+"custom versions."
+msgstr ""
+"Тези шаблони се предоставят от системата. Можете да ги дублирате, за да "
+"създадете персонализирани версии."
 
 #: admin/partials/templates.php
 msgid "Predefined"
@@ -1592,7 +1664,8 @@ msgstr "Персонализирани шаблони"
 
 #: admin/partials/templates.php
 msgid "Templates you have created. You can edit, duplicate, or delete these."
-msgstr "Шаблони, които сте създали. Можете да ги редактирате, дублирате или изтриете."
+msgstr ""
+"Шаблони, които сте създали. Можете да ги редактирате, дублирате или изтриете."
 
 #: admin/partials/templates.php
 msgid "Custom"
@@ -1607,8 +1680,7 @@ msgstr "Създаден: %s"
 msgid "No custom templates yet."
 msgstr "Все още няма персонализирани шаблони."
 
-#: admin/partials/templates.php
-#: admin/partials/compose-wizard.php
+#: admin/partials/templates.php admin/partials/compose-wizard.php
 msgid "Create your first template"
 msgstr "Създайте първия си шаблон"
 
@@ -1644,16 +1716,24 @@ msgstr "Промоционален"
 msgid "Special Offer Just for You!"
 msgstr "Специална оферта само за вас!"
 
+#. #-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov Design 1.0.0)  #-#-#-#-#
 #. translators: %s: template name
-#: admin/partials/compose.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
+#, fuzzy
 msgid "Using template: %s"
-msgstr "Използване на шаблон: %s"
+msgstr ""
+"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
+"Design 1.0.0)  #-#-#-#-#\n"
+"Използване на шаблон: %s\n"
+"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
+"Design 1.0.0)  #-#-#-#-#\n"
+"Използва се шаблон: %s"
 
 #: admin/partials/compose.php
 msgid "Choose how to compose your email"
 msgstr "Изберете как да съставите вашия имейл"
 
-#: admin/partials/compose.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
 msgid "Use a Template"
 msgstr "Използвайте шаблон"
 
@@ -1665,8 +1745,7 @@ msgstr "Изберете от запазените шаблони и персо�
 msgid "Browse Templates"
 msgstr "Разгледайте шаблоните"
 
-#: admin/partials/compose.php
-#: admin/partials/compose-wizard.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
 msgid "Open Visual Editor"
 msgstr "Отворете визуалния редактор"
 
@@ -1678,8 +1757,7 @@ msgstr "Създавайте имейли с визуален редактор �
 msgid "Open Editor"
 msgstr "Отвори редактор"
 
-#: admin/partials/templates.php
-#: includes/Admin/class-admin-visual-editor.php
+#: admin/partials/templates.php includes/Admin/class-admin-visual-editor.php
 msgid "Visual Editor"
 msgstr "Визуален редактор"
 
@@ -1744,12 +1822,16 @@ msgid "Start from Scratch"
 msgstr "Започнете от нулата"
 
 #: admin/partials/compose-wizard.php
-msgid "Create your email using the HTML editor with full control over the code."
+msgid ""
+"Create your email using the HTML editor with full control over the code."
 msgstr "Създайте своя имейл с HTML редактор с пълен контрол над кода."
 
 #: admin/partials/compose-wizard.php
-msgid "Build your email with our drag-and-drop visual editor. No coding required."
-msgstr "Създайте имейла си с нашия визуален редактор с плъзгане и пускане. Не се изисква програмиране."
+msgid ""
+"Build your email with our drag-and-drop visual editor. No coding required."
+msgstr ""
+"Създайте имейла си с нашия визуален редактор с плъзгане и пускане. Не се "
+"изисква програмиране."
 
 #: admin/partials/compose-wizard.php
 msgid "Start with one of your saved templates and customize it."
@@ -1768,12 +1850,20 @@ msgid "Edit Your Email"
 msgstr "Редактирайте имейла си"
 
 #: admin/partials/compose-wizard.php
-msgid "Use the visual editor to design your email. Click the button below to open the editor."
-msgstr "Използвайте визуалния редактор, за да проектирате имейла си. Кликнете върху бутона по-долу, за да отворите редактора."
+msgid ""
+"Use the visual editor to design your email. Click the button below to open "
+"the editor."
+msgstr ""
+"Използвайте визуалния редактор, за да проектирате имейла си. Кликнете върху "
+"бутона по-долу, за да отворите редактора."
 
 #: admin/partials/compose-wizard.php
-msgid "The visual editor will open in a new window. When you save your template, you can continue to the next step."
-msgstr "Визуалният редактор ще се отвори в нов прозорец. Когато запазите шаблона си, можете да продължите към следващата стъпка."
+msgid ""
+"The visual editor will open in a new window. When you save your template, "
+"you can continue to the next step."
+msgstr ""
+"Визуалният редактор ще се отвори в нов прозорец. Когато запазите шаблона си, "
+"можете да продължите към следващата стъпка."
 
 #: admin/partials/compose-wizard.php
 msgid "Continue to Send Settings"
@@ -1793,7 +1883,8 @@ msgstr "Конфигуриране и изпращане"
 
 #: admin/partials/compose-wizard.php
 msgid "Select recipients, set scheduling options, and send your email."
-msgstr "Изберете получатели, настройте опции за планиране и изпратете имейла си."
+msgstr ""
+"Изберете получатели, настройте опции за планиране и изпратете имейла си."
 
 #: admin/partials/compose-wizard.php
 msgid "Content Preview"
@@ -1801,13 +1892,15 @@ msgstr "Преглед на съдържанието"
 
 #: admin/partials/compose-wizard.php
 msgid "No content set. Please go back to Step 2 to add content."
-msgstr "Няма зададено съдържание. Моля, върнете се към Стъпка 2, за да добавите съдържание."
+msgstr ""
+"Няма зададено съдържание. Моля, върнете се към Стъпка 2, за да добавите "
+"съдържание."
 
 #: admin/partials/compose-wizard.php
 msgid "No lists available."
 msgstr "Няма налични списъци."
 
-#: admin/partials/compose-wizard.php
+#: admin/partials/compose-wizard.php admin/partials/shortcodes.php
 msgid "Create a list"
 msgstr "Създайте списък"
 
@@ -1823,10 +1916,66 @@ msgstr "Планирай изпращане"
 msgid "Back"
 msgstr "Назад"
 
-#: admin/partials/compose-wizard.php
-msgid "Use a Template"
-msgstr "Използвайте шаблон"
+#: public/class-public.php includes/Admin/class-admin.php
+msgid "Shortcodes"
+msgstr "Шорткодове"
 
-#: admin/partials/compose-wizard.php
-msgid "Using template: %s"
-msgstr "Използва се шаблон: %s"
+#: includes/Admin/class-admin.php
+msgid "Copied!"
+msgstr "Копирано!"
+
+#: includes/Admin/class-admin.php
+msgid "Copy failed"
+msgstr "Копирането не успя"
+
+#: admin/partials/shortcodes.php
+msgid ""
+"Copy any shortcode below and paste it into your page or post to display the "
+"subscription form."
+msgstr ""
+"Копирайте който и да е шорткод по-долу и го поставете във вашата страница "
+"или публикация, за да покажете формуляра за абонамент."
+
+#: admin/partials/shortcodes.php
+msgid "General Subscription Form"
+msgstr "Общ формуляр за абонамент"
+
+#: admin/partials/shortcodes.php
+msgid "Subscribe without assigning to a specific list."
+msgstr "Абонирайте се без да се присъединявате към конкретен списък."
+
+#: admin/partials/shortcodes.php
+msgid "Copy"
+msgstr "Копирай"
+
+#: admin/partials/shortcodes.php
+msgid "List-specific Forms"
+msgstr "Формуляри за конкретни списъци"
+
+#: admin/partials/shortcodes.php
+msgid ""
+"No lists available yet. %s to create subscription forms for specific lists."
+msgstr ""
+"Все още няма налични списъци. %s за да създадете формуляри за абонамент за "
+"конкретни списъци."
+
+#: admin/partials/shortcodes.php
+msgid "Shortcode Attributes"
+msgstr "Атрибути на шорткода"
+
+#: admin/partials/shortcodes.php
+msgid "Attribute"
+msgstr "Атрибут"
+
+#: admin/partials/shortcodes.php
+msgid ""
+"The ID of the list to subscribe to. If omitted, subscribers are added "
+"without a list."
+msgstr ""
+"ID на списъка за абониране. Ако е пропуснато, абонатите се добавят без "
+"списък."
+
+#: admin/partials/shortcodes.php
+msgid "The title displayed above the form. Defaults to \"Subscribe\"."
+msgstr ""
+"Заглавието, показвано над формуляра. По подразбиране е \"Абонирайте се\"."

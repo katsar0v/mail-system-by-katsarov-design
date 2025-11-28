@@ -308,6 +308,67 @@
                 $('#import_file').attr('accept', '.' + format);
             });
         }
+
+        // =====================================================================
+        // Shortcodes Page - Copy functionality
+        // =====================================================================
+
+        $('.mskd-copy-btn').on('click', function() {
+            var $button = $(this);
+            var targetId = $button.data('target');
+            var $codeElement = $('#' + targetId);
+            var shortcode = $codeElement.text();
+            var originalText = $button.text();
+
+            // Copy to clipboard
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(shortcode).then(function() {
+                    showCopySuccess($button, originalText);
+                }).catch(function() {
+                    fallbackCopyToClipboard(shortcode, $button, originalText);
+                });
+            } else {
+                fallbackCopyToClipboard(shortcode, $button, originalText);
+            }
+        });
+
+        /**
+         * Fallback copy method for older browsers
+         */
+        function fallbackCopyToClipboard(text, $button, originalText) {
+            var textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            textArea.style.top = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                document.execCommand('copy');
+                showCopySuccess($button, originalText);
+            } catch (err) {
+                $button.text(mskd_admin.strings.copy_error || 'Error');
+                setTimeout(function() {
+                    $button.text(originalText);
+                }, 2000);
+            }
+
+            document.body.removeChild(textArea);
+        }
+
+        /**
+         * Show copy success feedback
+         */
+        function showCopySuccess($button, originalText) {
+            $button.text(mskd_admin.strings.copied || 'Copied!');
+            $button.addClass('button-primary');
+            setTimeout(function() {
+                $button.text(originalText);
+                $button.removeClass('button-primary');
+            }, 2000);
+        }
     });
 
 })(jQuery);

@@ -40,10 +40,8 @@ msgstr "Abonnenten"
 msgid "Lists"
 msgstr "Listen"
 
-#: admin/class-admin.php
-#: admin/partials/compose.php
-#: admin/partials/compose-wizard.php
-#: admin/partials/dashboard.php
+#: admin/class-admin.php admin/partials/compose.php
+#: admin/partials/compose-wizard.php admin/partials/dashboard.php
 msgid "New campaign"
 msgstr "Neue Kampagne"
 
@@ -88,8 +86,12 @@ msgid "Recommendation for Mail System:"
 msgstr "Empfehlung für Mail-System:"
 
 #: admin/class-admin.php
-msgid "For more reliable email sending, we recommend using system cron instead of WP-Cron."
-msgstr "Für zuverlässigeren E-Mail-Versand empfehlen wir die Verwendung von System-Cron anstelle von WP-Cron."
+msgid ""
+"For more reliable email sending, we recommend using system cron instead of "
+"WP-Cron."
+msgstr ""
+"Für zuverlässigeren E-Mail-Versand empfehlen wir die Verwendung von System-"
+"Cron anstelle von WP-Cron."
 
 #: admin/class-admin.php
 msgid "Add to wp-config.php:"
@@ -189,7 +191,9 @@ msgstr "Ungültige Empfänger-E-Mail-Adresse."
 
 #: admin/class-admin.php
 msgid "SMTP is not configured. Please set up SMTP in the plugin settings."
-msgstr "SMTP ist nicht konfiguriert. Bitte richten Sie SMTP in den Plugin-Einstellungen ein."
+msgstr ""
+"SMTP ist nicht konfiguriert. Bitte richten Sie SMTP in den Plugin-"
+"Einstellungen ein."
 
 #: admin/class-admin.php
 msgid "wp_mail() failed for one-time email"
@@ -359,8 +363,7 @@ msgstr "Datum"
 msgid "Actions"
 msgstr "Aktionen"
 
-#: admin/partials/subscribers.php
-#: admin/partials/compose-wizard.php
+#: admin/partials/subscribers.php admin/partials/compose-wizard.php
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -574,7 +577,8 @@ msgstr "SMTP-Einstellungen"
 
 #: admin/partials/settings.php
 msgid "Configure an SMTP server for more reliable email sending."
-msgstr "Konfigurieren Sie einen SMTP-Server für zuverlässigeren E-Mail-Versand."
+msgstr ""
+"Konfigurieren Sie einen SMTP-Server für zuverlässigeren E-Mail-Versand."
 
 #: admin/partials/settings.php
 msgid "Enable SMTP"
@@ -585,8 +589,12 @@ msgid "Use SMTP for sending emails"
 msgstr "SMTP für den E-Mail-Versand verwenden"
 
 #: admin/partials/settings.php
-msgid "When enabled, emails will be sent via the specified SMTP server instead of wp_mail()."
-msgstr "Wenn aktiviert, werden E-Mails über den angegebenen SMTP-Server anstelle von wp_mail() gesendet."
+msgid ""
+"When enabled, emails will be sent via the specified SMTP server instead of "
+"wp_mail()."
+msgstr ""
+"Wenn aktiviert, werden E-Mails über den angegebenen SMTP-Server anstelle von "
+"wp_mail() gesendet."
 
 #: admin/partials/settings.php
 msgid "SMTP Host"
@@ -614,7 +622,8 @@ msgstr "Keine Verschlüsselung"
 
 #: admin/partials/settings.php
 msgid "It is recommended to use TLS or SSL for a secure connection."
-msgstr "Es wird empfohlen, TLS oder SSL für eine sichere Verbindung zu verwenden."
+msgstr ""
+"Es wird empfohlen, TLS oder SSL für eine sichere Verbindung zu verwenden."
 
 #: admin/partials/settings.php
 msgid "SMTP Authentication"
@@ -638,7 +647,8 @@ msgstr "SMTP-Passwort"
 
 #: admin/partials/settings.php
 msgid "For Gmail, use App Password instead of the regular password."
-msgstr "Für Gmail verwenden Sie ein App-Passwort anstelle des normalen Passworts."
+msgstr ""
+"Für Gmail verwenden Sie ein App-Passwort anstelle des normalen Passworts."
 
 #: admin/partials/settings.php
 msgid "Connection test"
@@ -701,8 +711,12 @@ msgid "Save settings"
 msgstr "Einstellungen speichern"
 
 #: admin/partials/one-time-email.php
-msgid "Send a one-time email directly to a specific recipient. The email can be sent immediately or scheduled for later."
-msgstr "Senden Sie eine einmalige E-Mail direkt an einen bestimmten Empfänger. Die E-Mail kann sofort gesendet oder für später geplant werden."
+msgid ""
+"Send a one-time email directly to a specific recipient. The email can be "
+"sent immediately or scheduled for later."
+msgstr ""
+"Senden Sie eine einmalige E-Mail direkt an einen bestimmten Empfänger. Die E-"
+"Mail kann sofort gesendet oder für später geplant werden."
 
 #: admin/partials/one-time-email.php
 msgid "Recipient email"
@@ -717,8 +731,11 @@ msgid "Recipient name"
 msgstr "Empfängername"
 
 #: admin/partials/one-time-email.php
-msgid "Recipient name (optional). Can be used in content with {recipient_name}."
-msgstr "Empfängername (optional). Kann im Inhalt mit {recipient_name} verwendet werden."
+msgid ""
+"Recipient name (optional). Can be used in content with {recipient_name}."
+msgstr ""
+"Empfängername (optional). Kann im Inhalt mit {recipient_name} verwendet "
+"werden."
 
 #: admin/partials/one-time-email.php
 msgid "The email will be sent after the specified time."
@@ -730,7 +747,8 @@ msgstr "Informationen"
 
 #: admin/partials/one-time-email.php
 msgid "One-time emails can be sent immediately or scheduled for later."
-msgstr "Einmalige E-Mails können sofort gesendet oder für später geplant werden."
+msgstr ""
+"Einmalige E-Mails können sofort gesendet oder für später geplant werden."
 
 #: admin/partials/one-time-email.php
 msgid "They are not saved as templates and do not repeat."
@@ -738,15 +756,19 @@ msgstr "Sie werden nicht als Vorlagen gespeichert und wiederholen sich nicht."
 
 #: admin/partials/one-time-email.php
 msgid "All sent one-time emails are logged in the audit history."
-msgstr "Alle gesendeten einmaligen E-Mails werden im Audit-Verlauf protokolliert."
+msgstr ""
+"Alle gesendeten einmaligen E-Mails werden im Audit-Verlauf protokolliert."
 
 #: admin/partials/one-time-email.php
 msgid "Scheduled emails can be cancelled from the Queue page."
-msgstr "Geplante E-Mails können von der Warteschlangenseite abgebrochen werden."
+msgstr ""
+"Geplante E-Mails können von der Warteschlangenseite abgebrochen werden."
 
 #: admin/partials/one-time-email.php
 msgid "Suitable for: account activation, notifications, event reminders."
-msgstr "Geeignet für: Kontoaktivierung, Benachrichtigungen, Veranstaltungserinnerungen."
+msgstr ""
+"Geeignet für: Kontoaktivierung, Benachrichtigungen, "
+"Veranstaltungserinnerungen."
 
 #: includes/services/class-cron-handler.php
 msgid "SMTP sending failed"
@@ -778,7 +800,9 @@ msgstr "SMTP ist nicht aktiviert oder konfiguriert."
 
 #: includes/services/class-smtp-mailer.php
 msgid "SMTP is not enabled or configured. Please fill in SMTP settings."
-msgstr "SMTP ist nicht aktiviert oder konfiguriert. Bitte füllen Sie die SMTP-Einstellungen aus."
+msgstr ""
+"SMTP ist nicht aktiviert oder konfiguriert. Bitte füllen Sie die SMTP-"
+"Einstellungen aus."
 
 #: includes/services/class-smtp-mailer.php
 msgid "Invalid sender email address."
@@ -789,8 +813,14 @@ msgid "[%s] SMTP Test Email"
 msgstr "[%s] SMTP-Test-E-Mail"
 
 #: includes/services/class-smtp-mailer.php
-msgid "<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP server:</strong> %2$s:%3$s</p>"
-msgstr "<h2>SMTP-Test-E-Mail</h2><p>Diese E-Mail bestätigt, dass die SMTP-Einstellungen korrekt funktionieren.</p><p><strong>Zeit:</strong> %1$s</p><p><strong>SMTP-Server:</strong> %2$s:%3$s</p>"
+msgid ""
+"<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are "
+"working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP "
+"server:</strong> %2$s:%3$s</p>"
+msgstr ""
+"<h2>SMTP-Test-E-Mail</h2><p>Diese E-Mail bestätigt, dass die SMTP-"
+"Einstellungen korrekt funktionieren.</p><p><strong>Zeit:</strong> %1$s</"
+"p><p><strong>SMTP-Server:</strong> %2$s:%3$s</p>"
 
 #: includes/services/class-smtp-mailer.php
 msgid "Test email sent successfully to %s!"
@@ -893,8 +923,12 @@ msgid "External subscribers cannot be edited"
 msgstr "Externe Abonnenten können nicht bearbeitet werden"
 
 #: admin/partials/subscribers.php
-msgid "External subscribers are managed by third-party plugins and appear as read-only."
-msgstr "Externe Abonnenten werden von Drittanbieter-Plugins verwaltet und werden als schreibgeschützt angezeigt."
+msgid ""
+"External subscribers are managed by third-party plugins and appear as read-"
+"only."
+msgstr ""
+"Externe Abonnenten werden von Drittanbieter-Plugins verwaltet und werden als "
+"schreibgeschützt angezeigt."
 
 #: admin/partials/lists.php
 msgid "Send email"
@@ -910,16 +944,26 @@ msgid "Processing..."
 msgstr "Verarbeitung..."
 
 #: admin/class-admin.php
-msgid "Are you sure you want to delete ALL subscribers? This action cannot be undone!"
-msgstr "Sind Sie sicher, dass Sie ALLE Abonnenten löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
+msgid ""
+"Are you sure you want to delete ALL subscribers? This action cannot be "
+"undone!"
+msgstr ""
+"Sind Sie sicher, dass Sie ALLE Abonnenten löschen möchten? Diese Aktion kann "
+"nicht rückgängig gemacht werden!"
 
 #: admin/class-admin.php
-msgid "Are you sure you want to delete ALL lists? This action cannot be undone!"
-msgstr "Sind Sie sicher, dass Sie ALLE Listen löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
+msgid ""
+"Are you sure you want to delete ALL lists? This action cannot be undone!"
+msgstr ""
+"Sind Sie sicher, dass Sie ALLE Listen löschen möchten? Diese Aktion kann "
+"nicht rückgängig gemacht werden!"
 
 #: admin/class-admin.php
-msgid "Are you sure you want to delete ALL campaigns? This action cannot be undone!"
-msgstr "Sind Sie sicher, dass Sie ALLE Kampagnen löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
+msgid ""
+"Are you sure you want to delete ALL campaigns? This action cannot be undone!"
+msgstr ""
+"Sind Sie sicher, dass Sie ALLE Kampagnen löschen möchten? Diese Aktion kann "
+"nicht rückgängig gemacht werden!"
 
 #: includes/Admin/class-admin.php
 msgid "Select lists..."
@@ -939,7 +983,8 @@ msgstr "%d Abonnenten"
 
 #: admin/partials/compose.php
 msgid "Start typing to search. You can select multiple lists."
-msgstr "Beginnen Sie zu tippen, um zu suchen. Sie können mehrere Listen auswählen."
+msgstr ""
+"Beginnen Sie zu tippen, um zu suchen. Sie können mehrere Listen auswählen."
 
 #: admin/class-admin.php
 msgid "All subscribers deleted successfully."
@@ -1014,8 +1059,12 @@ msgid "Delete all campaigns"
 msgstr "Alle Kampagnen löschen"
 
 #: admin/partials/settings.php
-msgid "Permanently deletes all campaigns and their queued emails (pending, processing, sent, and failed)."
-msgstr "Löscht dauerhaft alle Kampagnen und ihre E-Mails aus der Warteschlange (ausstehend, in Bearbeitung, gesendet und fehlgeschlagen)."
+msgid ""
+"Permanently deletes all campaigns and their queued emails (pending, "
+"processing, sent, and failed)."
+msgstr ""
+"Löscht dauerhaft alle Kampagnen und ihre E-Mails aus der Warteschlange "
+"(ausstehend, in Bearbeitung, gesendet und fehlgeschlagen)."
 
 #: admin/partials/queue.php
 msgid "Completed"
@@ -1059,7 +1108,8 @@ msgstr "Keine Kampagnen in der Warteschlange."
 
 #: admin/partials/queue.php
 msgid "There are %d emails from before the campaign system was introduced."
-msgstr "Es gibt %d E-Mails aus der Zeit vor der Einführung des Kampagnensystems."
+msgstr ""
+"Es gibt %d E-Mails aus der Zeit vor der Einführung des Kampagnensystems."
 
 #: admin/partials/queue.php
 msgid "View legacy emails"
@@ -1114,8 +1164,12 @@ msgid "Cancel Campaign"
 msgstr "Kampagne abbrechen"
 
 #: admin/partials/queue-detail.php
-msgid "Are you sure you want to cancel this campaign? All pending emails will be cancelled."
-msgstr "Sind Sie sicher, dass Sie diese Kampagne abbrechen möchten? Alle ausstehenden E-Mails werden abgebrochen."
+msgid ""
+"Are you sure you want to cancel this campaign? All pending emails will be "
+"cancelled."
+msgstr ""
+"Sind Sie sicher, dass Sie diese Kampagne abbrechen möchten? Alle "
+"ausstehenden E-Mails werden abgebrochen."
 
 #: admin/partials/queue-detail.php
 msgid "No emails in this campaign."
@@ -1126,8 +1180,12 @@ msgid "Legacy Emails"
 msgstr "Alte E-Mails"
 
 #: admin/partials/queue-legacy.php
-msgid "These emails were sent before the campaign system was introduced. They are not grouped by campaign."
-msgstr "Diese E-Mails wurden vor der Einführung des Kampagnensystems gesendet. Sie sind nicht nach Kampagnen gruppiert."
+msgid ""
+"These emails were sent before the campaign system was introduced. They are "
+"not grouped by campaign."
+msgstr ""
+"Diese E-Mails wurden vor der Einführung des Kampagnensystems gesendet. Sie "
+"sind nicht nach Kampagnen gruppiert."
 
 #: admin/partials/queue-legacy.php
 msgid "No legacy emails."
@@ -1139,7 +1197,8 @@ msgstr "Gefällt Ihnen Mail System by Katsarov Design?"
 
 #: admin/class-admin.php
 msgid "If you like this plugin, please share it with your friends!"
-msgstr "Wenn Ihnen dieses Plugin gefällt, teilen Sie es bitte mit Ihren Freunden!"
+msgstr ""
+"Wenn Ihnen dieses Plugin gefällt, teilen Sie es bitte mit Ihren Freunden!"
 
 #: admin/class-admin.php
 msgid "Yes, of course!"
@@ -1159,7 +1218,9 @@ msgstr "Export"
 
 #: admin/partials/import-export.php
 msgid "Export subscribers or lists to a CSV file for backup or migration."
-msgstr "Exportieren Sie Abonnenten oder Listen in eine CSV-Datei für Backup oder Migration."
+msgstr ""
+"Exportieren Sie Abonnenten oder Listen in eine CSV-Datei für Backup oder "
+"Migration."
 
 #: admin/partials/import-export.php
 msgid "Export type"
@@ -1218,16 +1279,23 @@ msgid "Update existing subscribers"
 msgstr "Bestehende Abonnenten aktualisieren"
 
 #: admin/partials/import-export.php
-msgid "If a subscriber with the same email already exists, update their information."
-msgstr "Wenn ein Abonnent mit derselben E-Mail bereits existiert, aktualisieren Sie seine Informationen."
+msgid ""
+"If a subscriber with the same email already exists, update their information."
+msgstr ""
+"Wenn ein Abonnent mit derselben E-Mail bereits existiert, aktualisieren Sie "
+"seine Informationen."
 
 #: admin/partials/import-export.php
 msgid "Assign to lists from file"
 msgstr "Listen aus Datei zuweisen"
 
 #: admin/partials/import-export.php
-msgid "If the file contains a \"lists\" column, assign subscribers to those lists. Lists will be created if they do not exist."
-msgstr "Wenn die Datei eine \"lists\"-Spalte enthält, weisen Sie Abonnenten diesen Listen zu. Listen werden erstellt, wenn sie nicht existieren."
+msgid ""
+"If the file contains a \"lists\" column, assign subscribers to those lists. "
+"Lists will be created if they do not exist."
+msgstr ""
+"Wenn die Datei eine \"lists\"-Spalte enthält, weisen Sie Abonnenten diesen "
+"Listen zu. Listen werden erstellt, wenn sie nicht existieren."
 
 #: admin/partials/import-export.php
 msgid "File format requirements"
@@ -1238,8 +1306,11 @@ msgid "Subscribers CSV format"
 msgstr "Abonnenten CSV-Format"
 
 #: admin/partials/import-export.php
-msgid "The CSV file must contain at minimum an \"email\" column. Optional columns:"
-msgstr "Die CSV-Datei muss mindestens eine \"email\"-Spalte enthalten. Optionale Spalten:"
+msgid ""
+"The CSV file must contain at minimum an \"email\" column. Optional columns:"
+msgstr ""
+"Die CSV-Datei muss mindestens eine \"email\"-Spalte enthalten. Optionale "
+"Spalten:"
 
 #: admin/partials/import-export.php
 msgid "Email address (required)"
@@ -1262,8 +1333,11 @@ msgid "Lists CSV format"
 msgstr "Listen CSV-Format"
 
 #: admin/partials/import-export.php
-msgid "The CSV file must contain at minimum a \"name\" column. Optional columns:"
-msgstr "Die CSV-Datei muss mindestens eine \"name\"-Spalte enthalten. Optionale Spalten:"
+msgid ""
+"The CSV file must contain at minimum a \"name\" column. Optional columns:"
+msgstr ""
+"Die CSV-Datei muss mindestens eine \"name\"-Spalte enthalten. Optionale "
+"Spalten:"
 
 #: admin/partials/import-export.php
 msgid "List name (required)"
@@ -1284,7 +1358,8 @@ msgstr "Ungültiges Dateiformat. %s-Datei erwartet."
 
 #: includes/Services/class-import-export-service.php
 msgid "Invalid file type. The file content does not match the expected format."
-msgstr "Ungültiger Dateityp. Der Dateiinhalt entspricht nicht dem erwarteten Format."
+msgstr ""
+"Ungültiger Dateityp. Der Dateiinhalt entspricht nicht dem erwarteten Format."
 
 #: includes/Services/class-import-export-service.php
 msgid "Could not read the file."
@@ -1404,7 +1479,9 @@ msgstr[1] "%d Listen übersprungen (existieren bereits)."
 
 #: admin/partials/import-export.php
 msgid "Manage your subscriber data with easy import and export functionality."
-msgstr "Verwalten Sie Ihre Abonnentendaten mit einfacher Import- und Exportfunktionalität."
+msgstr ""
+"Verwalten Sie Ihre Abonnentendaten mit einfacher Import- und "
+"Exportfunktionalität."
 
 #: admin/partials/import-export.php
 msgid "Export Data"
@@ -1447,8 +1524,12 @@ msgid "Import options"
 msgstr "Importoptionen"
 
 #: admin/partials/import-export.php
-msgid "Assign subscribers to lists specified in the \"lists\" column. New lists will be created automatically."
-msgstr "Abonnenten den in der Spalte \"lists\" angegebenen Listen zuweisen. Neue Listen werden automatisch erstellt."
+msgid ""
+"Assign subscribers to lists specified in the \"lists\" column. New lists "
+"will be created automatically."
+msgstr ""
+"Abonnenten den in der Spalte \"lists\" angegebenen Listen zuweisen. Neue "
+"Listen werden automatisch erstellt."
 
 #: admin/partials/import-export.php
 msgid "Import from CSV"
@@ -1460,7 +1541,8 @@ msgstr "Dateiformat-Leitfaden"
 
 #: admin/partials/import-export.php
 msgid "Learn how to format your CSV files for successful imports"
-msgstr "Erfahren Sie, wie Sie Ihre CSV-Dateien für erfolgreiche Importe formatieren"
+msgstr ""
+"Erfahren Sie, wie Sie Ihre CSV-Dateien für erfolgreiche Importe formatieren"
 
 #: admin/partials/import-export.php
 msgid "Subscribers CSV Format"
@@ -1486,7 +1568,7 @@ msgstr "Erforderlich"
 msgid "Optional"
 msgstr "Optional"
 
-#: admin/partials/import-export.php
+#: admin/partials/import-export.php admin/partials/shortcodes.php
 msgid "Example"
 msgstr "Beispiel"
 
@@ -1510,7 +1592,8 @@ msgstr "Vorlage erfolgreich hinzugefügt."
 msgid "Error adding template."
 msgstr "Fehler beim Hinzufügen der Vorlage."
 
-#: includes/Admin/class-admin-templates.php admin/partials/templates.php admin/partials/visual-editor.php
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+#: admin/partials/visual-editor.php
 msgid "Template not found."
 msgstr "Vorlage nicht gefunden."
 
@@ -1556,7 +1639,8 @@ msgstr "Standard-Betreff"
 
 #: admin/partials/templates.php
 msgid "Optional. This subject will be pre-filled when using this template."
-msgstr "Optional. Dieser Betreff wird bei Verwendung dieser Vorlage vorausgefüllt."
+msgstr ""
+"Optional. Dieser Betreff wird bei Verwendung dieser Vorlage vorausgefüllt."
 
 #: admin/partials/templates.php
 msgid "Add template"
@@ -1567,8 +1651,12 @@ msgid "Predefined Templates"
 msgstr "Vordefinierte Vorlagen"
 
 #: admin/partials/templates.php
-msgid "These templates are provided by the system. You can duplicate them to create custom versions."
-msgstr "Diese Vorlagen werden vom System bereitgestellt. Sie können sie duplizieren, um benutzerdefinierte Versionen zu erstellen."
+msgid ""
+"These templates are provided by the system. You can duplicate them to create "
+"custom versions."
+msgstr ""
+"Diese Vorlagen werden vom System bereitgestellt. Sie können sie duplizieren, "
+"um benutzerdefinierte Versionen zu erstellen."
 
 #: admin/partials/templates.php
 msgid "Predefined"
@@ -1592,7 +1680,9 @@ msgstr "Benutzerdefinierte Vorlagen"
 
 #: admin/partials/templates.php
 msgid "Templates you have created. You can edit, duplicate, or delete these."
-msgstr "Von Ihnen erstellte Vorlagen. Sie können diese bearbeiten, duplizieren oder löschen."
+msgstr ""
+"Von Ihnen erstellte Vorlagen. Sie können diese bearbeiten, duplizieren oder "
+"löschen."
 
 #: admin/partials/templates.php
 msgid "Custom"
@@ -1607,8 +1697,7 @@ msgstr "Erstellt: %s"
 msgid "No custom templates yet."
 msgstr "Noch keine benutzerdefinierten Vorlagen."
 
-#: admin/partials/templates.php
-#: admin/partials/compose-wizard.php
+#: admin/partials/templates.php admin/partials/compose-wizard.php
 msgid "Create your first template"
 msgstr "Erstellen Sie Ihre erste Vorlage"
 
@@ -1644,16 +1733,24 @@ msgstr "Werbeangebot"
 msgid "Special Offer Just for You!"
 msgstr "Sonderangebot nur für Sie!"
 
+#. #-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov Design 1.0.0)  #-#-#-#-#
 #. translators: %s: template name
-#: admin/partials/compose.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
+#, fuzzy
 msgid "Using template: %s"
-msgstr "Verwendete Vorlage: %s"
+msgstr ""
+"#-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov "
+"Design 1.0.0)  #-#-#-#-#\n"
+"Verwendete Vorlage: %s\n"
+"#-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov "
+"Design 1.0.0)  #-#-#-#-#\n"
+"Vorlage wird verwendet: %s"
 
 #: admin/partials/compose.php
 msgid "Choose how to compose your email"
 msgstr "Wählen Sie, wie Sie Ihre E-Mail erstellen möchten"
 
-#: admin/partials/compose.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
 msgid "Use a Template"
 msgstr "Vorlage verwenden"
 
@@ -1665,8 +1762,7 @@ msgstr "Aus gespeicherten Vorlagen auswählen und anpassen"
 msgid "Browse Templates"
 msgstr "Vorlagen durchsuchen"
 
-#: admin/partials/compose.php
-#: admin/partials/compose-wizard.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
 msgid "Open Visual Editor"
 msgstr "Visuellen Editor öffnen"
 
@@ -1678,8 +1774,7 @@ msgstr "E-Mails mit Drag-and-Drop-Visual-Editor erstellen"
 msgid "Open Editor"
 msgstr "Editor öffnen"
 
-#: admin/partials/templates.php
-#: includes/Admin/class-admin-visual-editor.php
+#: admin/partials/templates.php includes/Admin/class-admin-visual-editor.php
 msgid "Visual Editor"
 msgstr "Visueller Editor"
 
@@ -1744,16 +1839,23 @@ msgid "Start from Scratch"
 msgstr "Von Grund auf neu beginnen"
 
 #: admin/partials/compose-wizard.php
-msgid "Create your email using the HTML editor with full control over the code."
-msgstr "Erstellen Sie Ihre E-Mail mit dem HTML-Editor mit voller Kontrolle über den Code."
+msgid ""
+"Create your email using the HTML editor with full control over the code."
+msgstr ""
+"Erstellen Sie Ihre E-Mail mit dem HTML-Editor mit voller Kontrolle über den "
+"Code."
 
 #: admin/partials/compose-wizard.php
-msgid "Build your email with our drag-and-drop visual editor. No coding required."
-msgstr "Erstellen Sie Ihre E-Mail mit unserem Drag-and-Drop-Visual-Editor. Keine Programmierung erforderlich."
+msgid ""
+"Build your email with our drag-and-drop visual editor. No coding required."
+msgstr ""
+"Erstellen Sie Ihre E-Mail mit unserem Drag-and-Drop-Visual-Editor. Keine "
+"Programmierung erforderlich."
 
 #: admin/partials/compose-wizard.php
 msgid "Start with one of your saved templates and customize it."
-msgstr "Beginnen Sie mit einer Ihrer gespeicherten Vorlagen und passen Sie sie an."
+msgstr ""
+"Beginnen Sie mit einer Ihrer gespeicherten Vorlagen und passen Sie sie an."
 
 #: admin/partials/compose-wizard.php
 msgid "Select a Template"
@@ -1764,20 +1866,24 @@ msgid "No templates available."
 msgstr "Keine Vorlagen verfügbar."
 
 #: admin/partials/compose-wizard.php
-msgid "Continue"
-msgstr "Weiter"
-
-#: admin/partials/compose-wizard.php
 msgid "Edit Your Email"
 msgstr "Ihre E-Mail bearbeiten"
 
 #: admin/partials/compose-wizard.php
-msgid "Use the visual editor to design your email. Click the button below to open the editor."
-msgstr "Verwenden Sie den visuellen Editor, um Ihre E-Mail zu gestalten. Klicken Sie auf die Schaltfläche unten, um den Editor zu öffnen."
+msgid ""
+"Use the visual editor to design your email. Click the button below to open "
+"the editor."
+msgstr ""
+"Verwenden Sie den visuellen Editor, um Ihre E-Mail zu gestalten. Klicken Sie "
+"auf die Schaltfläche unten, um den Editor zu öffnen."
 
 #: admin/partials/compose-wizard.php
-msgid "The visual editor will open in a new window. When you save your template, you can continue to the next step."
-msgstr "Der visuelle Editor wird in einem neuen Fenster geöffnet. Wenn Sie Ihre Vorlage speichern, können Sie mit dem nächsten Schritt fortfahren."
+msgid ""
+"The visual editor will open in a new window. When you save your template, "
+"you can continue to the next step."
+msgstr ""
+"Der visuelle Editor wird in einem neuen Fenster geöffnet. Wenn Sie Ihre "
+"Vorlage speichern, können Sie mit dem nächsten Schritt fortfahren."
 
 #: admin/partials/compose-wizard.php
 msgid "Continue to Send Settings"
@@ -1797,7 +1903,9 @@ msgstr "Konfigurieren & Senden"
 
 #: admin/partials/compose-wizard.php
 msgid "Select recipients, set scheduling options, and send your email."
-msgstr "Wählen Sie Empfänger, legen Sie Planungsoptionen fest und senden Sie Ihre E-Mail."
+msgstr ""
+"Wählen Sie Empfänger, legen Sie Planungsoptionen fest und senden Sie Ihre E-"
+"Mail."
 
 #: admin/partials/compose-wizard.php
 msgid "Content Preview"
@@ -1805,13 +1913,15 @@ msgstr "Inhaltsvorschau"
 
 #: admin/partials/compose-wizard.php
 msgid "No content set. Please go back to Step 2 to add content."
-msgstr "Kein Inhalt festgelegt. Bitte gehen Sie zurück zu Schritt 2, um Inhalt hinzuzufügen."
+msgstr ""
+"Kein Inhalt festgelegt. Bitte gehen Sie zurück zu Schritt 2, um Inhalt "
+"hinzuzufügen."
 
 #: admin/partials/compose-wizard.php
 msgid "No lists available."
 msgstr "Keine Listen verfügbar."
 
-#: admin/partials/compose-wizard.php
+#: admin/partials/compose-wizard.php admin/partials/shortcodes.php
 msgid "Create a list"
 msgstr "Liste erstellen"
 
@@ -1827,10 +1937,65 @@ msgstr "Versand planen"
 msgid "Back"
 msgstr "Zurück"
 
-#: admin/partials/compose-wizard.php
-msgid "Use a Template"
-msgstr "Vorlage verwenden"
+#: includes/Admin/class-admin.php
+msgid "Shortcodes"
+msgstr "Shortcodes"
 
-#: admin/partials/compose-wizard.php
-msgid "Using template: %s"
-msgstr "Vorlage wird verwendet: %s"
+#: includes/Admin/class-admin.php
+msgid "Copied!"
+msgstr "Kopiert!"
+
+#: includes/Admin/class-admin.php
+msgid "Copy failed"
+msgstr "Kopieren fehlgeschlagen"
+
+#: admin/partials/shortcodes.php
+msgid ""
+"Copy any shortcode below and paste it into your page or post to display the "
+"subscription form."
+msgstr ""
+"Kopieren Sie einen beliebigen Shortcode unten und fügen Sie ihn in Ihre "
+"Seite oder Ihren Beitrag ein, um das Anmeldeformular anzuzeigen."
+
+#: admin/partials/shortcodes.php
+msgid "General Subscription Form"
+msgstr "Allgemeines Anmeldeformular"
+
+#: admin/partials/shortcodes.php
+msgid "Subscribe without assigning to a specific list."
+msgstr "Abonnieren ohne Zuweisung zu einer bestimmten Liste."
+
+#: admin/partials/shortcodes.php
+msgid "Copy"
+msgstr "Kopieren"
+
+#: admin/partials/shortcodes.php
+msgid "List-specific Forms"
+msgstr "Listenspezifische Formulare"
+
+#: admin/partials/shortcodes.php
+msgid ""
+"No lists available yet. %s to create subscription forms for specific lists."
+msgstr ""
+"Noch keine Listen verfügbar. %s um Anmeldeformulare für bestimmte Listen zu "
+"erstellen."
+
+#: admin/partials/shortcodes.php
+msgid "Shortcode Attributes"
+msgstr "Shortcode-Attribute"
+
+#: admin/partials/shortcodes.php
+msgid "Attribute"
+msgstr "Attribut"
+
+#: admin/partials/shortcodes.php
+msgid ""
+"The ID of the list to subscribe to. If omitted, subscribers are added "
+"without a list."
+msgstr ""
+"Die ID der Liste, die abonniert werden soll. Wenn weggelassen, werden "
+"Abonnenten ohne Liste hinzugefügt."
+
+#: admin/partials/shortcodes.php
+msgid "The title displayed above the form. Defaults to \"Subscribe\"."
+msgstr "Der über dem Formular angezeigte Titel. Standard ist \"Abonnieren\"."
