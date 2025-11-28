@@ -332,15 +332,20 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 											<span class="dashicons dashicons-visibility"></span>
 											<?php esc_html_e( 'Content Preview', 'mail-system-by-katsarov-design' ); ?>
 											<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&step=2' ) ); ?>" class="mskd-edit-link">
-												<span class="dashicons dashicons-edit"></span>
-												<?php esc_html_e( 'Edit', 'mail-system-by-katsarov-design' ); ?>
-											</a>
-										</div>
-										<div class="mskd-content-preview-body">
-											<?php echo wp_kses_post( wp_trim_words( wp_strip_all_tags( $session_data['content'] ), 50 ) ); ?>
-										</div>
+											<span class="dashicons dashicons-edit"></span>
+											<?php esc_html_e( 'Edit', 'mail-system-by-katsarov-design' ); ?>
+										</a>
 									</div>
-									<input type="hidden" name="body" value="<?php echo esc_attr( $session_data['content'] ); ?>">
+									<div class="mskd-content-preview-body">
+										<iframe 
+											srcdoc="<?php echo esc_attr( $session_data['content'] ); ?>" 
+											style="width: 100%; height: 300px; border: 1px solid #ddd; border-radius: 4px; background: #fff;"
+											sandbox="allow-same-origin"
+											title="<?php esc_attr_e( 'Email content preview', 'mail-system-by-katsarov-design' ); ?>"
+										></iframe>
+									</div>
+								</div>
+								<input type="hidden" name="body" value="<?php echo esc_attr( $session_data['content'] ); ?>">
 								<?php elseif ( $session_data['use_visual'] && $session_data['template_id'] > 0 ) : ?>
 									<?php 
 									$template = $template_service->get_by_id( $session_data['template_id'] );

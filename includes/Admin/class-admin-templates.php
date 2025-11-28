@@ -83,7 +83,9 @@ class Admin_Templates {
 	private function handle_add(): void {
 		$name    = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
 		$subject = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
-		$content = isset( $_POST['content'] ) ? wp_kses_post( wp_unslash( $_POST['content'] ) ) : '';
+		// Email HTML content must be preserved exactly (including <style> tags for MJML output).
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
+		$content = isset( $_POST['content'] ) ? wp_unslash( $_POST['content'] ) : '';
 
 		// Validate name.
 		if ( empty( $name ) ) {
@@ -135,7 +137,9 @@ class Admin_Templates {
 		$id      = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
 		$name    = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
 		$subject = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
-		$content = isset( $_POST['content'] ) ? wp_kses_post( wp_unslash( $_POST['content'] ) ) : '';
+		// Email HTML content must be preserved exactly (including <style> tags for MJML output).
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
+		$content = isset( $_POST['content'] ) ? wp_unslash( $_POST['content'] ) : '';
 
 		// Validate name.
 		if ( empty( $name ) ) {

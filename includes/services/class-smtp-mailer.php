@@ -8,7 +8,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 /**
@@ -18,350 +18,352 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class MSKD_SMTP_Mailer {
 
-    /**
-     * SMTP settings.
-     *
-     * @var array
-     */
-    private $settings;
+	/**
+	 * SMTP settings.
+	 *
+	 * @var array
+	 */
+	private $settings;
 
-    /**
-     * Last error message.
-     *
-     * @var string
-     */
-    private $last_error = '';
+	/**
+	 * Last error message.
+	 *
+	 * @var string
+	 */
+	private $last_error = '';
 
-    /**
-     * Debug log.
-     *
-     * @var array
-     */
-    private $debug_log = array();
+	/**
+	 * Debug log.
+	 *
+	 * @var array
+	 */
+	private $debug_log = array();
 
-    /**
-     * Constructor.
-     *
-     * @param array $settings SMTP settings array.
-     */
-    public function __construct( $settings = array() ) {
-        if ( empty( $settings ) ) {
-            $settings = get_option( 'mskd_settings', array() );
-        }
-        $this->settings = $settings;
-    }
+	/**
+	 * Constructor.
+	 *
+	 * @param array $settings SMTP settings array.
+	 */
+	public function __construct( $settings = array() ) {
+		if ( empty( $settings ) ) {
+			$settings = get_option( 'mskd_settings', array() );
+		}
+		$this->settings = $settings;
+	}
 
-    /**
-     * Check if mailer can send emails (always true - uses PHP mail as fallback).
-     *
-     * @return bool
-     */
-    public function is_enabled() {
-        return true;
-    }
+	/**
+	 * Check if mailer can send emails (always true - uses PHP mail as fallback).
+	 *
+	 * @return bool
+	 */
+	public function is_enabled() {
+		return true;
+	}
 
-    /**
-     * Check if SMTP is specifically enabled and configured.
-     *
-     * @return bool
-     */
-    public function is_smtp_enabled() {
-        return ! empty( $this->settings['smtp_enabled'] ) 
-            && ! empty( $this->settings['smtp_host'] );
-    }
+	/**
+	 * Check if SMTP is specifically enabled and configured.
+	 *
+	 * @return bool
+	 */
+	public function is_smtp_enabled() {
+		return ! empty( $this->settings['smtp_enabled'] )
+			&& ! empty( $this->settings['smtp_host'] );
+	}
 
-    /**
-     * Get the last error message.
-     *
-     * @return string
-     */
-    public function get_last_error() {
-        return $this->last_error;
-    }
+	/**
+	 * Get the last error message.
+	 *
+	 * @return string
+	 */
+	public function get_last_error() {
+		return $this->last_error;
+	}
 
-    /**
-     * Get the debug log.
-     *
-     * @return array
-     */
-    public function get_debug_log() {
-        return $this->debug_log;
-    }
+	/**
+	 * Get the debug log.
+	 *
+	 * @return array
+	 */
+	public function get_debug_log() {
+		return $this->debug_log;
+	}
 
-    /**
-     * Send an email via SMTP.
-     *
-     * @param string $to      Recipient email address.
-     * @param string $subject Email subject.
-     * @param string $body    Email body (HTML).
-     * @param array  $headers Optional. Additional headers.
-     * @return bool True on success, false on failure.
-     */
-    public function send( $to, $subject, $body, $headers = array() ) {
-        $this->last_error = '';
-        $this->debug_log  = array();
+	/**
+	 * Send an email via SMTP.
+	 *
+	 * @param string $to      Recipient email address.
+	 * @param string $subject Email subject.
+	 * @param string $body    Email body (HTML).
+	 * @param array  $headers Optional. Additional headers.
+	 * @return bool True on success, false on failure.
+	 */
+	public function send( $to, $subject, $body, $headers = array() ) {
+		$this->last_error = '';
+		$this->debug_log  = array();
 
-        // Create a local PHPMailer instance to avoid conflicts with global instance.
-        require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
-        require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
-        require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
+		// Create a local PHPMailer instance to avoid conflicts with global instance.
+		require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+		require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
+		require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
 
-        $mailer = new PHPMailer\PHPMailer\PHPMailer( true );
+		$mailer = new PHPMailer\PHPMailer\PHPMailer( true );
 
-        try {
-            // Configure mailer - use SMTP if configured, otherwise use PHP mail.
-            if ( $this->is_smtp_enabled() ) {
-                $mailer->isSMTP();
-                $mailer->Host       = $this->settings['smtp_host'];
-                $mailer->Port       = ! empty( $this->settings['smtp_port'] ) ? (int) $this->settings['smtp_port'] : 587;
-                $mailer->SMTPSecure = $this->get_smtp_secure();
-                $mailer->SMTPAuth   = ! empty( $this->settings['smtp_auth'] );
+		try {
+			// Configure mailer - use SMTP if configured, otherwise use PHP mail.
+			if ( $this->is_smtp_enabled() ) {
+				$mailer->isSMTP();
+				$mailer->Host       = $this->settings['smtp_host'];
+				$mailer->Port       = ! empty( $this->settings['smtp_port'] ) ? (int) $this->settings['smtp_port'] : 587;
+				$mailer->SMTPSecure = $this->get_smtp_secure();
+				$mailer->SMTPAuth   = ! empty( $this->settings['smtp_auth'] );
 
-                if ( $mailer->SMTPAuth ) {
-                    $mailer->Username = ! empty( $this->settings['smtp_username'] ) ? $this->settings['smtp_username'] : '';
-                    $mailer->Password = ! empty( $this->settings['smtp_password'] ) ? base64_decode( $this->settings['smtp_password'] ) : '';
-                }
-            } else {
-                // Use PHP's mail() function as fallback.
-                $mailer->isMail();
-            }
+				if ( $mailer->SMTPAuth ) {
+					$mailer->Username = ! empty( $this->settings['smtp_username'] ) ? $this->settings['smtp_username'] : '';
+					$mailer->Password = ! empty( $this->settings['smtp_password'] ) ? base64_decode( $this->settings['smtp_password'] ) : '';
+				}
+			} else {
+				// Use PHP's mail() function as fallback.
+				$mailer->isMail();
+			}
 
-            // Set sender.
-            $from_email = ! empty( $this->settings['from_email'] ) ? $this->settings['from_email'] : get_bloginfo( 'admin_email' );
-            $from_name  = ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : get_bloginfo( 'name' );
-            $mailer->setFrom( $from_email, $from_name );
+			// Set sender.
+			$from_email = ! empty( $this->settings['from_email'] ) ? $this->settings['from_email'] : get_bloginfo( 'admin_email' );
+			$from_name  = ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : get_bloginfo( 'name' );
+			$mailer->setFrom( $from_email, $from_name );
 
-            // Set reply-to.
-            $reply_to = ! empty( $this->settings['reply_to'] ) ? $this->settings['reply_to'] : $from_email;
-            $mailer->addReplyTo( $reply_to );
+			// Set reply-to.
+			$reply_to = ! empty( $this->settings['reply_to'] ) ? $this->settings['reply_to'] : $from_email;
+			$mailer->addReplyTo( $reply_to );
 
-            // Set recipient.
-            $mailer->addAddress( $to );
+			// Set recipient.
+			$mailer->addAddress( $to );
 
-            // Set email content.
-            $mailer->isHTML( true );
-            $mailer->CharSet  = 'UTF-8';
-            $mailer->Subject  = $subject;
-            $mailer->Body     = $body;
-            $mailer->AltBody  = wp_strip_all_tags( $body );
+			// Set email content.
+			$mailer->isHTML( true );
+			$mailer->CharSet = 'UTF-8';
+			$mailer->Subject = $subject;
+			$mailer->Body    = $body;
+			$mailer->AltBody = wp_strip_all_tags( $body );
 
-            // Process additional headers.
-            $this->process_headers( $mailer, $headers );
+			// Process additional headers.
+			$this->process_headers( $mailer, $headers );
 
-            // Enable debug mode for logging (internal only).
-            $mailer->SMTPDebug = 0;
-            $mailer->Debugoutput = function( $str, $level ) {
-                $this->debug_log[] = array(
-                    'level'   => $level,
-                    'message' => $str,
-                    'time'    => current_time( 'mysql' ),
-                );
-            };
+			// Enable debug mode for logging (internal only).
+			$mailer->SMTPDebug   = 0;
+			$mailer->Debugoutput = function ( $str, $level ) {
+				$this->debug_log[] = array(
+					'level'   => $level,
+					'message' => $str,
+					'time'    => current_time( 'mysql' ),
+				);
+			};
 
-            // Attempt to send.
-            $result = $mailer->send();
+			// Attempt to send.
+			$result = $mailer->send();
 
-            if ( $result ) {
-                $this->log_success( $to, $subject );
-            }
+			if ( $result ) {
+				$this->log_success( $to, $subject );
+			}
 
-            return $result;
+			return $result;
 
-        } catch ( PHPMailer\PHPMailer\Exception $e ) {
-            $this->log_error( $mailer->ErrorInfo );
-            return false;
-        } catch ( Exception $e ) {
-            $this->log_error( $e->getMessage() );
-            return false;
-        }
-    }
+		} catch ( PHPMailer\PHPMailer\Exception $e ) {
+			$this->log_error( $mailer->ErrorInfo );
+			return false;
+		} catch ( Exception $e ) {
+			$this->log_error( $e->getMessage() );
+			return false;
+		}
+	}
 
-    /**
-     * Test SMTP connection.
-     *
-     * @return array Result array with 'success' and 'message' keys.
-     */
-    public function test_connection() {
-        $this->last_error = '';
-        $this->debug_log  = array();
+	/**
+	 * Test SMTP connection.
+	 *
+	 * @return array Result array with 'success' and 'message' keys.
+	 */
+	public function test_connection() {
+		$this->last_error = '';
+		$this->debug_log  = array();
 
-        // Check if SMTP is enabled.
-        if ( ! $this->is_smtp_enabled() ) {
-            return array(
-                'success' => false,
-                'message' => __( 'SMTP is not enabled or configured. Please fill in SMTP settings.', 'mail-system-by-katsarov-design' ),
-            );
-        }
+		// Check if SMTP is enabled.
+		if ( ! $this->is_smtp_enabled() ) {
+			return array(
+				'success' => false,
+				'message' => __( 'SMTP is not enabled or configured. Please fill in SMTP settings.', 'mail-system-by-katsarov-design' ),
+			);
+		}
 
-        // Validate from_email before proceeding.
-        $from_email = ! empty( $this->settings['from_email'] ) ? $this->settings['from_email'] : get_bloginfo( 'admin_email' );
-        if ( ! is_email( $from_email ) ) {
-            return array(
-                'success' => false,
-                'message' => __( 'Invalid sender email address.', 'mail-system-by-katsarov-design' ),
-            );
-        }
+		// Validate from_email before proceeding.
+		$from_email = ! empty( $this->settings['from_email'] ) ? $this->settings['from_email'] : get_bloginfo( 'admin_email' );
+		if ( ! is_email( $from_email ) ) {
+			return array(
+				'success' => false,
+				'message' => __( 'Invalid sender email address.', 'mail-system-by-katsarov-design' ),
+			);
+		}
 
-        // Use WordPress PHPMailer.
-        require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
-        require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
-        require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
+		// Use WordPress PHPMailer.
+		require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+		require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
+		require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
 
-        $mailer = new PHPMailer\PHPMailer\PHPMailer( true );
+		$mailer = new PHPMailer\PHPMailer\PHPMailer( true );
 
-        try {
-            // Configure SMTP.
-            $mailer->isSMTP();
-            $mailer->Host       = $this->settings['smtp_host'];
-            $mailer->Port       = ! empty( $this->settings['smtp_port'] ) ? (int) $this->settings['smtp_port'] : 587;
-            $mailer->SMTPSecure = $this->get_smtp_secure();
-            $mailer->SMTPAuth   = ! empty( $this->settings['smtp_auth'] );
-            $mailer->Timeout    = 15;
+		try {
+			// Configure SMTP.
+			$mailer->isSMTP();
+			$mailer->Host       = $this->settings['smtp_host'];
+			$mailer->Port       = ! empty( $this->settings['smtp_port'] ) ? (int) $this->settings['smtp_port'] : 587;
+			$mailer->SMTPSecure = $this->get_smtp_secure();
+			$mailer->SMTPAuth   = ! empty( $this->settings['smtp_auth'] );
+			$mailer->Timeout    = 15;
 
-            if ( $mailer->SMTPAuth ) {
-                $mailer->Username = ! empty( $this->settings['smtp_username'] ) ? $this->settings['smtp_username'] : '';
-                $mailer->Password = ! empty( $this->settings['smtp_password'] ) ? base64_decode( $this->settings['smtp_password'] ) : '';
-            }
+			if ( $mailer->SMTPAuth ) {
+				$mailer->Username = ! empty( $this->settings['smtp_username'] ) ? $this->settings['smtp_username'] : '';
+				$mailer->Password = ! empty( $this->settings['smtp_password'] ) ? base64_decode( $this->settings['smtp_password'] ) : '';
+			}
 
-            // Set sender.
-            $from_name  = ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : get_bloginfo( 'name' );
-            $mailer->setFrom( $from_email, $from_name );
+			// Set sender.
+			$from_name = ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : get_bloginfo( 'name' );
+			$mailer->setFrom( $from_email, $from_name );
 
-            // Set test recipient.
-            $to = get_bloginfo( 'admin_email' );
-            $mailer->addAddress( $to );
+			// Set test recipient.
+			$to = get_bloginfo( 'admin_email' );
+			$mailer->addAddress( $to );
 
-            // Set test email content.
-            $mailer->isHTML( true );
-            $mailer->CharSet = 'UTF-8';
-            $mailer->Subject = sprintf(
-                /* translators: %s: Site name */
-                __( '[%s] SMTP Test Email', 'mail-system-by-katsarov-design' ),
-                get_bloginfo( 'name' )
-            );
-            $mailer->Body = sprintf(
-                /* translators: %1$s: Current time, %2$s: SMTP host, %3$s: SMTP port */
-                __( '<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP server:</strong> %2$s:%3$s</p>', 'mail-system-by-katsarov-design' ),
-                current_time( 'mysql' ),
-                $this->settings['smtp_host'],
-                $this->settings['smtp_port']
-            );
-            $mailer->AltBody = wp_strip_all_tags( $mailer->Body );
+			// Set test email content.
+			$mailer->isHTML( true );
+			$mailer->CharSet = 'UTF-8';
+			$mailer->Subject = sprintf(
+				/* translators: %s: Site name */
+				__( '[%s] SMTP Test Email', 'mail-system-by-katsarov-design' ),
+				get_bloginfo( 'name' )
+			);
+			$mailer->Body = sprintf(
+				/* translators: %1$s: Current time, %2$s: SMTP host, %3$s: SMTP port */
+				__( '<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP server:</strong> %2$s:%3$s</p>', 'mail-system-by-katsarov-design' ),
+				current_time( 'mysql' ),
+				$this->settings['smtp_host'],
+				$this->settings['smtp_port']
+			);
+			$mailer->AltBody = wp_strip_all_tags( $mailer->Body );
 
-            // Try to send.
-            $result = $mailer->send();
+			// Try to send.
+			$result = $mailer->send();
 
-            if ( $result ) {
-                $this->log_success( $to, $mailer->Subject );
-                return array(
-                    'success' => true,
-                    'message' => sprintf(
-                        /* translators: %s: Admin email address */
-                        __( 'Test email sent successfully to %s!', 'mail-system-by-katsarov-design' ),
-                        $to
-                    ),
-                );
-            }
+			if ( $result ) {
+				$this->log_success( $to, $mailer->Subject );
+				return array(
+					'success' => true,
+					'message' => sprintf(
+						/* translators: %s: Admin email address */
+						__( 'Test email sent successfully to %s!', 'mail-system-by-katsarov-design' ),
+						$to
+					),
+				);
+			}
 
-            return array(
-                'success' => false,
-                'message' => __( 'Failed to send test email.', 'mail-system-by-katsarov-design' ),
-            );
+			return array(
+				'success' => false,
+				'message' => __( 'Failed to send test email.', 'mail-system-by-katsarov-design' ),
+			);
 
-        } catch ( PHPMailer\PHPMailer\Exception $e ) {
-            $this->log_error( $mailer->ErrorInfo );
-            return array(
-                'success' => false,
-                'message' => sprintf(
-                    /* translators: %s: Error message */
-                    __( 'SMTP error: %s', 'mail-system-by-katsarov-design' ),
-                    $mailer->ErrorInfo
-                ),
-            );
-        } catch ( Exception $e ) {
-            $this->log_error( $e->getMessage() );
-            return array(
-                'success' => false,
-                'message' => sprintf(
-                    /* translators: %s: Error message */
-                    __( 'Error: %s', 'mail-system-by-katsarov-design' ),
-                    $e->getMessage()
-                ),
-            );
-        }
-    }
+		} catch ( PHPMailer\PHPMailer\Exception $e ) {
+			$this->log_error( $mailer->ErrorInfo );
+			return array(
+				'success' => false,
+				'message' => sprintf(
+					/* translators: %s: Error message */
+					__( 'SMTP error: %s', 'mail-system-by-katsarov-design' ),
+					$mailer->ErrorInfo
+				),
+			);
+		} catch ( Exception $e ) {
+			$this->log_error( $e->getMessage() );
+			return array(
+				'success' => false,
+				'message' => sprintf(
+					/* translators: %s: Error message */
+					__( 'Error: %s', 'mail-system-by-katsarov-design' ),
+					$e->getMessage()
+				),
+			);
+		}
+	}
 
-    /**
-     * Get SMTP secure setting.
-     *
-     * @return string PHPMailer secure type.
-     */
-    private function get_smtp_secure() {
-        $security = ! empty( $this->settings['smtp_security'] ) ? $this->settings['smtp_security'] : '';
+	/**
+	 * Get SMTP secure setting.
+	 *
+	 * @return string PHPMailer secure type.
+	 */
+	private function get_smtp_secure() {
+		$security = ! empty( $this->settings['smtp_security'] ) ? $this->settings['smtp_security'] : '';
 
-        switch ( $security ) {
-            case 'ssl':
-                return PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
-            case 'tls':
-                return PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
-            default:
-                return '';
-        }
-    }
+		switch ( $security ) {
+			case 'ssl':
+				return PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
+			case 'tls':
+				return PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+			default:
+				return '';
+		}
+	}
 
-    /**
-     * Process additional headers.
-     *
-     * @param PHPMailer\PHPMailer\PHPMailer $phpmailer PHPMailer instance.
-     * @param array                          $headers   Headers array.
-     */
-    private function process_headers( $phpmailer, $headers ) {
-        if ( empty( $headers ) || ! is_array( $headers ) ) {
-            return;
-        }
+	/**
+	 * Process additional headers.
+	 *
+	 * @param PHPMailer\PHPMailer\PHPMailer $phpmailer PHPMailer instance.
+	 * @param array                         $headers   Headers array.
+	 */
+	private function process_headers( $phpmailer, $headers ) {
+		if ( empty( $headers ) || ! is_array( $headers ) ) {
+			return;
+		}
 
-        foreach ( $headers as $header ) {
-            if ( is_string( $header ) && strpos( $header, ':' ) !== false ) {
-                list( $name, $value ) = explode( ':', $header, 2 );
-                $name  = trim( $name );
-                $value = trim( $value );
+		foreach ( $headers as $header ) {
+			if ( is_string( $header ) && strpos( $header, ':' ) !== false ) {
+				list( $name, $value ) = explode( ':', $header, 2 );
+				$name                 = trim( $name );
+				$value                = trim( $value );
 
-                // Skip headers that PHPMailer handles.
-                if ( in_array( strtolower( $name ), array( 'from', 'to', 'cc', 'bcc', 'reply-to', 'content-type' ), true ) ) {
-                    continue;
-                }
+				// Skip headers that PHPMailer handles.
+				if ( in_array( strtolower( $name ), array( 'from', 'to', 'cc', 'bcc', 'reply-to', 'content-type' ), true ) ) {
+					continue;
+				}
 
-                $phpmailer->addCustomHeader( $name, $value );
-            }
-        }
-    }
+				$phpmailer->addCustomHeader( $name, $value );
+			}
+		}
+	}
 
-    /**
-     * Log successful email send.
-     *
-     * @param string $to      Recipient.
-     * @param string $subject Subject.
-     */
-    private function log_success( $to, $subject ) {
-        if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
-            error_log( sprintf(
-                '[MSKD SMTP] Email sent successfully to %s: %s',
-                $to,
-                $subject
-            ) );
-        }
-    }
+	/**
+	 * Log successful email send.
+	 *
+	 * @param string $to      Recipient.
+	 * @param string $subject Subject.
+	 */
+	private function log_success( $to, $subject ) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+			error_log(
+				sprintf(
+					'[MSKD SMTP] Email sent successfully to %s: %s',
+					$to,
+					$subject
+				)
+			);
+		}
+	}
 
-    /**
-     * Log an error.
-     *
-     * @param string $message Error message.
-     */
-    private function log_error( $message ) {
-        $this->last_error = $message;
+	/**
+	 * Log an error.
+	 *
+	 * @param string $message Error message.
+	 */
+	private function log_error( $message ) {
+		$this->last_error = $message;
 
-        if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
-            error_log( sprintf( '[MSKD SMTP] Error: %s', $message ) );
-        }
-    }
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+			error_log( sprintf( '[MSKD SMTP] Error: %s', $message ) );
+		}
+	}
 }

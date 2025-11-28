@@ -203,6 +203,10 @@ abstract class TestCase extends PHPUnitTestCase {
                     $now->setTime( (int) $now->format( 'H' ), (int) $now->format( 'i' ), 0 );
                     return $now->format( 'Y-m-d H:i:s' );
                 },
+                'mskd_kses_email'               => function ( $content ) {
+                    // In tests, return content as-is (sanitization happens in WordPress).
+                    return $content;
+                },
             )
         );
     }
