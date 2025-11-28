@@ -1426,3 +1426,94 @@ msgid_plural "%d lists skipped (already exist)."
 msgstr[0] "%d Liste übersprungen (existiert bereits)."
 msgstr[1] "%d Listen übersprungen (existieren bereits)."
 
+#: admin/partials/import-export.php
+msgid "Manage your subscriber data with easy import and export functionality."
+msgstr "Verwalten Sie Ihre Abonnentendaten mit einfacher Import- und Exportfunktionalität."
+
+#: admin/partials/import-export.php
+msgid "Export Data"
+msgstr "Daten exportieren"
+
+#: admin/partials/import-export.php
+msgid "Download subscribers or lists as CSV"
+msgstr "Abonnenten oder Listen als CSV herunterladen"
+
+#: admin/partials/import-export.php
+msgid "Export to CSV"
+msgstr "Als CSV exportieren"
+
+#: admin/partials/import-export.php
+msgid "Import Data"
+msgstr "Daten importieren"
+
+#: admin/partials/import-export.php
+msgid "Upload subscribers or lists from CSV"
+msgstr "Abonnenten oder Listen aus CSV hochladen"
+
+#: admin/partials/import-export.php
+msgid "CSV File"
+msgstr "CSV-Datei"
+
+#: admin/partials/import-export.php
+msgid "Drag & drop your CSV file here or"
+msgstr "Ziehen Sie Ihre CSV-Datei hierher oder"
+
+#: admin/partials/import-export.php
+msgid "browse"
+msgstr "durchsuchen"
+
+#: admin/partials/import-export.php
+msgid "Maximum file size: 5MB"
+msgstr "Maximale Dateigröße: 5MB"
+
+#: admin/partials/import-export.php
+msgid "Import options"
+msgstr "Importoptionen"
+
+#: admin/partials/import-export.php
+msgid "Assign subscribers to lists specified in the \"lists\" column. New lists will be created automatically."
+msgstr "Abonnenten den in der Spalte \"lists\" angegebenen Listen zuweisen. Neue Listen werden automatisch erstellt."
+
+#: admin/partials/import-export.php
+msgid "Import from CSV"
+msgstr "Aus CSV importieren"
+
+#: admin/partials/import-export.php
+msgid "File Format Guide"
+msgstr "Dateiformat-Leitfaden"
+
+#: admin/partials/import-export.php
+msgid "Learn how to format your CSV files for successful imports"
+msgstr "Erfahren Sie, wie Sie Ihre CSV-Dateien für erfolgreiche Importe formatieren"
+
+#: admin/partials/import-export.php
+msgid "Subscribers CSV Format"
+msgstr "CSV-Format für Abonnenten"
+
+#: admin/partials/import-export.php
+msgid "The CSV file must contain at minimum an \"email\" column."
+msgstr "Die CSV-Datei muss mindestens eine \"email\"-Spalte enthalten."
+
+#: admin/partials/import-export.php
+msgid "Lists CSV Format"
+msgstr "CSV-Format für Listen"
+
+#: admin/partials/import-export.php
+msgid "The CSV file must contain at minimum a \"name\" column."
+msgstr "Die CSV-Datei muss mindestens eine \"name\"-Spalte enthalten."
+
+#: admin/partials/import-export.php
+msgid "Required"
+msgstr "Erforderlich"
+
+#: admin/partials/import-export.php
+msgid "Optional"
+msgstr "Optional"
+
+#: admin/partials/import-export.php
+msgid "Example"
+msgstr "Beispiel"
+
+#: admin/partials/import-export.php
+msgid "Remove selected file"
+msgstr "Ausgewählte Datei entfernen"
