@@ -145,17 +145,17 @@ $lists = $list_service->get_all();
 								<span class="dashicons dashicons-cloud-upload"></span>
 								<p class="mskd-file-upload-text">
 									<?php esc_html_e( 'Drag & drop your CSV file here or', 'mail-system-by-katsarov-design' ); ?>
-									<span class="mskd-file-upload-link"><?php esc_html_e( 'browse', 'mail-system-by-katsarov-design' ); ?></span>
+									<span class="mskd-file-upload-link" role="button" tabindex="0"><?php esc_html_e( 'browse', 'mail-system-by-katsarov-design' ); ?></span>
 								</p>
 								<p class="mskd-file-upload-hint">
 									<?php esc_html_e( 'Maximum file size: 5MB', 'mail-system-by-katsarov-design' ); ?>
 								</p>
 							</div>
 							<input type="file" name="import_file" id="import_file" accept=".csv" required class="mskd-file-input">
-							<div class="mskd-file-selected" style="display: none;">
+							<div class="mskd-file-selected mskd-hidden">
 								<span class="dashicons dashicons-media-spreadsheet"></span>
 								<span class="mskd-file-name"></span>
-								<button type="button" class="mskd-file-remove">
+								<button type="button" class="mskd-file-remove" aria-label="<?php esc_attr_e( 'Remove selected file', 'mail-system-by-katsarov-design' ); ?>">
 									<span class="dashicons dashicons-no-alt"></span>
 								</button>
 							</div>
@@ -308,19 +308,46 @@ Updates,Product update notifications</pre>
 	document.addEventListener('DOMContentLoaded', function() {
 		const fileInput = document.getElementById('import_file');
 		const uploadArea = document.getElementById('mskd-file-upload-area');
+
+		// Exit early if required elements are not found.
+		if (!fileInput || !uploadArea) {
+			return;
+		}
+
 		const fileContent = uploadArea.querySelector('.mskd-file-upload-content');
 		const fileSelected = uploadArea.querySelector('.mskd-file-selected');
 		const fileName = uploadArea.querySelector('.mskd-file-name');
 		const fileRemove = uploadArea.querySelector('.mskd-file-remove');
+		const browseLink = uploadArea.querySelector('.mskd-file-upload-link');
 
-		// Handle file selection
+		// Exit early if required child elements are not found.
+		if (!fileContent || !fileSelected || !fileName || !fileRemove) {
+			return;
+		}
+
+		// Handle file selection.
 		fileInput.addEventListener('change', function() {
 			if (this.files.length > 0) {
 				showSelectedFile(this.files[0].name);
 			}
 		});
 
-		// Handle drag and drop
+		// Handle browse link click and keyboard activation.
+		if (browseLink) {
+			browseLink.addEventListener('click', function(e) {
+				e.preventDefault();
+				fileInput.click();
+			});
+
+			browseLink.addEventListener('keydown', function(e) {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault();
+					fileInput.click();
+				}
+			});
+		}
+
+		// Handle drag and drop.
 		uploadArea.addEventListener('dragover', function(e) {
 			e.preventDefault();
 			uploadArea.classList.add('mskd-file-upload-area-dragover');
@@ -340,7 +367,7 @@ Updates,Product update notifications</pre>
 			}
 		});
 
-		// Handle file remove
+		// Handle file remove.
 		fileRemove.addEventListener('click', function(e) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -350,14 +377,14 @@ Updates,Product update notifications</pre>
 
 		function showSelectedFile(name) {
 			fileName.textContent = name;
-			fileContent.style.display = 'none';
-			fileSelected.style.display = 'flex';
+			fileContent.classList.add('mskd-hidden');
+			fileSelected.classList.remove('mskd-hidden');
 			uploadArea.classList.add('mskd-file-upload-area-has-file');
 		}
 
 		function hideSelectedFile() {
-			fileContent.style.display = 'block';
-			fileSelected.style.display = 'none';
+			fileContent.classList.remove('mskd-hidden');
+			fileSelected.classList.add('mskd-hidden');
 			uploadArea.classList.remove('mskd-file-upload-area-has-file');
 		}
 	});

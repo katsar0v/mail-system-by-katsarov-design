@@ -3,6 +3,7 @@
 // ==========================================================================
 // Styles for the import/export admin page.
 
+@use 'sass:color';
 @use '../abstracts' as *;
 
 // ==========================================================================
@@ -107,7 +108,7 @@
 }
 
 .mskd-card-icon-export {
-  background: linear-gradient(135deg, $color-success, darken($color-success, 10%));
+  background: linear-gradient(135deg, $color-success, color.adjust($color-success, $lightness: -10%));
 }
 
 .mskd-card-icon-import {
@@ -115,7 +116,7 @@
 }
 
 .mskd-card-icon-info {
-  background: linear-gradient(135deg, $color-info, darken($color-info, 10%));
+  background: linear-gradient(135deg, $color-info, color.adjust($color-info, $lightness: -10%));
 }
 
 .mskd-card-header-content {
@@ -314,8 +315,16 @@
   }
 
   &:hover {
-    background: darken($color-error, 10%);
+    background: color.adjust($color-error, $lightness: -10%);
   }
+}
+
+// ==========================================================================
+// UTILITY CLASSES
+// ==========================================================================
+
+.mskd-hidden {
+  display: none;
 }
 
 // ==========================================================================

@@ -1511,3 +1511,6 @@ msgstr ""
 msgid "Example"
 msgstr ""
 
+#: admin/partials/import-export.php
+msgid "Remove selected file"
+msgstr ""

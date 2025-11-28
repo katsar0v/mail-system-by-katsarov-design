@@ -1514,3 +1514,6 @@ msgstr "Незадължително"
 msgid "Example"
 msgstr "Пример"
 
+#: admin/partials/import-export.php
+msgid "Remove selected file"
+msgstr "Премахни избрания файл"
