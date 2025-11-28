@@ -196,3 +196,145 @@
     color: $color-error !important;
   }
 }
+
+// Email Content Accordion
+.mskd-email-content-accordion {
+  @include card;
+  width: 100%;
+  margin: $spacing-5 0;
+  border-top: 3px solid $color-primary;
+  overflow: hidden;
+}
+
+.mskd-accordion-toggle {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: $spacing-5 $spacing-6;
+  background: linear-gradient(to bottom, $color-gray-100, $color-white);
+  border: none;
+  border-bottom: $border-width solid $color-gray-200;
+  cursor: pointer;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-wp-text;
+  text-align: left;
+  gap: $spacing-3;
+  @include transition(background-color);
+
+  &:hover {
+    background: linear-gradient(to bottom, $color-gray-200, $color-gray-100);
+  }
+
+  &:focus {
+    outline: 2px solid $color-primary;
+    outline-offset: -2px;
+  }
+
+  &[aria-expanded="true"] {
+    border-bottom-color: $color-gray-200;
+
+    .mskd-accordion-arrow {
+      transform: rotate(180deg);
+    }
+  }
+
+  &[aria-expanded="false"] {
+    border-bottom: none;
+  }
+}
+
+.mskd-accordion-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, $color-primary, $color-primary-hover);
+  border-radius: $border-radius;
+  flex-shrink: 0;
+
+  &::before {
+    color: $color-white;
+    font-size: 18px;
+  }
+}
+
+.mskd-accordion-title {
+  flex: 1;
+}
+
+.mskd-accordion-arrow {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: $color-gray-500;
+  @include transition(transform);
+}
+
+.mskd-accordion-content {
+  padding: $spacing-6;
+  background: $color-white;
+}
+
+.mskd-email-meta {
+  margin-bottom: $spacing-5;
+}
+
+.mskd-email-subject {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  background: $color-gray-100;
+  border-radius: $border-radius;
+  font-size: $font-size-base;
+}
+
+.mskd-email-label {
+  font-weight: $font-weight-semibold;
+  color: $color-gray-600;
+  flex-shrink: 0;
+}
+
+.mskd-email-value {
+  color: $color-wp-text;
+  font-weight: $font-weight-medium;
+}
+
+.mskd-email-body {
+  border: $border-width solid $color-gray-200;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+}
+
+.mskd-email-body-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-3 $spacing-4;
+  background: $color-gray-100;
+  border-bottom: $border-width solid $color-gray-200;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-gray-600;
+
+  .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.mskd-email-body-preview {
+  background: $color-white;
+  padding: $spacing-1;
+}
+
+.mskd-email-iframe {
+  width: 100%;
+  min-height: 450px;
+  border: none;
+  display: block;
+  background: $color-white;
+}

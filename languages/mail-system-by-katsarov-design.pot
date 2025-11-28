@@ -1921,6 +1921,22 @@ msgstr ""
 msgid "Example"
 msgstr ""
 
+#: admin/partials/queue-detail.php
+msgid "Email Content"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Subject:"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Body:"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgid "Email Preview"
+msgstr ""
+
 #: includes/Admin/class-admin.php
 msgid "No subscribers selected."
 msgstr ""
