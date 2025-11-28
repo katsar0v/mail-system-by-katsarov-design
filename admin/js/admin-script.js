@@ -369,6 +369,179 @@
                 $button.removeClass('button-primary');
             }, 2000);
         }
+
+        // =====================================================================
+        // Subscribers Page - Batch Edit
+        // =====================================================================
+
+        // Only run batch edit logic if on the subscribers page
+        if ($('.mskd-subscribers-table').length) {
+            
+            // SlimSelect instance for bulk lists
+            var bulkListsSlimSelect = null;
+
+            /**
+             * Initialize SlimSelect for bulk list selector
+             */
+            function initBulkListsSlimSelect() {
+                var selectElement = document.querySelector('.mskd-slimselect-bulk-lists');
+                
+                if (!selectElement || bulkListsSlimSelect) {
+                    return;
+                }
+
+                // Check if SlimSelect is available
+                if (typeof SlimSelect === 'undefined') {
+                    setTimeout(initBulkListsSlimSelect, 100);
+                    return;
+                }
+
+                bulkListsSlimSelect = new SlimSelect({
+                    select: selectElement,
+                    settings: {
+                        placeholderText: (typeof mskd_admin !== 'undefined' && mskd_admin.strings.select_lists_placeholder) || 'Select lists...',
+                        searchPlaceholderText: (typeof mskd_admin !== 'undefined' && mskd_admin.strings.search_placeholder) || 'Search...',
+                        searchText: (typeof mskd_admin !== 'undefined' && mskd_admin.strings.no_results) || 'No results found',
+                        allowDeselect: true,
+                        closeOnSelect: false,
+                        showSearch: true
+                    }
+                });
+            }
+
+            // Toggle bulk action controls based on selected action
+            $('#mskd-bulk-action').on('change', function() {
+                var action = $(this).val();
+                if (action === 'assign_lists' || action === 'remove_lists') {
+                    $('#mskd-bulk-list-wrapper').show();
+                    $('#mskd-bulk-apply').show();
+                    // Initialize SlimSelect when first shown
+                    initBulkListsSlimSelect();
+                } else {
+                    $('#mskd-bulk-list-wrapper').hide();
+                    $('#mskd-bulk-apply').hide();
+                }
+            });
+
+            // Select all checkboxes
+            $('#mskd-select-all').on('change', function() {
+                var isChecked = $(this).is(':checked');
+                $('.mskd-subscriber-checkbox').prop('checked', isChecked);
+                updateSelectedCount();
+            });
+
+            // Update selected count on individual checkbox change
+            $(document).on('change', '.mskd-subscriber-checkbox', function() {
+                updateSelectedCount();
+                
+                // Update "select all" checkbox state
+                var totalCheckboxes = $('.mskd-subscriber-checkbox').length;
+                var checkedCheckboxes = $('.mskd-subscriber-checkbox:checked').length;
+                
+                if (checkedCheckboxes === 0) {
+                    $('#mskd-select-all').prop('checked', false);
+                    $('#mskd-select-all').prop('indeterminate', false);
+                } else if (checkedCheckboxes === totalCheckboxes) {
+                    $('#mskd-select-all').prop('checked', true);
+                    $('#mskd-select-all').prop('indeterminate', false);
+                } else {
+                    $('#mskd-select-all').prop('checked', false);
+                    $('#mskd-select-all').prop('indeterminate', true);
+                }
+            });
+
+            // Update selected count display
+            function updateSelectedCount() {
+                var count = $('.mskd-subscriber-checkbox:checked').length;
+                $('#mskd-selected-count').text(count);
+            }
+
+            // Handle bulk apply button click
+            $('#mskd-bulk-apply').on('click', function(e) {
+                e.preventDefault();
+
+                var $button = $(this);
+                var $result = $('#mskd-bulk-result');
+                var action = $('#mskd-bulk-action').val();
+                var listIds = bulkListsSlimSelect ? bulkListsSlimSelect.getSelected() : [];
+                var subscriberIds = [];
+
+                // Collect selected subscriber IDs
+                $('.mskd-subscriber-checkbox:checked').each(function() {
+                    subscriberIds.push($(this).val());
+                });
+
+                // Validate inputs
+                if (subscriberIds.length === 0) {
+                    $result.removeClass('mskd-bulk-success').addClass('mskd-bulk-error')
+                        .text(mskd_admin.strings.no_subscribers_selected || 'No subscribers selected.');
+                    return;
+                }
+
+                if (!listIds || listIds.length === 0) {
+                    $result.removeClass('mskd-bulk-success').addClass('mskd-bulk-error')
+                        .text(mskd_admin.strings.no_lists_selected || 'No lists selected.');
+                    return;
+                }
+
+                // Determine AJAX action
+                var ajaxAction = action === 'assign_lists' ? 'mskd_batch_assign_lists' : 'mskd_batch_remove_lists';
+
+                // Show loading state
+                var originalText = $button.text();
+                $button.prop('disabled', true).text(mskd_admin.strings.processing || 'Processing...');
+                $result.removeClass('mskd-bulk-success mskd-bulk-error').text('');
+
+                // Send AJAX request
+                $.ajax({
+                    url: mskd_admin.ajax_url,
+                    type: 'POST',
+                    timeout: 60000,
+                    data: {
+                        action: ajaxAction,
+                        nonce: mskd_admin.nonce,
+                        subscriber_ids: subscriberIds,
+                        list_ids: listIds
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $result.removeClass('mskd-bulk-error').addClass('mskd-bulk-success')
+                                .text(response.data.message);
+                            
+                            // Clear checkboxes after success
+                            $('.mskd-subscriber-checkbox').prop('checked', false);
+                            $('#mskd-select-all').prop('checked', false).prop('indeterminate', false);
+                            updateSelectedCount();
+                            
+                            // Reset form - clear the SlimSelect and reset action dropdown
+                            $('#mskd-bulk-action').val('');
+                            if (bulkListsSlimSelect) {
+                                bulkListsSlimSelect.setSelected([]);
+                            }
+                            $('#mskd-bulk-list-wrapper').hide();
+                            $('#mskd-bulk-apply').hide();
+                        } else {
+                            var errorMsg = (response.data && response.data.message) 
+                                ? response.data.message 
+                                : (mskd_admin.strings.error || 'Error occurred.');
+                            $result.removeClass('mskd-bulk-success').addClass('mskd-bulk-error')
+                                .text(errorMsg);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        var errorMsg = mskd_admin.strings.error || 'Error occurred.';
+                        if (status === 'timeout') {
+                            errorMsg = mskd_admin.strings.timeout || 'Request timed out.';
+                        }
+                        $result.removeClass('mskd-bulk-success').addClass('mskd-bulk-error')
+                            .text(errorMsg);
+                    },
+                    complete: function() {
+                        $button.prop('disabled', false).text(originalText);
+                    }
+                });
+            });
+        }
     });
 
 })(jQuery);
