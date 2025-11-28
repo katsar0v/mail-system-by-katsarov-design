@@ -41,8 +41,11 @@ msgid "Lists"
 msgstr "Listen"
 
 #: admin/class-admin.php
-msgid "New email"
-msgstr "Neue E-Mail"
+#: admin/partials/compose.php
+#: admin/partials/compose-wizard.php
+#: admin/partials/dashboard.php
+msgid "New campaign"
+msgstr "Neue Kampagne"
 
 #: admin/class-admin.php
 msgid "One-time email"
@@ -357,6 +360,7 @@ msgid "Actions"
 msgstr "Aktionen"
 
 #: admin/partials/subscribers.php
+#: admin/partials/compose-wizard.php
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -820,7 +824,7 @@ msgstr "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
 msgid "Invalid unsubscribe link."
 msgstr "Ungültiger Abmeldelink."
 
-#: public/class-public.php
+#: public/class-public.php admin/partials/queue-detail.php
 msgid "Error"
 msgstr "Fehler"
 
@@ -852,7 +856,7 @@ msgstr "Sie werden keine E-Mails mehr von uns erhalten."
 msgid "Back to site"
 msgstr "Zurück zur Website"
 
-#: includes/services/class-list-provider.php
+#: includes/services/class-list-provider.php admin/partials/queue.php
 msgid "External"
 msgstr "Extern"
 
@@ -1014,10 +1018,6 @@ msgid "Permanently deletes all campaigns and their queued emails (pending, proce
 msgstr "Löscht dauerhaft alle Kampagnen und ihre E-Mails aus der Warteschlange (ausstehend, in Bearbeitung, gesendet und fehlgeschlagen)."
 
 #: admin/partials/queue.php
-msgid "External"
-msgstr "Extern"
-
-#: admin/partials/queue.php
 msgid "Completed"
 msgstr "Abgeschlossen"
 
@@ -1118,10 +1118,6 @@ msgid "Are you sure you want to cancel this campaign? All pending emails will be
 msgstr "Sind Sie sicher, dass Sie diese Kampagne abbrechen möchten? Alle ausstehenden E-Mails werden abgebrochen."
 
 #: admin/partials/queue-detail.php
-msgid "Error"
-msgstr "Fehler"
-
-#: admin/partials/queue-detail.php
 msgid "No emails in this campaign."
 msgstr "Keine E-Mails in dieser Kampagne."
 
@@ -1152,26 +1148,6 @@ msgstr "Ja, natürlich!"
 #: admin/class-admin.php
 msgid "Nah, I do not like the plugin"
 msgstr "Nein, das Plugin gefällt mir nicht"
-
-#: admin/partials/queue.php
-msgid "Created"
-msgstr "Erstellt"
-
-#: admin/partials/queue.php
-msgid "Type"
-msgstr "Typ"
-
-#: admin/partials/queue.php
-msgid "Recipients"
-msgstr "Empfänger"
-
-#: admin/partials/queue.php
-msgid "Progress"
-msgstr "Fortschritt"
-
-#: admin/partials/queue.php
-msgid "Scheduled for"
-msgstr "Geplant für"
 
 #: includes/Admin/class-admin.php
 msgid "Import / Export"
@@ -1517,3 +1493,344 @@ msgstr "Beispiel"
 #: admin/partials/import-export.php
 msgid "Remove selected file"
 msgstr "Ausgewählte Datei entfernen"
+
+#: includes/Admin/class-admin.php
+msgid "Templates"
+msgstr "Vorlagen"
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template name is required."
+msgstr "Vorlagenname ist erforderlich."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template added successfully."
+msgstr "Vorlage erfolgreich hinzugefügt."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Error adding template."
+msgstr "Fehler beim Hinzufügen der Vorlage."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php admin/partials/visual-editor.php
+msgid "Template not found."
+msgstr "Vorlage nicht gefunden."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template updated successfully."
+msgstr "Vorlage erfolgreich aktualisiert."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Predefined templates cannot be deleted."
+msgstr "Vordefinierte Vorlagen können nicht gelöscht werden."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template deleted successfully."
+msgstr "Vorlage erfolgreich gelöscht."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Template duplicated successfully."
+msgstr "Vorlage erfolgreich dupliziert."
+
+#: includes/Admin/class-admin-templates.php admin/partials/templates.php
+msgid "Error duplicating template."
+msgstr "Fehler beim Duplizieren der Vorlage."
+
+#: admin/partials/templates.php
+msgid "Email Templates"
+msgstr "E-Mail-Vorlagen"
+
+#: admin/partials/templates.php
+msgid "Add new template"
+msgstr "Neue Vorlage hinzufügen"
+
+#: admin/partials/templates.php
+msgid "Edit template"
+msgstr "Vorlage bearbeiten"
+
+#: admin/partials/templates.php
+msgid "Template name"
+msgstr "Vorlagenname"
+
+#: admin/partials/templates.php
+msgid "Default subject"
+msgstr "Standard-Betreff"
+
+#: admin/partials/templates.php
+msgid "Optional. This subject will be pre-filled when using this template."
+msgstr "Optional. Dieser Betreff wird bei Verwendung dieser Vorlage vorausgefüllt."
+
+#: admin/partials/templates.php
+msgid "Add template"
+msgstr "Vorlage hinzufügen"
+
+#: admin/partials/templates.php
+msgid "Predefined Templates"
+msgstr "Vordefinierte Vorlagen"
+
+#: admin/partials/templates.php
+msgid "These templates are provided by the system. You can duplicate them to create custom versions."
+msgstr "Diese Vorlagen werden vom System bereitgestellt. Sie können sie duplizieren, um benutzerdefinierte Versionen zu erstellen."
+
+#: admin/partials/templates.php
+msgid "Predefined"
+msgstr "Vordefiniert"
+
+#: admin/partials/templates.php
+msgid "Duplicate"
+msgstr "Duplizieren"
+
+#: admin/partials/templates.php
+msgid "Use template"
+msgstr "Vorlage verwenden"
+
+#: admin/partials/templates.php
+msgid "Use"
+msgstr "Verwenden"
+
+#: admin/partials/templates.php
+msgid "Custom Templates"
+msgstr "Benutzerdefinierte Vorlagen"
+
+#: admin/partials/templates.php
+msgid "Templates you have created. You can edit, duplicate, or delete these."
+msgstr "Von Ihnen erstellte Vorlagen. Sie können diese bearbeiten, duplizieren oder löschen."
+
+#: admin/partials/templates.php
+msgid "Custom"
+msgstr "Benutzerdefiniert"
+
+#. translators: %s: date
+#: admin/partials/templates.php
+msgid "Created: %s"
+msgstr "Erstellt: %s"
+
+#: admin/partials/templates.php
+msgid "No custom templates yet."
+msgstr "Noch keine benutzerdefinierten Vorlagen."
+
+#: admin/partials/templates.php
+#: admin/partials/compose-wizard.php
+msgid "Create your first template"
+msgstr "Erstellen Sie Ihre erste Vorlage"
+
+#: includes/Services/class-template-service.php
+msgid " (Copy)"
+msgstr " (Kopie)"
+
+#: includes/Services/class-template-service.php
+msgid "Blank Template"
+msgstr "Leere Vorlage"
+
+#: includes/Services/class-template-service.php
+msgid "Newsletter"
+msgstr "Newsletter"
+
+#: includes/Services/class-template-service.php
+msgid "Your Newsletter Title"
+msgstr "Ihr Newsletter-Titel"
+
+#: includes/Services/class-template-service.php
+msgid "Welcome Email"
+msgstr "Willkommens-E-Mail"
+
+#: includes/Services/class-template-service.php
+msgid "Welcome to {site_name}!"
+msgstr "Willkommen bei {site_name}!"
+
+#: includes/Services/class-template-service.php
+msgid "Promotional"
+msgstr "Werbeangebot"
+
+#: includes/Services/class-template-service.php
+msgid "Special Offer Just for You!"
+msgstr "Sonderangebot nur für Sie!"
+
+#. translators: %s: template name
+#: admin/partials/compose.php
+msgid "Using template: %s"
+msgstr "Verwendete Vorlage: %s"
+
+#: admin/partials/compose.php
+msgid "Choose how to compose your email"
+msgstr "Wählen Sie, wie Sie Ihre E-Mail erstellen möchten"
+
+#: admin/partials/compose.php
+msgid "Use a Template"
+msgstr "Vorlage verwenden"
+
+#: admin/partials/compose.php
+msgid "Select from saved templates and customize"
+msgstr "Aus gespeicherten Vorlagen auswählen und anpassen"
+
+#: admin/partials/compose.php
+msgid "Browse Templates"
+msgstr "Vorlagen durchsuchen"
+
+#: admin/partials/compose.php
+#: admin/partials/compose-wizard.php
+msgid "Open Visual Editor"
+msgstr "Visuellen Editor öffnen"
+
+#: admin/partials/compose.php
+msgid "Create emails with drag-and-drop visual editor"
+msgstr "E-Mails mit Drag-and-Drop-Visual-Editor erstellen"
+
+#: admin/partials/compose.php
+msgid "Open Editor"
+msgstr "Editor öffnen"
+
+#: admin/partials/templates.php
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Visual Editor"
+msgstr "Visueller Editor"
+
+#: admin/partials/templates.php
+msgid "Edit with Visual Editor"
+msgstr "Mit visuellem Editor bearbeiten"
+
+#: admin/partials/templates.php
+msgid "Edit HTML"
+msgstr "HTML bearbeiten"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Template saved successfully."
+msgstr "Vorlage erfolgreich gespeichert."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Missing required fields."
+msgstr "Erforderliche Felder fehlen."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Failed to save template."
+msgstr "Vorlage konnte nicht gespeichert werden."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "No file uploaded."
+msgstr "Keine Datei hochgeladen."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Upload failed."
+msgstr "Upload fehlgeschlagen."
+
+#: admin/partials/visual-editor.php
+msgid "Loading email editor..."
+msgstr "E-Mail-Editor wird geladen..."
+
+#: admin/partials/compose-wizard.php
+msgid "Choose Template"
+msgstr "Vorlage wählen"
+
+#: admin/partials/compose-wizard.php
+msgid "Edit Content"
+msgstr "Inhalt bearbeiten"
+
+#: admin/partials/compose-wizard.php
+msgid "Send"
+msgstr "Senden"
+
+#: admin/partials/compose-wizard.php
+msgid "Continue"
+msgstr "Weiter"
+
+#: admin/partials/compose-wizard.php
+msgid "How would you like to create your email?"
+msgstr "Wie möchten Sie Ihre E-Mail erstellen?"
+
+#: admin/partials/compose-wizard.php
+msgid "Choose a starting point for your email campaign."
+msgstr "Wählen Sie einen Ausgangspunkt für Ihre E-Mail-Kampagne."
+
+#: admin/partials/compose-wizard.php
+msgid "Start from Scratch"
+msgstr "Von Grund auf neu beginnen"
+
+#: admin/partials/compose-wizard.php
+msgid "Create your email using the HTML editor with full control over the code."
+msgstr "Erstellen Sie Ihre E-Mail mit dem HTML-Editor mit voller Kontrolle über den Code."
+
+#: admin/partials/compose-wizard.php
+msgid "Build your email with our drag-and-drop visual editor. No coding required."
+msgstr "Erstellen Sie Ihre E-Mail mit unserem Drag-and-Drop-Visual-Editor. Keine Programmierung erforderlich."
+
+#: admin/partials/compose-wizard.php
+msgid "Start with one of your saved templates and customize it."
+msgstr "Beginnen Sie mit einer Ihrer gespeicherten Vorlagen und passen Sie sie an."
+
+#: admin/partials/compose-wizard.php
+msgid "Select a Template"
+msgstr "Vorlage auswählen"
+
+#: admin/partials/compose-wizard.php
+msgid "No templates available."
+msgstr "Keine Vorlagen verfügbar."
+
+#: admin/partials/compose-wizard.php
+msgid "Continue"
+msgstr "Weiter"
+
+#: admin/partials/compose-wizard.php
+msgid "Edit Your Email"
+msgstr "Ihre E-Mail bearbeiten"
+
+#: admin/partials/compose-wizard.php
+msgid "Use the visual editor to design your email. Click the button below to open the editor."
+msgstr "Verwenden Sie den visuellen Editor, um Ihre E-Mail zu gestalten. Klicken Sie auf die Schaltfläche unten, um den Editor zu öffnen."
+
+#: admin/partials/compose-wizard.php
+msgid "The visual editor will open in a new window. When you save your template, you can continue to the next step."
+msgstr "Der visuelle Editor wird in einem neuen Fenster geöffnet. Wenn Sie Ihre Vorlage speichern, können Sie mit dem nächsten Schritt fortfahren."
+
+#: admin/partials/compose-wizard.php
+msgid "Continue to Send Settings"
+msgstr "Weiter zu den Sendeeinstellungen"
+
+#: admin/partials/compose-wizard.php
+msgid "Edit Your Email Content"
+msgstr "Bearbeiten Sie Ihren E-Mail-Inhalt"
+
+#: admin/partials/compose-wizard.php
+msgid "Write your email content using the editor below."
+msgstr "Schreiben Sie Ihren E-Mail-Inhalt mit dem Editor unten."
+
+#: admin/partials/compose-wizard.php
+msgid "Configure & Send"
+msgstr "Konfigurieren & Senden"
+
+#: admin/partials/compose-wizard.php
+msgid "Select recipients, set scheduling options, and send your email."
+msgstr "Wählen Sie Empfänger, legen Sie Planungsoptionen fest und senden Sie Ihre E-Mail."
+
+#: admin/partials/compose-wizard.php
+msgid "Content Preview"
+msgstr "Inhaltsvorschau"
+
+#: admin/partials/compose-wizard.php
+msgid "No content set. Please go back to Step 2 to add content."
+msgstr "Kein Inhalt festgelegt. Bitte gehen Sie zurück zu Schritt 2, um Inhalt hinzuzufügen."
+
+#: admin/partials/compose-wizard.php
+msgid "No lists available."
+msgstr "Keine Listen verfügbar."
+
+#: admin/partials/compose-wizard.php
+msgid "Create a list"
+msgstr "Liste erstellen"
+
+#: admin/partials/compose-wizard.php
+msgid "Send Now"
+msgstr "Jetzt senden"
+
+#: admin/partials/compose-wizard.php
+msgid "Schedule Sending"
+msgstr "Versand planen"
+
+#: admin/partials/compose-wizard.php
+msgid "Back"
+msgstr "Zurück"
+
+#: admin/partials/compose-wizard.php
+msgid "Use a Template"
+msgstr "Vorlage verwenden"
+
+#: admin/partials/compose-wizard.php
+msgid "Using template: %s"
+msgstr "Vorlage wird verwendet: %s"

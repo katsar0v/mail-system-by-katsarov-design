@@ -1,6 +1,7 @@
 # Dependencies
 /vendor/
 /node_modules/
+admin/editor/node_modules/
 
 # IDE
 .idea/
@@ -19,5 +20,7 @@ Thumbs.db
 # Build artifacts
 *.log
 
-# SCSS source maps (optional - uncomment if you don't want to commit them)
-# *.css.map
+# Compiled CSS (generated from SCSS during release)
+# Run `npm run build` to generate CSS files locally
+admin/css/
+public/css/

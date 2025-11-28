@@ -1,0 +1,221 @@
+// ==========================================================================
+// Templates Component
+// ==========================================================================
+// Styles for the email templates page.
+
+@use '../abstracts' as *;
+
+// Templates page wrapper
+.mskd-templates-section {
+  margin-top: $spacing-6;
+  margin-bottom: $spacing-8;
+
+  h2 {
+    margin-bottom: $spacing-2;
+    color: $color-wp-text;
+  }
+
+  > .description {
+    margin-bottom: $spacing-4;
+    color: $color-wp-text-light;
+  }
+}
+
+// Templates grid
+.mskd-templates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $spacing-6;
+  margin-top: $spacing-4;
+}
+
+// Template card
+.mskd-template-card {
+  @include card;
+  overflow: hidden;
+  @include transition(box-shadow);
+
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+}
+
+// Template preview
+.mskd-template-preview {
+  height: 180px;
+  background: $color-gray-100;
+  border-bottom: 1px solid $color-wp-border;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Template placeholder (when no thumbnail)
+.mskd-template-placeholder {
+  @include flex-center;
+  height: 100%;
+  background: linear-gradient(135deg, $color-gray-100 0%, $color-gray-200 100%);
+
+  .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: $color-gray-400;
+  }
+}
+
+// Template info
+.mskd-template-info {
+  padding: $spacing-4;
+
+  h3 {
+    margin: 0 0 $spacing-2;
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-wp-text;
+    @include text-truncate;
+  }
+}
+
+// Template badges
+.mskd-template-badge {
+  @include status-badge;
+  margin-right: $spacing-2;
+}
+
+.mskd-template-badge-predefined {
+  @include status-badge-variant($color-info-bg, $color-info-text);
+}
+
+.mskd-template-badge-custom {
+  @include status-badge-variant($color-success-bg, $color-success-text);
+}
+
+// Template date
+.mskd-template-date {
+  display: block;
+  margin-top: $spacing-2;
+  font-size: $font-size-sm;
+  color: $color-wp-text-light;
+}
+
+// Template actions
+.mskd-template-actions {
+  display: flex;
+  gap: $spacing-2;
+  padding: $spacing-3 $spacing-4;
+  background: $color-gray-100;
+  border-top: 1px solid $color-wp-border;
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-1;
+    padding: $spacing-1 $spacing-2;
+
+    .dashicons {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .button-primary {
+    margin-left: auto;
+  }
+}
+
+// No templates message
+.mskd-no-templates {
+  padding: $spacing-6;
+  background: $color-gray-100;
+  border-radius: $border-radius-lg;
+  text-align: center;
+  color: $color-wp-text-light;
+
+  a {
+    display: block;
+    margin-top: $spacing-2;
+  }
+}
+
+// Template form
+.mskd-template-form {
+  .wp-editor-wrap {
+    max-width: 100%;
+  }
+
+  .form-table th {
+    width: 180px;
+  }
+}
+
+// Template preview modal (for future use)
+.mskd-template-preview-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: $z-index-modal;
+  display: none;
+
+  &.is-active {
+    display: block;
+  }
+}
+
+.mskd-template-preview-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba($color-black, 0.5);
+}
+
+.mskd-template-preview-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh;
+  background: $color-white;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-xl;
+  overflow: auto;
+}
+
+.mskd-template-preview-header {
+  @include flex-between;
+  padding: $spacing-4;
+  border-bottom: 1px solid $color-wp-border;
+}
+
+.mskd-template-preview-body {
+  padding: $spacing-4;
+}
+
+// Responsive adjustments
+@include mobile {
+  .mskd-templates-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mskd-template-form .form-table th {
+    width: 100%;
+    display: block;
+    padding-bottom: 0;
+  }
+
+  .mskd-template-form .form-table td {
+    display: block;
+    padding-left: 0;
+  }
+}

@@ -13,10 +13,12 @@ This document provides comprehensive documentation for third-party plugin develo
 4. [Services API](#services-api)
    - [MSKD_List_Provider](#mskd_list_provider)
    - [MSKD_SMTP_Mailer](#mskd_smtp_mailer)
+   - [Template_Service](#template_service)
 5. [Database Schema](#database-schema)
-6. [Examples](#examples)
-7. [Best Practices](#best-practices)
-8. [Troubleshooting](#troubleshooting)
+6. [Email Templates](#email-templates)
+7. [Examples](#examples)
+8. [Best Practices](#best-practices)
+9. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -28,6 +30,7 @@ The Mail System provides a hook-based architecture that allows third-party plugi
 - **Register external subscribers** - Add subscribers from external sources (CRM, WooCommerce, etc.)
 - **Control editability** - Lock specific lists or subscribers from being modified
 - **Extend email functionality** - Modify email content, add custom placeholders
+- **Manage email templates** - Create, edit, and use reusable email templates
 
 ### Key Concepts
 
@@ -305,6 +308,66 @@ $mailer = new MSKD_SMTP_Mailer();
 
 ---
 
+### Template_Service
+
+Service for managing email templates.
+
+```php
+use MSKD\Services\Template_Service;
+
+$template_service = new Template_Service();
+```
+
+#### Methods
+
+| Method | Description | Returns |
+|--------|-------------|---------|
+| `get_all( $args )` | Get all templates with optional filters | `array` |
+| `get_by_id( $id )` | Get template by ID | `object\|null` |
+| `get_by_name( $name )` | Get template by name | `object\|null` |
+| `create( $data )` | Create a new template | `int\|false` |
+| `update( $id, $data )` | Update a template | `bool` |
+| `delete( $id )` | Delete a template | `bool` |
+| `duplicate( $id )` | Duplicate a template | `int\|false` |
+| `count( $type, $status )` | Get template count | `int` |
+| `get_predefined()` | Get all predefined templates | `array` |
+| `get_custom()` | Get all custom templates | `array` |
+| `get_active()` | Get all active templates | `array` |
+| `install_defaults()` | Install default predefined templates | `void` |
+
+#### Usage Example
+
+```php
+use MSKD\Services\Template_Service;
+
+$template_service = new Template_Service();
+
+// Create a custom template
+$template_id = $template_service->create( array(
+    'name'    => 'My Newsletter Template',
+    'subject' => 'Weekly Newsletter',
+    'content' => '<h1>Hello {first_name}!</h1><p>Your content here...</p>',
+    'type'    => 'custom',
+    'status'  => 'active',
+) );
+
+// Get a template by ID
+$template = $template_service->get_by_id( $template_id );
+
+// Update a template
+$template_service->update( $template_id, array(
+    'subject' => 'Updated Weekly Newsletter',
+) );
+
+// Duplicate a template
+$new_id = $template_service->duplicate( $template_id );
+
+// Delete a template (only custom templates can be deleted)
+$template_service->delete( $template_id );
+```
+
+---
+
 ## Database Schema
 
 ### Tables
@@ -342,6 +405,21 @@ All tables use the `{$wpdb->prefix}mskd_` prefix.
 | `list_id` | bigint(20) | FK to lists |
 | `subscribed_at` | datetime | Subscription timestamp |
 
+#### `mskd_templates`
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | bigint(20) | Primary key |
+| `name` | varchar(255) | Template name |
+| `subject` | varchar(255) | Default email subject |
+| `content` | longtext | HTML email content |
+| `json_content` | longtext | JSON content for visual editor |
+| `thumbnail` | varchar(500) | Thumbnail image URL |
+| `type` | enum | `predefined`, `custom` |
+| `status` | enum | `active`, `inactive` |
+| `created_at` | datetime | Creation timestamp |
+| `updated_at` | datetime | Last update timestamp |
+
 #### `mskd_queue`
 
 | Column | Type | Description |
@@ -357,6 +435,71 @@ All tables use the `{$wpdb->prefix}mskd_` prefix.
 | `attempts` | int | Retry attempt count |
 | `error_message` | text | Last error message |
 | `created_at` | datetime | Creation timestamp |
+
+---
+
+## Email Templates
+
+The Mail System includes a comprehensive email templates feature that allows users to create reusable email templates.
+
+### Template Types
+
+| Type | Description |
+|------|-------------|
+| **Predefined** | Built-in templates provided by the system. Cannot be deleted but can be duplicated. |
+| **Custom** | User-created templates. Can be edited, duplicated, and deleted. |
+
+### Default Templates
+
+The system includes the following predefined templates:
+
+1. **Blank Template** - An empty starting point
+2. **Newsletter** - Standard newsletter layout with header, content area, and footer
+3. **Welcome Email** - Template for welcoming new subscribers
+4. **Promotional** - Template for promotional offers with call-to-action buttons
+
+### Using Templates
+
+Templates can be used when composing a new email:
+
+1. Navigate to **Emails > Templates**
+2. Click **"Use"** on any template
+3. The compose form will be pre-filled with the template's subject and content
+4. Modify as needed and send
+
+### Template Placeholders
+
+All templates support the standard email placeholders:
+
+| Placeholder | Description |
+|-------------|-------------|
+| `{first_name}` | Subscriber's first name |
+| `{last_name}` | Subscriber's last name |
+| `{email}` | Subscriber's email address |
+| `{unsubscribe_link}` | HTML link to unsubscribe |
+| `{unsubscribe_url}` | Raw unsubscribe URL |
+
+### Programmatic Template Usage
+
+```php
+use MSKD\Services\Template_Service;
+
+$template_service = new Template_Service();
+
+// Get a template
+$template = $template_service->get_by_id( 1 );
+
+// Use the template content
+$subject = $template->subject;
+$content = $template->content;
+
+// Apply placeholders
+$content = str_replace(
+    array( '{first_name}', '{last_name}', '{email}' ),
+    array( $subscriber->first_name, $subscriber->last_name, $subscriber->email ),
+    $content
+);
+```
 
 ---
 

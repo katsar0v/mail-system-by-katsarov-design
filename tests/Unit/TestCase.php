@@ -101,6 +101,9 @@ abstract class TestCase extends PHPUnitTestCase {
                 'is_email'                => function ( $email ) {
                     return filter_var( $email, FILTER_VALIDATE_EMAIL ) !== false;
                 },
+                'wp_unslash'              => function ( $value ) {
+                    return is_array( $value ) ? array_map( 'stripslashes_deep', $value ) : stripslashes( $value );
+                },
             )
         );
 

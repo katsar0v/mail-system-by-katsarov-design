@@ -78,6 +78,20 @@ class Admin {
     private $import_export;
 
     /**
+     * Templates controller.
+     *
+     * @var Admin_Templates
+     */
+    private $templates;
+
+    /**
+     * Visual Editor controller.
+     *
+     * @var Admin_Visual_Editor
+     */
+    private $visual_editor;
+
+    /**
      * Constructor - initialize controllers.
      */
     public function __construct() {
@@ -88,6 +102,8 @@ class Admin {
         $this->settings      = new Admin_Settings();
         $this->ajax          = new Admin_Ajax();
         $this->import_export = new Admin_Import_Export();
+        $this->templates     = new Admin_Templates();
+        $this->visual_editor = new Admin_Visual_Editor();
     }
 
     /**
@@ -105,6 +121,7 @@ class Admin {
 
         // Initialize AJAX handlers.
         $this->ajax->init();
+        $this->visual_editor->init();
     }
 
     /**
@@ -154,11 +171,31 @@ class Admin {
             array( $this->lists, 'render' )
         );
 
+        // Templates.
+        add_submenu_page(
+            self::PAGE_PREFIX . 'dashboard',
+            __( 'Templates', 'mail-system-by-katsarov-design' ),
+            __( 'Templates', 'mail-system-by-katsarov-design' ),
+            'manage_options',
+            self::PAGE_PREFIX . 'templates',
+            array( $this->templates, 'render' )
+        );
+
+        // Visual Editor (hidden from menu but accessible via URL).
+        add_submenu_page(
+            null, // No parent - hidden from menu.
+            __( 'Visual Editor', 'mail-system-by-katsarov-design' ),
+            __( 'Visual Editor', 'mail-system-by-katsarov-design' ),
+            'manage_options',
+            self::PAGE_PREFIX . 'visual-editor',
+            array( $this->visual_editor, 'render' )
+        );
+
         // Compose.
         add_submenu_page(
             self::PAGE_PREFIX . 'dashboard',
-            __( 'New email', 'mail-system-by-katsarov-design' ),
-            __( 'New email', 'mail-system-by-katsarov-design' ),
+            __( 'New campaign', 'mail-system-by-katsarov-design' ),
+            __( 'New campaign', 'mail-system-by-katsarov-design' ),
             'manage_options',
             self::PAGE_PREFIX . 'compose',
             array( $this->email, 'render_compose' )
@@ -386,6 +423,7 @@ class Admin {
         $this->queue->handle_actions();
         $this->settings->handle_actions();
         $this->import_export->handle_actions();
+        $this->templates->handle_actions();
     }
 
     /**
@@ -458,5 +496,23 @@ class Admin {
      */
     public function get_import_export_controller(): Admin_Import_Export {
         return $this->import_export;
+    }
+
+    /**
+     * Get the templates controller.
+     *
+     * @return Admin_Templates
+     */
+    public function get_templates_controller(): Admin_Templates {
+        return $this->templates;
+    }
+
+    /**
+     * Get the visual editor controller.
+     *
+     * @return Admin_Visual_Editor
+     */
+    public function get_visual_editor_controller(): Admin_Visual_Editor {
+        return $this->visual_editor;
     }
 }
