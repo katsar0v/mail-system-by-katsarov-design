@@ -147,8 +147,9 @@ class MSKD_Cron_Handler {
 				array( '%d' )
 			);
 
-			// Prepare email content with placeholders
-			$body    = $this->replace_placeholders( $item->body, $item );
+			// Prepare email content with header, footer, and placeholders.
+			$body    = $this->apply_header_footer( $item->body, $settings );
+			$body    = $this->replace_placeholders( $body, $item );
 			$subject = $this->replace_placeholders( $item->subject, $item );
 
 			// Send email using SMTP mailer.
@@ -359,6 +360,39 @@ class MSKD_Cron_Handler {
 		);
 
 		return str_replace( array_keys( $placeholders ), array_values( $placeholders ), $content );
+	}
+
+	/**
+	 * Apply custom header and footer to email content.
+	 *
+	 * Prepends the configured email header and appends the configured email footer
+	 * to the email body. Both header and footer support the same template variables
+	 * as the main email content.
+	 *
+	 * @param string $content  Email body content.
+	 * @param array  $settings Plugin settings array.
+	 * @return string Email content with header prepended and footer appended.
+	 */
+	private function apply_header_footer( $content, $settings ) {
+		$header = $settings['email_header'] ?? '';
+		$footer = $settings['email_footer'] ?? '';
+
+		// Only modify content if header or footer is set.
+		if ( empty( $header ) && empty( $footer ) ) {
+			return $content;
+		}
+
+		// Prepend header if set.
+		if ( ! empty( $header ) ) {
+			$content = $header . $content;
+		}
+
+		// Append footer if set.
+		if ( ! empty( $footer ) ) {
+			$content = $content . $footer;
+		}
+
+		return $content;
 	}
 
 	/**

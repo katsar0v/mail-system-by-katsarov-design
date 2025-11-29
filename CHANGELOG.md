@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Custom Email Header and Footer**
+  - Configurable HTML header prepended to all outgoing emails
+  - Configurable HTML footer appended to all outgoing emails
+  - Support for template variables (`{first_name}`, `{last_name}`, `{email}`, `{unsubscribe_link}`, `{unsubscribe_url}`)
+  - New "Email Template Settings" section in Settings page
+  - Documentation in `docs/email-header-footer.md`
+
 ### Planned
 - Open and click statistics
 - A/B testing

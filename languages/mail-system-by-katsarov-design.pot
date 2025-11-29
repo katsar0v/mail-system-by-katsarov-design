@@ -1999,3 +1999,51 @@ msgstr ""
 #: includes/Services/class-subscriber-service.php
 msgid "Subscriber ID %d not found."
 msgstr ""
+
+#: admin/partials/settings.php
+msgid "Email Template Settings"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Configure custom header and footer that will be added to all outgoing emails. Supports HTML and template variables."
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Email Header"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "HTML content to prepend to all emails. Leave empty to disable."
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Email Footer"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "HTML content to append to all emails. Leave empty to disable."
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Available Variables"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Subscriber first name"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Subscriber last name"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Subscriber email address"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Clickable unsubscribe link"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Raw unsubscribe URL"
+msgstr ""
