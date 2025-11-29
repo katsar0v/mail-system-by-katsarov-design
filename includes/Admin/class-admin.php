@@ -582,6 +582,7 @@ class Admin {
 		global $wpdb;
 
 		// Get queue statistics.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Static query with no user input, caching not needed for dashboard widget.
 		$queue_stats = $wpdb->get_row(
 			"SELECT 
 				SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
