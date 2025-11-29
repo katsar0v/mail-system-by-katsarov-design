@@ -446,10 +446,8 @@ class Import_Export_Service {
 
 					// Sync lists: use target lists if provided, otherwise use CSV lists.
 					if ( ! empty( $valid_target_list_ids ) ) {
-						// Merge target lists with existing lists.
-						$existing_lists = $this->subscriber_service->get_lists( (int) $existing->id );
-						$merged_lists   = array_unique( array_merge( $existing_lists, $valid_target_list_ids ) );
-						$this->subscriber_service->sync_lists( (int) $existing->id, $merged_lists );
+						// Replace existing lists with target lists (consistent with new subscriber behavior).
+						$this->subscriber_service->sync_lists( (int) $existing->id, $valid_target_list_ids );
 					} elseif ( $options['assign_lists'] && ! empty( $row['lists'] ) ) {
 						$list_ids = $this->get_list_ids_from_names( $row['lists'] );
 						if ( ! empty( $list_ids ) ) {

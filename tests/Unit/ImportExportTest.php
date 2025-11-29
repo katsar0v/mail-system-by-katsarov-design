@@ -525,6 +525,62 @@ class ImportExportTest extends TestCase {
 	}
 
 	/**
+	 * Test import subscribers with target_list_ids and existing subscriber replaces lists.
+	 */
+	public function test_import_subscribers_existing_with_target_list_ids_replaces_lists(): void {
+		$rows = array(
+			array(
+				'email'      => 'existing@example.com',
+				'first_name' => 'Updated',
+				'last_name'  => 'Name',
+				'status'     => 'active',
+				'lists'      => 'OldList', // Should be ignored when target_list_ids provided.
+			),
+		);
+
+		// Mock get_row to return different results based on query.
+		$this->wpdb->shouldReceive( 'get_row' )
+			->andReturnUsing(
+				function ( $query ) {
+					// List lookup for target list validation.
+					if ( strpos( $query, 'mskd_lists' ) !== false ) {
+						return (object) array( 'id' => 8, 'name' => 'New Target List' );
+					}
+					// Subscriber lookup.
+					if ( strpos( $query, 'mskd_subscribers' ) !== false ) {
+						return (object) array( 'id' => 1, 'email' => 'existing@example.com' );
+					}
+					return null;
+				}
+			);
+
+		// Mock update subscriber.
+		$this->wpdb->shouldReceive( 'update' )
+			->andReturn( 1 );
+
+		// Mock delete existing list assignments (sync_lists replaces all).
+		$this->wpdb->shouldReceive( 'delete' )
+			->andReturn( true );
+
+		// Mock insert new list assignment.
+		$this->wpdb->insert_id = 1;
+		$this->wpdb->shouldReceive( 'insert' )
+			->andReturn( 1 );
+
+		$result = $this->service->import_subscribers(
+			$rows,
+			array(
+				'update_existing'  => true,
+				'target_list_ids'  => array( 8 ),
+			)
+		);
+
+		$this->assertEquals( 0, $result['imported'] );
+		$this->assertEquals( 1, $result['updated'] );
+		$this->assertEquals( 0, $result['skipped'] );
+	}
+
+	/**
 	 * Test validate import file checks file size.
 	 */
 	public function test_validate_import_file_checks_size(): void {
