@@ -367,10 +367,17 @@ This plugin is licensed under [GPL v2 or later](https://www.gnu.org/licenses/gpl
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read the contribution guidelines before submitting a pull request.
+Contributions are welcome! Please read our [Contributing Guidelines](.github/CONTRIBUTING.md) before submitting a pull request.
+
+### Quick Start
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create an issue or find an existing one
+3. Create a feature branch (`git checkout -b feature/issue-123-description`)
+4. Make your changes following [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/)
+5. Run tests and coding standards checks
+6. Commit your changes (`git commit -m "Fix #123: Brief description"`)
+7. Push to your fork (`git push origin feature/issue-123-description`)
+8. Open a Pull Request referencing the issue
+
+**Important**: The `main` branch is protected. All changes must go through pull requests, and each issue requires its own PR.
