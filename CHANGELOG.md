@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - New "Email Template Settings" section in Settings page
   - Documentation in `docs/email-header-footer.md`
 
+### Fixed
+- **One-time emails now include header and footer**
+  - Immediate one-time emails now apply the configured email header and footer
+  - Previously only queued/scheduled emails included the header and footer
+
 ### Planned
 - Open and click statistics
 - A/B testing

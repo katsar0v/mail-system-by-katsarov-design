@@ -26,6 +26,42 @@ define( 'MSKD_PLUGIN_URL', 'https://example.com/wp-content/plugins/mail-system-b
 define( 'MSKD_PLUGIN_BASENAME', 'mail-system-by-katsarov-design/mail-system-by-katsarov-design.php' );
 define( 'MSKD_BATCH_SIZE', 10 );
 
+// Register plugin autoloader for traits and namespaced classes.
+spl_autoload_register(
+	function ( $class ) {
+		// Handle PSR-4 namespaced classes (MSKD\*)
+		if ( strpos( $class, 'MSKD\\' ) === 0 ) {
+			// Skip test classes - they are handled by Composer autoloader.
+			if ( strpos( $class, 'MSKD\\Tests\\' ) === 0 ) {
+				return;
+			}
+
+			// Convert namespace to file path.
+			$relative_class = substr( $class, 5 ); // Remove 'MSKD\' prefix.
+			$parts          = explode( '\\', $relative_class );
+
+			// Get class name (last part) and namespace parts.
+			$class_name     = array_pop( $parts );
+			$namespace_path = implode( '/', $parts );
+
+			// Convert class name to file name (Admin_Email -> admin-email).
+			$file_name = strtolower( str_replace( '_', '-', $class_name ) );
+
+			// Determine file prefix based on namespace (trait- for Traits namespace, class- otherwise).
+			$file_prefix = ( 'Traits' === $namespace_path ) ? 'trait-' : 'class-';
+
+			// Lowercase the namespace path for traits directory (traits vs Traits).
+			$dir_path = ( 'Traits' === $namespace_path ) ? strtolower( $namespace_path ) : $namespace_path;
+			$file     = MSKD_PLUGIN_DIR . 'includes/' . $dir_path . '/' . $file_prefix . $file_name . '.php';
+
+			if ( file_exists( $file ) ) {
+				require_once $file;
+				return;
+			}
+		}
+	}
+);
+
 // Create mock directory structure for PHPMailer.
 $phpmailer_dir = '/tmp/wordpress/wp-includes/PHPMailer';
 if ( ! is_dir( $phpmailer_dir ) ) {

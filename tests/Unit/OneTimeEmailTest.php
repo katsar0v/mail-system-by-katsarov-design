@@ -373,6 +373,66 @@ class OneTimeEmailTest extends TestCase {
     }
 
     /**
+     * Test that header and footer are applied to immediate one-time emails.
+     *
+     * This test verifies that the Admin_Email class correctly uses the
+     * Email_Header_Footer trait's apply_header_footer method. The method
+     * itself is thoroughly tested in EmailHeaderFooterTest.
+     */
+    public function test_one_time_email_applies_header_footer(): void {
+        // Load Admin_Email to test trait integration.
+        require_once \MSKD_PLUGIN_DIR . 'includes/Admin/class-admin-email.php';
+
+        $admin_email = new \MSKD\Admin\Admin_Email();
+
+        // Test that Admin_Email class has the apply_header_footer method from trait.
+        $this->assertTrue(
+            method_exists( $admin_email, 'apply_header_footer' ),
+            'Admin_Email should have apply_header_footer method from trait'
+        );
+
+        // Test the method works correctly (trait integration test).
+        $content  = '<p>Main email content</p>';
+        $settings = array(
+            'email_header' => '<div class="header">Company Header</div>',
+            'email_footer' => '<div class="footer">Company Footer</div>',
+        );
+
+        $result = $admin_email->apply_header_footer( $content, $settings );
+
+        $this->assertStringContainsString( '<div class="header">Company Header</div>', $result );
+        $this->assertStringContainsString( '<p>Main email content</p>', $result );
+        $this->assertStringContainsString( '<div class="footer">Company Footer</div>', $result );
+    }
+
+    /**
+     * Test that empty header and footer don't modify content.
+     *
+     * This test verifies that the Admin_Email class correctly handles
+     * empty header/footer settings via the Email_Header_Footer trait.
+     */
+    public function test_one_time_email_with_empty_header_footer(): void {
+        // Load Admin_Email to test trait integration.
+        require_once \MSKD_PLUGIN_DIR . 'includes/Admin/class-admin-email.php';
+
+        $admin_email = new \MSKD\Admin\Admin_Email();
+
+        $content  = '<p>Main email content</p>';
+        $settings = array(
+            'email_header' => '',
+            'email_footer' => '',
+        );
+
+        $result = $admin_email->apply_header_footer( $content, $settings );
+
+        $this->assertEquals(
+            $content,
+            $result,
+            'Content should remain unchanged when header and footer are empty'
+        );
+    }
+
+    /**
      * Clean up after each test.
      */
     protected function tearDown(): void {

@@ -11,6 +11,7 @@
 namespace MSKD\Admin;
 
 use MSKD\Services\Email_Service;
+use MSKD\Traits\Email_Header_Footer;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,6 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Controller for email compose and one-time email pages.
  */
 class Admin_Email {
+
+	use Email_Header_Footer;
 
 	/**
 	 * Email service instance.
@@ -346,13 +349,19 @@ class Admin_Email {
 		$scheduled_at = $this->service->calculate_scheduled_time( $_POST );
 		$is_immediate = $this->service->is_immediate_send( $_POST );
 
+		// Get settings for header/footer.
+		$settings = get_option( 'mskd_settings', array() );
+
 		// Load SMTP Mailer.
 		require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
 		$mailer = new \MSKD_SMTP_Mailer();
 
 		if ( $is_immediate ) {
+			// Apply header/footer for immediate sends.
+			$body_with_wrapper = $this->apply_header_footer( $body, $settings );
+
 			// Send immediately (via SMTP if configured, otherwise via PHP mail).
-			$sent = $mailer->send( $recipient_email, $subject, $body );
+			$sent = $mailer->send( $recipient_email, $subject, $body_with_wrapper );
 
 			if ( ! $sent ) {
 				$this->last_mail_error = $mailer->get_last_error();
