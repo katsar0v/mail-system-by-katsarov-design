@@ -346,13 +346,19 @@ class Admin_Email {
 		$scheduled_at = $this->service->calculate_scheduled_time( $_POST );
 		$is_immediate = $this->service->is_immediate_send( $_POST );
 
+		// Get settings for header/footer.
+		$settings = get_option( 'mskd_settings', array() );
+
 		// Load SMTP Mailer.
 		require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
 		$mailer = new \MSKD_SMTP_Mailer();
 
 		if ( $is_immediate ) {
+			// Apply header/footer for immediate sends.
+			$body_with_wrapper = $this->apply_header_footer( $body, $settings );
+
 			// Send immediately (via SMTP if configured, otherwise via PHP mail).
-			$sent = $mailer->send( $recipient_email, $subject, $body );
+			$sent = $mailer->send( $recipient_email, $subject, $body_with_wrapper );
 
 			if ( ! $sent ) {
 				$this->last_mail_error = $mailer->get_last_error();
@@ -483,5 +489,38 @@ class Admin_Email {
 	 */
 	public function get_service(): Email_Service {
 		return $this->service;
+	}
+
+	/**
+	 * Apply custom header and footer to email content.
+	 *
+	 * Prepends the configured email header and appends the configured email footer
+	 * to the email body. This ensures one-time emails sent immediately have the
+	 * same formatting as queued emails processed by the cron handler.
+	 *
+	 * @param string $content  Email body content.
+	 * @param array  $settings Plugin settings array.
+	 * @return string Email content with header prepended and footer appended.
+	 */
+	private function apply_header_footer( string $content, array $settings ): string {
+		$header = $settings['email_header'] ?? '';
+		$footer = $settings['email_footer'] ?? '';
+
+		// Only modify content if header or footer is set.
+		if ( empty( $header ) && empty( $footer ) ) {
+			return $content;
+		}
+
+		// Prepend header if set.
+		if ( ! empty( $header ) ) {
+			$content = $header . $content;
+		}
+
+		// Append footer if set.
+		if ( ! empty( $footer ) ) {
+			$content = $content . $footer;
+		}
+
+		return $content;
 	}
 }

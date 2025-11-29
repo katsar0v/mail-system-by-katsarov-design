@@ -8,6 +8,11 @@ You can configure custom HTML content that will be:
 - **Header**: Prepended (added before) the main email content
 - **Footer**: Appended (added after) the main email content
 
+This feature applies to all email types:
+- **Campaign emails** (newsletters sent to lists)
+- **One-time emails** (individual emails sent immediately or scheduled)
+- **Scheduled emails** (processed by the queue)
+
 This feature is useful for:
 - Adding consistent branding elements (logos, company info)
 - Including legal disclaimers or privacy notices
