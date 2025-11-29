@@ -913,6 +913,18 @@ msgstr ""
 msgid "... and %d more"
 msgstr ""
 
+#: admin/partials/lists.php
+msgid "Shortcode"
+msgstr ""
+
+#: admin/partials/lists.php
+msgid "Copy shortcode"
+msgstr ""
+
+#: admin/partials/lists.php
+msgid "Automated lists do not have subscription forms"
+msgstr ""
+
 #: admin/class-admin.php
 msgid "Processing..."
 msgstr ""

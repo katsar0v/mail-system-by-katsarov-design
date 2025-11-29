@@ -942,6 +942,18 @@ msgstr "Изпрати имейл"
 msgid "... and %d more"
 msgstr "... и още %d"
 
+#: admin/partials/lists.php
+msgid "Shortcode"
+msgstr "Шорткод"
+
+#: admin/partials/lists.php
+msgid "Copy shortcode"
+msgstr "Копирай шорткод"
+
+#: admin/partials/lists.php
+msgid "Automated lists do not have subscription forms"
+msgstr "Автоматичните списъци нямат формуляри за абонамент"
+
 #: admin/class-admin.php
 msgid "Processing..."
 msgstr "Обработка..."

@@ -951,6 +951,18 @@ msgstr "E-Mail senden"
 msgid "... and %d more"
 msgstr "... und %d weitere"
 
+#: admin/partials/lists.php
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: admin/partials/lists.php
+msgid "Copy shortcode"
+msgstr "Shortcode kopieren"
+
+#: admin/partials/lists.php
+msgid "Automated lists do not have subscription forms"
+msgstr "Automatisierte Listen haben keine Abonnement-Formulare"
+
 #: admin/class-admin.php
 msgid "Processing..."
 msgstr "Verarbeitung..."

@@ -130,3 +130,40 @@
     color: $color-wp-text-light;
     font-style: italic;
 }
+
+// Shortcode column in lists table
+.mskd-lists-table {
+    .mskd-shortcode-col {
+        width: 280px;
+    }
+}
+
+.mskd-shortcode-inline {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+
+    .mskd-shortcode-code {
+        flex: 1;
+        font-family: $font-family-code;
+        font-size: $font-size-xs;
+        color: $color-gray-700;
+        background: $color-gray-100;
+        padding: $spacing-1 $spacing-2;
+        border-radius: $border-radius;
+        word-break: break-all;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 180px;
+    }
+
+    .button-small {
+        flex-shrink: 0;
+    }
+}
+
+.mskd-shortcode-na {
+    color: $color-wp-text-light;
+    cursor: help;
+}
