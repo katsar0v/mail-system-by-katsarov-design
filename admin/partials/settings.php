@@ -95,39 +95,39 @@ $smtp_password = isset( $settings['smtp_password'] ) ? base64_decode( $settings[
 
             <hr>
 
-            <h2><?php _e( 'Email Template Settings', 'mail-system-by-katsarov-design' ); ?></h2>
-            <p class="description"><?php _e( 'Configure custom header and footer that will be added to all outgoing emails. Supports HTML and template variables.', 'mail-system-by-katsarov-design' ); ?></p>
+            <h2><?php esc_html_e( 'Email Template Settings', 'mail-system-by-katsarov-design' ); ?></h2>
+            <p class="description"><?php esc_html_e( 'Configure custom header and footer that will be added to all outgoing emails. Supports HTML and template variables.', 'mail-system-by-katsarov-design' ); ?></p>
 
             <table class="form-table">
                 <tr>
                     <th scope="row">
-                        <label for="email_header"><?php _e( 'Email Header', 'mail-system-by-katsarov-design' ); ?></label>
+                        <label for="email_header"><?php esc_html_e( 'Email Header', 'mail-system-by-katsarov-design' ); ?></label>
                     </th>
                     <td>
                         <textarea name="email_header" id="email_header" class="large-text code" rows="6"><?php echo esc_textarea( $email_header ); ?></textarea>
-                        <p class="description"><?php _e( 'HTML content to prepend to all emails. Leave empty to disable.', 'mail-system-by-katsarov-design' ); ?></p>
+                        <p class="description"><?php esc_html_e( 'HTML content to prepend to all emails. Leave empty to disable.', 'mail-system-by-katsarov-design' ); ?></p>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">
-                        <label for="email_footer"><?php _e( 'Email Footer', 'mail-system-by-katsarov-design' ); ?></label>
+                        <label for="email_footer"><?php esc_html_e( 'Email Footer', 'mail-system-by-katsarov-design' ); ?></label>
                     </th>
                     <td>
                         <textarea name="email_footer" id="email_footer" class="large-text code" rows="6"><?php echo esc_textarea( $email_footer ); ?></textarea>
-                        <p class="description"><?php _e( 'HTML content to append to all emails. Leave empty to disable.', 'mail-system-by-katsarov-design' ); ?></p>
+                        <p class="description"><?php esc_html_e( 'HTML content to append to all emails. Leave empty to disable.', 'mail-system-by-katsarov-design' ); ?></p>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">
-                        <?php _e( 'Available Variables', 'mail-system-by-katsarov-design' ); ?>
+                        <?php esc_html_e( 'Available Variables', 'mail-system-by-katsarov-design' ); ?>
                     </th>
                     <td>
                         <p class="description">
-                            <code>{first_name}</code> - <?php _e( 'Subscriber first name', 'mail-system-by-katsarov-design' ); ?><br>
-                            <code>{last_name}</code> - <?php _e( 'Subscriber last name', 'mail-system-by-katsarov-design' ); ?><br>
-                            <code>{email}</code> - <?php _e( 'Subscriber email address', 'mail-system-by-katsarov-design' ); ?><br>
-                            <code>{unsubscribe_link}</code> - <?php _e( 'Clickable unsubscribe link', 'mail-system-by-katsarov-design' ); ?><br>
-                            <code>{unsubscribe_url}</code> - <?php _e( 'Raw unsubscribe URL', 'mail-system-by-katsarov-design' ); ?>
+                            <code>{first_name}</code> - <?php esc_html_e( 'Subscriber first name', 'mail-system-by-katsarov-design' ); ?><br>
+                            <code>{last_name}</code> - <?php esc_html_e( 'Subscriber last name', 'mail-system-by-katsarov-design' ); ?><br>
+                            <code>{email}</code> - <?php esc_html_e( 'Subscriber email address', 'mail-system-by-katsarov-design' ); ?><br>
+                            <code>{unsubscribe_link}</code> - <?php esc_html_e( 'Clickable unsubscribe link', 'mail-system-by-katsarov-design' ); ?><br>
+                            <code>{unsubscribe_url}</code> - <?php esc_html_e( 'Raw unsubscribe URL', 'mail-system-by-katsarov-design' ); ?>
                         </p>
                     </td>
                 </tr>
