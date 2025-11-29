@@ -374,150 +374,62 @@ class OneTimeEmailTest extends TestCase {
 
     /**
      * Test that header and footer are applied to immediate one-time emails.
+     *
+     * This test verifies that the Admin_Email class correctly uses the
+     * Email_Header_Footer trait's apply_header_footer method. The method
+     * itself is thoroughly tested in EmailHeaderFooterTest.
      */
     public function test_one_time_email_applies_header_footer(): void {
-        // Use the wpdb mock set up in setUp().
-        $wpdb = $this->wpdb;
+        // Load Admin_Email to test trait integration.
+        require_once \MSKD_PLUGIN_DIR . 'includes/Admin/class-admin-email.php';
 
-        $_POST = array(
-            'mskd_send_one_time_email' => 1,
-            'mskd_nonce'               => 'test_nonce',
-            'recipient_email'          => 'user@example.com',
-            'recipient_name'           => 'Test User',
-            'subject'                  => 'Test Subject',
-            'body'                     => '<p>Main email content</p>',
-            'schedule_type'            => 'now',
+        $admin_email = new \MSKD\Admin\Admin_Email();
+
+        // Test that Admin_Email class has the apply_header_footer method from trait.
+        $this->assertTrue(
+            method_exists( $admin_email, 'apply_header_footer' ),
+            'Admin_Email should have apply_header_footer method from trait'
         );
 
-        Functions\expect( 'wp_verify_nonce' )
-            ->once()
-            ->andReturn( true );
+        // Test the method works correctly (trait integration test).
+        $content  = '<p>Main email content</p>';
+        $settings = array(
+            'email_header' => '<div class="header">Company Header</div>',
+            'email_footer' => '<div class="footer">Company Footer</div>',
+        );
 
-        Functions\expect( 'current_user_can' )
-            ->atLeast()
-            ->times( 1 )
-            ->andReturn( true );
+        $result = $admin_email->apply_header_footer( $content, $settings );
 
-        // Settings with header and footer configured.
-        Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
-            if ( 'mskd_settings' === $option ) {
-                return array(
-                    'smtp_enabled'  => true,
-                    'smtp_host'     => 'smtp.example.com',
-                    'from_name'     => 'Test Site',
-                    'from_email'    => 'noreply@example.com',
-                    'reply_to'      => 'reply@example.com',
-                    'email_header'  => '<div class="header">Company Header</div>',
-                    'email_footer'  => '<div class="footer">Company Footer</div>',
-                );
-            }
-            return $default;
-        });
-
-        // First insert is to campaigns table.
-        $wpdb->insert_id = 1;
-        $wpdb->shouldReceive( 'insert' )
-            ->once()
-            ->with(
-                'wp_mskd_campaigns',
-                Mockery::type( 'array' ),
-                Mockery::type( 'array' )
-            )
-            ->andReturn( 1 );
-
-        // Second insert is to queue table.
-        $wpdb->shouldReceive( 'insert' )
-            ->once()
-            ->with(
-                'wp_mskd_queue',
-                Mockery::type( 'array' ),
-                Mockery::type( 'array' )
-            )
-            ->andReturn( 1 );
-
-        Functions\expect( 'add_settings_error' )
-            ->once()
-            ->andReturnUsing( function ( $setting, $code, $message, $type ) {
-                $this->assertEquals( 'mskd_success', $code );
-                $this->assertEquals( 'success', $type );
-            } );
-
-        $this->admin->handle_actions();
-
-        // The test passes if it reaches here - header/footer are applied before sending.
-        // The actual verification that header/footer are applied is done via PHPMailer mock.
-        $this->assertTrue( true );
+        $this->assertStringContainsString( '<div class="header">Company Header</div>', $result );
+        $this->assertStringContainsString( '<p>Main email content</p>', $result );
+        $this->assertStringContainsString( '<div class="footer">Company Footer</div>', $result );
     }
 
     /**
      * Test that empty header and footer don't modify content.
+     *
+     * This test verifies that the Admin_Email class correctly handles
+     * empty header/footer settings via the Email_Header_Footer trait.
      */
     public function test_one_time_email_with_empty_header_footer(): void {
-        // Use the wpdb mock set up in setUp().
-        $wpdb = $this->wpdb;
+        // Load Admin_Email to test trait integration.
+        require_once \MSKD_PLUGIN_DIR . 'includes/Admin/class-admin-email.php';
 
-        $_POST = array(
-            'mskd_send_one_time_email' => 1,
-            'mskd_nonce'               => 'test_nonce',
-            'recipient_email'          => 'user@example.com',
-            'recipient_name'           => 'Test User',
-            'subject'                  => 'Test Subject',
-            'body'                     => '<p>Main email content</p>',
-            'schedule_type'            => 'now',
+        $admin_email = new \MSKD\Admin\Admin_Email();
+
+        $content  = '<p>Main email content</p>';
+        $settings = array(
+            'email_header' => '',
+            'email_footer' => '',
         );
 
-        Functions\expect( 'wp_verify_nonce' )
-            ->once()
-            ->andReturn( true );
+        $result = $admin_email->apply_header_footer( $content, $settings );
 
-        Functions\expect( 'current_user_can' )
-            ->atLeast()
-            ->times( 1 )
-            ->andReturn( true );
-
-        // Settings with empty header and footer.
-        Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
-            if ( 'mskd_settings' === $option ) {
-                return array(
-                    'smtp_enabled'  => true,
-                    'smtp_host'     => 'smtp.example.com',
-                    'from_name'     => 'Test Site',
-                    'from_email'    => 'noreply@example.com',
-                    'reply_to'      => 'reply@example.com',
-                    'email_header'  => '',
-                    'email_footer'  => '',
-                );
-            }
-            return $default;
-        });
-
-        // First insert is to campaigns table.
-        $wpdb->insert_id = 1;
-        $wpdb->shouldReceive( 'insert' )
-            ->once()
-            ->with(
-                'wp_mskd_campaigns',
-                Mockery::type( 'array' ),
-                Mockery::type( 'array' )
-            )
-            ->andReturn( 1 );
-
-        // Second insert is to queue table.
-        $wpdb->shouldReceive( 'insert' )
-            ->once()
-            ->with(
-                'wp_mskd_queue',
-                Mockery::type( 'array' ),
-                Mockery::type( 'array' )
-            )
-            ->andReturn( 1 );
-
-        Functions\expect( 'add_settings_error' )
-            ->once();
-
-        $this->admin->handle_actions();
-
-        $this->assertTrue( true );
+        $this->assertEquals(
+            $content,
+            $result,
+            'Content should remain unchanged when header and footer are empty'
+        );
     }
 
     /**

@@ -11,6 +11,7 @@
 namespace MSKD\Admin;
 
 use MSKD\Services\Email_Service;
+use MSKD\Traits\Email_Header_Footer;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,6 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Controller for email compose and one-time email pages.
  */
 class Admin_Email {
+
+	use Email_Header_Footer;
 
 	/**
 	 * Email service instance.
@@ -489,38 +492,5 @@ class Admin_Email {
 	 */
 	public function get_service(): Email_Service {
 		return $this->service;
-	}
-
-	/**
-	 * Apply custom header and footer to email content.
-	 *
-	 * Prepends the configured email header and appends the configured email footer
-	 * to the email body. This ensures one-time emails sent immediately have the
-	 * same formatting as queued emails processed by the cron handler.
-	 *
-	 * @param string $content  Email body content.
-	 * @param array  $settings Plugin settings array.
-	 * @return string Email content with header prepended and footer appended.
-	 */
-	private function apply_header_footer( string $content, array $settings ): string {
-		$header = $settings['email_header'] ?? '';
-		$footer = $settings['email_footer'] ?? '';
-
-		// Only modify content if header or footer is set.
-		if ( empty( $header ) && empty( $footer ) ) {
-			return $content;
-		}
-
-		// Prepend header if set.
-		if ( ! empty( $header ) ) {
-			$content = $header . $content;
-		}
-
-		// Append footer if set.
-		if ( ! empty( $footer ) ) {
-			$content = $content . $footer;
-		}
-
-		return $content;
 	}
 }
