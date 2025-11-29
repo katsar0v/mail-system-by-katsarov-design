@@ -349,25 +349,59 @@
                 document.execCommand('copy');
                 showCopySuccess($button, originalText);
             } catch (err) {
-                $button.text(mskd_admin.strings.copy_error || 'Error');
-                setTimeout(function() {
-                    $button.text(originalText);
-                }, 2000);
+                showCopyError($button, originalText);
             }
 
             document.body.removeChild(textArea);
         }
 
         /**
+         * Show copy error feedback
+         */
+        function showCopyError($button, originalText) {
+            if ($button.hasClass('mskd-copy-icon-btn')) {
+                var $icon = $button.find('.dashicons');
+                // Swap clipboard icon with X
+                $icon.removeClass('dashicons-clipboard').addClass('dashicons-no');
+                $button.addClass('error');
+                setTimeout(function() {
+                    // Restore clipboard icon
+                    $icon.removeClass('dashicons-no').addClass('dashicons-clipboard');
+                    $button.removeClass('error');
+                }, 2000);
+            } else {
+                // Text button
+                $button.text(mskd_admin.strings.copy_error || 'Error');
+                setTimeout(function() {
+                    $button.text(originalText);
+                }, 2000);
+            }
+        }
+
+        /**
          * Show copy success feedback
          */
         function showCopySuccess($button, originalText) {
-            $button.text(mskd_admin.strings.copied || 'Copied!');
-            $button.addClass('button-primary');
-            setTimeout(function() {
-                $button.text(originalText);
-                $button.removeClass('button-primary');
-            }, 2000);
+            // Check if this is an icon-only button
+            if ($button.hasClass('mskd-copy-icon-btn')) {
+                var $icon = $button.find('.dashicons');
+                // Swap clipboard icon with checkmark
+                $icon.removeClass('dashicons-clipboard').addClass('dashicons-yes-alt');
+                $button.addClass('copied');
+                setTimeout(function() {
+                    // Restore clipboard icon
+                    $icon.removeClass('dashicons-yes-alt').addClass('dashicons-clipboard');
+                    $button.removeClass('copied');
+                }, 2000);
+            } else {
+                // Text button (shortcodes page)
+                $button.text(mskd_admin.strings.copied || 'Copied!');
+                $button.addClass('button-primary');
+                setTimeout(function() {
+                    $button.text(originalText);
+                    $button.removeClass('button-primary');
+                }, 2000);
+            }
         }
 
         // =====================================================================

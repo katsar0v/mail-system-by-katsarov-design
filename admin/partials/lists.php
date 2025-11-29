@@ -182,8 +182,8 @@ if ( $action === 'edit' && $list_id ) {
                                     ?>
                                     <div class="mskd-shortcode-inline">
                                         <code class="mskd-shortcode-code" id="<?php echo esc_attr( $shortcode_id ); ?>"><?php echo esc_html( $shortcode ); ?></code>
-                                        <button type="button" class="button button-small mskd-copy-btn" data-target="<?php echo esc_attr( $shortcode_id ); ?>" title="<?php esc_attr_e( 'Copy shortcode', 'mail-system-by-katsarov-design' ); ?>">
-                                            <?php esc_html_e( 'Copy', 'mail-system-by-katsarov-design' ); ?>
+                                        <button type="button" class="mskd-copy-btn mskd-copy-icon-btn" data-target="<?php echo esc_attr( $shortcode_id ); ?>" title="<?php esc_attr_e( 'Copy shortcode', 'mail-system-by-katsarov-design' ); ?>">
+                                            <span class="dashicons dashicons-clipboard"></span>
                                         </button>
                                     </div>
                                 <?php else : ?>
