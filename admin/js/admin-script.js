@@ -38,9 +38,84 @@
         });
     }
 
+    /**
+     * SlimSelect instance for import target lists
+     */
+    var importListsSlimSelect = null;
+
+    /**
+     * Initialize SlimSelect for import target lists selector
+     */
+    function initImportListsSlimSelect() {
+        var selectElement = document.querySelector('.mskd-slimselect-import-lists');
+        
+        if (!selectElement || importListsSlimSelect) {
+            return;
+        }
+
+        // Check if SlimSelect is available
+        if (typeof SlimSelect === 'undefined') {
+            setTimeout(initImportListsSlimSelect, 100);
+            return;
+        }
+
+        importListsSlimSelect = new SlimSelect({
+            select: selectElement,
+            settings: {
+                placeholderText: (typeof mskd_admin !== 'undefined' && mskd_admin.strings.select_lists_placeholder) || 'Select lists...',
+                searchPlaceholderText: (typeof mskd_admin !== 'undefined' && mskd_admin.strings.search_placeholder) || 'Search...',
+                searchText: (typeof mskd_admin !== 'undefined' && mskd_admin.strings.no_results) || 'No results found',
+                allowDeselect: true,
+                closeOnSelect: false,
+                showSearch: true
+            },
+            events: {
+                afterChange: function() {
+                    toggleImportListsWarning();
+                }
+            }
+        });
+    }
+
+    /**
+     * Toggle warning message when target lists are selected
+     */
+    function toggleImportListsWarning() {
+        var selectElement = document.querySelector('.mskd-slimselect-import-lists');
+        var warningElement = document.getElementById('mskd-target-lists-warning');
+        var assignListsCheckbox = document.querySelector('input[name="assign_lists"]');
+        
+        if (!selectElement || !warningElement) {
+            return;
+        }
+
+        var selectedValues = Array.from(selectElement.selectedOptions).map(function(opt) {
+            return opt.value;
+        });
+
+        if (selectedValues.length > 0) {
+            warningElement.classList.remove('mskd-hidden');
+            // Disable the "assign from file" checkbox when target lists are selected
+            if (assignListsCheckbox) {
+                assignListsCheckbox.disabled = true;
+                assignListsCheckbox.closest('.mskd-checkbox-item').classList.add('mskd-disabled');
+            }
+        } else {
+            warningElement.classList.add('mskd-hidden');
+            // Re-enable the checkbox
+            if (assignListsCheckbox) {
+                assignListsCheckbox.disabled = false;
+                assignListsCheckbox.closest('.mskd-checkbox-item').classList.remove('mskd-disabled');
+            }
+        }
+    }
+
     $(document).ready(function() {
         // Initialize SlimSelect for lists multi-select
         initSlimSelect();
+
+        // Initialize SlimSelect for import target lists
+        initImportListsSlimSelect();
 
         // Confirm delete
         $('.mskd-delete-link').on('click', function(e) {

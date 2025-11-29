@@ -1521,6 +1521,18 @@ msgid "Maximum file size: 5MB"
 msgstr ""
 
 #: admin/partials/import-export.php
+msgid "Assign to specific lists"
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "Leave empty to use lists from CSV file."
+msgstr ""
+
+#: admin/partials/import-export.php
+msgid "This will override any list assignments in the CSV file."
+msgstr ""
+
+#: admin/partials/import-export.php
 msgid "Import options"
 msgstr ""
 

@@ -230,9 +230,16 @@ class Admin_Import_Export {
 
 		// Import options.
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions().
+		$target_list_ids = array();
+		if ( ! empty( $_POST['target_lists'] ) && is_array( $_POST['target_lists'] ) ) {
+			$target_list_ids = array_map( 'intval', $_POST['target_lists'] );
+			$target_list_ids = array_filter( $target_list_ids ); // Remove zeros.
+		}
+
 		$options = array(
 			'update_existing' => isset( $_POST['update_existing'] ) && '1' === $_POST['update_existing'],
 			'assign_lists'    => isset( $_POST['assign_lists'] ) && '1' === $_POST['assign_lists'],
+			'target_list_ids' => $target_list_ids,
 			'skip_existing'   => true,
 		);
 		// phpcs:enable
