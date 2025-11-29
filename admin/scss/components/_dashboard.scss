@@ -117,3 +117,96 @@
     grid-template-columns: 1fr;
   }
 }
+
+// ==========================================================================
+// Dashboard Widget
+// ==========================================================================
+// Styles for the WordPress dashboard widget.
+
+.mskd-dashboard-widget {
+  padding: $spacing-2 0;
+}
+
+// Widget stats grid
+.mskd-widget-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-3;
+  margin-bottom: $spacing-4;
+}
+
+// Individual stat item
+.mskd-widget-stat {
+  text-align: center;
+  padding: $spacing-3;
+  border-radius: $border-radius;
+  background: $color-gray-100;
+
+  .mskd-widget-stat-number {
+    display: block;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-semibold;
+    line-height: $line-height-tight;
+    margin-bottom: $spacing-1;
+  }
+
+  .mskd-widget-stat-label {
+    display: block;
+    font-size: $font-size-sm;
+    color: $color-wp-text-light;
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing-wide;
+  }
+}
+
+// Status colors for widget stats
+.mskd-widget-stat-pending {
+  background: $color-warning-bg;
+
+  .mskd-widget-stat-number {
+    color: $color-warning-text;
+  }
+}
+
+.mskd-widget-stat-sent {
+  background: $color-success-bg;
+
+  .mskd-widget-stat-number {
+    color: $color-success-text;
+  }
+}
+
+.mskd-widget-stat-failed {
+  background: $color-error-bg;
+
+  .mskd-widget-stat-number {
+    color: $color-error-text;
+  }
+}
+
+// Cron status section
+.mskd-widget-cron {
+  margin-bottom: $spacing-4;
+  padding: $spacing-3;
+  background: $color-gray-100;
+  border-radius: $border-radius;
+
+  p {
+    margin: 0;
+    font-size: $font-size-base;
+    color: $color-wp-text;
+  }
+}
+
+.mskd-widget-cron-never {
+  color: $color-warning-text !important;
+}
+
+// Widget links
+.mskd-widget-link {
+  margin: 0;
+
+  .button {
+    margin-right: $spacing-2;
+  }
+}
