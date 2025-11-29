@@ -44,18 +44,21 @@ class Email_Service {
 	private $campaigns_table;
 
 	/**
-	 * Subscriber ID for one-time emails (not associated with any subscriber).
+	 * Subscriber service instance.
+	 *
+	 * @var Subscriber_Service
 	 */
-	const ONE_TIME_EMAIL_SUBSCRIBER_ID = 0;
+	private $subscriber_service;
 
 	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		global $wpdb;
-		$this->wpdb            = $wpdb;
-		$this->queue_table     = $wpdb->prefix . 'mskd_queue';
-		$this->campaigns_table = $wpdb->prefix . 'mskd_campaigns';
+		$this->wpdb               = $wpdb;
+		$this->queue_table        = $wpdb->prefix . 'mskd_queue';
+		$this->campaigns_table    = $wpdb->prefix . 'mskd_campaigns';
+		$this->subscriber_service = new Subscriber_Service();
 	}
 
 	/**
@@ -115,35 +118,43 @@ class Email_Service {
 		foreach ( $subscribers as $subscriber ) {
 			$is_external = \MSKD_List_Provider::is_external_id( $subscriber->id ?? '' );
 
+			// For external subscribers, get or create a subscriber record with unsubscribe token.
+			if ( $is_external ) {
+				$db_subscriber = $this->subscriber_service->get_or_create(
+					$subscriber->email,
+					$subscriber->first_name ?? '',
+					$subscriber->last_name ?? '',
+					Subscriber_Service::SOURCE_EXTERNAL
+				);
+
+				// Skip if subscriber is unsubscribed or couldn't be created.
+				if ( ! $db_subscriber || 'unsubscribed' === $db_subscriber->status ) {
+					continue;
+				}
+
+				$subscriber_id = (int) $db_subscriber->id;
+			} else {
+				// For internal subscribers, check if they're unsubscribed.
+				$db_subscriber = $this->subscriber_service->get_by_id( (int) $subscriber->id );
+				if ( ! $db_subscriber || 'unsubscribed' === $db_subscriber->status ) {
+					continue;
+				}
+				$subscriber_id = (int) $subscriber->id;
+			}
+
 			$queue_data = array(
 				'campaign_id'   => $campaign_id,
-				'subscriber_id' => $is_external ? 0 : intval( $subscriber->id ),
+				'subscriber_id' => $subscriber_id,
 				'subject'       => $subject,
 				'body'          => $body,
 				'status'        => 'pending',
 				'scheduled_at'  => $scheduled_at,
 			);
 
-			// Store inline subscriber data for external subscribers.
-			if ( $is_external ) {
-				$queue_data['subscriber_data'] = wp_json_encode(
-					array(
-						'email'             => $subscriber->email,
-						'first_name'        => $subscriber->first_name ?? '',
-						'last_name'         => $subscriber->last_name ?? '',
-						'unsubscribe_token' => $subscriber->unsubscribe_token ?? '',
-						'source'            => 'external',
-						'provider'          => $subscriber->provider ?? '',
-					)
-				);
-			}
-
 			$result = $this->wpdb->insert(
 				$this->queue_table,
 				$queue_data,
-				$is_external
-					? array( '%d', '%d', '%s', '%s', '%s', '%s', '%s' )
-					: array( '%d', '%d', '%s', '%s', '%s', '%s' )
+				array( '%d', '%d', '%s', '%s', '%s', '%s' )
 			);
 
 			if ( $result ) {
@@ -185,6 +196,21 @@ class Email_Service {
 			return false;
 		}
 
+		// Get or create subscriber record for unsubscribe support.
+		$subscriber = $this->subscriber_service->get_or_create(
+			$recipient_email,
+			$recipient_name,
+			'',
+			Subscriber_Service::SOURCE_ONE_TIME
+		);
+
+		// Check if subscriber is unsubscribed.
+		if ( $subscriber && 'unsubscribed' === $subscriber->status ) {
+			return false;
+		}
+
+		$subscriber_id = $subscriber ? (int) $subscriber->id : 0;
+
 		// Create campaign record for the one-time email.
 		$campaign_status = $is_immediate ? 'completed' : 'pending';
 		$campaign_data   = array(
@@ -217,47 +243,34 @@ class Email_Service {
 			update_option( 'mskd_total_campaigns_created', $total_campaigns + 1 );
 		}
 
-		// Create subscriber data JSON.
-		$subscriber_data = wp_json_encode(
-			array(
-				'email'             => $recipient_email,
-				'first_name'        => $recipient_name,
-				'last_name'         => '',
-				'unsubscribe_token' => '',
-				'source'            => 'one-time-email',
-			)
-		);
-
 		// Queue item data.
 		if ( $is_immediate ) {
 			$queue_status = $sent ? 'sent' : 'failed';
 			$queue_data   = array(
-				'campaign_id'     => $campaign_id,
-				'subscriber_id'   => self::ONE_TIME_EMAIL_SUBSCRIBER_ID,
-				'subscriber_data' => $subscriber_data,
-				'subject'         => $subject,
-				'body'            => $body,
-				'status'          => $queue_status,
-				'scheduled_at'    => mskd_current_time_normalized(),
-				'sent_at'         => $sent ? mskd_current_time_normalized() : null,
-				'attempts'        => 1,
-				'error_message'   => $sent ? null : $error_message,
+				'campaign_id'   => $campaign_id,
+				'subscriber_id' => $subscriber_id,
+				'subject'       => $subject,
+				'body'          => $body,
+				'status'        => $queue_status,
+				'scheduled_at'  => mskd_current_time_normalized(),
+				'sent_at'       => $sent ? mskd_current_time_normalized() : null,
+				'attempts'      => 1,
+				'error_message' => $sent ? null : $error_message,
 			);
-			$format       = array( '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s' );
+			$format       = array( '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s' );
 		} else {
 			$queue_data = array(
-				'campaign_id'     => $campaign_id,
-				'subscriber_id'   => self::ONE_TIME_EMAIL_SUBSCRIBER_ID,
-				'subscriber_data' => $subscriber_data,
-				'subject'         => $subject,
-				'body'            => $body,
-				'status'          => 'pending',
-				'scheduled_at'    => $scheduled_at,
-				'sent_at'         => null,
-				'attempts'        => 0,
-				'error_message'   => null,
+				'campaign_id'   => $campaign_id,
+				'subscriber_id' => $subscriber_id,
+				'subject'       => $subject,
+				'body'          => $body,
+				'status'        => 'pending',
+				'scheduled_at'  => $scheduled_at,
+				'sent_at'       => null,
+				'attempts'      => 0,
+				'error_message' => null,
 			);
-			$format     = array( '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s' );
+			$format     = array( '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s' );
 		}
 
 		$result = $this->wpdb->insert( $this->queue_table, $queue_data, $format );

@@ -200,21 +200,14 @@ class EmailHeaderFooterTest extends TestCase {
 			} ) )
 			->andReturn( array() );
 
-		// Second get_results is for pending DB subscriber queue items.
+		// Second get_results is for queue items (unified query with JOIN).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
 			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'subscriber_id > 0' ) !== false;
+				return strpos( $query, 'INNER JOIN' ) !== false
+					&& strpos( $query, 'mskd_subscribers' ) !== false;
 			} ) )
 			->andReturn( $queue_items );
-
-		// Third get_results is for pending external subscriber queue items.
-		$wpdb->shouldReceive( 'get_results' )
-			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'subscriber_id = 0' ) !== false;
-			} ) )
-			->andReturn( array() );
 
 		$wpdb->shouldReceive( 'update' )
 			->twice()
@@ -273,21 +266,14 @@ class EmailHeaderFooterTest extends TestCase {
 			} ) )
 			->andReturn( array() );
 
-		// Second get_results is for DB subscriber queue items.
+		// Second get_results is for queue items (unified query with JOIN).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
 			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'subscriber_id > 0' ) !== false;
+				return strpos( $query, 'INNER JOIN' ) !== false
+					&& strpos( $query, 'mskd_subscribers' ) !== false;
 			} ) )
 			->andReturn( $queue_items );
-
-		// Third get_results is for external subscriber queue items.
-		$wpdb->shouldReceive( 'get_results' )
-			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'subscriber_id = 0' ) !== false;
-			} ) )
-			->andReturn( array() );
 
 		$wpdb->shouldReceive( 'update' )
 			->twice()
@@ -345,21 +331,14 @@ class EmailHeaderFooterTest extends TestCase {
 			} ) )
 			->andReturn( array() );
 
-		// Second get_results is for DB subscriber queue items.
+		// Second get_results is for queue items (unified query with JOIN).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
 			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'subscriber_id > 0' ) !== false;
+				return strpos( $query, 'INNER JOIN' ) !== false
+					&& strpos( $query, 'mskd_subscribers' ) !== false;
 			} ) )
 			->andReturn( $queue_items );
-
-		// Third get_results is for external subscriber queue items.
-		$wpdb->shouldReceive( 'get_results' )
-			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'subscriber_id = 0' ) !== false;
-			} ) )
-			->andReturn( array() );
 
 		$wpdb->shouldReceive( 'update' )
 			->twice()
@@ -416,21 +395,14 @@ class EmailHeaderFooterTest extends TestCase {
 			} ) )
 			->andReturn( array() );
 
-		// Second get_results is for DB subscriber queue items.
+		// Second get_results is for queue items (unified query with JOIN).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
 			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'subscriber_id > 0' ) !== false;
+				return strpos( $query, 'INNER JOIN' ) !== false
+					&& strpos( $query, 'mskd_subscribers' ) !== false;
 			} ) )
 			->andReturn( $queue_items );
-
-		// Third get_results is for external subscriber queue items.
-		$wpdb->shouldReceive( 'get_results' )
-			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'subscriber_id = 0' ) !== false;
-			} ) )
-			->andReturn( array() );
 
 		$wpdb->shouldReceive( 'update' )
 			->twice()
@@ -487,21 +459,14 @@ class EmailHeaderFooterTest extends TestCase {
 			} ) )
 			->andReturn( array() );
 
-		// Second get_results is for DB subscriber queue items.
+		// Second get_results is for queue items (unified query with JOIN).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
 			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'subscriber_id > 0' ) !== false;
+				return strpos( $query, 'INNER JOIN' ) !== false
+					&& strpos( $query, 'mskd_subscribers' ) !== false;
 			} ) )
 			->andReturn( $queue_items );
-
-		// Third get_results is for external subscriber queue items.
-		$wpdb->shouldReceive( 'get_results' )
-			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'subscriber_id = 0' ) !== false;
-			} ) )
-			->andReturn( array() );
 
 		$wpdb->shouldReceive( 'update' )
 			->twice()
@@ -559,21 +524,14 @@ class EmailHeaderFooterTest extends TestCase {
 			} ) )
 			->andReturn( array() );
 
-		// Second get_results is for DB subscriber queue items.
+		// Second get_results is for queue items (unified query with JOIN).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
 			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'subscriber_id > 0' ) !== false;
+				return strpos( $query, 'INNER JOIN' ) !== false
+					&& strpos( $query, 'mskd_subscribers' ) !== false;
 			} ) )
 			->andReturn( $queue_items );
-
-		// Third get_results is for external subscriber queue items.
-		$wpdb->shouldReceive( 'get_results' )
-			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'subscriber_id = 0' ) !== false;
-			} ) )
-			->andReturn( array() );
 
 		$wpdb->shouldReceive( 'update' )
 			->twice()

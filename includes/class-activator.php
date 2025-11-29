@@ -19,7 +19,7 @@ class MSKD_Activator {
 	/**
 	 * Database version for tracking schema updates
 	 */
-	const DB_VERSION = '1.3.0';
+	const DB_VERSION = '1.4.0';
 
 	/**
 	 * Activate the plugin
@@ -106,6 +106,11 @@ class MSKD_Activator {
 		if ( version_compare( $from_version, '1.3.0', '<' ) ) {
 			self::create_templates_table();
 		}
+
+		// Upgrade from 1.3.0 to 1.4.0: Add source column to subscribers table.
+		if ( version_compare( $from_version, '1.4.0', '<' ) ) {
+			self::add_subscriber_source_column();
+		}
 	}
 
 	/**
@@ -124,12 +129,14 @@ class MSKD_Activator {
             first_name varchar(100) DEFAULT '',
             last_name varchar(100) DEFAULT '',
             status enum('active','inactive','unsubscribed') DEFAULT 'active',
+            source enum('internal','external','one_time') DEFAULT 'internal',
             unsubscribe_token varchar(64) NOT NULL,
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             UNIQUE KEY email (email),
             KEY status (status),
+            KEY source (source),
             KEY unsubscribe_token (unsubscribe_token)
         ) $charset_collate;";
 
@@ -282,6 +289,36 @@ class MSKD_Activator {
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta( $sql_templates );
+	}
+
+	/**
+	 * Add source column to subscribers table (used for upgrades)
+	 *
+	 * Tracks subscriber origin: internal (form signup), external (from callbacks), one_time (one-time emails).
+	 */
+	private static function add_subscriber_source_column() {
+		global $wpdb;
+
+		$table_subscribers = $wpdb->prefix . 'mskd_subscribers';
+
+		// Check if column exists.
+		$column_exists = $wpdb->get_results(
+			$wpdb->prepare(
+				"SHOW COLUMNS FROM {$table_subscribers} LIKE %s",
+				'source'
+			)
+		);
+
+		if ( empty( $column_exists ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+			$wpdb->query(
+				"ALTER TABLE {$table_subscribers} ADD COLUMN source enum('internal','external','one_time') DEFAULT 'internal' AFTER status"
+			);
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+			$wpdb->query(
+				"ALTER TABLE {$table_subscribers} ADD KEY source (source)"
+			);
+		}
 	}
 
 	/**
