@@ -164,6 +164,27 @@ $lists = $list_service->get_all();
 
 					<div class="mskd-import-subscribers-options">
 						<div class="mskd-form-group">
+							<label for="target_lists" class="mskd-form-label">
+								<span class="dashicons dashicons-list-view"></span>
+								<?php esc_html_e( 'Assign to specific lists', 'mail-system-by-katsarov-design' ); ?>
+							</label>
+							<select name="target_lists[]" id="target_lists" class="mskd-slimselect-import-lists" multiple="multiple">
+								<?php foreach ( $lists as $list ) : ?>
+									<option value="<?php echo esc_attr( $list->id ); ?>">
+										<?php echo esc_html( $list->name ); ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+							<p class="mskd-field-hint">
+								<?php esc_html_e( 'Leave empty to use lists from CSV file.', 'mail-system-by-katsarov-design' ); ?>
+							</p>
+							<div class="mskd-warning-hint mskd-hidden" id="mskd-target-lists-warning">
+								<span class="dashicons dashicons-warning"></span>
+								<span><?php esc_html_e( 'This will override any list assignments in the CSV file.', 'mail-system-by-katsarov-design' ); ?></span>
+							</div>
+						</div>
+
+						<div class="mskd-form-group">
 							<label class="mskd-form-label">
 								<span class="dashicons dashicons-admin-settings"></span>
 								<?php esc_html_e( 'Import options', 'mail-system-by-katsarov-design' ); ?>

@@ -355,6 +355,176 @@ class ImportExportTest extends TestCase {
 	}
 
 	/**
+	 * Test import subscribers with target_list_ids overrides CSV lists.
+	 */
+	public function test_import_subscribers_with_target_list_ids_overrides_csv(): void {
+		$rows = array(
+			array(
+				'email'      => 'new@example.com',
+				'first_name' => 'New',
+				'last_name'  => 'User',
+				'status'     => 'active',
+				'lists'      => 'Newsletter;Updates', // These should be ignored.
+			),
+		);
+
+		// Mock no existing subscriber.
+		$this->wpdb->shouldReceive( 'get_row' )
+			->with( Mockery::pattern( '/mskd_subscribers.*email/i' ), Mockery::any() )
+			->andReturn( null );
+
+		// Mock list exists check for target list.
+		$this->wpdb->shouldReceive( 'get_row' )
+			->with( Mockery::pattern( '/mskd_lists.*id.*=.*5/i' ), Mockery::any() )
+			->andReturn( (object) array( 'id' => 5, 'name' => 'Target List' ) );
+
+		// Mock insert subscriber and list assignments.
+		$this->wpdb->insert_id = 1;
+		$this->wpdb->shouldReceive( 'insert' )
+			->andReturn( 1 );
+
+		// Mock delete existing list assignments.
+		$this->wpdb->shouldReceive( 'delete' )
+			->andReturn( true );
+
+		$result = $this->service->import_subscribers(
+			$rows,
+			array( 'target_list_ids' => array( 5 ) )
+		);
+
+		$this->assertEquals( 1, $result['imported'] );
+		$this->assertEquals( 0, $result['skipped'] );
+		$this->assertEmpty( $result['errors'] );
+	}
+
+	/**
+	 * Test import subscribers with multiple target_list_ids.
+	 */
+	public function test_import_subscribers_with_multiple_target_list_ids(): void {
+		$rows = array(
+			array(
+				'email'      => 'multi@example.com',
+				'first_name' => 'Multi',
+				'last_name'  => 'List',
+				'status'     => 'active',
+				'lists'      => '',
+			),
+		);
+
+		// Mock no existing subscriber.
+		$this->wpdb->shouldReceive( 'get_row' )
+			->with( Mockery::pattern( '/mskd_subscribers.*email/i' ), Mockery::any() )
+			->andReturn( null );
+
+		// Mock list exists check for target lists (ids 3 and 7).
+		$this->wpdb->shouldReceive( 'get_row' )
+			->with( Mockery::pattern( '/mskd_lists.*id.*=.*3/i' ), Mockery::any() )
+			->andReturn( (object) array( 'id' => 3, 'name' => 'List Three' ) );
+
+		$this->wpdb->shouldReceive( 'get_row' )
+			->with( Mockery::pattern( '/mskd_lists.*id.*=.*7/i' ), Mockery::any() )
+			->andReturn( (object) array( 'id' => 7, 'name' => 'List Seven' ) );
+
+		// Mock insert subscriber.
+		$this->wpdb->insert_id = 2;
+		$this->wpdb->shouldReceive( 'insert' )
+			->andReturn( 1 );
+
+		// Mock delete existing list assignments.
+		$this->wpdb->shouldReceive( 'delete' )
+			->andReturn( true );
+
+		$result = $this->service->import_subscribers(
+			$rows,
+			array( 'target_list_ids' => array( 3, 7 ) )
+		);
+
+		$this->assertEquals( 1, $result['imported'] );
+	}
+
+	/**
+	 * Test import subscribers with empty target_list_ids uses CSV lists.
+	 */
+	public function test_import_subscribers_without_target_list_ids_uses_csv(): void {
+		$rows = array(
+			array(
+				'email'      => 'csv@example.com',
+				'first_name' => 'CSV',
+				'last_name'  => 'User',
+				'status'     => 'active',
+				'lists'      => 'FromCSV',
+			),
+		);
+
+		// Mock no existing subscriber.
+		$this->wpdb->shouldReceive( 'get_row' )
+			->with( Mockery::pattern( '/mskd_subscribers.*email/i' ), Mockery::any() )
+			->andReturn( null );
+
+		// Mock list lookup by name (for CSV list).
+		$this->wpdb->shouldReceive( 'get_row' )
+			->with( Mockery::pattern( '/mskd_lists.*name.*FromCSV/i' ), Mockery::any() )
+			->andReturn( (object) array( 'id' => 10, 'name' => 'FromCSV' ) );
+
+		// Mock insert subscriber.
+		$this->wpdb->insert_id = 3;
+		$this->wpdb->shouldReceive( 'insert' )
+			->andReturn( 1 );
+
+		// Mock delete existing list assignments.
+		$this->wpdb->shouldReceive( 'delete' )
+			->andReturn( true );
+
+		$result = $this->service->import_subscribers(
+			$rows,
+			array(
+				'target_list_ids' => array(), // Empty - should use CSV.
+				'assign_lists'    => true,
+			)
+		);
+
+		$this->assertEquals( 1, $result['imported'] );
+	}
+
+	/**
+	 * Test import subscribers with invalid target_list_id ignores it.
+	 */
+	public function test_import_subscribers_filters_invalid_target_list_ids(): void {
+		$rows = array(
+			array(
+				'email'      => 'invalid@example.com',
+				'first_name' => 'Invalid',
+				'last_name'  => 'List',
+				'status'     => 'active',
+				'lists'      => '',
+			),
+		);
+
+		// Mock no existing subscriber.
+		$this->wpdb->shouldReceive( 'get_row' )
+			->with( Mockery::pattern( '/mskd_subscribers.*email/i' ), Mockery::any() )
+			->andReturn( null );
+
+		// Mock list does not exist (return null for id 999).
+		$this->wpdb->shouldReceive( 'get_row' )
+			->with( Mockery::pattern( '/mskd_lists.*id.*=.*999/i' ), Mockery::any() )
+			->andReturn( null );
+
+		// Mock insert subscriber.
+		$this->wpdb->insert_id = 4;
+		$this->wpdb->shouldReceive( 'insert' )
+			->andReturn( 1 );
+
+		$result = $this->service->import_subscribers(
+			$rows,
+			array( 'target_list_ids' => array( 999 ) ) // Invalid list ID.
+		);
+
+		// Should still import, just without list assignment.
+		$this->assertEquals( 1, $result['imported'] );
+	}
+
+	/**
 	 * Test validate import file checks file size.
 	 */
 	public function test_validate_import_file_checks_size(): void {

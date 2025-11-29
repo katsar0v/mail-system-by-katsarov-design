@@ -397,10 +397,22 @@ class Import_Export_Service {
 	 */
 	public function import_subscribers( array $rows, array $options = array() ): array {
 		$defaults = array(
-			'update_existing' => false,
-			'assign_lists'    => true,
+			'update_existing'  => false,
+			'assign_lists'     => true,
+			'target_list_ids'  => array(),
 		);
 		$options  = wp_parse_args( $options, $defaults );
+
+		// Validate target list IDs if provided.
+		$valid_target_list_ids = array();
+		if ( ! empty( $options['target_list_ids'] ) ) {
+			foreach ( $options['target_list_ids'] as $list_id ) {
+				$list = $this->list_service->get_by_id( (int) $list_id );
+				if ( $list ) {
+					$valid_target_list_ids[] = (int) $list_id;
+				}
+			}
+		}
 
 		$imported = 0;
 		$updated  = 0;
@@ -432,8 +444,13 @@ class Import_Export_Service {
 						$this->subscriber_service->update( (int) $existing->id, $update_data );
 					}
 
-					// Sync lists if provided.
-					if ( $options['assign_lists'] && ! empty( $row['lists'] ) ) {
+					// Sync lists: use target lists if provided, otherwise use CSV lists.
+					if ( ! empty( $valid_target_list_ids ) ) {
+						// Merge target lists with existing lists.
+						$existing_lists = $this->subscriber_service->get_lists( (int) $existing->id );
+						$merged_lists   = array_unique( array_merge( $existing_lists, $valid_target_list_ids ) );
+						$this->subscriber_service->sync_lists( (int) $existing->id, $merged_lists );
+					} elseif ( $options['assign_lists'] && ! empty( $row['lists'] ) ) {
 						$list_ids = $this->get_list_ids_from_names( $row['lists'] );
 						if ( ! empty( $list_ids ) ) {
 							// Merge with existing lists.
@@ -469,8 +486,10 @@ class Import_Export_Service {
 				continue;
 			}
 
-			// Assign lists if provided.
-			if ( $options['assign_lists'] && ! empty( $row['lists'] ) ) {
+			// Assign lists: use target lists if provided, otherwise use CSV lists.
+			if ( ! empty( $valid_target_list_ids ) ) {
+				$this->subscriber_service->sync_lists( $subscriber_id, $valid_target_list_ids );
+			} elseif ( $options['assign_lists'] && ! empty( $row['lists'] ) ) {
 				$list_ids = $this->get_list_ids_from_names( $row['lists'] );
 				if ( ! empty( $list_ids ) ) {
 					$this->subscriber_service->sync_lists( $subscriber_id, $list_ids );
