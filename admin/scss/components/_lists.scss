@@ -130,3 +130,85 @@
     color: $color-wp-text-light;
     font-style: italic;
 }
+
+// Shortcode column in lists table
+.mskd-lists-table {
+    .mskd-shortcode-col {
+        width: 280px;
+    }
+}
+
+.mskd-shortcode-inline {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+
+    .mskd-shortcode-code {
+        flex: 1;
+        font-family: $font-family-code;
+        font-size: $font-size-xs;
+        color: $color-gray-700;
+        background: $color-gray-100;
+        padding: $spacing-1 $spacing-2;
+        border-radius: $border-radius;
+        word-break: break-all;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 200px;
+    }
+}
+
+// Icon-only copy button
+.mskd-copy-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid $color-gray-300;
+    border-radius: $border-radius;
+    background: $color-white;
+    color: $color-gray-600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+
+    .dashicons {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+    }
+
+    &:hover {
+        background: $color-gray-100;
+        border-color: $color-primary;
+        color: $color-primary;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $color-primary;
+        box-shadow: 0 0 0 1px $color-primary;
+    }
+
+    // Success state (added via JS)
+    &.copied {
+        background: $color-success-bg;
+        border-color: $color-success;
+        color: $color-success;
+    }
+
+    // Error state (added via JS)
+    &.error {
+        background: $color-error-bg;
+        border-color: $color-error;
+        color: $color-error;
+    }
+}
+
+.mskd-shortcode-na {
+    color: $color-wp-text-light;
+    cursor: help;
+}

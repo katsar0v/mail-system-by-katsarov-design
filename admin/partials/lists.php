@@ -94,11 +94,12 @@ if ( $action === 'edit' && $list_id ) {
         $all_lists = MSKD_List_Provider::get_all_lists();
         ?>
 
-        <table class="wp-list-table widefat fixed striped">
+        <table class="wp-list-table widefat fixed striped mskd-lists-table">
             <thead>
                 <tr>
                     <th scope="col"><?php _e( 'Name', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Subscribers', 'mail-system-by-katsarov-design' ); ?></th>
+                    <th scope="col" class="mskd-shortcode-col"><?php _e( 'Shortcode', 'mail-system-by-katsarov-design' ); ?></th>
                     <th scope="col"><?php _e( 'Actions', 'mail-system-by-katsarov-design' ); ?></th>
                 </tr>
             </thead>
@@ -173,6 +174,22 @@ if ( $action === 'edit' && $list_id ) {
                                     <span class="mskd-subscriber-count-empty">0</span>
                                 <?php endif; ?>
                             </td>
+                            <td class="mskd-shortcode-col">
+                                <?php if ( ! $is_external ) : ?>
+                                    <?php
+                                    $shortcode    = sprintf( '[mskd_subscribe_form list_id="%d"]', absint( $item->id ) );
+                                    $shortcode_id = 'shortcode-list-' . absint( $item->id );
+                                    ?>
+                                    <div class="mskd-shortcode-inline">
+                                        <code class="mskd-shortcode-code" id="<?php echo esc_attr( $shortcode_id ); ?>"><?php echo esc_html( $shortcode ); ?></code>
+                                        <button type="button" class="mskd-copy-btn mskd-copy-icon-btn" data-target="<?php echo esc_attr( $shortcode_id ); ?>" title="<?php esc_attr_e( 'Copy shortcode', 'mail-system-by-katsarov-design' ); ?>">
+                                            <span class="dashicons dashicons-clipboard"></span>
+                                        </button>
+                                    </div>
+                                <?php else : ?>
+                                    <span class="mskd-shortcode-na" title="<?php esc_attr_e( 'Automated lists do not have subscription forms', 'mail-system-by-katsarov-design' ); ?>">—</span>
+                                <?php endif; ?>
+                            </td>
                             <td>
                                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&list_id=' . rawurlencode( $item->id ) ) ); ?>">
                                     <?php _e( 'Send email', 'mail-system-by-katsarov-design' ); ?>
@@ -191,7 +208,7 @@ if ( $action === 'edit' && $list_id ) {
                     <?php endforeach; ?>
                 <?php else : ?>
                     <tr>
-                        <td colspan="3"><?php _e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?></td>
+                        <td colspan="4"><?php _e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?></td>
                     </tr>
                 <?php endif; ?>
             </tbody>
