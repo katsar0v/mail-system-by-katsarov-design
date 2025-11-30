@@ -686,8 +686,12 @@ msgid "Emails per minute"
 msgstr "Имейли на минута"
 
 #: admin/partials/settings.php
-msgid "Maximum number of emails to send per minute. Higher values may exceed your hosting provider limits."
-msgstr "Максимален брой имейли за изпращане на минута. По-високи стойности могат да надвишат лимитите на вашия хостинг доставчик."
+msgid ""
+"Maximum number of emails to send per minute. Higher values may exceed your "
+"hosting provider limits."
+msgstr ""
+"Максимален брой имейли за изпращане на минута. По-високи стойности могат да "
+"надвишат лимитите на вашия хостинг доставчик."
 
 #: admin/partials/settings.php
 msgid "Sending speed"
@@ -886,7 +890,7 @@ msgstr "Успешно се отписахте"
 msgid "You will no longer receive emails from us."
 msgstr "Вече няма да получавате имейли от нас."
 
-#: public/partials/unsubscribe.php
+#: public/partials/unsubscribe.php public/partials/opt-in-confirm.php
 msgid "Back to site"
 msgstr "Обратно към сайта"
 
@@ -2088,8 +2092,12 @@ msgid "Email Template Settings"
 msgstr "Настройки на шаблон за имейл"
 
 #: admin/partials/settings.php
-msgid "Configure custom header and footer that will be added to all outgoing emails. Supports HTML and template variables."
-msgstr "Конфигурирайте персонализиран хедър и футър, които ще бъдат добавени към всички изходящи имейли. Поддържа HTML и променливи на шаблона."
+msgid ""
+"Configure custom header and footer that will be added to all outgoing "
+"emails. Supports HTML and template variables."
+msgstr ""
+"Конфигурирайте персонализиран хедър и футър, които ще бъдат добавени към "
+"всички изходящи имейли. Поддържа HTML и променливи на шаблона."
 
 #: admin/partials/settings.php
 msgid "Email Header"
@@ -2097,7 +2105,9 @@ msgstr "Хедър на имейл"
 
 #: admin/partials/settings.php
 msgid "HTML content to prepend to all emails. Leave empty to disable."
-msgstr "HTML съдържание, което да се добави в началото на всички имейли. Оставете празно за деактивиране."
+msgstr ""
+"HTML съдържание, което да се добави в началото на всички имейли. Оставете "
+"празно за деактивиране."
 
 #: admin/partials/settings.php
 msgid "Email Footer"
@@ -2105,7 +2115,9 @@ msgstr "Футър на имейл"
 
 #: admin/partials/settings.php
 msgid "HTML content to append to all emails. Leave empty to disable."
-msgstr "HTML съдържание, което да се добави в края на всички имейли. Оставете празно за деактивиране."
+msgstr ""
+"HTML съдържание, което да се добави в края на всички имейли. Оставете празно "
+"за деактивиране."
 
 #: admin/partials/settings.php
 msgid "Available Variables"
@@ -2131,8 +2143,7 @@ msgstr "Линк за отписване"
 msgid "Raw unsubscribe URL"
 msgstr "Чист URL за отписване"
 
-#: includes/Admin/class-admin.php
-#: admin/partials/dashboard-widget.php
+#: includes/Admin/class-admin.php admin/partials/dashboard-widget.php
 msgid "Mail System - Queue Statistics"
 msgstr "Мейл система - Статистика на опашката"
 
@@ -2155,10 +2166,6 @@ msgstr "Невалиден или липсващ имейл адрес"
 #: public/class-public.php
 msgid "Invalid confirmation link."
 msgstr "Невалиден линк за потвърждение."
-
-#: public/class-public.php
-msgid "Too many attempts. Please try again in 5 minutes."
-msgstr "Твърде много опити. Моля, опитайте отново след 5 минути."
 
 #: public/class-public.php
 msgid "Please check your email to confirm your subscription."
@@ -2184,8 +2191,33 @@ msgstr "Здравейте,"
 
 #: public/class-public.php
 #, php-format
-msgid "%1$s\n\nThank you for subscribing to %2$s!\n\nPlease click the link below to confirm your subscription:\n\n%3$s\n\nIf you did not request this subscription, you can safely ignore this email.\n\nBest regards,\n%4$s"
-msgstr "%1$s\n\nБлагодарим ви, че се абонирахте за %2$s!\n\nМоля, кликнете върху линка по-долу, за да потвърдите абонамента си:\n\n%3$s\n\nАко не сте заявили този абонамент, можете спокойно да игнорирате този имейл.\n\nС уважение,\n%4$s"
+msgid ""
+"%1$s\n"
+"\n"
+"Thank you for subscribing to %2$s!\n"
+"\n"
+"Please click the link below to confirm your subscription:\n"
+"\n"
+"%3$s\n"
+"\n"
+"If you did not request this subscription, you can safely ignore this email.\n"
+"\n"
+"Best regards,\n"
+"%4$s"
+msgstr ""
+"%1$s\n"
+"\n"
+"Благодарим ви, че се абонирахте за %2$s!\n"
+"\n"
+"Моля, кликнете върху линка по-долу, за да потвърдите абонамента си:\n"
+"\n"
+"%3$s\n"
+"\n"
+"Ако не сте заявили този абонамент, можете спокойно да игнорирате този "
+"имейл.\n"
+"\n"
+"С уважение,\n"
+"%4$s"
 
 #: public/partials/opt-in-confirm.php
 msgid "Subscription Confirmed"
@@ -2196,13 +2228,58 @@ msgid "Subscription Confirmed!"
 msgstr "Абонаментът е потвърден!"
 
 #: public/partials/opt-in-confirm.php
-msgid "Thank you for confirming your subscription. You will now receive our emails."
-msgstr "Благодарим ви, че потвърдихте абонамента си. Сега ще получавате нашите имейли."
-
-#: public/partials/opt-in-confirm.php
-msgid "Back to site"
-msgstr "Обратно към сайта"
+msgid ""
+"Thank you for confirming your subscription. You will now receive our emails."
+msgstr ""
+"Благодарим ви, че потвърдихте абонамента си. Сега ще получавате нашите "
+"имейли."
 
 #: public/class-public.php
 msgid "Unable to verify request."
 msgstr "Заявката не може да бъде потвърдена."
+
+#: includes/Admin/class-admin.php
+msgid "Mail System Database Update Required"
+msgstr "Необходима е актуализация на базата данни на Mail System"
+
+#: includes/Admin/class-admin.php
+#, php-format
+msgid ""
+"Your database schema (version %1$s) is outdated. Version %2$s is required "
+"for the plugin to work correctly."
+msgstr ""
+"Схемата на базата данни (версия %1$s) е остаряла. За правилната работа на "
+"плъгина е необходима версия %2$s."
+
+#: includes/Admin/class-admin.php
+msgid "Update Database Now"
+msgstr "Актуализирай базата данни сега"
+
+#: includes/Admin/class-admin.php
+msgid "Mail System Database Repair Required"
+msgstr "Необходим е ремонт на базата данни на Mail System"
+
+#: includes/Admin/class-admin.php
+msgid ""
+"Some required database columns are missing. This may cause subscription "
+"confirmation links to fail. Click the button below to repair the database."
+msgstr ""
+"Някои необходими колони в базата данни липсват. Това може да причини неуспех "
+"на линковете за потвърждение на абонамент. Кликнете бутона по-долу, за да "
+"поправите базата данни."
+
+#: includes/Admin/class-admin.php
+msgid "Repair Database Now"
+msgstr "Поправи базата данни сега"
+
+#: includes/Admin/class-admin.php
+msgid "Security check failed."
+msgstr "Проверката за сигурност е неуспешна."
+
+#: includes/Admin/class-admin.php
+msgid "Database has been updated successfully."
+msgstr "Базата данни е актуализирана успешно."
+
+#: public/class-public.php
+msgid "An error occurred. Please try again later."
+msgstr "Възникна грешка. Моля, опитайте отново по-късно."
