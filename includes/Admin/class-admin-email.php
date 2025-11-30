@@ -360,6 +360,9 @@ class Admin_Email {
 			// Apply header/footer for immediate sends.
 			$body_with_wrapper = $this->apply_header_footer( $body, $settings );
 
+			// Replace subscriber placeholders (including those in header/footer).
+			$body_with_wrapper = $this->replace_one_time_placeholders( $body_with_wrapper, $recipient_email, $recipient_name );
+
 			// Send immediately (via SMTP if configured, otherwise via PHP mail).
 			$sent = $mailer->send( $recipient_email, $subject, $body_with_wrapper );
 
@@ -446,6 +449,62 @@ class Admin_Email {
 				);
 			}
 		}
+	}
+
+	/**
+	 * Replace subscriber placeholders for one-time emails.
+	 *
+	 * Checks if the recipient is an existing subscriber and uses their data.
+	 * For non-subscribers, uses the provided name and removes unsubscribe links.
+	 *
+	 * @param string $content         Email content.
+	 * @param string $recipient_email Recipient email address.
+	 * @param string $recipient_name  Recipient name.
+	 * @return string Content with placeholders replaced.
+	 */
+	private function replace_one_time_placeholders( string $content, string $recipient_email, string $recipient_name ): string {
+		global $wpdb;
+
+		// Check if recipient is an existing subscriber.
+		$table_name = $wpdb->prefix . 'mskd_subscribers';
+		$subscriber = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$table_name} WHERE email = %s LIMIT 1",
+				$recipient_email
+			)
+		);
+
+		if ( $subscriber && ! empty( $subscriber->unsubscribe_token ) ) {
+			// Subscriber exists - use their data.
+			$unsubscribe_url = add_query_arg(
+				array(
+					'mskd_unsubscribe' => $subscriber->unsubscribe_token,
+				),
+				home_url()
+			);
+
+			$first_name = ! empty( $subscriber->first_name ) ? $subscriber->first_name : $recipient_name;
+			$last_name  = ! empty( $subscriber->last_name ) ? $subscriber->last_name : '';
+
+			$placeholders = array(
+				'{first_name}'       => $first_name,
+				'{last_name}'        => $last_name,
+				'{email}'            => $subscriber->email,
+				'{unsubscribe_link}' => '<a href="' . esc_url( $unsubscribe_url ) . '">' . __( 'Unsubscribe', 'mail-system-by-katsarov-design' ) . '</a>',
+				'{unsubscribe_url}'  => $unsubscribe_url,
+			);
+		} else {
+			// Not a subscriber - use provided data and remove unsubscribe links.
+			$placeholders = array(
+				'{first_name}'       => $recipient_name,
+				'{last_name}'        => '',
+				'{email}'            => $recipient_email,
+				'{unsubscribe_link}' => '',
+				'{unsubscribe_url}'  => '',
+			);
+		}
+
+		return str_replace( array_keys( $placeholders ), array_values( $placeholders ), $content );
 	}
 
 	/**
