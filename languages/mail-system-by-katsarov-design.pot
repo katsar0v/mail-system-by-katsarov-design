@@ -2071,3 +2071,24 @@ msgstr ""
 #: admin/partials/settings.php
 msgid "Raw unsubscribe URL"
 msgstr ""
+
+#: includes/Admin/class-admin.php
+#: admin/partials/dashboard-widget.php
+msgid "Mail System - Queue Statistics"
+msgstr ""
+
+#: admin/partials/dashboard-widget.php
+msgid "Last cron run:"
+msgstr ""
+
+#: admin/partials/dashboard-widget.php
+msgid "Cron has not run yet."
+msgstr ""
+
+#: admin/partials/dashboard-widget.php
+msgid "View Queue"
+msgstr ""
+
+#: includes/services/class-cron-handler.php
+msgid "Invalid or missing email address"
+msgstr ""

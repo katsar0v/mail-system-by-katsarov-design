@@ -2150,3 +2150,24 @@ msgstr "Klickbarer Abmeldelink"
 #: admin/partials/settings.php
 msgid "Raw unsubscribe URL"
 msgstr "Rohe Abmelde-URL"
+
+#: includes/Admin/class-admin.php
+#: admin/partials/dashboard-widget.php
+msgid "Mail System - Queue Statistics"
+msgstr "Mail-System - Warteschlangen-Statistik"
+
+#: admin/partials/dashboard-widget.php
+msgid "Last cron run:"
+msgstr "Letzte Cron-Ausführung:"
+
+#: admin/partials/dashboard-widget.php
+msgid "Cron has not run yet."
+msgstr "Cron wurde noch nicht ausgeführt."
+
+#: admin/partials/dashboard-widget.php
+msgid "View Queue"
+msgstr "Warteschlange anzeigen"
+
+#: includes/services/class-cron-handler.php
+msgid "Invalid or missing email address"
+msgstr "Ungültige oder fehlende E-Mail-Adresse"

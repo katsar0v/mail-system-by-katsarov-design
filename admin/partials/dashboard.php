@@ -72,6 +72,39 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
             </a>
         </div>
 
+        <!-- Queue Stats Summary Card -->
+        <div class="mskd-queue-stats-card">
+            <div class="mskd-widget-stats">
+                <div class="mskd-widget-stat mskd-widget-stat-pending">
+                    <span class="mskd-widget-stat-number"><?php echo esc_html( $pending_emails ); ?></span>
+                    <span class="mskd-widget-stat-label"><?php esc_html_e( 'Pending', 'mail-system-by-katsarov-design' ); ?></span>
+                </div>
+                <div class="mskd-widget-stat mskd-widget-stat-sent">
+                    <span class="mskd-widget-stat-number"><?php echo esc_html( $sent_emails ); ?></span>
+                    <span class="mskd-widget-stat-label"><?php esc_html_e( 'Sent', 'mail-system-by-katsarov-design' ); ?></span>
+                </div>
+                <div class="mskd-widget-stat mskd-widget-stat-failed">
+                    <span class="mskd-widget-stat-number"><?php echo esc_html( $failed_emails ); ?></span>
+                    <span class="mskd-widget-stat-label"><?php esc_html_e( 'Failed', 'mail-system-by-katsarov-design' ); ?></span>
+                </div>
+            </div>
+            <div class="mskd-widget-cron">
+                <?php
+                $last_cron_run = get_option( 'mskd_last_cron_run', 0 );
+                if ( $last_cron_run ) :
+                ?>
+                    <p>
+                        <strong><?php esc_html_e( 'Last cron run:', 'mail-system-by-katsarov-design' ); ?></strong>
+                        <?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $last_cron_run ) ); ?>
+                    </p>
+                <?php else : ?>
+                    <p class="mskd-widget-cron-never">
+                        <?php esc_html_e( 'Cron has not run yet.', 'mail-system-by-katsarov-design' ); ?>
+                    </p>
+                <?php endif; ?>
+            </div>
+        </div>
+
         <div class="mskd-stats-grid">
             <!-- Subscribers Stats -->
             <div class="mskd-stat-box">

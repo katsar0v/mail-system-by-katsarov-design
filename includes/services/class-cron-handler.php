@@ -54,7 +54,11 @@ class MSKD_Cron_Handler {
 	public function process_queue() {
 		global $wpdb;
 
-		// First, recover stuck emails (processing for too long)
+		// Record the cron run timestamp at the start of processing.
+		// This indicates when the cron was last triggered, useful for verifying cron health.
+		update_option( 'mskd_last_cron_run', time() );
+
+		// First, recover stuck emails (processing for too long).
 		$this->recover_stuck_emails();
 
 		// Get the configured batch size (emails per minute).

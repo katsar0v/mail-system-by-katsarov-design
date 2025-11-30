@@ -118,6 +118,7 @@ class Admin {
 		add_action( 'admin_notices', array( $this, 'show_cron_notice' ) );
 		add_action( 'admin_notices', array( $this, 'show_share_notice' ) );
 		add_action( 'admin_init', array( $this, 'handle_actions' ) );
+		add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widget' ) );
 
 		// Initialize AJAX handlers.
 		$this->ajax->init();
@@ -259,7 +260,18 @@ class Admin {
 	 * @return void
 	 */
 	public function enqueue_assets( string $hook ): void {
-		// Only load on plugin pages.
+		// Load minimal styles on the WordPress dashboard for the widget.
+		if ( 'index.php' === $hook ) {
+			wp_enqueue_style(
+				'mskd-admin-style',
+				MSKD_PLUGIN_URL . 'admin/css/admin-style.css',
+				array(),
+				MSKD_VERSION
+			);
+			return;
+		}
+
+		// Only load full assets on plugin pages.
 		if ( strpos( $hook, self::PAGE_PREFIX ) === false ) {
 			return;
 		}
@@ -542,5 +554,52 @@ class Admin {
 	 */
 	public function render_shortcodes(): void {
 		include MSKD_PLUGIN_DIR . 'admin/partials/shortcodes.php';
+	}
+
+	/**
+	 * Register dashboard widget.
+	 *
+	 * @return void
+	 */
+	public function register_dashboard_widget(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		wp_add_dashboard_widget(
+			'mskd_queue_stats_widget',
+			__( 'Mail System - Queue Statistics', 'mail-system-by-katsarov-design' ),
+			array( $this, 'render_dashboard_widget' )
+		);
+	}
+
+	/**
+	 * Render dashboard widget content.
+	 *
+	 * @return void
+	 */
+	public function render_dashboard_widget(): void {
+		global $wpdb;
+
+		// Get queue statistics.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Static query with no user input, caching not needed for dashboard widget.
+		$queue_stats = $wpdb->get_row(
+			"SELECT 
+				SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
+				SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
+				SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed
+			FROM {$wpdb->prefix}mskd_queue"
+		);
+
+		// Defensive null check for PHP 8+ compatibility.
+		$pending = $queue_stats ? intval( $queue_stats->pending ?? 0 ) : 0;
+		$sent    = $queue_stats ? intval( $queue_stats->sent ?? 0 ) : 0;
+		$failed  = $queue_stats ? intval( $queue_stats->failed ?? 0 ) : 0;
+
+		// Get last cron run timestamp.
+		$last_cron_run = get_option( 'mskd_last_cron_run', 0 );
+
+		// Include the widget template.
+		include MSKD_PLUGIN_DIR . 'admin/partials/dashboard-widget.php';
 	}
 }
