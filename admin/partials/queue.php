@@ -114,6 +114,10 @@ $orphan_count = $wpdb->get_var(
 
 // Next cron run
 $next_cron = wp_next_scheduled( 'mskd_process_queue' );
+
+// Get configured emails per minute from settings
+$settings          = get_option( 'mskd_settings', array() );
+$emails_per_minute = isset( $settings['emails_per_minute'] ) ? absint( $settings['emails_per_minute'] ) : MSKD_BATCH_SIZE;
 ?>
 
 <div class="wrap mskd-wrap">
@@ -132,7 +136,7 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
             <?php endif; ?>
             &nbsp;|&nbsp;
             <strong><?php _e( 'Speed:', 'mail-system-by-katsarov-design' ); ?></strong>
-            <?php printf( __( '%d emails/min', 'mail-system-by-katsarov-design' ), MSKD_BATCH_SIZE ); ?>
+            <?php printf( __( '%d emails/min', 'mail-system-by-katsarov-design' ), $emails_per_minute ); ?>
         </p>
     </div>
 
