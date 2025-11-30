@@ -67,3 +67,68 @@
   font-weight: 600;
   margin-left: $spacing-3;
 }
+
+// ==========================================================================
+// Styling Section
+// ==========================================================================
+
+.mskd-color-picker {
+  width: 40px;
+  height: 32px;
+  padding: 0;
+  border: $border-width solid $color-wp-border;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.mskd-color-text {
+  width: 80px !important;
+  margin-left: $spacing-2;
+  vertical-align: middle;
+  font-family: $font-family-code;
+}
+
+.mskd-styling-preview {
+  margin-top: $spacing-3;
+}
+
+.mskd-preview-box {
+  background: $color-wp-background;
+  border: $border-width solid $color-wp-border;
+  border-radius: $border-radius;
+  padding: $spacing-4;
+  max-width: 300px;
+}
+
+.mskd-preview-label {
+  font-size: $font-size-sm;
+  color: $color-wp-text-light;
+  margin: 0 0 $spacing-2;
+}
+
+.mskd-preview-btn {
+  display: inline-block;
+  padding: $spacing-2 $spacing-4;
+  background: $color-primary;
+  color: $color-white;
+  border: none;
+  border-radius: $border-radius;
+  font-size: $font-size-md;
+  cursor: pointer;
+  margin-bottom: $spacing-4;
+  @include transition(background-color);
+
+  &:hover {
+    background: $color-primary-hover;
+  }
+}
+
+.mskd-preview-link {
+  color: $color-primary;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -71,6 +71,18 @@ class Admin_Settings {
 		$email_footer = isset( $_POST['email_footer'] ) ? mskd_kses_email( wp_unslash( $_POST['email_footer'] ) ) : '';
 		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
+		// Validate styling colors (hex color format).
+		$highlight_color   = isset( $_POST['highlight_color'] ) ? sanitize_hex_color( wp_unslash( $_POST['highlight_color'] ) ) : '#2271b1';
+		$button_text_color = isset( $_POST['button_text_color'] ) ? sanitize_hex_color( wp_unslash( $_POST['button_text_color'] ) ) : '#ffffff';
+
+		// Ensure valid colors (fallback to defaults if invalid).
+		if ( empty( $highlight_color ) ) {
+			$highlight_color = '#2271b1';
+		}
+		if ( empty( $button_text_color ) ) {
+			$button_text_color = '#ffffff';
+		}
+
 		$settings = array(
 			'from_name'         => sanitize_text_field( wp_unslash( $_POST['from_name'] ) ),
 			'from_email'        => sanitize_email( wp_unslash( $_POST['from_email'] ) ),
@@ -80,6 +92,9 @@ class Admin_Settings {
 			// Email template settings.
 			'email_header'      => $email_header,
 			'email_footer'      => $email_footer,
+			// Styling settings.
+			'highlight_color'   => $highlight_color,
+			'button_text_color' => $button_text_color,
 			// SMTP Settings.
 			'smtp_enabled'      => isset( $_POST['smtp_enabled'] ) ? 1 : 0,
 			'smtp_host'         => sanitize_text_field( wp_unslash( $_POST['smtp_host'] ) ),
@@ -122,6 +137,8 @@ class Admin_Settings {
 			'emails_per_minute' => MSKD_BATCH_SIZE,
 			'email_header'      => '',
 			'email_footer'      => '',
+			'highlight_color'   => '#2271b1',
+			'button_text_color' => '#ffffff',
 			'smtp_enabled'      => 0,
 			'smtp_host'         => '',
 			'smtp_port'         => 587,

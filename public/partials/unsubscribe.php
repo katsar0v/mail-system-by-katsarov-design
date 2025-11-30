@@ -8,13 +8,17 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+// Get styling settings.
+$settings        = get_option( 'mskd_settings', array() );
+$highlight_color = isset( $settings['highlight_color'] ) ? $settings['highlight_color'] : '#2271b1';
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title><?php _e( 'Unsubscribe', 'mail-system-by-katsarov-design' ); ?> - <?php bloginfo( 'name' ); ?></title>
+	<title><?php esc_html_e( 'Unsubscribe', 'mail-system-by-katsarov-design' ); ?> - <?php bloginfo( 'name' ); ?></title>
 	<style>
 		body {
 			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -50,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			margin-bottom: 20px;
 		}
 		.mskd-unsubscribe-box a {
-			color: #2271b1;
+			color: <?php echo esc_attr( $highlight_color ); ?>;
 			text-decoration: none;
 		}
 		.mskd-unsubscribe-box a:hover {
@@ -61,11 +65,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 <body>
 	<div class="mskd-unsubscribe-box">
 		<div class="mskd-checkmark">✓</div>
-		<h1><?php _e( 'Successfully unsubscribed', 'mail-system-by-katsarov-design' ); ?></h1>
-		<p><?php _e( 'You will no longer receive emails from us.', 'mail-system-by-katsarov-design' ); ?></p>
+		<h1><?php esc_html_e( 'Successfully unsubscribed', 'mail-system-by-katsarov-design' ); ?></h1>
+		<p><?php esc_html_e( 'You will no longer receive emails from us.', 'mail-system-by-katsarov-design' ); ?></p>
 		<p>
 			<a href="<?php echo esc_url( home_url() ); ?>">
-				<?php _e( 'Back to site', 'mail-system-by-katsarov-design' ); ?>
+				<?php esc_html_e( 'Back to site', 'mail-system-by-katsarov-design' ); ?>
 			</a>
 		</p>
 	</div>

@@ -2310,3 +2310,39 @@ msgstr "Die Datenbank wurde erfolgreich aktualisiert."
 #: public/class-public.php
 msgid "An error occurred. Please try again later."
 msgstr "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
+
+#: admin/partials/settings.php
+msgid "Styling"
+msgstr "Styling"
+
+#: admin/partials/settings.php
+msgid "Customize the appearance of subscription forms and the unsubscribe page."
+msgstr "Passen Sie das Erscheinungsbild von Anmeldeformularen und der Abmeldeseite an."
+
+#: admin/partials/settings.php
+msgid "Highlight Color"
+msgstr "Akzentfarbe"
+
+#: admin/partials/settings.php
+msgid "Primary color for buttons, links, and focus states."
+msgstr "Primärfarbe für Schaltflächen, Links und Fokuszustände."
+
+#: admin/partials/settings.php
+msgid "Button Text Color"
+msgstr "Schaltflächentextfarbe"
+
+#: admin/partials/settings.php
+msgid "Text color for buttons."
+msgstr "Textfarbe für Schaltflächen."
+
+#: admin/partials/settings.php
+msgid "Preview"
+msgstr "Vorschau"
+
+#: admin/partials/settings.php
+msgid "Button preview:"
+msgstr "Schaltflächenvorschau:"
+
+#: admin/partials/settings.php
+msgid "Link preview:"
+msgstr "Linkvorschau:"

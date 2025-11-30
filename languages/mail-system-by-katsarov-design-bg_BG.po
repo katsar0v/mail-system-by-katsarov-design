@@ -2283,3 +2283,39 @@ msgstr "Базата данни е актуализирана успешно."
 #: public/class-public.php
 msgid "An error occurred. Please try again later."
 msgstr "Възникна грешка. Моля, опитайте отново по-късно."
+
+#: admin/partials/settings.php
+msgid "Styling"
+msgstr "Стилизиране"
+
+#: admin/partials/settings.php
+msgid "Customize the appearance of subscription forms and the unsubscribe page."
+msgstr "Персонализирайте визията на формите за абонамент и страницата за отписване."
+
+#: admin/partials/settings.php
+msgid "Highlight Color"
+msgstr "Акцентен цвят"
+
+#: admin/partials/settings.php
+msgid "Primary color for buttons, links, and focus states."
+msgstr "Основен цвят за бутони, линкове и фокусирани елементи."
+
+#: admin/partials/settings.php
+msgid "Button Text Color"
+msgstr "Цвят на текста в бутони"
+
+#: admin/partials/settings.php
+msgid "Text color for buttons."
+msgstr "Цвят на текста в бутоните."
+
+#: admin/partials/settings.php
+msgid "Preview"
+msgstr "Преглед"
+
+#: admin/partials/settings.php
+msgid "Button preview:"
+msgstr "Преглед на бутон:"
+
+#: admin/partials/settings.php
+msgid "Link preview:"
+msgstr "Преглед на линк:"
