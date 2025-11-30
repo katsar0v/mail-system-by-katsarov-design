@@ -73,7 +73,19 @@ class MSKD_Public {
 		$highlight_color   = isset( $settings['highlight_color'] ) ? $settings['highlight_color'] : '#2271b1';
 		$button_text_color = isset( $settings['button_text_color'] ) ? $settings['button_text_color'] : '#ffffff';
 
-		// Calculate hover color (10% darker).
+		// Sanitize colors to prevent XSS.
+		$highlight_color   = sanitize_hex_color( $highlight_color );
+		$button_text_color = sanitize_hex_color( $button_text_color );
+
+		// Fallback if sanitization returns empty (invalid color).
+		if ( empty( $highlight_color ) ) {
+			$highlight_color = '#2271b1';
+		}
+		if ( empty( $button_text_color ) ) {
+			$button_text_color = '#ffffff';
+		}
+
+		// Calculate hover color (darker by 20 RGB steps).
 		$hover_color = $this->adjust_brightness( $highlight_color, -20 );
 
 		$custom_css = "
@@ -95,13 +107,18 @@ class MSKD_Public {
 	/**
 	 * Adjust the brightness of a hex color.
 	 *
-	 * @param string $hex    The hex color code.
+	 * @param string $hex    The hex color code (e.g., '#ffffff' or 'ffffff').
 	 * @param int    $steps  Steps to adjust (-255 to 255). Negative = darker, positive = lighter.
-	 * @return string The adjusted hex color.
+	 * @return string The adjusted hex color, or original if invalid.
 	 */
 	private function adjust_brightness( $hex, $steps ) {
 		// Remove # if present.
 		$hex = ltrim( $hex, '#' );
+
+		// Validate hex format (must be exactly 6 hex characters).
+		if ( ! preg_match( '/^[0-9A-Fa-f]{6}$/', $hex ) ) {
+			return '#' . $hex; // Return as-is if invalid.
+		}
 
 		// Parse hex values.
 		$r = hexdec( substr( $hex, 0, 2 ) );
