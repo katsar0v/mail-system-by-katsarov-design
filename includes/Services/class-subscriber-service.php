@@ -23,6 +23,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Subscriber_Service {
 
 	/**
+	 * Subscriber source: internal (form signup).
+	 */
+	const SOURCE_INTERNAL = 'internal';
+
+	/**
+	 * Subscriber source: external (from list provider callbacks).
+	 */
+	const SOURCE_EXTERNAL = 'external';
+
+	/**
+	 * Subscriber source: one-time email recipient.
+	 */
+	const SOURCE_ONE_TIME = 'one_time';
+
+	/**
 	 * WordPress database instance.
 	 *
 	 * @var \wpdb
@@ -186,6 +201,85 @@ class Subscriber_Service {
 	}
 
 	/**
+	 * Get a subscriber by unsubscribe token.
+	 *
+	 * @param string $token Unsubscribe token.
+	 * @return object|null Subscriber object or null if not found.
+	 */
+	public function get_by_token( string $token ): ?object {
+		if ( empty( $token ) || strlen( $token ) !== 32 ) {
+			return null;
+		}
+
+		return $this->wpdb->get_row(
+			$this->wpdb->prepare(
+				"SELECT * FROM {$this->table} WHERE unsubscribe_token = %s",
+				$token
+			)
+		);
+	}
+
+	/**
+	 * Get or create a subscriber by email.
+	 *
+	 * If subscriber exists, returns existing record (preserves current status).
+	 * If not, creates new subscriber with generated token.
+	 *
+	 * @param string $email      Email address.
+	 * @param string $first_name First name (optional).
+	 * @param string $last_name  Last name (optional).
+	 * @param string $source     Source: 'internal', 'external', or 'one_time'.
+	 * @return object|null Subscriber object or null on failure.
+	 */
+	public function get_or_create( string $email, string $first_name = '', string $last_name = '', string $source = self::SOURCE_INTERNAL ): ?object {
+		$email = sanitize_email( $email );
+
+		if ( empty( $email ) || ! is_email( $email ) ) {
+			return null;
+		}
+
+		// Check if subscriber already exists.
+		$existing = $this->get_by_email( $email );
+
+		if ( $existing ) {
+			return $existing;
+		}
+
+		// Create new subscriber with source.
+		$subscriber_id = $this->create(
+			array(
+				'email'      => $email,
+				'first_name' => $first_name,
+				'last_name'  => $last_name,
+				'status'     => 'active',
+				'source'     => $source,
+			)
+		);
+
+		if ( ! $subscriber_id ) {
+			return null;
+		}
+
+		return $this->get_by_id( $subscriber_id );
+	}
+
+	/**
+	 * Check if an email is unsubscribed.
+	 *
+	 * @param string $email Email address.
+	 * @return bool True if unsubscribed, false otherwise.
+	 */
+	public function is_unsubscribed( string $email ): bool {
+		$subscriber = $this->get_by_email( $email );
+
+		if ( ! $subscriber ) {
+			return false;
+		}
+
+		return 'unsubscribed' === $subscriber->status;
+	}
+
+	/**
 	 * Create a new subscriber.
 	 *
 	 * @param array $data {
@@ -195,6 +289,7 @@ class Subscriber_Service {
 	 *     @type string $first_name Optional. First name.
 	 *     @type string $last_name  Optional. Last name.
 	 *     @type string $status     Optional. Status (active, inactive, unsubscribed). Default 'active'.
+	 *     @type string $source     Optional. Source (internal, external, one_time). Default 'internal'.
 	 * }
 	 * @return int|false Subscriber ID on success, false on failure.
 	 */
@@ -204,9 +299,16 @@ class Subscriber_Service {
 			'first_name' => '',
 			'last_name'  => '',
 			'status'     => 'active',
+			'source'     => self::SOURCE_INTERNAL,
 		);
 
 		$data = wp_parse_args( $data, $defaults );
+
+		// Validate source.
+		$valid_sources = array( self::SOURCE_INTERNAL, self::SOURCE_EXTERNAL, self::SOURCE_ONE_TIME );
+		if ( ! in_array( $data['source'], $valid_sources, true ) ) {
+			$data['source'] = self::SOURCE_INTERNAL;
+		}
 
 		// Generate unsubscribe token.
 		$token = wp_generate_password( 32, false );
@@ -218,9 +320,10 @@ class Subscriber_Service {
 				'first_name'        => $data['first_name'],
 				'last_name'         => $data['last_name'],
 				'status'            => $data['status'],
+				'source'            => $data['source'],
 				'unsubscribe_token' => $token,
 			),
-			array( '%s', '%s', '%s', '%s', '%s' )
+			array( '%s', '%s', '%s', '%s', '%s', '%s' )
 		);
 
 		if ( $result ) {

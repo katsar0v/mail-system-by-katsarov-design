@@ -19,7 +19,7 @@ class MSKD_Activator {
 	/**
 	 * Database version for tracking schema updates
 	 */
-	const DB_VERSION = '1.3.0';
+	const DB_VERSION = '1.4.0';
 
 	/**
 	 * Activate the plugin
@@ -106,6 +106,12 @@ class MSKD_Activator {
 		if ( version_compare( $from_version, '1.3.0', '<' ) ) {
 			self::create_templates_table();
 		}
+
+		// Upgrade from 1.3.0 to 1.4.0: Add source column to subscribers table.
+		if ( version_compare( $from_version, '1.4.0', '<' ) ) {
+			self::add_subscriber_source_column();
+			self::migrate_orphaned_queue_items();
+		}
 	}
 
 	/**
@@ -124,12 +130,14 @@ class MSKD_Activator {
             first_name varchar(100) DEFAULT '',
             last_name varchar(100) DEFAULT '',
             status enum('active','inactive','unsubscribed') DEFAULT 'active',
+            source enum('internal','external','one_time') DEFAULT 'internal',
             unsubscribe_token varchar(64) NOT NULL,
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             UNIQUE KEY email (email),
             KEY status (status),
+            KEY source (source),
             KEY unsubscribe_token (unsubscribe_token)
         ) $charset_collate;";
 
@@ -285,7 +293,117 @@ class MSKD_Activator {
 	}
 
 	/**
-	 * Schedule cron events
+	 * Add source column to subscribers table (used for upgrades)
+	 *
+	 * Tracks subscriber origin: internal (form signup), external (from callbacks), one_time (one-time emails).
+	 */
+	private static function add_subscriber_source_column() {
+		global $wpdb;
+
+		$table_subscribers = $wpdb->prefix . 'mskd_subscribers';
+
+		// Check if column exists.
+		$column_exists = $wpdb->get_results(
+			$wpdb->prepare(
+				"SHOW COLUMNS FROM {$table_subscribers} LIKE %s",
+				'source'
+			)
+		);
+
+		if ( empty( $column_exists ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+			$wpdb->query(
+				"ALTER TABLE {$table_subscribers} ADD COLUMN source enum('internal','external','one_time') DEFAULT 'internal' AFTER status"
+			);
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+			$wpdb->query(
+				"ALTER TABLE {$table_subscribers} ADD KEY source (source)"
+			);
+		}
+	}
+
+	/**
+	 * Migrate orphaned queue items with subscriber_id = 0.
+	 *
+	 * Creates subscriber records from subscriber_data JSON and updates queue items.
+	 */
+	private static function migrate_orphaned_queue_items() {
+		global $wpdb;
+
+		$queue_table = $wpdb->prefix . 'mskd_queue';
+
+		// Get pending queue items with subscriber_id = 0 that have subscriber_data.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$orphaned_items = $wpdb->get_results(
+			"SELECT id, subscriber_data FROM {$queue_table} WHERE subscriber_id = 0 AND subscriber_data IS NOT NULL AND status = 'pending'"
+		);
+
+		if ( empty( $orphaned_items ) ) {
+			return;
+		}
+
+		$subscribers_table = $wpdb->prefix . 'mskd_subscribers';
+
+		foreach ( $orphaned_items as $item ) {
+			$data = json_decode( $item->subscriber_data, true );
+
+			if ( ! $data || empty( $data['email'] ) || ! is_email( $data['email'] ) ) {
+				continue;
+			}
+
+			$email      = sanitize_email( $data['email'] );
+			$first_name = isset( $data['first_name'] ) ? sanitize_text_field( $data['first_name'] ) : '';
+			$last_name  = isset( $data['last_name'] ) ? sanitize_text_field( $data['last_name'] ) : '';
+			$source     = isset( $data['source'] ) && 'one-time-email' === $data['source'] ? 'one_time' : 'external';
+
+			// Check if subscriber already exists.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$existing = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT id FROM {$subscribers_table} WHERE email = %s",
+					$email
+				)
+			);
+
+			if ( $existing ) {
+				$subscriber_id = (int) $existing;
+			} else {
+				// Create new subscriber.
+				$token = wp_generate_password( 32, false );
+
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$wpdb->insert(
+					$subscribers_table,
+					array(
+						'email'             => $email,
+						'first_name'        => $first_name,
+						'last_name'         => $last_name,
+						'status'            => 'active',
+						'source'            => $source,
+						'unsubscribe_token' => $token,
+					),
+					array( '%s', '%s', '%s', '%s', '%s', '%s' )
+				);
+
+				$subscriber_id = $wpdb->insert_id;
+			}
+
+			if ( $subscriber_id ) {
+				// Update queue item with the new subscriber_id.
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$wpdb->update(
+					$queue_table,
+					array( 'subscriber_id' => $subscriber_id ),
+					array( 'id' => $item->id ),
+					array( '%d' ),
+					array( '%d' )
+				);
+			}
+		}
+	}
+
+	/**
+	 * Schedule cron events.
 	 */
 	private static function schedule_cron() {
 		if ( ! wp_next_scheduled( 'mskd_process_queue' ) ) {

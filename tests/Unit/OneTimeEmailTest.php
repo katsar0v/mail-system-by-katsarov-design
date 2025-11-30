@@ -179,8 +179,38 @@ class OneTimeEmailTest extends TestCase {
         // Note: SMTP mailer uses PHPMailer directly, not wp_mail.
         // The mock PHPMailer in bootstrap.php returns true from send().
 
-        // Expect database inserts: first campaigns table, then queue table.
-        $wpdb->insert_id = 1;
+        // Mock subscriber lookup (get_by_email returns null - subscriber doesn't exist).
+        $wpdb->shouldReceive( 'get_row' )
+            ->once()
+            ->andReturn( null );
+
+        // Mock subscriber creation (insert into subscribers table).
+        $subscriber_insert_id = 100;
+        $wpdb->shouldReceive( 'insert' )
+            ->once()
+            ->with(
+                'wp_mskd_subscribers',
+                Mockery::type( 'array' ),
+                Mockery::type( 'array' )
+            )
+            ->andReturnUsing( function () use ( $wpdb, $subscriber_insert_id ) {
+                $wpdb->insert_id = $subscriber_insert_id;
+                return 1;
+            } );
+
+        // Mock get_by_id after creation.
+        $wpdb->shouldReceive( 'get_row' )
+            ->once()
+            ->andReturn( (object) array(
+                'id'                => $subscriber_insert_id,
+                'email'             => 'user@example.com',
+                'first_name'        => 'Test User',
+                'last_name'         => '',
+                'status'            => 'active',
+                'unsubscribe_token' => 'test_token_123',
+            ) );
+
+        // Expect database inserts: campaigns table, then queue table.
         $wpdb->shouldReceive( 'insert' )
             ->once()
             ->with(
@@ -188,15 +218,18 @@ class OneTimeEmailTest extends TestCase {
                 Mockery::type( 'array' ),
                 Mockery::type( 'array' )
             )
-            ->andReturn( 1 );
+            ->andReturnUsing( function () use ( $wpdb ) {
+                $wpdb->insert_id = 1;
+                return 1;
+            } );
 
         $wpdb->shouldReceive( 'insert' )
             ->once()
             ->with(
                 'wp_mskd_queue',
                 Mockery::on(
-                    function ( $data ) {
-                        return $data['subscriber_id'] === 0
+                    function ( $data ) use ( $subscriber_insert_id ) {
+                        return $data['subscriber_id'] === $subscriber_insert_id
                             && $data['status'] === 'sent'
                             && strpos( $data['subject'], 'Test User' ) !== false;
                     }
@@ -262,6 +295,50 @@ class OneTimeEmailTest extends TestCase {
             return $default;
         });
 
+        // Mock subscriber lookup (get_by_email returns null - subscriber doesn't exist).
+        $wpdb->shouldReceive( 'get_row' )
+            ->once()
+            ->andReturn( null );
+
+        // Mock subscriber creation (insert into subscribers table).
+        $subscriber_insert_id = 100;
+        $wpdb->shouldReceive( 'insert' )
+            ->once()
+            ->with(
+                'wp_mskd_subscribers',
+                Mockery::type( 'array' ),
+                Mockery::type( 'array' )
+            )
+            ->andReturnUsing( function () use ( $wpdb, $subscriber_insert_id ) {
+                $wpdb->insert_id = $subscriber_insert_id;
+                return 1;
+            } );
+
+        // Mock get_by_id after creation.
+        $wpdb->shouldReceive( 'get_row' )
+            ->once()
+            ->andReturn( (object) array(
+                'id'                => $subscriber_insert_id,
+                'email'             => 'user@example.com',
+                'first_name'        => 'Test User',
+                'last_name'         => '',
+                'status'            => 'active',
+                'unsubscribe_token' => 'test_token_123',
+            ) );
+
+        // Expect database insert for campaigns table.
+        $wpdb->shouldReceive( 'insert' )
+            ->once()
+            ->with(
+                'wp_mskd_campaigns',
+                Mockery::type( 'array' ),
+                Mockery::type( 'array' )
+            )
+            ->andReturnUsing( function () use ( $wpdb ) {
+                $wpdb->insert_id = 1;
+                return 1;
+            } );
+
         // Expect database insert for logging the sent email.
         $wpdb->shouldReceive( 'insert' )
             ->once()
@@ -271,8 +348,6 @@ class OneTimeEmailTest extends TestCase {
                 \Mockery::type( 'array' )
             )
             ->andReturn( true );
-
-        $wpdb->insert_id = 1;
 
         // Should show success message since PHP mail fallback works.
         $success_called = false;
@@ -334,8 +409,38 @@ class OneTimeEmailTest extends TestCase {
         $sent_subject = '';
         $sent_body    = '';
 
+        // Mock subscriber lookup (get_by_email returns null - subscriber doesn't exist).
+        $wpdb->shouldReceive( 'get_row' )
+            ->once()
+            ->andReturn( null );
+
+        // Mock subscriber creation (insert into subscribers table).
+        $subscriber_insert_id = 100;
+        $wpdb->shouldReceive( 'insert' )
+            ->once()
+            ->with(
+                'wp_mskd_subscribers',
+                Mockery::type( 'array' ),
+                Mockery::type( 'array' )
+            )
+            ->andReturnUsing( function () use ( $wpdb, $subscriber_insert_id ) {
+                $wpdb->insert_id = $subscriber_insert_id;
+                return 1;
+            } );
+
+        // Mock get_by_id after creation.
+        $wpdb->shouldReceive( 'get_row' )
+            ->once()
+            ->andReturn( (object) array(
+                'id'                => $subscriber_insert_id,
+                'email'             => 'john@example.com',
+                'first_name'        => 'John Doe',
+                'last_name'         => '',
+                'status'            => 'active',
+                'unsubscribe_token' => 'test_token_123',
+            ) );
+
         // First insert is to campaigns table.
-        $wpdb->insert_id = 1;
         $wpdb->shouldReceive( 'insert' )
             ->once()
             ->with(
@@ -343,7 +448,10 @@ class OneTimeEmailTest extends TestCase {
                 Mockery::type( 'array' ),
                 Mockery::type( 'array' )
             )
-            ->andReturn( 1 );
+            ->andReturnUsing( function () use ( $wpdb ) {
+                $wpdb->insert_id = 1;
+                return 1;
+            } );
 
         // Second insert is to queue table - capture the sent content.
         $wpdb->shouldReceive( 'insert' )
