@@ -2171,3 +2171,39 @@ msgstr "Warteschlange anzeigen"
 #: includes/services/class-cron-handler.php
 msgid "Invalid or missing email address"
 msgstr "Ungültige oder fehlende E-Mail-Adresse"
+
+#: admin/partials/settings.php
+msgid "Styling"
+msgstr "Styling"
+
+#: admin/partials/settings.php
+msgid "Customize the appearance of subscription forms and the unsubscribe page."
+msgstr "Passen Sie das Erscheinungsbild von Anmeldeformularen und der Abmeldeseite an."
+
+#: admin/partials/settings.php
+msgid "Highlight Color"
+msgstr "Akzentfarbe"
+
+#: admin/partials/settings.php
+msgid "Primary color for buttons, links, and focus states."
+msgstr "Primärfarbe für Schaltflächen, Links und Fokuszustände."
+
+#: admin/partials/settings.php
+msgid "Button Text Color"
+msgstr "Schaltflächentextfarbe"
+
+#: admin/partials/settings.php
+msgid "Text color for buttons."
+msgstr "Textfarbe für Schaltflächen."
+
+#: admin/partials/settings.php
+msgid "Button preview:"
+msgstr "Schaltflächenvorschau:"
+
+#: admin/partials/settings.php
+msgid "Link preview:"
+msgstr "Linkvorschau:"
+
+#: admin/partials/settings.php
+msgid "Back to site"
+msgstr "Zurück zur Website"

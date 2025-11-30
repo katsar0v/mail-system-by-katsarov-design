@@ -2092,3 +2092,39 @@ msgstr ""
 #: includes/services/class-cron-handler.php
 msgid "Invalid or missing email address"
 msgstr ""
+
+#: admin/partials/settings.php
+msgid "Styling"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Customize the appearance of subscription forms and the unsubscribe page."
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Highlight Color"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Primary color for buttons, links, and focus states."
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Button Text Color"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Text color for buttons."
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Button preview:"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Link preview:"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "Back to site"
+msgstr ""
