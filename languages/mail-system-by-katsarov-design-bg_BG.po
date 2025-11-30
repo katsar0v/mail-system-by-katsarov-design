@@ -2130,3 +2130,24 @@ msgstr "Линк за отписване"
 #: admin/partials/settings.php
 msgid "Raw unsubscribe URL"
 msgstr "Чист URL за отписване"
+
+#: includes/Admin/class-admin.php
+#: admin/partials/dashboard-widget.php
+msgid "Mail System - Queue Statistics"
+msgstr "Мейл система - Статистика на опашката"
+
+#: admin/partials/dashboard-widget.php
+msgid "Last cron run:"
+msgstr "Последно изпълнение на cron:"
+
+#: admin/partials/dashboard-widget.php
+msgid "Cron has not run yet."
+msgstr "Cron още не е стартиран."
+
+#: admin/partials/dashboard-widget.php
+msgid "View Queue"
+msgstr "Виж опашка"
+
+#: includes/services/class-cron-handler.php
+msgid "Invalid or missing email address"
+msgstr "Невалиден или липсващ имейл адрес"

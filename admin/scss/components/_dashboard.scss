@@ -111,6 +111,12 @@
   }
 }
 
+// Queue Stats Summary Card (on main dashboard)
+.mskd-queue-stats-card {
+  @include card-padded;
+  margin-bottom: $grid-gap;
+}
+
 // Responsive
 @include mobile {
   .mskd-stats-grid {

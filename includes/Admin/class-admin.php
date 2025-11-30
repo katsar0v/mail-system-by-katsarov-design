@@ -591,9 +591,10 @@ class Admin {
 			FROM {$wpdb->prefix}mskd_queue"
 		);
 
-		$pending = intval( $queue_stats->pending ?? 0 );
-		$sent    = intval( $queue_stats->sent ?? 0 );
-		$failed  = intval( $queue_stats->failed ?? 0 );
+		// Defensive null check for PHP 8+ compatibility.
+		$pending = $queue_stats ? intval( $queue_stats->pending ?? 0 ) : 0;
+		$sent    = $queue_stats ? intval( $queue_stats->sent ?? 0 ) : 0;
+		$failed  = $queue_stats ? intval( $queue_stats->failed ?? 0 ) : 0;
 
 		// Get last cron run timestamp.
 		$last_cron_run = get_option( 'mskd_last_cron_run', 0 );
