@@ -2226,3 +2226,40 @@ msgstr "Zurück zur Seite"
 #: public/class-public.php
 msgid "Unable to verify request."
 msgstr "Anfrage kann nicht verifiziert werden."
+
+#: includes/Admin/class-admin.php
+msgid "Mail System Database Update Required"
+msgstr "Mail System Datenbankaktualisierung erforderlich"
+
+#: includes/Admin/class-admin.php
+#, php-format
+msgid "Your database schema (version %1$s) is outdated. Version %2$s is required for the plugin to work correctly."
+msgstr "Ihr Datenbankschema (Version %1$s) ist veraltet. Version %2$s ist erforderlich, damit das Plugin korrekt funktioniert."
+
+#: includes/Admin/class-admin.php
+msgid "Update Database Now"
+msgstr "Datenbank jetzt aktualisieren"
+
+#: includes/Admin/class-admin.php
+msgid "Mail System Database Repair Required"
+msgstr "Mail System Datenbankreparatur erforderlich"
+
+#: includes/Admin/class-admin.php
+msgid "Some required database columns are missing. This may cause subscription confirmation links to fail. Click the button below to repair the database."
+msgstr "Einige erforderliche Datenbankspalten fehlen. Dies kann dazu führen, dass Bestätigungslinks für Abonnements fehlschlagen. Klicken Sie auf die Schaltfläche unten, um die Datenbank zu reparieren."
+
+#: includes/Admin/class-admin.php
+msgid "Repair Database Now"
+msgstr "Datenbank jetzt reparieren"
+
+#: includes/Admin/class-admin.php
+msgid "Security check failed."
+msgstr "Sicherheitsüberprüfung fehlgeschlagen."
+
+#: includes/Admin/class-admin.php
+msgid "Database has been updated successfully."
+msgstr "Die Datenbank wurde erfolgreich aktualisiert."
+
+#: public/class-public.php
+msgid "An error occurred. Please try again later."
+msgstr "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."

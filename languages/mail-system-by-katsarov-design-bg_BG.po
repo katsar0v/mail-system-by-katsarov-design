@@ -2206,3 +2206,40 @@ msgstr "Обратно към сайта"
 #: public/class-public.php
 msgid "Unable to verify request."
 msgstr "Заявката не може да бъде потвърдена."
+
+#: includes/Admin/class-admin.php
+msgid "Mail System Database Update Required"
+msgstr "Необходима е актуализация на базата данни на Mail System"
+
+#: includes/Admin/class-admin.php
+#, php-format
+msgid "Your database schema (version %1$s) is outdated. Version %2$s is required for the plugin to work correctly."
+msgstr "Схемата на базата данни (версия %1$s) е остаряла. За правилната работа на плъгина е необходима версия %2$s."
+
+#: includes/Admin/class-admin.php
+msgid "Update Database Now"
+msgstr "Актуализирай базата данни сега"
+
+#: includes/Admin/class-admin.php
+msgid "Mail System Database Repair Required"
+msgstr "Необходим е ремонт на базата данни на Mail System"
+
+#: includes/Admin/class-admin.php
+msgid "Some required database columns are missing. This may cause subscription confirmation links to fail. Click the button below to repair the database."
+msgstr "Някои необходими колони в базата данни липсват. Това може да причини неуспех на линковете за потвърждение на абонамент. Кликнете бутона по-долу, за да поправите базата данни."
+
+#: includes/Admin/class-admin.php
+msgid "Repair Database Now"
+msgstr "Поправи базата данни сега"
+
+#: includes/Admin/class-admin.php
+msgid "Security check failed."
+msgstr "Проверката за сигурност е неуспешна."
+
+#: includes/Admin/class-admin.php
+msgid "Database has been updated successfully."
+msgstr "Базата данни е актуализирана успешно."
+
+#: public/class-public.php
+msgid "An error occurred. Please try again later."
+msgstr "Възникна грешка. Моля, опитайте отново по-късно."

@@ -117,7 +117,9 @@ class Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'admin_notices', array( $this, 'show_cron_notice' ) );
 		add_action( 'admin_notices', array( $this, 'show_share_notice' ) );
+		add_action( 'admin_notices', array( $this, 'show_database_upgrade_notice' ) );
 		add_action( 'admin_init', array( $this, 'handle_actions' ) );
+		add_action( 'admin_init', array( $this, 'handle_database_upgrade' ) );
 		add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widget' ) );
 
 		// Initialize AJAX handlers.
@@ -434,6 +436,161 @@ class Admin {
 			});
 		</script>
 		<?php
+	}
+
+	/**
+	 * Show database upgrade notice when schema is outdated.
+	 *
+	 * @return void
+	 */
+	public function show_database_upgrade_notice(): void {
+		// Only show to users who can manage options.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+
+		// Only show on plugin pages.
+		if ( ! $screen || false === strpos( $screen->id, self::PAGE_PREFIX ) ) {
+			return;
+		}
+
+		// Check if database needs upgrade.
+		$installed_version = get_option( 'mskd_db_version', '1.0.0' );
+		$required_version  = \MSKD_Activator::DB_VERSION;
+
+		if ( version_compare( $installed_version, $required_version, '>=' ) ) {
+			// Also verify the opt_in_token column exists (in case upgrade failed silently).
+			if ( ! $this->is_database_schema_valid() ) {
+				$this->render_database_repair_notice();
+			}
+			return;
+		}
+
+		$upgrade_url = wp_nonce_url(
+			add_query_arg( 'mskd_upgrade_db', '1', admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'dashboard' ) ),
+			'mskd_upgrade_db'
+		);
+
+		?>
+		<div class="notice notice-error">
+			<p>
+				<strong><?php esc_html_e( 'Mail System Database Update Required', 'mail-system-by-katsarov-design' ); ?></strong>
+			</p>
+			<p>
+				<?php
+				printf(
+					/* translators: 1: Current DB version, 2: Required DB version */
+					esc_html__( 'Your database schema (version %1$s) is outdated. Version %2$s is required for the plugin to work correctly.', 'mail-system-by-katsarov-design' ),
+					esc_html( $installed_version ),
+					esc_html( $required_version )
+				);
+				?>
+			</p>
+			<p>
+				<a href="<?php echo esc_url( $upgrade_url ); ?>" class="button button-primary">
+					<?php esc_html_e( 'Update Database Now', 'mail-system-by-katsarov-design' ); ?>
+				</a>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render database repair notice when schema is invalid.
+	 *
+	 * @return void
+	 */
+	private function render_database_repair_notice(): void {
+		$upgrade_url = wp_nonce_url(
+			add_query_arg( 'mskd_upgrade_db', '1', admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'dashboard' ) ),
+			'mskd_upgrade_db'
+		);
+
+		?>
+		<div class="notice notice-error">
+			<p>
+				<strong><?php esc_html_e( 'Mail System Database Repair Required', 'mail-system-by-katsarov-design' ); ?></strong>
+			</p>
+			<p>
+				<?php esc_html_e( 'Some required database columns are missing. This may cause subscription confirmation links to fail. Click the button below to repair the database.', 'mail-system-by-katsarov-design' ); ?>
+			</p>
+			<p>
+				<a href="<?php echo esc_url( $upgrade_url ); ?>" class="button button-primary">
+					<?php esc_html_e( 'Repair Database Now', 'mail-system-by-katsarov-design' ); ?>
+				</a>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Check if database schema has all required columns.
+	 *
+	 * @return bool True if schema is valid.
+	 */
+	private function is_database_schema_valid(): bool {
+		global $wpdb;
+
+		// Check if opt_in_token column exists in subscribers table.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema check.
+		$column_exists = $wpdb->get_results(
+			$wpdb->prepare(
+				"SHOW COLUMNS FROM {$wpdb->prefix}mskd_subscribers LIKE %s",
+				'opt_in_token'
+			)
+		);
+
+		return ! empty( $column_exists );
+	}
+
+	/**
+	 * Handle database upgrade action.
+	 *
+	 * @return void
+	 */
+	public function handle_database_upgrade(): void {
+		// Show success message if redirected after upgrade.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Just displaying a message.
+		if ( isset( $_GET['mskd_db_updated'] ) && '1' === $_GET['mskd_db_updated'] ) {
+			add_action(
+				'admin_notices',
+				function () {
+					?>
+					<div class="notice notice-success is-dismissible">
+						<p>
+							<strong><?php esc_html_e( 'Mail System:', 'mail-system-by-katsarov-design' ); ?></strong>
+							<?php esc_html_e( 'Database has been updated successfully.', 'mail-system-by-katsarov-design' ); ?>
+						</p>
+					</div>
+					<?php
+				}
+			);
+		}
+
+		if ( ! isset( $_GET['mskd_upgrade_db'] ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		// Verify nonce.
+		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'mskd_upgrade_db' ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'mail-system-by-katsarov-design' ) );
+		}
+
+		// Force re-run the upgrade by temporarily setting version to 1.0.0.
+		update_option( 'mskd_db_version', '1.0.0' );
+
+		// Run upgrade.
+		\MSKD_Activator::maybe_upgrade();
+
+		// Redirect to remove the query args.
+		wp_safe_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'dashboard&mskd_db_updated=1' ) );
+		exit;
 	}
 
 	/**

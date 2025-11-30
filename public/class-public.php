@@ -289,7 +289,7 @@ class MSKD_Public {
 				$opt_in_token = wp_generate_password( 32, false );
 
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for status update.
-				$wpdb->update(
+				$result = $wpdb->update(
 					$wpdb->prefix . 'mskd_subscribers',
 					array(
 						'status'       => 'inactive',
@@ -302,26 +302,51 @@ class MSKD_Public {
 					array( '%d' )
 				);
 
+				if ( false === $result ) {
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional logging for debugging database failures.
+					error_log( 'MSKD: Failed to update subscriber. DB error: ' . $wpdb->last_error );
+					wp_send_json_error(
+						array(
+							'message' => __( 'An error occurred. Please try again later.', 'mail-system-by-katsarov-design' ),
+						)
+					);
+				}
+
 				$subscriber_id = $existing->id;
 
 				// Send opt-in confirmation email.
 				$this->send_opt_in_email( $email, $first_name ? $first_name : $existing->first_name, $opt_in_token );
 			} elseif ( 'inactive' === $existing->status ) {
-				// Already inactive, resend confirmation email.
-				$opt_in_token = wp_generate_password( 32, false );
+				// Already inactive, resend confirmation email with existing token if valid.
+				// Only generate new token if existing one is empty.
+				if ( ! empty( $existing->opt_in_token ) ) {
+					$opt_in_token = $existing->opt_in_token;
+				} else {
+					$opt_in_token = wp_generate_password( 32, false );
 
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for token update.
-				$wpdb->update(
-					$wpdb->prefix . 'mskd_subscribers',
-					array(
-						'opt_in_token' => $opt_in_token,
-						'first_name'   => $first_name ? $first_name : $existing->first_name,
-						'last_name'    => $last_name ? $last_name : $existing->last_name,
-					),
-					array( 'id' => $existing->id ),
-					array( '%s', '%s', '%s' ),
-					array( '%d' )
-				);
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for token update.
+					$result = $wpdb->update(
+						$wpdb->prefix . 'mskd_subscribers',
+						array(
+							'opt_in_token' => $opt_in_token,
+							'first_name'   => $first_name ? $first_name : $existing->first_name,
+							'last_name'    => $last_name ? $last_name : $existing->last_name,
+						),
+						array( 'id' => $existing->id ),
+						array( '%s', '%s', '%s' ),
+						array( '%d' )
+					);
+
+					if ( false === $result ) {
+						// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional logging for debugging database failures.
+						error_log( 'MSKD: Failed to update subscriber token. DB error: ' . $wpdb->last_error );
+						wp_send_json_error(
+							array(
+								'message' => __( 'An error occurred. Please try again later.', 'mail-system-by-katsarov-design' ),
+							)
+						);
+					}
+				}
 
 				$subscriber_id = $existing->id;
 
@@ -341,7 +366,7 @@ class MSKD_Public {
 			$opt_in_token      = wp_generate_password( 32, false );
 
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct query needed for subscriber insert.
-			$wpdb->insert(
+			$result = $wpdb->insert(
 				$wpdb->prefix . 'mskd_subscribers',
 				array(
 					'email'             => $email,
@@ -353,6 +378,16 @@ class MSKD_Public {
 				),
 				array( '%s', '%s', '%s', '%s', '%s', '%s' )
 			);
+
+			if ( false === $result ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional logging for debugging database failures.
+				error_log( 'MSKD: Failed to insert subscriber. DB error: ' . $wpdb->last_error );
+				wp_send_json_error(
+					array(
+						'message' => __( 'An error occurred. Please try again later.', 'mail-system-by-katsarov-design' ),
+					)
+				);
+			}
 
 			$subscriber_id = $wpdb->insert_id;
 
