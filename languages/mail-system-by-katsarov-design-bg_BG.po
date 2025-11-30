@@ -2151,3 +2151,58 @@ msgstr "Виж опашка"
 #: includes/services/class-cron-handler.php
 msgid "Invalid or missing email address"
 msgstr "Невалиден или липсващ имейл адрес"
+
+#: public/class-public.php
+msgid "Invalid confirmation link."
+msgstr "Невалиден линк за потвърждение."
+
+#: public/class-public.php
+msgid "Too many attempts. Please try again in 5 minutes."
+msgstr "Твърде много опити. Моля, опитайте отново след 5 минути."
+
+#: public/class-public.php
+msgid "Please check your email to confirm your subscription."
+msgstr "Моля, проверете имейла си, за да потвърдите абонамента си."
+
+#: public/class-public.php
+msgid "You are already subscribed!"
+msgstr "Вече сте абонирани!"
+
+#: public/class-public.php
+#, php-format
+msgid "Confirm your subscription to %s"
+msgstr "Потвърдете абонамента си за %s"
+
+#: public/class-public.php
+#, php-format
+msgid "Hello %s,"
+msgstr "Здравейте %s,"
+
+#: public/class-public.php
+msgid "Hello,"
+msgstr "Здравейте,"
+
+#: public/class-public.php
+#, php-format
+msgid "%1$s\n\nThank you for subscribing to %2$s!\n\nPlease click the link below to confirm your subscription:\n\n%3$s\n\nIf you did not request this subscription, you can safely ignore this email.\n\nBest regards,\n%4$s"
+msgstr "%1$s\n\nБлагодарим ви, че се абонирахте за %2$s!\n\nМоля, кликнете върху линка по-долу, за да потвърдите абонамента си:\n\n%3$s\n\nАко не сте заявили този абонамент, можете спокойно да игнорирате този имейл.\n\nС уважение,\n%4$s"
+
+#: public/partials/opt-in-confirm.php
+msgid "Subscription Confirmed"
+msgstr "Абонаментът е потвърден"
+
+#: public/partials/opt-in-confirm.php
+msgid "Subscription Confirmed!"
+msgstr "Абонаментът е потвърден!"
+
+#: public/partials/opt-in-confirm.php
+msgid "Thank you for confirming your subscription. You will now receive our emails."
+msgstr "Благодарим ви, че потвърдихте абонамента си. Сега ще получавате нашите имейли."
+
+#: public/partials/opt-in-confirm.php
+msgid "Back to site"
+msgstr "Обратно към сайта"
+
+#: public/class-public.php
+msgid "Unable to verify request."
+msgstr "Заявката не може да бъде потвърдена."

@@ -2171,3 +2171,58 @@ msgstr "Warteschlange anzeigen"
 #: includes/services/class-cron-handler.php
 msgid "Invalid or missing email address"
 msgstr "Ungültige oder fehlende E-Mail-Adresse"
+
+#: public/class-public.php
+msgid "Invalid confirmation link."
+msgstr "Ungültiger Bestätigungslink."
+
+#: public/class-public.php
+msgid "Too many attempts. Please try again in 5 minutes."
+msgstr "Zu viele Versuche. Bitte versuchen Sie es in 5 Minuten erneut."
+
+#: public/class-public.php
+msgid "Please check your email to confirm your subscription."
+msgstr "Bitte überprüfen Sie Ihre E-Mail, um Ihr Abonnement zu bestätigen."
+
+#: public/class-public.php
+msgid "You are already subscribed!"
+msgstr "Sie sind bereits abonniert!"
+
+#: public/class-public.php
+#, php-format
+msgid "Confirm your subscription to %s"
+msgstr "Bestätigen Sie Ihr Abonnement für %s"
+
+#: public/class-public.php
+#, php-format
+msgid "Hello %s,"
+msgstr "Hallo %s,"
+
+#: public/class-public.php
+msgid "Hello,"
+msgstr "Hallo,"
+
+#: public/class-public.php
+#, php-format
+msgid "%1$s\n\nThank you for subscribing to %2$s!\n\nPlease click the link below to confirm your subscription:\n\n%3$s\n\nIf you did not request this subscription, you can safely ignore this email.\n\nBest regards,\n%4$s"
+msgstr "%1$s\n\nVielen Dank für Ihr Abonnement von %2$s!\n\nBitte klicken Sie auf den folgenden Link, um Ihr Abonnement zu bestätigen:\n\n%3$s\n\nWenn Sie dieses Abonnement nicht angefordert haben, können Sie diese E-Mail ignorieren.\n\nMit freundlichen Grüßen,\n%4$s"
+
+#: public/partials/opt-in-confirm.php
+msgid "Subscription Confirmed"
+msgstr "Abonnement bestätigt"
+
+#: public/partials/opt-in-confirm.php
+msgid "Subscription Confirmed!"
+msgstr "Abonnement bestätigt!"
+
+#: public/partials/opt-in-confirm.php
+msgid "Thank you for confirming your subscription. You will now receive our emails."
+msgstr "Vielen Dank für die Bestätigung Ihres Abonnements. Sie werden nun unsere E-Mails erhalten."
+
+#: public/partials/opt-in-confirm.php
+msgid "Back to site"
+msgstr "Zurück zur Seite"
+
+#: public/class-public.php
+msgid "Unable to verify request."
+msgstr "Anfrage kann nicht verifiziert werden."
