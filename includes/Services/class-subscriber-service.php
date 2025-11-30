@@ -222,7 +222,7 @@ class Subscriber_Service {
 	/**
 	 * Get or create a subscriber by email.
 	 *
-	 * If subscriber exists, returns existing record (and reactivates if unsubscribed for internal source).
+	 * If subscriber exists, returns existing record (preserves current status).
 	 * If not, creates new subscriber with generated token.
 	 *
 	 * @param string $email      Email address.

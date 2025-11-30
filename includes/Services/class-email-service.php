@@ -204,12 +204,17 @@ class Email_Service {
 			Subscriber_Service::SOURCE_ONE_TIME
 		);
 
-		// Check if subscriber is unsubscribed.
-		if ( $subscriber && 'unsubscribed' === $subscriber->status ) {
+		// If subscriber creation failed, abort early to avoid foreign key violation.
+		if ( ! $subscriber ) {
 			return false;
 		}
 
-		$subscriber_id = $subscriber ? (int) $subscriber->id : 0;
+		// Check if subscriber is unsubscribed.
+		if ( 'unsubscribed' === $subscriber->status ) {
+			return false;
+		}
+
+		$subscriber_id = (int) $subscriber->id;
 
 		// Create campaign record for the one-time email.
 		$campaign_status = $is_immediate ? 'completed' : 'pending';
