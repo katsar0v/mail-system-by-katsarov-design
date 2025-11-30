@@ -691,8 +691,12 @@ msgid "Emails per minute"
 msgstr "E-Mails pro Minute"
 
 #: admin/partials/settings.php
-msgid "Maximum number of emails to send per minute. Higher values may exceed your hosting provider limits."
-msgstr "Maximale Anzahl der E-Mails, die pro Minute gesendet werden. Höhere Werte können die Limits Ihres Hosting-Anbieters überschreiten."
+msgid ""
+"Maximum number of emails to send per minute. Higher values may exceed your "
+"hosting provider limits."
+msgstr ""
+"Maximale Anzahl der E-Mails, die pro Minute gesendet werden. Höhere Werte "
+"können die Limits Ihres Hosting-Anbieters überschreiten."
 
 #: admin/partials/settings.php
 msgid "Sending speed"
@@ -894,9 +898,16 @@ msgstr "Erfolgreich abgemeldet"
 msgid "You will no longer receive emails from us."
 msgstr "Sie werden keine E-Mails mehr von uns erhalten."
 
-#: public/partials/unsubscribe.php
+#: public/partials/unsubscribe.php public/partials/opt-in-confirm.php
+#, fuzzy
 msgid "Back to site"
-msgstr "Zurück zur Website"
+msgstr ""
+"#-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov "
+"Design 1.0.0)  #-#-#-#-#\n"
+"Zurück zur Website\n"
+"#-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov "
+"Design 1.0.0)  #-#-#-#-#\n"
+"Zurück zur Seite"
 
 #: includes/services/class-list-provider.php admin/partials/queue.php
 msgid "External"
@@ -2108,8 +2119,13 @@ msgid "Email Template Settings"
 msgstr "E-Mail-Vorlageneinstellungen"
 
 #: admin/partials/settings.php
-msgid "Configure custom header and footer that will be added to all outgoing emails. Supports HTML and template variables."
-msgstr "Konfigurieren Sie benutzerdefinierte Kopf- und Fußzeilen, die allen ausgehenden E-Mails hinzugefügt werden. Unterstützt HTML und Vorlagenvariablen."
+msgid ""
+"Configure custom header and footer that will be added to all outgoing "
+"emails. Supports HTML and template variables."
+msgstr ""
+"Konfigurieren Sie benutzerdefinierte Kopf- und Fußzeilen, die allen "
+"ausgehenden E-Mails hinzugefügt werden. Unterstützt HTML und "
+"Vorlagenvariablen."
 
 #: admin/partials/settings.php
 msgid "Email Header"
@@ -2117,7 +2133,9 @@ msgstr "E-Mail-Kopfzeile"
 
 #: admin/partials/settings.php
 msgid "HTML content to prepend to all emails. Leave empty to disable."
-msgstr "HTML-Inhalt, der allen E-Mails vorangestellt wird. Leer lassen zum Deaktivieren."
+msgstr ""
+"HTML-Inhalt, der allen E-Mails vorangestellt wird. Leer lassen zum "
+"Deaktivieren."
 
 #: admin/partials/settings.php
 msgid "Email Footer"
@@ -2125,7 +2143,8 @@ msgstr "E-Mail-Fußzeile"
 
 #: admin/partials/settings.php
 msgid "HTML content to append to all emails. Leave empty to disable."
-msgstr "HTML-Inhalt, der allen E-Mails angehängt wird. Leer lassen zum Deaktivieren."
+msgstr ""
+"HTML-Inhalt, der allen E-Mails angehängt wird. Leer lassen zum Deaktivieren."
 
 #: admin/partials/settings.php
 msgid "Available Variables"
@@ -2151,8 +2170,7 @@ msgstr "Klickbarer Abmeldelink"
 msgid "Raw unsubscribe URL"
 msgstr "Rohe Abmelde-URL"
 
-#: includes/Admin/class-admin.php
-#: admin/partials/dashboard-widget.php
+#: includes/Admin/class-admin.php admin/partials/dashboard-widget.php
 msgid "Mail System - Queue Statistics"
 msgstr "Mail-System - Warteschlangen-Statistik"
 
@@ -2175,10 +2193,6 @@ msgstr "Ungültige oder fehlende E-Mail-Adresse"
 #: public/class-public.php
 msgid "Invalid confirmation link."
 msgstr "Ungültiger Bestätigungslink."
-
-#: public/class-public.php
-msgid "Too many attempts. Please try again in 5 minutes."
-msgstr "Zu viele Versuche. Bitte versuchen Sie es in 5 Minuten erneut."
 
 #: public/class-public.php
 msgid "Please check your email to confirm your subscription."
@@ -2204,8 +2218,33 @@ msgstr "Hallo,"
 
 #: public/class-public.php
 #, php-format
-msgid "%1$s\n\nThank you for subscribing to %2$s!\n\nPlease click the link below to confirm your subscription:\n\n%3$s\n\nIf you did not request this subscription, you can safely ignore this email.\n\nBest regards,\n%4$s"
-msgstr "%1$s\n\nVielen Dank für Ihr Abonnement von %2$s!\n\nBitte klicken Sie auf den folgenden Link, um Ihr Abonnement zu bestätigen:\n\n%3$s\n\nWenn Sie dieses Abonnement nicht angefordert haben, können Sie diese E-Mail ignorieren.\n\nMit freundlichen Grüßen,\n%4$s"
+msgid ""
+"%1$s\n"
+"\n"
+"Thank you for subscribing to %2$s!\n"
+"\n"
+"Please click the link below to confirm your subscription:\n"
+"\n"
+"%3$s\n"
+"\n"
+"If you did not request this subscription, you can safely ignore this email.\n"
+"\n"
+"Best regards,\n"
+"%4$s"
+msgstr ""
+"%1$s\n"
+"\n"
+"Vielen Dank für Ihr Abonnement von %2$s!\n"
+"\n"
+"Bitte klicken Sie auf den folgenden Link, um Ihr Abonnement zu bestätigen:\n"
+"\n"
+"%3$s\n"
+"\n"
+"Wenn Sie dieses Abonnement nicht angefordert haben, können Sie diese E-Mail "
+"ignorieren.\n"
+"\n"
+"Mit freundlichen Grüßen,\n"
+"%4$s"
 
 #: public/partials/opt-in-confirm.php
 msgid "Subscription Confirmed"
@@ -2216,12 +2255,11 @@ msgid "Subscription Confirmed!"
 msgstr "Abonnement bestätigt!"
 
 #: public/partials/opt-in-confirm.php
-msgid "Thank you for confirming your subscription. You will now receive our emails."
-msgstr "Vielen Dank für die Bestätigung Ihres Abonnements. Sie werden nun unsere E-Mails erhalten."
-
-#: public/partials/opt-in-confirm.php
-msgid "Back to site"
-msgstr "Zurück zur Seite"
+msgid ""
+"Thank you for confirming your subscription. You will now receive our emails."
+msgstr ""
+"Vielen Dank für die Bestätigung Ihres Abonnements. Sie werden nun unsere E-"
+"Mails erhalten."
 
 #: public/class-public.php
 msgid "Unable to verify request."
@@ -2233,8 +2271,12 @@ msgstr "Mail System Datenbankaktualisierung erforderlich"
 
 #: includes/Admin/class-admin.php
 #, php-format
-msgid "Your database schema (version %1$s) is outdated. Version %2$s is required for the plugin to work correctly."
-msgstr "Ihr Datenbankschema (Version %1$s) ist veraltet. Version %2$s ist erforderlich, damit das Plugin korrekt funktioniert."
+msgid ""
+"Your database schema (version %1$s) is outdated. Version %2$s is required "
+"for the plugin to work correctly."
+msgstr ""
+"Ihr Datenbankschema (Version %1$s) ist veraltet. Version %2$s ist "
+"erforderlich, damit das Plugin korrekt funktioniert."
 
 #: includes/Admin/class-admin.php
 msgid "Update Database Now"
@@ -2245,8 +2287,13 @@ msgid "Mail System Database Repair Required"
 msgstr "Mail System Datenbankreparatur erforderlich"
 
 #: includes/Admin/class-admin.php
-msgid "Some required database columns are missing. This may cause subscription confirmation links to fail. Click the button below to repair the database."
-msgstr "Einige erforderliche Datenbankspalten fehlen. Dies kann dazu führen, dass Bestätigungslinks für Abonnements fehlschlagen. Klicken Sie auf die Schaltfläche unten, um die Datenbank zu reparieren."
+msgid ""
+"Some required database columns are missing. This may cause subscription "
+"confirmation links to fail. Click the button below to repair the database."
+msgstr ""
+"Einige erforderliche Datenbankspalten fehlen. Dies kann dazu führen, dass "
+"Bestätigungslinks für Abonnements fehlschlagen. Klicken Sie auf die "
+"Schaltfläche unten, um die Datenbank zu reparieren."
 
 #: includes/Admin/class-admin.php
 msgid "Repair Database Now"
