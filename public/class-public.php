@@ -159,7 +159,14 @@ class MSKD_Public {
 		}
 
 		// Rate limiting: check transient for this IP.
-		$ip_hash        = md5( isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : 'unknown' );
+		if ( ! isset( $_SERVER['REMOTE_ADDR'] ) ) {
+			wp_die(
+				esc_html__( 'Unable to verify request.', 'mail-system-by-katsarov-design' ),
+				esc_html__( 'Error', 'mail-system-by-katsarov-design' ),
+				array( 'response' => 400 )
+			);
+		}
+		$ip_hash        = md5( sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) );
 		$rate_limit_key = 'mskd_confirm_' . $ip_hash;
 		$attempts       = get_transient( $rate_limit_key );
 
@@ -208,7 +215,7 @@ class MSKD_Public {
 				'opt_in_token' => null,
 			),
 			array( 'id' => $subscriber->id ),
-			array( '%s', null ),
+			array( '%s', '%s' ),
 			array( '%d' )
 		);
 
@@ -321,8 +328,12 @@ class MSKD_Public {
 				// Resend opt-in confirmation email.
 				$this->send_opt_in_email( $email, $first_name ? $first_name : $existing->first_name, $opt_in_token );
 			} else {
-				// Already active - just use existing subscriber.
-				$subscriber_id = $existing->id;
+				// Already active - return early with message.
+				wp_send_json_success(
+					array(
+						'message' => __( 'You are already subscribed!', 'mail-system-by-katsarov-design' ),
+					)
+				);
 			}
 		} else {
 			// Create new subscriber with inactive status.
@@ -443,6 +454,10 @@ Best regards,
 		);
 
 		// Use WordPress wp_mail for sending confirmation email.
-		wp_mail( $email, $subject, $body );
+		$mail_sent = wp_mail( $email, $subject, $body );
+		if ( ! $mail_sent ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional logging for debugging email failures.
+			error_log( 'MSKD: Failed to send opt-in confirmation email to ' . $email );
+		}
 	}
 }

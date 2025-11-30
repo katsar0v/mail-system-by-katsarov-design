@@ -388,6 +388,42 @@ class OptInConfirmationTest extends TestCase {
     }
 
     /**
+     * Test missing REMOTE_ADDR returns error.
+     */
+    public function test_missing_remote_addr_returns_error(): void {
+        $this->setup_wpdb_mock();
+
+        $valid_token = 'abc123def456abc123def456abc12345';
+        $_GET['mskd_confirm'] = $valid_token;
+
+        // Remove REMOTE_ADDR.
+        unset( $_SERVER['REMOTE_ADDR'] );
+
+        Functions\expect( 'wp_die' )
+            ->once()
+            ->with(
+                Mockery::type( 'string' ),
+                Mockery::type( 'string' ),
+                Mockery::on(
+                    function ( $args ) {
+                        return $args['response'] === 400;
+                    }
+                )
+            )
+            ->andReturnUsing(
+                function () {
+                    throw new \Exception( 'wp_die_no_ip' );
+                }
+            );
+
+        try {
+            $this->public->handle_opt_in_confirmation();
+        } catch ( \Exception $e ) {
+            $this->assertEquals( 'wp_die_no_ip', $e->getMessage() );
+        }
+    }
+
+    /**
      * Clean up after each test.
      */
     protected function tearDown(): void {
