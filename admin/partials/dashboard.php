@@ -47,6 +47,10 @@ $one_time_emails = $queue_stats->one_time ?? 0;
 
 // Get next cron run
 $next_cron = wp_next_scheduled( 'mskd_process_queue' );
+
+// Get configured emails per minute from settings
+$settings          = get_option( 'mskd_settings', array() );
+$emails_per_minute = isset( $settings['emails_per_minute'] ) ? absint( $settings['emails_per_minute'] ) : MSKD_BATCH_SIZE;
 ?>
 
 <div class="wrap mskd-wrap">
@@ -158,7 +162,7 @@ $next_cron = wp_next_scheduled( 'mskd_process_queue' );
                     </div>
                 <?php endif; ?>
                 <p class="description">
-                    <?php printf( __( 'Sending: %d emails/min', 'mail-system-by-katsarov-design' ), MSKD_BATCH_SIZE ); ?>
+                    <?php printf( __( 'Sending: %d emails/min', 'mail-system-by-katsarov-design' ), $emails_per_minute ); ?>
                 </p>
             </div>
         </div>
