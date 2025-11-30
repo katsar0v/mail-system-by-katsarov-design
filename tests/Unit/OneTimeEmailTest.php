@@ -179,13 +179,31 @@ class OneTimeEmailTest extends TestCase {
         // Note: SMTP mailer uses PHPMailer directly, not wp_mail.
         // The mock PHPMailer in bootstrap.php returns true from send().
 
-        // Mock subscriber lookup (get_by_email returns null - subscriber doesn't exist).
-        $wpdb->shouldReceive( 'get_row' )
-            ->once()
-            ->andReturn( null );
-
-        // Mock subscriber creation (insert into subscribers table).
+        // Mock all get_row calls:
+        // 1. replace_one_time_placeholders() checks if recipient is subscriber → null (not found)
+        // 2. subscriber_service->get_by_email() in get_or_create() → null (not found)
+        // 3. subscriber_service->get_by_id() after creating subscriber → subscriber object
+        $call_count = 0;
         $subscriber_insert_id = 100;
+        $wpdb->shouldReceive( 'get_row' )
+            ->andReturnUsing( function () use ( &$call_count, $subscriber_insert_id ) {
+                ++$call_count;
+                // First two calls return null (subscriber not found).
+                if ( $call_count <= 2 ) {
+                    return null;
+                }
+                // Third call returns the newly created subscriber.
+                return (object) array(
+                    'id'                => $subscriber_insert_id,
+                    'email'             => 'user@example.com',
+                    'first_name'        => 'Test User',
+                    'last_name'         => '',
+                    'status'            => 'active',
+                    'unsubscribe_token' => 'test_token_123',
+                );
+            } );
+
+        // Mock subscriber creation (insert into subscribers table by get_or_create).
         $wpdb->shouldReceive( 'insert' )
             ->once()
             ->with(
@@ -197,18 +215,6 @@ class OneTimeEmailTest extends TestCase {
                 $wpdb->insert_id = $subscriber_insert_id;
                 return 1;
             } );
-
-        // Mock get_by_id after creation.
-        $wpdb->shouldReceive( 'get_row' )
-            ->once()
-            ->andReturn( (object) array(
-                'id'                => $subscriber_insert_id,
-                'email'             => 'user@example.com',
-                'first_name'        => 'Test User',
-                'last_name'         => '',
-                'status'            => 'active',
-                'unsubscribe_token' => 'test_token_123',
-            ) );
 
         // Expect database inserts: campaigns table, then queue table.
         $wpdb->shouldReceive( 'insert' )
@@ -295,13 +301,30 @@ class OneTimeEmailTest extends TestCase {
             return $default;
         });
 
-        // Mock subscriber lookup (get_by_email returns null - subscriber doesn't exist).
-        $wpdb->shouldReceive( 'get_row' )
-            ->once()
-            ->andReturn( null );
-
-        // Mock subscriber creation (insert into subscribers table).
+        // Mock subscriber lookup for placeholder replacement (recipient is NOT a subscriber).
+        // This is called by replace_one_time_placeholders() in Admin_Email.
+        // Then subscriber_service->get_or_create() also does lookups.
+        $call_count = 0;
         $subscriber_insert_id = 100;
+        $wpdb->shouldReceive( 'get_row' )
+            ->andReturnUsing( function () use ( &$call_count, $subscriber_insert_id ) {
+                ++$call_count;
+                // First two calls return null (subscriber not found).
+                if ( $call_count <= 2 ) {
+                    return null;
+                }
+                // Third call returns the newly created subscriber.
+                return (object) array(
+                    'id'                => $subscriber_insert_id,
+                    'email'             => 'user@example.com',
+                    'first_name'        => 'Test User',
+                    'last_name'         => '',
+                    'status'            => 'active',
+                    'unsubscribe_token' => 'test_token_123',
+                );
+            } );
+
+        // Mock subscriber creation (insert into subscribers table by get_or_create).
         $wpdb->shouldReceive( 'insert' )
             ->once()
             ->with(
@@ -313,18 +336,6 @@ class OneTimeEmailTest extends TestCase {
                 $wpdb->insert_id = $subscriber_insert_id;
                 return 1;
             } );
-
-        // Mock get_by_id after creation.
-        $wpdb->shouldReceive( 'get_row' )
-            ->once()
-            ->andReturn( (object) array(
-                'id'                => $subscriber_insert_id,
-                'email'             => 'user@example.com',
-                'first_name'        => 'Test User',
-                'last_name'         => '',
-                'status'            => 'active',
-                'unsubscribe_token' => 'test_token_123',
-            ) );
 
         // Expect database insert for campaigns table.
         $wpdb->shouldReceive( 'insert' )
@@ -409,13 +420,31 @@ class OneTimeEmailTest extends TestCase {
         $sent_subject = '';
         $sent_body    = '';
 
-        // Mock subscriber lookup (get_by_email returns null - subscriber doesn't exist).
-        $wpdb->shouldReceive( 'get_row' )
-            ->once()
-            ->andReturn( null );
-
-        // Mock subscriber creation (insert into subscribers table).
+        // Mock all get_row calls:
+        // 1. replace_one_time_placeholders() checks if recipient is subscriber → null (not found)
+        // 2. subscriber_service->get_by_email() in get_or_create() → null (not found)
+        // 3. subscriber_service->get_by_id() after creating subscriber → subscriber object
+        $call_count = 0;
         $subscriber_insert_id = 100;
+        $wpdb->shouldReceive( 'get_row' )
+            ->andReturnUsing( function () use ( &$call_count, $subscriber_insert_id ) {
+                ++$call_count;
+                // First two calls return null (subscriber not found).
+                if ( $call_count <= 2 ) {
+                    return null;
+                }
+                // Third call returns the newly created subscriber.
+                return (object) array(
+                    'id'                => $subscriber_insert_id,
+                    'email'             => 'john@example.com',
+                    'first_name'        => 'John Doe',
+                    'last_name'         => '',
+                    'status'            => 'active',
+                    'unsubscribe_token' => 'test_token_123',
+                );
+            } );
+
+        // Mock subscriber creation (insert into subscribers table by get_or_create).
         $wpdb->shouldReceive( 'insert' )
             ->once()
             ->with(
@@ -427,18 +456,6 @@ class OneTimeEmailTest extends TestCase {
                 $wpdb->insert_id = $subscriber_insert_id;
                 return 1;
             } );
-
-        // Mock get_by_id after creation.
-        $wpdb->shouldReceive( 'get_row' )
-            ->once()
-            ->andReturn( (object) array(
-                'id'                => $subscriber_insert_id,
-                'email'             => 'john@example.com',
-                'first_name'        => 'John Doe',
-                'last_name'         => '',
-                'status'            => 'active',
-                'unsubscribe_token' => 'test_token_123',
-            ) );
 
         // First insert is to campaigns table.
         $wpdb->shouldReceive( 'insert' )
