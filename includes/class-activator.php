@@ -107,10 +107,31 @@ class MSKD_Activator {
 			self::create_templates_table();
 		}
 
-		// Upgrade from 1.3.0 to 1.4.0: Add source column to subscribers table.
+		// Upgrade from 1.3.0 to 1.4.0: Add source column and opt_in_token to subscribers table.
 		if ( version_compare( $from_version, '1.4.0', '<' ) ) {
 			self::add_subscriber_source_column();
 			self::migrate_orphaned_queue_items();
+
+			$table_subscribers = $wpdb->prefix . 'mskd_subscribers';
+
+			// Check if opt_in_token column exists.
+			$column_exists = $wpdb->get_results(
+				$wpdb->prepare(
+					"SHOW COLUMNS FROM {$table_subscribers} LIKE %s",
+					'opt_in_token'
+				)
+			);
+
+			if ( empty( $column_exists ) ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+				$wpdb->query(
+					"ALTER TABLE {$table_subscribers} ADD COLUMN opt_in_token varchar(64) DEFAULT NULL AFTER unsubscribe_token"
+				);
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+				$wpdb->query(
+					"ALTER TABLE {$table_subscribers} ADD KEY opt_in_token (opt_in_token)"
+				);
+			}
 		}
 	}
 
@@ -132,13 +153,15 @@ class MSKD_Activator {
             status enum('active','inactive','unsubscribed') DEFAULT 'active',
             source enum('internal','external','one_time') DEFAULT 'internal',
             unsubscribe_token varchar(64) NOT NULL,
+            opt_in_token varchar(64) DEFAULT NULL,
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             UNIQUE KEY email (email),
             KEY status (status),
             KEY source (source),
-            KEY unsubscribe_token (unsubscribe_token)
+            KEY unsubscribe_token (unsubscribe_token),
+            KEY opt_in_token (opt_in_token)
         ) $charset_collate;";
 
 		// Lists table

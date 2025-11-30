@@ -41,7 +41,7 @@ class PublicSubscriptionTest extends TestCase {
     }
 
     /**
-     * Test AJAX subscribe creates new subscriber.
+     * Test AJAX subscribe creates new subscriber with inactive status (double opt-in).
      */
     public function test_ajax_subscribe_creates_new_subscriber(): void {
         $wpdb = $this->setup_wpdb_mock();
@@ -62,7 +62,7 @@ class PublicSubscriptionTest extends TestCase {
             ->once()
             ->andReturn( null );
 
-        // Insert new subscriber.
+        // Insert new subscriber with inactive status (double opt-in).
         $wpdb->insert_id = 999;
         $wpdb->shouldReceive( 'insert' )
             ->once()
@@ -73,12 +73,18 @@ class PublicSubscriptionTest extends TestCase {
                         return $data['email'] === 'newuser@example.com'
                             && $data['first_name'] === 'New'
                             && $data['last_name'] === 'User'
-                            && $data['status'] === 'active';
+                            && $data['status'] === 'inactive'
+                            && isset( $data['opt_in_token'] );
                     }
                 ),
                 Mockery::type( 'array' )
             )
             ->andReturn( 1 );
+
+        // Mock wp_mail for opt-in confirmation email.
+        Functions\expect( 'wp_mail' )
+            ->once()
+            ->andReturn( true );
 
         // Check not in list.
         $wpdb->shouldReceive( 'get_var' )
@@ -119,7 +125,7 @@ class PublicSubscriptionTest extends TestCase {
     }
 
     /**
-     * Test AJAX subscribe reactivates unsubscribed user.
+     * Test AJAX subscribe reactivates unsubscribed user (requires double opt-in).
      */
     public function test_ajax_subscribe_reactivates_unsubscribed(): void {
         $wpdb = $this->setup_wpdb_mock();
@@ -134,26 +140,38 @@ class PublicSubscriptionTest extends TestCase {
 
         // Existing unsubscribed subscriber.
         $existing = (object) array(
-            'id'     => 123,
-            'email'  => 'inactive@example.com',
-            'status' => 'unsubscribed',
+            'id'         => 123,
+            'email'      => 'inactive@example.com',
+            'status'     => 'unsubscribed',
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
         );
 
         $wpdb->shouldReceive( 'get_row' )
             ->once()
             ->andReturn( $existing );
 
-        // Should update status to active.
+        // Should update status to inactive and set opt_in_token (double opt-in).
         $wpdb->shouldReceive( 'update' )
             ->once()
             ->with(
                 'wp_mskd_subscribers',
-                array( 'status' => 'active' ),
+                Mockery::on(
+                    function ( $data ) {
+                        return $data['status'] === 'inactive'
+                            && isset( $data['opt_in_token'] );
+                    }
+                ),
                 array( 'id' => 123 ),
                 Mockery::type( 'array' ),
                 Mockery::type( 'array' )
             )
             ->andReturn( 1 );
+
+        // Mock wp_mail for opt-in confirmation email.
+        Functions\expect( 'wp_mail' )
+            ->once()
+            ->andReturn( true );
 
         Functions\expect( 'wp_send_json_success' )
             ->once()
@@ -171,12 +189,12 @@ class PublicSubscriptionTest extends TestCase {
     }
 
     /**
-     * Test AJAX subscribe adds to specified list.
+     * Test AJAX subscribe adds to specified list (for inactive subscriber being reactivated).
      */
     public function test_ajax_subscribe_adds_to_list(): void {
         $wpdb = $this->setup_wpdb_mock();
 
-        $_POST['email']   = 'existing@example.com';
+        $_POST['email']   = 'inactive@example.com';
         $_POST['list_id'] = 10;
         $_POST['nonce']   = 'valid_nonce';
 
@@ -184,16 +202,28 @@ class PublicSubscriptionTest extends TestCase {
             ->once()
             ->andReturn( true );
 
-        // Existing active subscriber.
+        // Existing inactive subscriber (needs reactivation via opt-in).
         $existing = (object) array(
-            'id'     => 456,
-            'email'  => 'existing@example.com',
-            'status' => 'active',
+            'id'         => 456,
+            'email'      => 'inactive@example.com',
+            'status'     => 'inactive',
+            'first_name' => 'Inactive',
+            'last_name'  => 'User',
         );
 
         $wpdb->shouldReceive( 'get_row' )
             ->once()
             ->andReturn( $existing );
+
+        // Should update with new opt_in_token.
+        $wpdb->shouldReceive( 'update' )
+            ->once()
+            ->andReturn( 1 );
+
+        // Mock wp_mail for opt-in confirmation email.
+        Functions\expect( 'wp_mail' )
+            ->once()
+            ->andReturn( true );
 
         // Not in list yet.
         $wpdb->shouldReceive( 'get_var' )
@@ -225,6 +255,62 @@ class PublicSubscriptionTest extends TestCase {
             $this->public->ajax_subscribe();
         } catch ( \Exception $e ) {
             $this->assertEquals( 'json_success', $e->getMessage() );
+        }
+    }
+
+    /**
+     * Test AJAX subscribe returns early for already active subscriber.
+     */
+    public function test_ajax_subscribe_active_subscriber_returns_early(): void {
+        $wpdb = $this->setup_wpdb_mock();
+
+        $_POST['email']   = 'active@example.com';
+        $_POST['list_id'] = 10;
+        $_POST['nonce']   = 'valid_nonce';
+
+        Functions\expect( 'check_ajax_referer' )
+            ->once()
+            ->andReturn( true );
+
+        // Already active subscriber.
+        $existing = (object) array(
+            'id'         => 456,
+            'email'      => 'active@example.com',
+            'status'     => 'active',
+            'first_name' => 'Active',
+            'last_name'  => 'User',
+        );
+
+        $wpdb->shouldReceive( 'get_row' )
+            ->once()
+            ->andReturn( $existing );
+
+        // Should NOT do any list operations (returns early).
+        $wpdb->shouldReceive( 'get_var' )->never();
+        $wpdb->shouldReceive( 'insert' )->never();
+        $wpdb->shouldReceive( 'update' )->never();
+
+        // Should NOT send email.
+        Functions\expect( 'wp_mail' )->never();
+
+        // Should return "already subscribed" message.
+        Functions\expect( 'wp_send_json_success' )
+            ->once()
+            ->with( Mockery::on(
+                function ( $data ) {
+                    return isset( $data['message'] ) && strpos( $data['message'], 'already' ) !== false;
+                }
+            ) )
+            ->andReturnUsing(
+                function () {
+                    throw new \Exception( 'json_success_already' );
+                }
+            );
+
+        try {
+            $this->public->ajax_subscribe();
+        } catch ( \Exception $e ) {
+            $this->assertEquals( 'json_success_already', $e->getMessage() );
         }
     }
 
@@ -321,7 +407,7 @@ class PublicSubscriptionTest extends TestCase {
     public function test_ajax_subscribe_skips_duplicate_list_assignment(): void {
         $wpdb = $this->setup_wpdb_mock();
 
-        $_POST['email']   = 'existing@example.com';
+        $_POST['email']   = 'inactive@example.com';
         $_POST['list_id'] = 10;
         $_POST['nonce']   = 'valid_nonce';
 
@@ -329,22 +415,35 @@ class PublicSubscriptionTest extends TestCase {
             ->once()
             ->andReturn( true );
 
+        // Inactive subscriber (needs reactivation).
         $existing = (object) array(
-            'id'     => 456,
-            'email'  => 'existing@example.com',
-            'status' => 'active',
+            'id'         => 456,
+            'email'      => 'inactive@example.com',
+            'status'     => 'inactive',
+            'first_name' => 'Inactive',
+            'last_name'  => 'User',
         );
 
         $wpdb->shouldReceive( 'get_row' )
             ->once()
             ->andReturn( $existing );
 
+        // Should update with new opt_in_token.
+        $wpdb->shouldReceive( 'update' )
+            ->once()
+            ->andReturn( 1 );
+
+        // Mock wp_mail for opt-in confirmation email.
+        Functions\expect( 'wp_mail' )
+            ->once()
+            ->andReturn( true );
+
         // Already in list.
         $wpdb->shouldReceive( 'get_var' )
             ->once()
             ->andReturn( 99 ); // Returns existing ID
 
-        // Should NOT insert into list again.
+        // Should NOT insert into list again (already exists).
         $wpdb->shouldReceive( 'insert' )
             ->never();
 

@@ -2092,3 +2092,58 @@ msgstr ""
 #: includes/services/class-cron-handler.php
 msgid "Invalid or missing email address"
 msgstr ""
+
+#: public/class-public.php
+msgid "Invalid confirmation link."
+msgstr ""
+
+#: public/class-public.php
+msgid "Too many attempts. Please try again in 5 minutes."
+msgstr ""
+
+#: public/class-public.php
+msgid "Please check your email to confirm your subscription."
+msgstr ""
+
+#: public/class-public.php
+msgid "You are already subscribed!"
+msgstr ""
+
+#: public/class-public.php
+#, php-format
+msgid "Confirm your subscription to %s"
+msgstr ""
+
+#: public/class-public.php
+#, php-format
+msgid "Hello %s,"
+msgstr ""
+
+#: public/class-public.php
+msgid "Hello,"
+msgstr ""
+
+#: public/class-public.php
+#, php-format
+msgid "%1$s\n\nThank you for subscribing to %2$s!\n\nPlease click the link below to confirm your subscription:\n\n%3$s\n\nIf you did not request this subscription, you can safely ignore this email.\n\nBest regards,\n%4$s"
+msgstr ""
+
+#: public/partials/opt-in-confirm.php
+msgid "Subscription Confirmed"
+msgstr ""
+
+#: public/partials/opt-in-confirm.php
+msgid "Subscription Confirmed!"
+msgstr ""
+
+#: public/partials/opt-in-confirm.php
+msgid "Thank you for confirming your subscription. You will now receive our emails."
+msgstr ""
+
+#: public/partials/opt-in-confirm.php
+msgid "Back to site"
+msgstr ""
+
+#: public/class-public.php
+msgid "Unable to verify request."
+msgstr ""
