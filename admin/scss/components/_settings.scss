@@ -73,9 +73,9 @@
 // ==========================================================================
 
 .mskd-color-picker {
-  width: 40px;
-  height: 32px;
-  padding: 0;
+  width: 50px;
+  height: 34px;
+  padding: 2px;
   border: $border-width solid $color-wp-border;
   border-radius: $border-radius-sm;
   cursor: pointer;
@@ -83,14 +83,15 @@
 }
 
 .mskd-color-text {
-  width: 80px !important;
+  width: 100px !important;
   margin-left: $spacing-2;
   vertical-align: middle;
   font-family: $font-family-code;
+  font-size: 13px;
 }
 
 .mskd-styling-preview {
-  margin-top: $spacing-3;
+  margin-top: 0;
 }
 
 .mskd-preview-box {
