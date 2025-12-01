@@ -38,6 +38,9 @@ class MSKD_Public {
 			MSKD_VERSION
 		);
 
+		// Add custom styling colors.
+		$this->add_custom_styles();
+
 		wp_enqueue_script(
 			'mskd-public-script',
 			MSKD_PLUGIN_URL . 'public/js/public-script.js',
@@ -59,6 +62,80 @@ class MSKD_Public {
 				),
 			)
 		);
+	}
+
+	/**
+	 * Add custom inline styles based on plugin settings.
+	 */
+	private function add_custom_styles() {
+		$settings = get_option( 'mskd_settings', array() );
+
+		$highlight_color   = isset( $settings['highlight_color'] ) ? $settings['highlight_color'] : '#2271b1';
+		$button_text_color = isset( $settings['button_text_color'] ) ? $settings['button_text_color'] : '#ffffff';
+
+		// Sanitize colors to prevent XSS.
+		$highlight_color   = sanitize_hex_color( $highlight_color );
+		$button_text_color = sanitize_hex_color( $button_text_color );
+
+		// Fallback if sanitization returns empty (invalid color).
+		if ( empty( $highlight_color ) ) {
+			$highlight_color = '#2271b1';
+		}
+		if ( empty( $button_text_color ) ) {
+			$button_text_color = '#ffffff';
+		}
+
+		// Calculate hover color (darker by 20 RGB steps).
+		$hover_color = $this->adjust_brightness( $highlight_color, -20 );
+
+		$custom_css = "
+			.mskd-input:focus {
+				border-color: {$highlight_color};
+			}
+			.mskd-submit-btn {
+				background: {$highlight_color};
+				color: {$button_text_color};
+			}
+			.mskd-submit-btn:hover {
+				background: {$hover_color};
+			}
+		";
+
+		wp_add_inline_style( 'mskd-public-style', $custom_css );
+	}
+
+	/**
+	 * Adjust the brightness of a hex color.
+	 *
+	 * @param string $hex    The hex color code (e.g., '#ffffff', 'ffffff', '#fff', or 'fff').
+	 * @param int    $steps  Steps to adjust (-255 to 255). Negative = darker, positive = lighter.
+	 * @return string The adjusted hex color, or original if invalid.
+	 */
+	private function adjust_brightness( $hex, $steps ) {
+		// Remove # if present.
+		$hex = ltrim( $hex, '#' );
+
+		// Handle 3-character shorthand hex (e.g., 'fff' -> 'ffffff').
+		if ( preg_match( '/^[0-9A-Fa-f]{3}$/', $hex ) ) {
+			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+		}
+
+		// Validate hex format (must be exactly 6 hex characters).
+		if ( ! preg_match( '/^[0-9A-Fa-f]{6}$/', $hex ) ) {
+			return '#' . $hex; // Return as-is if invalid.
+		}
+
+		// Parse hex values.
+		$r = hexdec( substr( $hex, 0, 2 ) );
+		$g = hexdec( substr( $hex, 2, 2 ) );
+		$b = hexdec( substr( $hex, 4, 2 ) );
+
+		// Adjust values.
+		$r = max( 0, min( 255, $r + $steps ) );
+		$g = max( 0, min( 255, $g + $steps ) );
+		$b = max( 0, min( 255, $b + $steps ) );
+
+		return sprintf( '#%02x%02x%02x', $r, $g, $b );
 	}
 
 	/**

@@ -511,6 +511,87 @@
         });
 
         // =====================================================================
+        // Styling Settings - Color Picker and Preview
+        // =====================================================================
+
+        // Sync color picker with text input
+        function syncColorInputs() {
+            // Highlight color sync
+            $('#highlight_color').on('input change', function() {
+                var color = $(this).val();
+                $('#highlight_color_text').val(color);
+                updatePreview();
+            });
+
+            $('#highlight_color_text').on('input change', function() {
+                var color = $(this).val();
+                if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
+                    $('#highlight_color').val(color);
+                    updatePreview();
+                }
+            });
+
+            // Button text color sync
+            $('#button_text_color').on('input change', function() {
+                var color = $(this).val();
+                $('#button_text_color_text').val(color);
+                updatePreview();
+            });
+
+            $('#button_text_color_text').on('input change', function() {
+                var color = $(this).val();
+                if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
+                    $('#button_text_color').val(color);
+                    updatePreview();
+                }
+            });
+        }
+
+        // Update live preview
+        function updatePreview() {
+            var highlightColor = $('#highlight_color').val();
+            var buttonTextColor = $('#button_text_color').val();
+            var hoverColor = adjustBrightness(highlightColor, -20);
+
+            $('#mskd-preview-button').css({
+                'background': highlightColor,
+                'color': buttonTextColor
+            });
+
+            $('#mskd-preview-link').css('color', highlightColor);
+
+            // Add hover effect dynamically
+            $('#mskd-preview-button').off('mouseenter mouseleave').on({
+                mouseenter: function() {
+                    $(this).css('background', hoverColor);
+                },
+                mouseleave: function() {
+                    $(this).css('background', highlightColor);
+                }
+            });
+        }
+
+        // Adjust brightness of hex color
+        function adjustBrightness(hex, steps) {
+            hex = hex.replace('#', '');
+            var r = parseInt(hex.substring(0, 2), 16);
+            var g = parseInt(hex.substring(2, 4), 16);
+            var b = parseInt(hex.substring(4, 6), 16);
+
+            r = Math.max(0, Math.min(255, r + steps));
+            g = Math.max(0, Math.min(255, g + steps));
+            b = Math.max(0, Math.min(255, b + steps));
+
+            return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+
+        // Initialize color picker sync if on settings page
+        if ($('#highlight_color').length) {
+            syncColorInputs();
+            updatePreview();
+        }
+
+        // =====================================================================
         // Subscribers Page - Batch Edit
         // =====================================================================
 
