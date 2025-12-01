@@ -29,72 +29,101 @@ class Admin {
 	const PAGE_PREFIX = 'mskd-';
 
 	/**
+	 * Menu controller.
+	 *
+	 * @var Admin_Menu
+	 */
+	private Admin_Menu $menu;
+
+	/**
+	 * Assets controller.
+	 *
+	 * @var Admin_Assets
+	 */
+	private Admin_Assets $assets;
+
+	/**
+	 * Notices controller.
+	 *
+	 * @var Admin_Notices
+	 */
+	private Admin_Notices $notices;
+
+	/**
+	 * Dashboard controller.
+	 *
+	 * @var Admin_Dashboard
+	 */
+	private Admin_Dashboard $dashboard;
+
+	/**
 	 * Subscribers controller.
 	 *
 	 * @var Admin_Subscribers
 	 */
-	private $subscribers;
+	private Admin_Subscribers $subscribers;
 
 	/**
 	 * Lists controller.
 	 *
 	 * @var Admin_Lists
 	 */
-	private $lists;
+	private Admin_Lists $lists;
 
 	/**
 	 * Email controller.
 	 *
 	 * @var Admin_Email
 	 */
-	private $email;
+	private Admin_Email $email;
 
 	/**
 	 * Queue controller.
 	 *
 	 * @var Admin_Queue
 	 */
-	private $queue;
+	private Admin_Queue $queue;
 
 	/**
 	 * Settings controller.
 	 *
 	 * @var Admin_Settings
 	 */
-	private $settings;
+	private Admin_Settings $settings;
 
 	/**
 	 * AJAX handler.
 	 *
 	 * @var Admin_Ajax
 	 */
-	private $ajax;
+	private Admin_Ajax $ajax;
 
 	/**
 	 * Import/Export controller.
 	 *
 	 * @var Admin_Import_Export
 	 */
-	private $import_export;
+	private Admin_Import_Export $import_export;
 
 	/**
 	 * Templates controller.
 	 *
 	 * @var Admin_Templates
 	 */
-	private $templates;
+	private Admin_Templates $templates;
 
 	/**
 	 * Visual Editor controller.
 	 *
 	 * @var Admin_Visual_Editor
 	 */
-	private $visual_editor;
+	private Admin_Visual_Editor $visual_editor;
 
 	/**
 	 * Constructor - initialize controllers.
 	 */
 	public function __construct() {
+		// Initialize feature controllers.
 		$this->subscribers   = new Admin_Subscribers();
 		$this->lists         = new Admin_Lists();
 		$this->email         = new Admin_Email();
@@ -104,6 +133,24 @@ class Admin {
 		$this->import_export = new Admin_Import_Export();
 		$this->templates     = new Admin_Templates();
 		$this->visual_editor = new Admin_Visual_Editor();
+
+		// Initialize infrastructure controllers.
+		$this->dashboard = new Admin_Dashboard();
+		$this->notices   = new Admin_Notices();
+		$this->assets    = new Admin_Assets();
+		$this->menu      = new Admin_Menu(
+			array(
+				'dashboard'     => $this->dashboard,
+				'subscribers'   => $this->subscribers,
+				'lists'         => $this->lists,
+				'email'         => $this->email,
+				'queue'         => $this->queue,
+				'settings'      => $this->settings,
+				'import_export' => $this->import_export,
+				'templates'     => $this->templates,
+				'visual_editor' => $this->visual_editor,
+			)
+		);
 	}
 
 	/**
@@ -112,485 +159,16 @@ class Admin {
 	 * @return void
 	 */
 	public function init(): void {
-		// Register hooks.
-		add_action( 'admin_menu', array( $this, 'register_menu' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
-		add_action( 'admin_notices', array( $this, 'show_cron_notice' ) );
-		add_action( 'admin_notices', array( $this, 'show_share_notice' ) );
-		add_action( 'admin_notices', array( $this, 'show_database_upgrade_notice' ) );
+		// Register hooks via controllers.
+		add_action( 'admin_menu', array( $this->menu, 'register' ) );
+		add_action( 'admin_enqueue_scripts', array( $this->assets, 'enqueue' ) );
 		add_action( 'admin_init', array( $this, 'handle_actions' ) );
-		add_action( 'admin_init', array( $this, 'handle_database_upgrade' ) );
-		add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widget' ) );
 
-		// Initialize AJAX handlers.
+		// Initialize controllers that need their own hooks.
+		$this->notices->init();
+		$this->dashboard->init();
 		$this->ajax->init();
 		$this->visual_editor->init();
-	}
-
-	/**
-	 * Register admin menu and submenus.
-	 *
-	 * @return void
-	 */
-	public function register_menu(): void {
-		// Main menu.
-		add_menu_page(
-			__( 'Mail System', 'mail-system-by-katsarov-design' ),
-			__( 'Emails', 'mail-system-by-katsarov-design' ),
-			'manage_options',
-			self::PAGE_PREFIX . 'dashboard',
-			array( $this, 'render_dashboard' ),
-			'dashicons-email-alt',
-			26
-		);
-
-		// Dashboard submenu (same as main).
-		add_submenu_page(
-			self::PAGE_PREFIX . 'dashboard',
-			__( 'Dashboard', 'mail-system-by-katsarov-design' ),
-			__( 'Dashboard', 'mail-system-by-katsarov-design' ),
-			'manage_options',
-			self::PAGE_PREFIX . 'dashboard',
-			array( $this, 'render_dashboard' )
-		);
-
-		// Subscribers.
-		add_submenu_page(
-			self::PAGE_PREFIX . 'dashboard',
-			__( 'Subscribers', 'mail-system-by-katsarov-design' ),
-			__( 'Subscribers', 'mail-system-by-katsarov-design' ),
-			'manage_options',
-			self::PAGE_PREFIX . 'subscribers',
-			array( $this->subscribers, 'render' )
-		);
-
-		// Lists.
-		add_submenu_page(
-			self::PAGE_PREFIX . 'dashboard',
-			__( 'Lists', 'mail-system-by-katsarov-design' ),
-			__( 'Lists', 'mail-system-by-katsarov-design' ),
-			'manage_options',
-			self::PAGE_PREFIX . 'lists',
-			array( $this->lists, 'render' )
-		);
-
-		// Templates.
-		add_submenu_page(
-			self::PAGE_PREFIX . 'dashboard',
-			__( 'Templates', 'mail-system-by-katsarov-design' ),
-			__( 'Templates', 'mail-system-by-katsarov-design' ),
-			'manage_options',
-			self::PAGE_PREFIX . 'templates',
-			array( $this->templates, 'render' )
-		);
-
-		// Visual Editor (hidden from menu but accessible via URL).
-		add_submenu_page(
-			null, // No parent - hidden from menu.
-			__( 'Visual Editor', 'mail-system-by-katsarov-design' ),
-			__( 'Visual Editor', 'mail-system-by-katsarov-design' ),
-			'manage_options',
-			self::PAGE_PREFIX . 'visual-editor',
-			array( $this->visual_editor, 'render' )
-		);
-
-		// Compose.
-		add_submenu_page(
-			self::PAGE_PREFIX . 'dashboard',
-			__( 'New campaign', 'mail-system-by-katsarov-design' ),
-			__( 'New campaign', 'mail-system-by-katsarov-design' ),
-			'manage_options',
-			self::PAGE_PREFIX . 'compose',
-			array( $this->email, 'render_compose' )
-		);
-
-		// One-Time Email.
-		add_submenu_page(
-			self::PAGE_PREFIX . 'dashboard',
-			__( 'One-time email', 'mail-system-by-katsarov-design' ),
-			__( 'One-time email', 'mail-system-by-katsarov-design' ),
-			'manage_options',
-			self::PAGE_PREFIX . 'one-time-email',
-			array( $this->email, 'render_one_time' )
-		);
-
-		// Queue.
-		add_submenu_page(
-			self::PAGE_PREFIX . 'dashboard',
-			__( 'Queue', 'mail-system-by-katsarov-design' ),
-			__( 'Queue', 'mail-system-by-katsarov-design' ),
-			'manage_options',
-			self::PAGE_PREFIX . 'queue',
-			array( $this->queue, 'render' )
-		);
-
-		// Settings.
-		add_submenu_page(
-			self::PAGE_PREFIX . 'dashboard',
-			__( 'Settings', 'mail-system-by-katsarov-design' ),
-			__( 'Settings', 'mail-system-by-katsarov-design' ),
-			'manage_options',
-			self::PAGE_PREFIX . 'settings',
-			array( $this->settings, 'render' )
-		);
-
-		// Import/Export.
-		add_submenu_page(
-			self::PAGE_PREFIX . 'dashboard',
-			__( 'Import / Export', 'mail-system-by-katsarov-design' ),
-			__( 'Import / Export', 'mail-system-by-katsarov-design' ),
-			'manage_options',
-			self::PAGE_PREFIX . 'import-export',
-			array( $this->import_export, 'render' )
-		);
-
-		// Shortcodes.
-		add_submenu_page(
-			self::PAGE_PREFIX . 'dashboard',
-			__( 'Shortcodes', 'mail-system-by-katsarov-design' ),
-			__( 'Shortcodes', 'mail-system-by-katsarov-design' ),
-			'manage_options',
-			self::PAGE_PREFIX . 'shortcodes',
-			array( $this, 'render_shortcodes' )
-		);
-	}
-
-	/**
-	 * Enqueue admin assets.
-	 *
-	 * @param string $hook Current admin page hook.
-	 * @return void
-	 */
-	public function enqueue_assets( string $hook ): void {
-		// Load minimal styles on the WordPress dashboard for the widget.
-		if ( 'index.php' === $hook ) {
-			wp_enqueue_style(
-				'mskd-admin-style',
-				MSKD_PLUGIN_URL . 'admin/css/admin-style.css',
-				array(),
-				MSKD_VERSION
-			);
-			return;
-		}
-
-		// Only load full assets on plugin pages.
-		if ( strpos( $hook, self::PAGE_PREFIX ) === false ) {
-			return;
-		}
-
-		// SlimSelect CSS.
-		wp_enqueue_style(
-			'slimselect',
-			'https://cdn.jsdelivr.net/npm/slim-select@2.9.2/dist/slimselect.min.css',
-			array(),
-			'2.9.2'
-		);
-
-		wp_enqueue_style(
-			'mskd-admin-style',
-			MSKD_PLUGIN_URL . 'admin/css/admin-style.css',
-			array( 'slimselect' ),
-			MSKD_VERSION
-		);
-
-		// SlimSelect JS.
-		wp_enqueue_script(
-			'slimselect',
-			'https://cdn.jsdelivr.net/npm/slim-select@2.9.2/dist/slimselect.min.js',
-			array(),
-			'2.9.2',
-			false
-		);
-
-		wp_enqueue_script(
-			'mskd-admin-script',
-			MSKD_PLUGIN_URL . 'admin/js/admin-script.js',
-			array( 'jquery', 'slimselect' ),
-			MSKD_VERSION,
-			true
-		);
-
-		wp_localize_script(
-			'mskd-admin-script',
-			'mskd_admin',
-			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'mskd_admin_nonce' ),
-				'strings'  => array(
-					'confirm_delete'               => __( 'Are you sure you want to delete?', 'mail-system-by-katsarov-design' ),
-					'sending'                      => __( 'Sending...', 'mail-system-by-katsarov-design' ),
-					'success'                      => __( 'Success!', 'mail-system-by-katsarov-design' ),
-					'error'                        => __( 'Error!', 'mail-system-by-katsarov-design' ),
-					'timeout'                      => __( 'Connection timed out. Check SMTP settings.', 'mail-system-by-katsarov-design' ),
-					'datetime_past'                => __( 'Please select a future date and time.', 'mail-system-by-katsarov-design' ),
-					'processing'                   => __( 'Processing...', 'mail-system-by-katsarov-design' ),
-					'confirm_truncate_subscribers' => __( 'Are you sure you want to delete ALL subscribers? This action cannot be undone!', 'mail-system-by-katsarov-design' ),
-					'confirm_truncate_lists'       => __( 'Are you sure you want to delete ALL lists? This action cannot be undone!', 'mail-system-by-katsarov-design' ),
-					'confirm_truncate_queue'       => __( 'Are you sure you want to delete ALL campaigns? This action cannot be undone!', 'mail-system-by-katsarov-design' ),
-					'select_lists_placeholder'     => __( 'Select lists...', 'mail-system-by-katsarov-design' ),
-					'search_placeholder'           => __( 'Search...', 'mail-system-by-katsarov-design' ),
-					'no_results'                   => __( 'No results found', 'mail-system-by-katsarov-design' ),
-					'copied'                       => __( 'Copied!', 'mail-system-by-katsarov-design' ),
-					'copy_error'                   => __( 'Copy failed', 'mail-system-by-katsarov-design' ),
-					'no_subscribers_selected'      => __( 'No subscribers selected.', 'mail-system-by-katsarov-design' ),
-					'no_lists_selected'            => __( 'No lists selected.', 'mail-system-by-katsarov-design' ),
-				),
-			)
-		);
-	}
-
-	/**
-	 * Show WP-Cron warning notice only on plugin pages.
-	 *
-	 * @return void
-	 */
-	public function show_cron_notice(): void {
-		$screen = get_current_screen();
-
-		// Only show on plugin pages.
-		if ( ! $screen || strpos( $screen->id, self::PAGE_PREFIX ) === false ) {
-			return;
-		}
-
-		// Check if WP-Cron is disabled.
-		if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
-			return;
-		}
-
-		?>
-		<div class="notice notice-warning">
-			<p>
-				<strong><?php esc_html_e( 'Recommendation for Mail System:', 'mail-system-by-katsarov-design' ); ?></strong>
-				<?php esc_html_e( 'For more reliable email sending, we recommend using system cron instead of WP-Cron.', 'mail-system-by-katsarov-design' ); ?>
-			</p>
-			<p>
-				<?php esc_html_e( 'Add to wp-config.php:', 'mail-system-by-katsarov-design' ); ?>
-				<code>define('DISABLE_WP_CRON', true);</code>
-			</p>
-			<p>
-				<?php esc_html_e( 'And set up system cron:', 'mail-system-by-katsarov-design' ); ?>
-				<code>* * * * * php <?php echo esc_html( ABSPATH . 'wp-cron.php' ); ?></code>
-			</p>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Show share notice asking users to share the plugin.
-	 *
-	 * @return void
-	 */
-	public function show_share_notice(): void {
-		// Check if notice was already dismissed.
-		if ( get_option( 'mskd_share_notice_dismissed' ) ) {
-			return;
-		}
-
-		// Only show to users who can manage options.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		$screen = get_current_screen();
-
-		// Only show on plugin pages.
-		if ( ! $screen || strpos( $screen->id, self::PAGE_PREFIX ) === false ) {
-			return;
-		}
-
-		// Only show after at least 3 campaigns have been created.
-		$campaign_count = (int) get_option( 'mskd_total_campaigns_created', 0 );
-		if ( $campaign_count < 3 ) {
-			return;
-		}
-
-		?>
-		<div class="notice notice-info mskd-share-notice" style="padding: 15px;">
-			<p style="font-size: 14px; margin-bottom: 10px;">
-				<strong><?php esc_html_e( 'Enjoying Mail System by Katsarov Design?', 'mail-system-by-katsarov-design' ); ?></strong>
-				<?php esc_html_e( 'If you like this plugin, please share it with your friends!', 'mail-system-by-katsarov-design' ); ?>
-			</p>
-			<p>
-				<a href="#" class="button button-primary mskd-share-dismiss" data-nonce="<?php echo esc_attr( wp_create_nonce( 'mskd_dismiss_share_notice' ) ); ?>">
-					<?php esc_html_e( 'Yes, of course!', 'mail-system-by-katsarov-design' ); ?>
-				</a>
-				<a href="https://github.com/katsar0v/mail-system-by-katsarov-design" target="_blank" class="button" style="margin-left: 10px;">
-					<?php esc_html_e( 'Nah, I do not like the plugin', 'mail-system-by-katsarov-design' ); ?>
-				</a>
-			</p>
-		</div>
-		<script type="text/javascript">
-			jQuery(document).ready(function($) {
-				$('.mskd-share-dismiss').on('click', function(e) {
-					e.preventDefault();
-					var $notice = $(this).closest('.mskd-share-notice');
-					var nonce = $(this).data('nonce');
-
-					$.post(ajaxurl, {
-						action: 'mskd_dismiss_share_notice',
-						nonce: nonce
-					}, function() {
-						$notice.fadeOut();
-					});
-				});
-			});
-		</script>
-		<?php
-	}
-
-	/**
-	 * Show database upgrade notice when schema is outdated.
-	 *
-	 * @return void
-	 */
-	public function show_database_upgrade_notice(): void {
-		// Only show to users who can manage options.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		$screen = get_current_screen();
-
-		// Only show on plugin pages.
-		if ( ! $screen || false === strpos( $screen->id, self::PAGE_PREFIX ) ) {
-			return;
-		}
-
-		// Check if database needs upgrade.
-		$installed_version = get_option( 'mskd_db_version', '1.0.0' );
-		$required_version  = \MSKD_Activator::DB_VERSION;
-
-		if ( version_compare( $installed_version, $required_version, '>=' ) ) {
-			// Also verify the opt_in_token column exists (in case upgrade failed silently).
-			if ( ! $this->is_database_schema_valid() ) {
-				$this->render_database_repair_notice();
-			}
-			return;
-		}
-
-		$upgrade_url = wp_nonce_url(
-			add_query_arg( 'mskd_upgrade_db', '1', admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'dashboard' ) ),
-			'mskd_upgrade_db'
-		);
-
-		?>
-		<div class="notice notice-error">
-			<p>
-				<strong><?php esc_html_e( 'Mail System Database Update Required', 'mail-system-by-katsarov-design' ); ?></strong>
-			</p>
-			<p>
-				<?php
-				printf(
-					/* translators: 1: Current DB version, 2: Required DB version */
-					esc_html__( 'Your database schema (version %1$s) is outdated. Version %2$s is required for the plugin to work correctly.', 'mail-system-by-katsarov-design' ),
-					esc_html( $installed_version ),
-					esc_html( $required_version )
-				);
-				?>
-			</p>
-			<p>
-				<a href="<?php echo esc_url( $upgrade_url ); ?>" class="button button-primary">
-					<?php esc_html_e( 'Update Database Now', 'mail-system-by-katsarov-design' ); ?>
-				</a>
-			</p>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Render database repair notice when schema is invalid.
-	 *
-	 * @return void
-	 */
-	private function render_database_repair_notice(): void {
-		$upgrade_url = wp_nonce_url(
-			add_query_arg( 'mskd_upgrade_db', '1', admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'dashboard' ) ),
-			'mskd_upgrade_db'
-		);
-
-		?>
-		<div class="notice notice-error">
-			<p>
-				<strong><?php esc_html_e( 'Mail System Database Repair Required', 'mail-system-by-katsarov-design' ); ?></strong>
-			</p>
-			<p>
-				<?php esc_html_e( 'Some required database columns are missing. This may cause subscription confirmation links to fail. Click the button below to repair the database.', 'mail-system-by-katsarov-design' ); ?>
-			</p>
-			<p>
-				<a href="<?php echo esc_url( $upgrade_url ); ?>" class="button button-primary">
-					<?php esc_html_e( 'Repair Database Now', 'mail-system-by-katsarov-design' ); ?>
-				</a>
-			</p>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Check if database schema has all required columns.
-	 *
-	 * @return bool True if schema is valid.
-	 */
-	private function is_database_schema_valid(): bool {
-		global $wpdb;
-
-		// Check if opt_in_token column exists in subscribers table.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema check.
-		$column_exists = $wpdb->get_results(
-			$wpdb->prepare(
-				"SHOW COLUMNS FROM {$wpdb->prefix}mskd_subscribers LIKE %s",
-				'opt_in_token'
-			)
-		);
-
-		return ! empty( $column_exists );
-	}
-
-	/**
-	 * Handle database upgrade action.
-	 *
-	 * @return void
-	 */
-	public function handle_database_upgrade(): void {
-		// Show success message if redirected after upgrade.
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Just displaying a message.
-		if ( isset( $_GET['mskd_db_updated'] ) && '1' === $_GET['mskd_db_updated'] ) {
-			add_action(
-				'admin_notices',
-				function () {
-					?>
-					<div class="notice notice-success is-dismissible">
-						<p>
-							<strong><?php esc_html_e( 'Mail System:', 'mail-system-by-katsarov-design' ); ?></strong>
-							<?php esc_html_e( 'Database has been updated successfully.', 'mail-system-by-katsarov-design' ); ?>
-						</p>
-					</div>
-					<?php
-				}
-			);
-		}
-
-		if ( ! isset( $_GET['mskd_upgrade_db'] ) ) {
-			return;
-		}
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		// Verify nonce.
-		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'mskd_upgrade_db' ) ) {
-			wp_die( esc_html__( 'Security check failed.', 'mail-system-by-katsarov-design' ) );
-		}
-
-		// Force re-run the upgrade by temporarily setting version to 1.0.0.
-		update_option( 'mskd_db_version', '1.0.0' );
-
-		// Run upgrade.
-		\MSKD_Activator::maybe_upgrade();
-
-		// Redirect to remove the query args.
-		wp_safe_redirect( admin_url( 'admin.php?page=' . self::PAGE_PREFIX . 'dashboard&mskd_db_updated=1' ) );
-		exit;
 	}
 
 	/**
@@ -614,12 +192,280 @@ class Admin {
 	}
 
 	/**
-	 * Render Dashboard page.
+	 * Get preserved form data for one-time email.
 	 *
+	 * @return array
+	 */
+	public function get_one_time_email_form_data(): array {
+		return $this->email->get_one_time_email_form_data();
+	}
+
+	/**
+	 * Register admin menu and submenus.
+	 * Delegates to the menu controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Menu::register() directly.
+	 * @return void
+	 */
+	public function register_menu(): void {
+		$this->menu->register();
+	}
+
+	/**
+	 * Enqueue admin assets.
+	 * Delegates to the assets controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Assets::enqueue() directly.
+	 * @param string $hook The current admin page hook.
+	 * @return void
+	 */
+	public function enqueue_assets( string $hook ): void {
+		$this->assets->enqueue( $hook );
+	}
+
+	/**
+	 * Show WP-Cron warning notice.
+	 * Delegates to the notices controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Notices::show_cron_notice() directly.
+	 * @return void
+	 */
+	public function show_cron_notice(): void {
+		$this->notices->show_cron_notice();
+	}
+
+	/**
+	 * Show share notice.
+	 * Delegates to the notices controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Notices::show_share_notice() directly.
+	 * @return void
+	 */
+	public function show_share_notice(): void {
+		$this->notices->show_share_notice();
+	}
+
+	/**
+	 * Show database upgrade notice.
+	 * Delegates to the notices controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Notices::show_database_upgrade_notice() directly.
+	 * @return void
+	 */
+	public function show_database_upgrade_notice(): void {
+		$this->notices->show_database_upgrade_notice();
+	}
+
+	/**
+	 * Handle database upgrade.
+	 * Delegates to the notices controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Notices::handle_database_upgrade() directly.
+	 * @return void
+	 */
+	public function handle_database_upgrade(): void {
+		$this->notices->handle_database_upgrade();
+	}
+
+	/**
+	 * Render Dashboard page.
+	 * Delegates to the dashboard controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Dashboard::render() directly.
 	 * @return void
 	 */
 	public function render_dashboard(): void {
-		include MSKD_PLUGIN_DIR . 'admin/partials/dashboard.php';
+		$this->dashboard->render();
+	}
+
+	/**
+	 * Render Subscribers page.
+	 * Delegates to the subscribers controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Subscribers::render() directly.
+	 * @return void
+	 */
+	public function render_subscribers(): void {
+		$this->subscribers->render();
+	}
+
+	/**
+	 * Render Lists page.
+	 * Delegates to the lists controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Lists::render() directly.
+	 * @return void
+	 */
+	public function render_lists(): void {
+		$this->lists->render();
+	}
+
+	/**
+	 * Render Compose page.
+	 * Delegates to the email controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Email::render_compose() directly.
+	 * @return void
+	 */
+	public function render_compose(): void {
+		$this->email->render_compose();
+	}
+
+	/**
+	 * Render Queue page.
+	 * Delegates to the queue controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Queue::render() directly.
+	 * @return void
+	 */
+	public function render_queue(): void {
+		$this->queue->render();
+	}
+
+	/**
+	 * Render Settings page.
+	 * Delegates to the settings controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Settings::render() directly.
+	 * @return void
+	 */
+	public function render_settings(): void {
+		$this->settings->render();
+	}
+
+	/**
+	 * Render One-Time Email page.
+	 * Delegates to the email controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Email::render_one_time() directly.
+	 * @return void
+	 */
+	public function render_one_time_email(): void {
+		$this->email->render_one_time();
+	}
+
+	/**
+	 * Render Shortcodes page.
+	 * Delegates to the dashboard controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Dashboard::render_shortcodes() directly.
+	 * @return void
+	 */
+	public function render_shortcodes(): void {
+		$this->dashboard->render_shortcodes();
+	}
+
+	/**
+	 * Register dashboard widget.
+	 * Delegates to the dashboard controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Dashboard::register_widget() directly.
+	 * @return void
+	 */
+	public function register_dashboard_widget(): void {
+		$this->dashboard->register_widget();
+	}
+
+	/**
+	 * Render dashboard widget content.
+	 * Delegates to the dashboard controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Dashboard::render_widget() directly.
+	 * @return void
+	 */
+	public function render_dashboard_widget(): void {
+		$this->dashboard->render_widget();
+	}
+
+	/**
+	 * AJAX handler to dismiss share notice.
+	 * Delegates to the AJAX controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Ajax::dismiss_share_notice() directly.
+	 * @return void
+	 */
+	public function ajax_dismiss_share_notice(): void {
+		$this->ajax->dismiss_share_notice();
+	}
+
+	/**
+	 * AJAX handler for SMTP test.
+	 * Delegates to the AJAX controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Ajax::test_smtp() directly.
+	 * @return void
+	 */
+	public function ajax_test_smtp(): void {
+		$this->ajax->test_smtp();
+	}
+
+	/**
+	 * AJAX handler: Truncate subscribers table.
+	 * Delegates to the AJAX controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Ajax::truncate_subscribers() directly.
+	 * @return void
+	 */
+	public function ajax_truncate_subscribers(): void {
+		$this->ajax->truncate_subscribers();
+	}
+
+	/**
+	 * AJAX handler: Truncate lists table.
+	 * Delegates to the AJAX controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Ajax::truncate_lists() directly.
+	 * @return void
+	 */
+	public function ajax_truncate_lists(): void {
+		$this->ajax->truncate_lists();
+	}
+
+	/**
+	 * AJAX handler: Truncate queue table.
+	 * Delegates to the AJAX controller.
+	 *
+	 * @deprecated 2.0.0 Use Admin_Ajax::truncate_queue() directly.
+	 * @return void
+	 */
+	public function ajax_truncate_queue(): void {
+		$this->ajax->truncate_queue();
+	}
+
+	/**
+	 * Get the menu controller.
+	 *
+	 * @return Admin_Menu
+	 */
+	public function get_menu_controller(): Admin_Menu {
+		return $this->menu;
+	}
+
+	/**
+	 * Get the assets controller.
+	 *
+	 * @return Admin_Assets
+	 */
+	public function get_assets_controller(): Admin_Assets {
+		return $this->assets;
+	}
+
+	/**
+	 * Get the notices controller.
+	 *
+	 * @return Admin_Notices
+	 */
+	public function get_notices_controller(): Admin_Notices {
+		return $this->notices;
+	}
+
+	/**
+	 * Get the dashboard controller.
+	 *
+	 * @return Admin_Dashboard
+	 */
+	public function get_dashboard_controller(): Admin_Dashboard {
+		return $this->dashboard;
 	}
 
 	/**
@@ -686,7 +532,6 @@ class Admin {
 	}
 
 	/**
-	/**
 	 * Get the templates controller.
 	 *
 	 * @return Admin_Templates
@@ -702,61 +547,5 @@ class Admin {
 	 */
 	public function get_visual_editor_controller(): Admin_Visual_Editor {
 		return $this->visual_editor;
-	}
-
-	/**
-	 * Render Shortcodes page.
-	 *
-	 * @return void
-	 */
-	public function render_shortcodes(): void {
-		include MSKD_PLUGIN_DIR . 'admin/partials/shortcodes.php';
-	}
-
-	/**
-	 * Register dashboard widget.
-	 *
-	 * @return void
-	 */
-	public function register_dashboard_widget(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		wp_add_dashboard_widget(
-			'mskd_queue_stats_widget',
-			__( 'Mail System - Queue Statistics', 'mail-system-by-katsarov-design' ),
-			array( $this, 'render_dashboard_widget' )
-		);
-	}
-
-	/**
-	 * Render dashboard widget content.
-	 *
-	 * @return void
-	 */
-	public function render_dashboard_widget(): void {
-		global $wpdb;
-
-		// Get queue statistics.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Static query with no user input, caching not needed for dashboard widget.
-		$queue_stats = $wpdb->get_row(
-			"SELECT 
-				SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
-				SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
-				SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed
-			FROM {$wpdb->prefix}mskd_queue"
-		);
-
-		// Defensive null check for PHP 8+ compatibility.
-		$pending = $queue_stats ? intval( $queue_stats->pending ?? 0 ) : 0;
-		$sent    = $queue_stats ? intval( $queue_stats->sent ?? 0 ) : 0;
-		$failed  = $queue_stats ? intval( $queue_stats->failed ?? 0 ) : 0;
-
-		// Get last cron run timestamp.
-		$last_cron_run = get_option( 'mskd_last_cron_run', 0 );
-
-		// Include the widget template.
-		include MSKD_PLUGIN_DIR . 'admin/partials/dashboard-widget.php';
 	}
 }
