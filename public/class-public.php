@@ -107,13 +107,18 @@ class MSKD_Public {
 	/**
 	 * Adjust the brightness of a hex color.
 	 *
-	 * @param string $hex    The hex color code (e.g., '#ffffff' or 'ffffff').
+	 * @param string $hex    The hex color code (e.g., '#ffffff', 'ffffff', '#fff', or 'fff').
 	 * @param int    $steps  Steps to adjust (-255 to 255). Negative = darker, positive = lighter.
 	 * @return string The adjusted hex color, or original if invalid.
 	 */
 	private function adjust_brightness( $hex, $steps ) {
 		// Remove # if present.
 		$hex = ltrim( $hex, '#' );
+
+		// Handle 3-character shorthand hex (e.g., 'fff' -> 'ffffff').
+		if ( preg_match( '/^[0-9A-Fa-f]{3}$/', $hex ) ) {
+			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+		}
 
 		// Validate hex format (must be exactly 6 hex characters).
 		if ( ! preg_match( '/^[0-9A-Fa-f]{6}$/', $hex ) ) {
