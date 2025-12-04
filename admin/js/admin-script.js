@@ -765,4 +765,92 @@
         }
     });
 
+    /**
+     * Load email preview with header and footer via AJAX
+     */
+    function loadEmailPreview() {
+        // Handle compose wizard previews (content-based)
+        $('.mskd-email-preview-iframe').each(function() {
+            var $iframe = $(this);
+            var content = $iframe.data('content');
+            
+            if (!content) {
+                return;
+            }
+
+            // Create a form to POST to the AJAX endpoint
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = mskd_admin.ajax_url + '?action=mskd_preview_email';
+            form.target = 'preview_frame_' + Date.now();
+            form.style.display = 'none';
+
+            // Set iframe name to match form target
+            $iframe.attr('name', form.target);
+
+            // Add nonce
+            var nonceInput = document.createElement('input');
+            nonceInput.type = 'hidden';
+            nonceInput.name = 'nonce';
+            nonceInput.value = mskd_admin.preview_nonce;
+            form.appendChild(nonceInput);
+
+            // Add content
+            var contentInput = document.createElement('input');
+            contentInput.type = 'hidden';
+            contentInput.name = 'content';
+            contentInput.value = content;
+            form.appendChild(contentInput);
+
+            // Submit form to load preview in iframe
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        });
+
+        // Handle campaign previews (campaign ID-based)
+        $('.mskd-campaign-preview-iframe').each(function() {
+            var $iframe = $(this);
+            var campaignId = $iframe.data('campaign-id');
+            
+            if (!campaignId) {
+                return;
+            }
+
+            // Create a form to POST to the AJAX endpoint
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = mskd_admin.ajax_url + '?action=mskd_preview_email';
+            form.target = 'preview_campaign_' + campaignId;
+            form.style.display = 'none';
+
+            // Set iframe name to match form target
+            $iframe.attr('name', form.target);
+
+            // Add nonce
+            var nonceInput = document.createElement('input');
+            nonceInput.type = 'hidden';
+            nonceInput.name = 'nonce';
+            nonceInput.value = mskd_admin.preview_nonce;
+            form.appendChild(nonceInput);
+
+            // Add campaign ID
+            var campaignInput = document.createElement('input');
+            campaignInput.type = 'hidden';
+            campaignInput.name = 'campaign_id';
+            campaignInput.value = campaignId;
+            form.appendChild(campaignInput);
+
+            // Submit form to load preview in iframe
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        });
+    }
+
+    // Load previews on page load
+    $(document).ready(function() {
+        loadEmailPreview();
+    });
+
 })(jQuery);

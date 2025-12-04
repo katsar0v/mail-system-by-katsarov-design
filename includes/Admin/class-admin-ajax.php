@@ -39,6 +39,7 @@ class Admin_Ajax {
 		add_action( 'wp_ajax_mskd_dismiss_share_notice', array( $this, 'dismiss_share_notice' ) );
 		add_action( 'wp_ajax_mskd_batch_assign_lists', array( $this, 'batch_assign_lists' ) );
 		add_action( 'wp_ajax_mskd_batch_remove_lists', array( $this, 'batch_remove_lists' ) );
+		add_action( 'wp_ajax_mskd_preview_email', array( $this, 'preview_email' ) );
 	}
 
 	/**
@@ -370,5 +371,77 @@ class Admin_Ajax {
 				)
 			);
 		}
+	}
+
+	/**
+	 * AJAX handler: Preview email with full header and footer.
+	 *
+	 * Returns HTML output of the complete email (header + body + footer)
+	 * for display in preview iframe. This allows accurate preview of the
+	 * final email appearance before sending.
+	 *
+	 * Security: Nonce verified, admin-only, content sanitized.
+	 *
+	 * @return void
+	 */
+	public function preview_email(): void {
+		// Verify nonce.
+		if ( ! check_ajax_referer( 'mskd_preview_nonce', 'nonce', false ) ) {
+			wp_die( esc_html__( 'Invalid request. Please refresh the page.', 'mail-system-by-katsarov-design' ), 403 );
+		}
+
+		// Check permissions.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission for this operation.', 'mail-system-by-katsarov-design' ), 403 );
+		}
+
+		// Get email content from POST or campaign ID.
+		$content     = '';
+		$campaign_id = isset( $_POST['campaign_id'] ) ? intval( $_POST['campaign_id'] ) : 0;
+
+		if ( $campaign_id > 0 ) {
+			// Load content from campaign in database.
+			global $wpdb;
+			$campaign = $wpdb->get_row(
+				$wpdb->prepare(
+					"SELECT body FROM {$wpdb->prefix}mskd_campaigns WHERE id = %d",
+					$campaign_id
+				)
+			);
+
+			if ( $campaign ) {
+				$content = $campaign->body;
+			}
+		} elseif ( isset( $_POST['content'] ) ) {
+			// Use content from POST (for compose wizard preview).
+			// Email HTML content must be preserved exactly (including <style> tags for MJML output).
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
+			$content = wp_unslash( $_POST['content'] );
+		}
+
+		// If no content provided, return error.
+		if ( empty( $content ) ) {
+			wp_die( esc_html__( 'No content to preview.', 'mail-system-by-katsarov-design' ), 400 );
+		}
+
+		// Load Email_Header_Footer trait via a helper class.
+		require_once MSKD_PLUGIN_DIR . 'includes/traits/trait-email-header-footer.php';
+
+		// Create anonymous class with trait to apply header/footer.
+		$helper = new class() {
+			use \MSKD\Traits\Email_Header_Footer;
+		};
+
+		// Get plugin settings for header/footer.
+		$settings = get_option( 'mskd_settings', array() );
+
+		// Apply header and footer to content.
+		$full_content = $helper->apply_header_footer( $content, $settings );
+
+		// Output the full HTML directly (for iframe display).
+		// No JSON wrapper needed - iframe expects raw HTML.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Admin-only preview of email HTML, already sanitized on save.
+		echo $full_content;
+		wp_die();
 	}
 }

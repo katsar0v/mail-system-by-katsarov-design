@@ -140,9 +140,10 @@ class Admin_Assets {
 			'mskd-admin-script',
 			'mskd_admin',
 			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'mskd_admin_nonce' ),
-				'strings'  => $this->get_localized_strings(),
+				'ajax_url'      => admin_url( 'admin-ajax.php' ),
+				'nonce'         => wp_create_nonce( 'mskd_admin_nonce' ),
+				'preview_nonce' => wp_create_nonce( 'mskd_preview_nonce' ),
+				'strings'       => $this->get_localized_strings(),
 			)
 		);
 	}

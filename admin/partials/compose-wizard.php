@@ -330,7 +330,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 									<div class="mskd-content-preview">
 										<div class="mskd-content-preview-header">
 											<span class="dashicons dashicons-visibility"></span>
-											<?php esc_html_e( 'Content Preview', 'mail-system-by-katsarov-design' ); ?>
+											<?php esc_html_e( 'Content Preview (with header & footer)', 'mail-system-by-katsarov-design' ); ?>
 											<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&step=2' ) ); ?>" class="mskd-edit-link">
 											<span class="dashicons dashicons-edit"></span>
 											<?php esc_html_e( 'Edit', 'mail-system-by-katsarov-design' ); ?>
@@ -338,7 +338,8 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 									</div>
 									<div class="mskd-content-preview-body">
 										<iframe 
-											srcdoc="<?php echo esc_attr( $session_data['content'] ); ?>" 
+											class="mskd-email-preview-iframe" 
+											data-content="<?php echo esc_attr( $session_data['content'] ); ?>"
 											style="width: 100%; height: 300px; border: 1px solid #ddd; border-radius: 4px; background: #fff;"
 											sandbox="allow-same-origin"
 											title="<?php esc_attr_e( 'Email content preview', 'mail-system-by-katsarov-design' ); ?>"
