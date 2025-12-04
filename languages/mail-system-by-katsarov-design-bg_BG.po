@@ -2036,6 +2036,18 @@ msgstr "Съдържание:"
 msgid "Email Preview"
 msgstr "Преглед на имейл"
 
+#: admin/partials/queue-detail.php
+msgid "Email Preview (with header & footer)"
+msgstr "Преглед на имейл (с хедър и футър)"
+
+#: admin/partials/compose-wizard.php
+msgid "Content Preview (with header & footer)"
+msgstr "Преглед на съдържанието (с хедър и футър)"
+
+#: includes/Admin/class-admin-ajax.php
+msgid "No content to preview."
+msgstr "Няма съдържание за преглед."
+
 #: includes/Admin/class-admin.php
 msgid "No subscribers selected."
 msgstr "Не са избрани абонати."
