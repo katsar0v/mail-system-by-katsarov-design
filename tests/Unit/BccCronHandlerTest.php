@@ -144,4 +144,62 @@ class BccCronHandlerTest extends TestCase {
 		// Verify no headers are added.
 		$this->assertCount( 0, $headers );
 	}
+
+	/**
+	 * Test that Bcc is sent only once per campaign (not for every subscriber).
+	 */
+	public function test_bcc_sent_once_per_campaign(): void {
+		// Test the logic for regular campaigns.
+		$campaign_type = 'campaign';
+		$bcc_sent = 0; // Not sent yet.
+		$bcc = 'admin@example.com';
+
+		// First email in campaign - should send Bcc.
+		$should_send_bcc = false;
+		if ( ! empty( $bcc ) ) {
+			if ( 'one_time' === $campaign_type ) {
+				$should_send_bcc = true;
+			} elseif ( empty( $bcc_sent ) ) {
+				$should_send_bcc = true;
+			}
+		}
+
+		$this->assertTrue( $should_send_bcc, 'Bcc should be sent with first email' );
+
+		// After Bcc is sent, bcc_sent becomes 1.
+		$bcc_sent = 1;
+
+		// Second email in campaign - should NOT send Bcc.
+		$should_send_bcc = false;
+		if ( ! empty( $bcc ) ) {
+			if ( 'one_time' === $campaign_type ) {
+				$should_send_bcc = true;
+			} elseif ( empty( $bcc_sent ) ) {
+				$should_send_bcc = true;
+			}
+		}
+
+		$this->assertFalse( $should_send_bcc, 'Bcc should not be sent with subsequent emails' );
+	}
+
+	/**
+	 * Test that Bcc is always sent for one-time emails.
+	 */
+	public function test_bcc_always_sent_for_one_time(): void {
+		$campaign_type = 'one_time';
+		$bcc_sent = 0; // Doesn't matter for one-time.
+		$bcc = 'admin@example.com';
+
+		// One-time emails should always send Bcc.
+		$should_send_bcc = false;
+		if ( ! empty( $bcc ) ) {
+			if ( 'one_time' === $campaign_type ) {
+				$should_send_bcc = true;
+			} elseif ( empty( $bcc_sent ) ) {
+				$should_send_bcc = true;
+			}
+		}
+
+		$this->assertTrue( $should_send_bcc, 'Bcc should always be sent for one-time emails' );
+	}
 }

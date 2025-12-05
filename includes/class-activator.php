@@ -152,6 +152,21 @@ class MSKD_Activator {
 					"ALTER TABLE {$table_campaigns} ADD COLUMN bcc text DEFAULT NULL AFTER list_ids"
 				);
 			}
+
+			// Check if bcc_sent column exists.
+			$column_exists = $wpdb->get_results(
+				$wpdb->prepare(
+					"SHOW COLUMNS FROM {$table_campaigns} LIKE %s",
+					'bcc_sent'
+				)
+			);
+
+			if ( empty( $column_exists ) ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- Required for upgrade.
+				$wpdb->query(
+					"ALTER TABLE {$table_campaigns} ADD COLUMN bcc_sent tinyint(1) DEFAULT 0 AFTER bcc"
+				);
+			}
 		}
 	}
 
@@ -291,6 +306,7 @@ class MSKD_Activator {
             body longtext NOT NULL,
             list_ids text DEFAULT NULL,
             bcc text DEFAULT NULL,
+            bcc_sent tinyint(1) DEFAULT 0,
             type enum('campaign','one_time') DEFAULT 'campaign',
             total_recipients int(11) DEFAULT 0,
             status enum('pending','processing','completed','cancelled') DEFAULT 'pending',

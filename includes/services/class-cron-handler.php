@@ -67,7 +67,7 @@ class MSKD_Cron_Handler {
 		// Join with campaigns table to get Bcc information.
 		$queue_items = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT q.*, s.email, s.first_name, s.last_name, s.unsubscribe_token, c.bcc
+				"SELECT q.*, s.email, s.first_name, s.last_name, s.unsubscribe_token, c.bcc, c.bcc_sent, c.type as campaign_type
 				FROM {$wpdb->prefix}mskd_queue q
 				INNER JOIN {$wpdb->prefix}mskd_subscribers s ON q.subscriber_id = s.id
 				LEFT JOIN {$wpdb->prefix}mskd_campaigns c ON q.campaign_id = c.id
@@ -126,13 +126,28 @@ class MSKD_Cron_Handler {
 			$subject = $this->replace_placeholders( $item->subject, $item );
 
 			// Prepare headers for Bcc if available.
+			// For regular campaigns, only send Bcc with the first email (bcc_sent = 0).
+			// For one_time campaigns, always send Bcc (they only have one email).
 			$headers = array();
+			$should_send_bcc = false;
+
 			if ( ! empty( $item->bcc ) ) {
-				// Parse multiple Bcc addresses separated by commas.
-				$bcc_emails = array_map( 'trim', explode( ',', $item->bcc ) );
-				foreach ( $bcc_emails as $bcc_email ) {
-					if ( ! empty( $bcc_email ) && is_email( $bcc_email ) ) {
-						$headers[] = 'Bcc: ' . $bcc_email;
+				// Check if we should send Bcc for this email.
+				if ( 'one_time' === $item->campaign_type ) {
+					// One-time emails: always send Bcc.
+					$should_send_bcc = true;
+				} elseif ( ! empty( $item->campaign_id ) && empty( $item->bcc_sent ) ) {
+					// Regular campaigns: send Bcc only if not already sent.
+					$should_send_bcc = true;
+				}
+
+				if ( $should_send_bcc ) {
+					// Parse multiple Bcc addresses separated by commas.
+					$bcc_emails = array_map( 'trim', explode( ',', $item->bcc ) );
+					foreach ( $bcc_emails as $bcc_email ) {
+						if ( ! empty( $bcc_email ) && is_email( $bcc_email ) ) {
+							$headers[] = 'Bcc: ' . $bcc_email;
+						}
 					}
 				}
 			}
@@ -159,8 +174,19 @@ class MSKD_Cron_Handler {
 					array( '%d' )
 				);
 
+				// If Bcc was sent with this email, mark the campaign as bcc_sent.
+				if ( $should_send_bcc && ! empty( $item->campaign_id ) && 'campaign' === $item->campaign_type ) {
+					$wpdb->update(
+						$wpdb->prefix . 'mskd_campaigns',
+						array( 'bcc_sent' => 1 ),
+						array( 'id' => $item->campaign_id ),
+						array( '%d' ),
+						array( '%d' )
+					);
+				}
+
 				// Log Bcc recipients for audit/compliance.
-				if ( ! empty( $item->bcc ) && defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+				if ( $should_send_bcc && ! empty( $item->bcc ) && defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
 					error_log(
 						sprintf(
 							'[MSKD] Campaign %d: Email sent to %s with Bcc to: %s',
