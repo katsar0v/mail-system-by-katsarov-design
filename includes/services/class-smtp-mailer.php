@@ -91,13 +91,15 @@ class MSKD_SMTP_Mailer {
 	/**
 	 * Send an email via SMTP.
 	 *
-	 * @param string $to      Recipient email address.
-	 * @param string $subject Email subject.
-	 * @param string $body    Email body (HTML).
-	 * @param array  $headers Optional. Additional headers.
+	 * @param string $to          Recipient email address.
+	 * @param string $subject     Email subject.
+	 * @param string $body        Email body (HTML).
+	 * @param array  $headers     Optional. Additional headers.
+	 * @param string $from_email  Optional. Custom sender email address.
+	 * @param string $from_name   Optional. Custom sender name.
 	 * @return bool True on success, false on failure.
 	 */
-	public function send( $to, $subject, $body, $headers = array() ) {
+	public function send( $to, $subject, $body, $headers = array(), $from_email = null, $from_name = null ) {
 		$this->last_error = '';
 		$this->debug_log  = array();
 
@@ -126,13 +128,17 @@ class MSKD_SMTP_Mailer {
 				$mailer->isMail();
 			}
 
-			// Set sender.
-			$from_email = ! empty( $this->settings['from_email'] ) ? $this->settings['from_email'] : get_bloginfo( 'admin_email' );
-			$from_name  = ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : get_bloginfo( 'name' );
-			$mailer->setFrom( $from_email, $from_name );
+			// Set sender with fallback to global settings.
+			$final_from_email = ! empty( $from_email ) ? $from_email :
+				( ! empty( $this->settings['from_email'] ) ? $this->settings['from_email'] : get_bloginfo( 'admin_email' ) );
+			$final_from_name  = ! empty( $from_name ) ? $from_name :
+				( ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : get_bloginfo( 'name' ) );
 
-			// Set reply-to.
-			$reply_to = ! empty( $this->settings['reply_to'] ) ? $this->settings['reply_to'] : $from_email;
+			$mailer->setFrom( $final_from_email, $final_from_name );
+
+			// Set reply-to (use custom from email if provided, otherwise use global setting).
+			$reply_to = ! empty( $from_email ) ? $from_email :
+				( ! empty( $this->settings['reply_to'] ) ? $this->settings['reply_to'] : $final_from_email );
 			$mailer->addReplyTo( $reply_to );
 
 			// Set recipient.
@@ -179,9 +185,10 @@ class MSKD_SMTP_Mailer {
 	/**
 	 * Test SMTP connection.
 	 *
+	 * @param string $from_email Optional. Custom sender email to test with.
 	 * @return array Result array with 'success' and 'message' keys.
 	 */
-	public function test_connection() {
+	public function test_connection( $from_email = null ) {
 		$this->last_error = '';
 		$this->debug_log  = array();
 
@@ -193,9 +200,10 @@ class MSKD_SMTP_Mailer {
 			);
 		}
 
-		// Validate from_email before proceeding.
-		$from_email = ! empty( $this->settings['from_email'] ) ? $this->settings['from_email'] : get_bloginfo( 'admin_email' );
-		if ( ! is_email( $from_email ) ) {
+		// Validate from_email before proceeding (use custom or global).
+		$final_from_email = ! empty( $from_email ) ? $from_email :
+			( ! empty( $this->settings['from_email'] ) ? $this->settings['from_email'] : get_bloginfo( 'admin_email' ) );
+		if ( ! is_email( $final_from_email ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'Invalid sender email address.', 'mail-system-by-katsarov-design' ),
@@ -223,9 +231,9 @@ class MSKD_SMTP_Mailer {
 				$mailer->Password = ! empty( $this->settings['smtp_password'] ) ? base64_decode( $this->settings['smtp_password'] ) : '';
 			}
 
-			// Set sender.
+			// Set sender using the validated email.
 			$from_name = ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : get_bloginfo( 'name' );
-			$mailer->setFrom( $from_email, $from_name );
+			$mailer->setFrom( $final_from_email, $from_name );
 
 			// Set test recipient.
 			$to = get_bloginfo( 'admin_email' );

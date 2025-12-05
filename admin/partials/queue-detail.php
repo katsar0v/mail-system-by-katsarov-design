@@ -151,6 +151,12 @@ $can_cancel = in_array( $campaign->status, array( 'pending', 'processing' ), tru
 					<?php echo esc_html( implode( ', ', $list_names ) ); ?>
 				</div>
 			<?php endif; ?>
+			<?php if ( ! empty( $campaign->bcc ) ) : ?>
+				<div class="mskd-campaign-meta-item">
+					<strong><?php _e( 'BCC:', 'mail-system-by-katsarov-design' ); ?></strong>
+					<?php echo esc_html( $campaign->bcc ); ?>
+				</div>
+			<?php endif; ?>
 		</div>
 
 		<div class="mskd-campaign-progress">

@@ -205,6 +205,38 @@ class Admin_Email {
 			return;
 		}
 
+		// Validate custom from email if provided
+		$use_custom_from = isset( $_POST['use_custom_from'] ) ? sanitize_text_field( $_POST['use_custom_from'] ) : 'default';
+		$from_email = '';
+		$from_name = '';
+
+		if ( 'custom' === $use_custom_from ) {
+			$from_email = isset( $_POST['from_email'] ) ? sanitize_email( $_POST['from_email'] ) : '';
+			$from_name = isset( $_POST['from_name'] ) ? sanitize_text_field( $_POST['from_name'] ) : '';
+			
+			// Required validation
+			if ( empty( $from_email ) ) {
+				add_settings_error(
+					'mskd_messages',
+					'mskd_error',
+					__( 'Custom sender email is required when using custom sender option.', 'mail-system-by-katsarov-design' ),
+					'error'
+				);
+				return;
+			}
+			
+			// Format validation
+			if ( ! is_email( $from_email ) ) {
+				add_settings_error(
+					'mskd_messages',
+					'mskd_error',
+					__( 'Invalid custom sender email address.', 'mail-system-by-katsarov-design' ),
+					'error'
+				);
+				return;
+			}
+		}
+
 		// Validate Bcc email addresses if provided.
 		$bcc_validation = $this->validate_bcc_emails( $bcc );
 		if ( true !== $bcc_validation ) {
@@ -255,6 +287,8 @@ class Admin_Email {
 				'subscribers'  => $all_subscribers,
 				'scheduled_at' => $scheduled_at,
 				'bcc'          => $bcc,
+				'from_email'   => $from_email,
+				'from_name'    => $from_name,
 			)
 		);
 
@@ -314,6 +348,38 @@ class Admin_Email {
 		$schedule_type   = isset( $_POST['schedule_type'] ) ? sanitize_text_field( $_POST['schedule_type'] ) : 'now';
 		$bcc             = isset( $_POST['bcc'] ) ? sanitize_text_field( wp_unslash( $_POST['bcc'] ) ) : '';
 
+		// Validate custom from email if provided
+		$use_custom_from = isset( $_POST['use_custom_from'] ) ? sanitize_text_field( $_POST['use_custom_from'] ) : 'default';
+		$from_email = '';
+		$from_name = '';
+
+		if ( 'custom' === $use_custom_from ) {
+			$from_email = isset( $_POST['from_email'] ) ? sanitize_email( $_POST['from_email'] ) : '';
+			$from_name = isset( $_POST['from_name'] ) ? sanitize_text_field( $_POST['from_name'] ) : '';
+			
+			// Required validation
+			if ( empty( $from_email ) ) {
+				add_settings_error(
+					'mskd_messages',
+					'mskd_error',
+					__( 'Custom sender email is required when using custom sender option.', 'mail-system-by-katsarov-design' ),
+					'error'
+				);
+				return;
+			}
+			
+			// Format validation
+			if ( ! is_email( $from_email ) ) {
+				add_settings_error(
+					'mskd_messages',
+					'mskd_error',
+					__( 'Invalid custom sender email address.', 'mail-system-by-katsarov-design' ),
+					'error'
+				);
+				return;
+			}
+		}
+
 		// Store form data for preservation on error.
 		$this->one_time_email_form_data = array(
 			'recipient_email'    => $recipient_email,
@@ -325,6 +391,8 @@ class Admin_Email {
 			'delay_value'        => isset( $_POST['delay_value'] ) ? intval( $_POST['delay_value'] ) : 1,
 			'delay_unit'         => isset( $_POST['delay_unit'] ) ? sanitize_text_field( $_POST['delay_unit'] ) : 'hours',
 			'bcc'                => $bcc,
+			'from_email'         => $from_email,
+			'from_name'          => $from_name,
 		);
 
 		// Validate required fields.
@@ -391,8 +459,19 @@ class Admin_Email {
 			// Replace subscriber placeholders (including those in header/footer).
 			$body_with_wrapper = $this->replace_one_time_placeholders( $body_with_wrapper, $recipient_email, $recipient_name );
 
-			// Send immediately (via SMTP if configured, otherwise via PHP mail).
-			$sent = $mailer->send( $recipient_email, $subject, $body_with_wrapper );
+			// Build headers array including Bcc if provided.
+			$headers = array();
+			if ( ! empty( $bcc ) ) {
+				$bcc_emails = array_map( 'trim', explode( ',', $bcc ) );
+				foreach ( $bcc_emails as $bcc_email ) {
+					if ( ! empty( $bcc_email ) && is_email( $bcc_email ) ) {
+						$headers[] = 'Bcc: ' . $bcc_email;
+					}
+				}
+			}
+
+			// Send immediately (via SMTP if configured, otherwise via PHP mail) with custom from email if provided.
+			$sent = $mailer->send( $recipient_email, $subject, $body_with_wrapper, $headers, $from_email, $from_name );
 
 			if ( ! $sent ) {
 				$this->last_mail_error = $mailer->get_last_error();
@@ -410,6 +489,8 @@ class Admin_Email {
 					'sent'            => $sent,
 					'error_message'   => $sent ? null : ( $this->last_mail_error ?: __( 'wp_mail() failed for one-time email', 'mail-system-by-katsarov-design' ) ),
 					'bcc'             => $bcc,
+					'from_email'      => $from_email,
+					'from_name'       => $from_name,
 				)
 			);
 
@@ -448,6 +529,8 @@ class Admin_Email {
 					'scheduled_at'    => $scheduled_at,
 					'is_immediate'    => false,
 					'bcc'             => $bcc,
+					'from_email'      => $from_email,
+					'from_name'       => $from_name,
 				)
 			);
 

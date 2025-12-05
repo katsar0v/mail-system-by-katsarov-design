@@ -47,38 +47,38 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
         <form method="post" action="">
             <?php wp_nonce_field( 'mskd_send_one_time_email', 'mskd_nonce' ); ?>
 
-            <table class="form-table">
-                <tr>
-                    <th scope="row">
+            <div class="mskd-form-fields">
+                <div class="mskd-form-row">
+                    <div class="mskd-form-label">
                         <label for="recipient_email"><?php _e( 'Recipient email', 'mail-system-by-katsarov-design' ); ?> *</label>
-                    </th>
-                    <td>
+                    </div>
+                    <div class="mskd-form-field">
                         <input type="email" name="recipient_email" id="recipient_email" class="regular-text" value="<?php echo $recipient_email; ?>" required>
                         <p class="description"><?php _e( 'The email address to which the message will be sent.', 'mail-system-by-katsarov-design' ); ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
+                    </div>
+                </div>
+                <div class="mskd-form-row">
+                    <div class="mskd-form-label">
                         <label for="recipient_name"><?php _e( 'Recipient name', 'mail-system-by-katsarov-design' ); ?></label>
-                    </th>
-                    <td>
+                    </div>
+                    <div class="mskd-form-field">
                         <input type="text" name="recipient_name" id="recipient_name" class="regular-text" value="<?php echo $recipient_name; ?>">
                         <p class="description"><?php _e( 'Recipient name (optional). Can be used in content with {recipient_name}.', 'mail-system-by-katsarov-design' ); ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
+                    </div>
+                </div>
+                <div class="mskd-form-row">
+                    <div class="mskd-form-label">
                         <label for="subject"><?php _e( 'Subject', 'mail-system-by-katsarov-design' ); ?> *</label>
-                    </th>
-                    <td>
+                    </div>
+                    <div class="mskd-form-field">
                         <input type="text" name="subject" id="subject" class="large-text" value="<?php echo $subject_value; ?>" required>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
+                    </div>
+                </div>
+                <div class="mskd-form-row">
+                    <div class="mskd-form-label">
                         <label for="body"><?php _e( 'Content', 'mail-system-by-katsarov-design' ); ?> *</label>
-                    </th>
-                    <td>
+                    </div>
+                    <div class="mskd-form-field">
                         <?php
                         wp_editor( $body_value, 'body', array(
                             'textarea_name' => 'body',
@@ -92,24 +92,84 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
                             <?php _e( 'Available placeholders:', 'mail-system-by-katsarov-design' ); ?>
                             <code>{recipient_name}</code>, <code>{recipient_email}</code>
                         </p>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
+                    </div>
+                </div>
+                <div class="mskd-form-row">
+                    <div class="mskd-form-label">
                         <label for="bcc"><?php esc_html_e( 'Bcc (Optional)', 'mail-system-by-katsarov-design' ); ?></label>
-                    </th>
-                    <td>
+                    </div>
+                    <div class="mskd-form-field">
                         <input type="text" name="bcc" id="bcc" class="large-text" value="<?php echo isset( $form_data['bcc'] ) ? esc_attr( $form_data['bcc'] ) : ''; ?>" placeholder="<?php esc_attr_e( 'email1@example.com, email2@example.com', 'mail-system-by-katsarov-design' ); ?>">
                         <p class="description">
                             <?php esc_html_e( 'Enter one or more email addresses separated by commas to receive a blind carbon copy of this email. Bcc recipients are hidden from the main recipient.', 'mail-system-by-katsarov-design' ); ?>
                         </p>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
+                    </div>
+                </div>
+
+                <!-- Custom From Email -->
+                <div class="mskd-form-row">
+                    <div class="mskd-form-label">
+                        <label for="use_custom_from"><?php esc_html_e( 'Sender Email', 'mail-system-by-katsarov-design' ); ?></label>
+                    </div>
+                    <div class="mskd-form-field">
+                        <fieldset>
+                            <label>
+                                <input type="radio" name="use_custom_from" value="default" checked>
+                                <?php esc_html_e( 'Use default sender', 'mail-system-by-katsarov-design' ); ?>
+                                <span class="description">
+                                    <?php
+                                    $default_from = get_option( 'mskd_settings', array() );
+                                    $default_email = ! empty( $default_from['from_email'] ) ? $default_from['from_email'] : get_bloginfo( 'admin_email' );
+                                    printf(
+                                        esc_html__( '(%s)', 'mail-system-by-katsarov-design' ),
+                                        esc_html( $default_email )
+                                    );
+                                    ?>
+                                </span>
+                            </label>
+                            <br>
+                            <label>
+                                <input type="radio" name="use_custom_from" value="custom">
+                                <?php esc_html_e( 'Use custom sender', 'mail-system-by-katsarov-design' ); ?>
+                            </label>
+                        </fieldset>
+                        
+                        <div id="custom_from_fields" class="mskd-custom-from-fields" style="display: none;">
+                            <div class="mskd-nested-form-row">
+                                <div class="mskd-nested-form-label">
+                                    <label for="from_email"><?php esc_html_e( 'From Email', 'mail-system-by-katsarov-design' ); ?> *</label>
+                                </div>
+                                <div class="mskd-nested-form-field">
+                                    <input type="email" name="from_email" id="from_email" class="regular-text"
+                                           placeholder="<?php esc_attr_e( 'sender@example.com', 'mail-system-by-katsarov-design' ); ?>"
+                                           value="<?php echo isset( $form_data['from_email'] ) ? esc_attr( $form_data['from_email'] ) : ''; ?>">
+                                    <p class="description">
+                                        <?php esc_html_e( 'Email address that will appear as the sender of this email.', 'mail-system-by-katsarov-design' ); ?>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="mskd-nested-form-row">
+                                <div class="mskd-nested-form-label">
+                                    <label for="from_name"><?php esc_html_e( 'From Name', 'mail-system-by-katsarov-design' ); ?></label>
+                                </div>
+                                <div class="mskd-nested-form-field">
+                                    <input type="text" name="from_name" id="from_name" class="regular-text"
+                                           placeholder="<?php esc_attr_e( 'Sender Name', 'mail-system-by-katsarov-design' ); ?>"
+                                           value="<?php echo isset( $form_data['from_name'] ) ? esc_attr( $form_data['from_name'] ) : ''; ?>">
+                                    <p class="description">
+                                        <?php esc_html_e( 'Display name for the sender (optional).', 'mail-system-by-katsarov-design' ); ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mskd-form-row">
+                    <div class="mskd-form-label">
                         <label for="schedule_type"><?php _e( 'Scheduling', 'mail-system-by-katsarov-design' ); ?></label>
-                    </th>
-                    <td>
+                    </div>
+                    <div class="mskd-form-field">
                         <select name="schedule_type" id="schedule_type" class="mskd-schedule-type">
                             <option value="now" <?php selected( $schedule_type, 'now' ); ?>><?php _e( 'Send now', 'mail-system-by-katsarov-design' ); ?></option>
                             <option value="absolute" <?php selected( $schedule_type, 'absolute' ); ?>><?php _e( 'Specific date and time', 'mail-system-by-katsarov-design' ); ?></option>
@@ -117,19 +177,19 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
                         </select>
                         
                         <div class="mskd-schedule-absolute" style="display: none; margin-top: 10px;">
-                            <input type="datetime-local" 
-                                   name="scheduled_datetime" 
-                                   id="scheduled_datetime" 
+                            <input type="datetime-local"
+                                   name="scheduled_datetime"
+                                   id="scheduled_datetime"
                                    class="mskd-datetime-picker"
                                    value="<?php echo esc_attr( $default_datetime ); ?>"
                                    min="<?php echo esc_attr( $min_datetime ); ?>"
                                    step="600">
                             <p class="description">
-                                <?php 
-                                printf( 
-                                    __( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ), 
+                                <?php
+                                printf(
+                                    __( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ),
                                     '<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
-                                ); 
+                                );
                                 ?>
                                 <br>
                                 <?php
@@ -143,12 +203,12 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
                         </div>
                         
                         <div class="mskd-schedule-relative" style="display: none; margin-top: 10px;">
-                            <input type="number" 
-                                   name="delay_value" 
-                                   id="delay_value" 
-                                   class="small-text" 
-                                   value="<?php echo esc_attr( $delay_value ); ?>" 
-                                   min="1" 
+                            <input type="number"
+                                   name="delay_value"
+                                   id="delay_value"
+                                   class="small-text"
+                                   value="<?php echo esc_attr( $delay_value ); ?>"
+                                   min="1"
                                    max="999">
                             <select name="delay_unit" id="delay_unit">
                                 <option value="minutes" <?php selected( $delay_unit, 'minutes' ); ?>><?php _e( 'minutes', 'mail-system-by-katsarov-design' ); ?></option>
@@ -157,9 +217,9 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
                             </select>
                             <p class="description"><?php _e( 'The email will be sent after the specified time.', 'mail-system-by-katsarov-design' ); ?></p>
                         </div>
-                    </td>
-                </tr>
-            </table>
+                    </div>
+                </div>
+            </div>
 
             <p class="submit">
                 <input type="submit" name="mskd_send_one_time_email" class="button button-primary button-large mskd-submit-btn" 
@@ -180,4 +240,200 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
             <li><?php _e( 'Suitable for: account activation, notifications, event reminders.', 'mail-system-by-katsarov-design' ); ?></li>
         </ul>
     </div>
+
+<style>
+/* Div-based Form Fields - Table-like alignment */
+.mskd-one-time-email-form .mskd-form-fields {
+    margin-top: 16px;
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.mskd-one-time-email-form .mskd-form-row {
+    display: table-row;
+}
+
+.mskd-one-time-email-form .mskd-form-row:not(:last-child) .mskd-form-label,
+.mskd-one-time-email-form .mskd-form-row:not(:last-child) .mskd-form-field {
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.mskd-one-time-email-form .mskd-form-label {
+    display: table-cell;
+    width: 200px;
+    padding: 16px 20px 16px 0;
+    vertical-align: top;
+}
+
+.mskd-one-time-email-form .mskd-form-label label {
+    font-weight: 600;
+    color: #1d2327;
+    font-size: 14px;
+}
+
+.mskd-one-time-email-form .mskd-form-field {
+    display: table-cell;
+    padding: 16px 0;
+    vertical-align: top;
+}
+
+.mskd-one-time-email-form .mskd-form-field .description {
+    margin-top: 8px;
+    color: #646970;
+    font-size: 13px;
+}
+
+/* Custom From Fields (nested div form) */
+.mskd-one-time-email-form .mskd-custom-from-fields {
+    background: #f8f9fa;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 16px;
+    margin-top: 12px;
+}
+
+.mskd-one-time-email-form .mskd-nested-form-row {
+    display: table;
+    width: 100%;
+    padding: 12px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.mskd-one-time-email-form .mskd-nested-form-row:first-child {
+    padding-top: 0;
+}
+
+.mskd-one-time-email-form .mskd-nested-form-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.mskd-one-time-email-form .mskd-nested-form-label {
+    display: table-cell;
+    width: 120px;
+    padding-right: 16px;
+    vertical-align: top;
+    padding-top: 6px;
+}
+
+.mskd-one-time-email-form .mskd-nested-form-label label {
+    font-weight: 600;
+    color: #1d2327;
+    font-size: 13px;
+}
+
+.mskd-one-time-email-form .mskd-nested-form-field {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.mskd-one-time-email-form .mskd-nested-form-field .description {
+    margin-top: 6px;
+    font-style: italic;
+    color: #646970;
+    font-size: 12px;
+}
+
+@media screen and (max-width: 782px) {
+    .mskd-one-time-email-form .mskd-form-fields {
+        display: block;
+    }
+    
+    .mskd-one-time-email-form .mskd-form-row {
+        display: block;
+        padding: 16px 0;
+        border-bottom: 1px solid #f0f0f1;
+    }
+    
+    .mskd-one-time-email-form .mskd-form-row:last-child {
+        border-bottom: none;
+    }
+    
+    .mskd-one-time-email-form .mskd-form-row .mskd-form-label,
+    .mskd-one-time-email-form .mskd-form-row .mskd-form-field {
+        border-bottom: none !important;
+    }
+    
+    .mskd-one-time-email-form .mskd-form-label {
+        display: block;
+        width: auto;
+        padding: 0 0 8px 0;
+    }
+    
+    .mskd-one-time-email-form .mskd-form-field {
+        display: block;
+        padding: 0;
+    }
+    
+    .mskd-one-time-email-form .mskd-nested-form-row {
+        display: block;
+    }
+    
+    .mskd-one-time-email-form .mskd-nested-form-label {
+        display: block;
+        width: auto;
+        padding: 0 0 6px 0;
+    }
+    
+    .mskd-one-time-email-form .mskd-nested-form-field {
+        display: block;
+    }
+}
+</style>
+
+<script>
+jQuery(document).ready(function($) {
+    // Schedule type toggle
+    $('#schedule_type').on('change', function() {
+        var value = $(this).val();
+        $('.mskd-schedule-absolute, .mskd-schedule-relative').hide();
+        
+        if (value === 'absolute') {
+            $('.mskd-schedule-absolute').show();
+        } else if (value === 'relative') {
+            $('.mskd-schedule-relative').show();
+        }
+        
+        // Update button text
+        var $btn = $('.mskd-submit-btn');
+        if (value === 'now') {
+            $btn.val($btn.data('send-now'));
+        } else {
+            $btn.val($btn.data('schedule'));
+        }
+    });
+
+    // Custom from email toggle
+    $('input[name="use_custom_from"]').on('change', function() {
+        var value = $(this).val();
+        if (value === 'custom') {
+            $('#custom_from_fields').slideDown();
+            $('#from_email').prop('required', true);
+        } else {
+            $('#custom_from_fields').slideUp();
+            $('#from_email').prop('required', false);
+            $('#from_email, #from_name').val('');
+        }
+    });
+
+    // Form validation
+    $('form').on('submit', function(e) {
+        var useCustom = $('input[name="use_custom_from"]:checked').val();
+        if (useCustom === 'custom') {
+            var fromEmail = $('#from_email').val().trim();
+            if (!fromEmail || !isValidEmail(fromEmail)) {
+                e.preventDefault();
+                alert('<?php esc_html_e( 'Please enter a valid sender email address.', 'mail-system-by-katsarov-design' ); ?>');
+                $('#from_email').focus();
+                return false;
+            }
+        }
+    });
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+});
+</script>
 </div>
