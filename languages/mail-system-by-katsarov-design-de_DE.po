@@ -189,6 +189,10 @@ msgstr "Bitte füllen Sie alle erforderlichen Felder aus."
 msgid "Invalid recipient email address."
 msgstr "Ungültige Empfänger-E-Mail-Adresse."
 
+#: includes/Admin/class-admin-email.php
+msgid "Invalid Bcc email address: %s"
+msgstr "Ungültige Bcc-E-Mail-Adresse: %s"
+
 #: admin/class-admin.php
 msgid "SMTP is not configured. Please set up SMTP in the plugin settings."
 msgstr ""
@@ -414,6 +418,22 @@ msgstr "Verfügbare Platzhalter:"
 #: admin/partials/compose.php
 msgid "Scheduling"
 msgstr "Planung"
+
+#: admin/partials/compose-wizard.php
+msgid "Bcc (Optional)"
+msgstr "Bcc (Optional)"
+
+#: admin/partials/compose-wizard.php
+msgid "email1@example.com, email2@example.com"
+msgstr "email1@example.com, email2@example.com"
+
+#: admin/partials/compose-wizard.php
+msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this campaign. Bcc recipients are hidden from other recipients."
+msgstr "Geben Sie eine oder mehrere durch Kommas getrennte E-Mail-Adressen ein, um eine Blindkopie dieser Kampagne zu erhalten. Bcc-Empfänger sind für andere Empfänger verborgen."
+
+#: admin/partials/one-time-email.php
+msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this email. Bcc recipients are hidden from the main recipient."
+msgstr "Geben Sie eine oder mehrere durch Kommas getrennte E-Mail-Adressen ein, um eine Blindkopie dieser E-Mail zu erhalten. Bcc-Empfänger sind für den Hauptempfänger verborgen."
 
 #: admin/partials/compose.php
 msgid "Send now"

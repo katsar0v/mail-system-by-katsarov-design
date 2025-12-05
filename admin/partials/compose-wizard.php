@@ -421,6 +421,19 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 							</td>
 						</tr>
 
+						<!-- Bcc -->
+						<tr>
+							<th scope="row">
+								<label for="bcc"><?php esc_html_e( 'Bcc (Optional)', 'mail-system-by-katsarov-design' ); ?></label>
+							</th>
+							<td>
+								<input type="text" name="bcc" id="bcc" class="large-text" placeholder="<?php esc_attr_e( 'email1@example.com, email2@example.com', 'mail-system-by-katsarov-design' ); ?>">
+								<p class="description">
+									<?php esc_html_e( 'Enter one or more email addresses separated by commas to receive a blind carbon copy of this campaign. Bcc recipients are hidden from other recipients.', 'mail-system-by-katsarov-design' ); ?>
+								</p>
+							</td>
+						</tr>
+
 						<!-- Scheduling -->
 						<tr>
 							<th scope="row">

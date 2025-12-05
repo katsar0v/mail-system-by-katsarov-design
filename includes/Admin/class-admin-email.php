@@ -193,12 +193,25 @@ class Admin_Email {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
 		$body     = wp_unslash( $_POST['body'] );
 		$list_ids = isset( $_POST['lists'] ) ? array_map( 'sanitize_text_field', $_POST['lists'] ) : array();
+		$bcc      = isset( $_POST['bcc'] ) ? sanitize_text_field( wp_unslash( $_POST['bcc'] ) ) : '';
 
 		if ( empty( $subject ) || empty( $body ) || empty( $list_ids ) ) {
 			add_settings_error(
 				'mskd_messages',
 				'mskd_error',
 				__( 'Please fill in all fields.', 'mail-system-by-katsarov-design' ),
+				'error'
+			);
+			return;
+		}
+
+		// Validate Bcc email addresses if provided.
+		$bcc_validation = $this->validate_bcc_emails( $bcc );
+		if ( true !== $bcc_validation ) {
+			add_settings_error(
+				'mskd_messages',
+				'mskd_error',
+				$bcc_validation,
 				'error'
 			);
 			return;
@@ -241,6 +254,7 @@ class Admin_Email {
 				'list_ids'     => $list_ids,
 				'subscribers'  => $all_subscribers,
 				'scheduled_at' => $scheduled_at,
+				'bcc'          => $bcc,
 			)
 		);
 
@@ -298,6 +312,7 @@ class Admin_Email {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
 		$body            = wp_unslash( $_POST['body'] );
 		$schedule_type   = isset( $_POST['schedule_type'] ) ? sanitize_text_field( $_POST['schedule_type'] ) : 'now';
+		$bcc             = isset( $_POST['bcc'] ) ? sanitize_text_field( wp_unslash( $_POST['bcc'] ) ) : '';
 
 		// Store form data for preservation on error.
 		$this->one_time_email_form_data = array(
@@ -309,6 +324,7 @@ class Admin_Email {
 			'scheduled_datetime' => isset( $_POST['scheduled_datetime'] ) ? sanitize_text_field( $_POST['scheduled_datetime'] ) : '',
 			'delay_value'        => isset( $_POST['delay_value'] ) ? intval( $_POST['delay_value'] ) : 1,
 			'delay_unit'         => isset( $_POST['delay_unit'] ) ? sanitize_text_field( $_POST['delay_unit'] ) : 'hours',
+			'bcc'                => $bcc,
 		);
 
 		// Validate required fields.
@@ -328,6 +344,18 @@ class Admin_Email {
 				'mskd_messages',
 				'mskd_error',
 				__( 'Invalid recipient email address.', 'mail-system-by-katsarov-design' ),
+				'error'
+			);
+			return;
+		}
+
+		// Validate Bcc email addresses if provided.
+		$bcc_validation = $this->validate_bcc_emails( $bcc );
+		if ( true !== $bcc_validation ) {
+			add_settings_error(
+				'mskd_messages',
+				'mskd_error',
+				$bcc_validation,
 				'error'
 			);
 			return;
@@ -381,6 +409,7 @@ class Admin_Email {
 					'is_immediate'    => true,
 					'sent'            => $sent,
 					'error_message'   => $sent ? null : ( $this->last_mail_error ?: __( 'wp_mail() failed for one-time email', 'mail-system-by-katsarov-design' ) ),
+					'bcc'             => $bcc,
 				)
 			);
 
@@ -418,6 +447,7 @@ class Admin_Email {
 					'body'            => $body,
 					'scheduled_at'    => $scheduled_at,
 					'is_immediate'    => false,
+					'bcc'             => $bcc,
 				)
 			);
 
@@ -449,6 +479,31 @@ class Admin_Email {
 				);
 			}
 		}
+	}
+
+	/**
+	 * Validate Bcc email addresses.
+	 *
+	 * @param string $bcc Comma-separated Bcc email addresses.
+	 * @return bool|string True if valid, error message string if invalid.
+	 */
+	private function validate_bcc_emails( string $bcc ) {
+		if ( empty( $bcc ) ) {
+			return true;
+		}
+
+		$bcc_emails = array_map( 'trim', explode( ',', $bcc ) );
+		foreach ( $bcc_emails as $bcc_email ) {
+			if ( ! empty( $bcc_email ) && ! is_email( $bcc_email ) ) {
+				return sprintf(
+					/* translators: %s: Invalid email address */
+					__( 'Invalid Bcc email address: %s', 'mail-system-by-katsarov-design' ),
+					esc_html( $bcc_email )
+				);
+			}
+		}
+
+		return true;
 	}
 
 	/**

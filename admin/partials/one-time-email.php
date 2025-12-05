@@ -96,6 +96,17 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
                 </tr>
                 <tr>
                     <th scope="row">
+                        <label for="bcc"><?php esc_html_e( 'Bcc (Optional)', 'mail-system-by-katsarov-design' ); ?></label>
+                    </th>
+                    <td>
+                        <input type="text" name="bcc" id="bcc" class="large-text" value="<?php echo isset( $form_data['bcc'] ) ? esc_attr( $form_data['bcc'] ) : ''; ?>" placeholder="<?php esc_attr_e( 'email1@example.com, email2@example.com', 'mail-system-by-katsarov-design' ); ?>">
+                        <p class="description">
+                            <?php esc_html_e( 'Enter one or more email addresses separated by commas to receive a blind carbon copy of this email. Bcc recipients are hidden from the main recipient.', 'mail-system-by-katsarov-design' ); ?>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
                         <label for="schedule_type"><?php _e( 'Scheduling', 'mail-system-by-katsarov-design' ); ?></label>
                     </th>
                     <td>

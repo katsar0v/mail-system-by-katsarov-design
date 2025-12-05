@@ -72,6 +72,7 @@ class Email_Service {
 	 *     @type array  $list_ids     Array of list IDs to send to.
 	 *     @type array  $subscribers  Array of subscriber objects with email, first_name, etc.
 	 *     @type string $scheduled_at MySQL datetime for scheduling.
+	 *     @type string $bcc          Optional. Comma-separated list of Bcc email addresses.
 	 * }
 	 * @return int|false Campaign ID on success, false on failure.
 	 */
@@ -81,6 +82,7 @@ class Email_Service {
 		$list_ids     = $data['list_ids'] ?? array();
 		$subscribers  = $data['subscribers'] ?? array();
 		$scheduled_at = $data['scheduled_at'] ?? mskd_current_time_normalized();
+		$bcc          = $data['bcc'] ?? '';
 
 		if ( empty( $subject ) || empty( $body ) || empty( $subscribers ) ) {
 			return false;
@@ -91,6 +93,7 @@ class Email_Service {
 			'subject'          => $subject,
 			'body'             => $body,
 			'list_ids'         => wp_json_encode( $list_ids ),
+			'bcc'              => $bcc,
 			'type'             => 'campaign',
 			'total_recipients' => count( $subscribers ),
 			'status'           => 'pending',
@@ -100,7 +103,7 @@ class Email_Service {
 		$this->wpdb->insert(
 			$this->campaigns_table,
 			$campaign_data,
-			array( '%s', '%s', '%s', '%s', '%d', '%s', '%s' )
+			array( '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s' )
 		);
 
 		$campaign_id = $this->wpdb->insert_id;
@@ -179,6 +182,7 @@ class Email_Service {
 	 *     @type bool   $is_immediate    Whether to mark as already sent.
 	 *     @type bool   $sent            Whether the email was sent (for immediate sends).
 	 *     @type string $error_message   Error message if sending failed.
+	 *     @type string $bcc             Optional. Comma-separated list of Bcc email addresses.
 	 * }
 	 * @return int|false Queue item ID on success, false on failure.
 	 */
@@ -191,6 +195,7 @@ class Email_Service {
 		$is_immediate    = $data['is_immediate'] ?? false;
 		$sent            = $data['sent'] ?? false;
 		$error_message   = $data['error_message'] ?? null;
+		$bcc             = $data['bcc'] ?? '';
 
 		if ( empty( $recipient_email ) || empty( $subject ) || empty( $body ) ) {
 			return false;
@@ -222,6 +227,7 @@ class Email_Service {
 			'subject'          => $subject,
 			'body'             => $body,
 			'list_ids'         => null,
+			'bcc'              => $bcc,
 			'type'             => 'one_time',
 			'total_recipients' => 1,
 			'status'           => $campaign_status,
@@ -236,8 +242,8 @@ class Email_Service {
 			$this->campaigns_table,
 			$campaign_data,
 			$is_immediate
-				? array( '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s' )
-				: array( '%s', '%s', '%s', '%s', '%d', '%s', '%s' )
+				? array( '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s' )
+				: array( '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s' )
 		);
 
 		$campaign_id = $this->wpdb->insert_id;

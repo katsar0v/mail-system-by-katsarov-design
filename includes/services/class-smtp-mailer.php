@@ -326,8 +326,26 @@ class MSKD_SMTP_Mailer {
 				$name                 = trim( $name );
 				$value                = trim( $value );
 
-				// Skip headers that PHPMailer handles.
-				if ( in_array( strtolower( $name ), array( 'from', 'to', 'cc', 'bcc', 'reply-to', 'content-type' ), true ) ) {
+				// Handle Bcc specially using PHPMailer's addBCC method.
+				if ( 'bcc' === strtolower( $name ) ) {
+					// Validate email address before adding.
+					if ( is_email( $value ) ) {
+						$phpmailer->addBCC( $value );
+					}
+					continue;
+				}
+
+				// Handle Cc specially using PHPMailer's addCC method.
+				if ( 'cc' === strtolower( $name ) ) {
+					// Validate email address before adding.
+					if ( is_email( $value ) ) {
+						$phpmailer->addCC( $value );
+					}
+					continue;
+				}
+
+				// Skip other headers that PHPMailer handles.
+				if ( in_array( strtolower( $name ), array( 'from', 'to', 'reply-to', 'content-type' ), true ) ) {
 					continue;
 				}
 
