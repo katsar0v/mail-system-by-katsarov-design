@@ -59,8 +59,11 @@ class Admin_Subscribers {
 		}
 
 		// Handle delete subscriber.
-		if ( isset( $_GET['action'] ) && 'delete_subscriber' === $_GET['action'] && isset( $_GET['id'] ) ) {
-			if ( wp_verify_nonce( $_GET['_wpnonce'], 'delete_subscriber_' . $_GET['id'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in the if condition below.
+		if ( isset( $_GET['action'] ) && 'delete_subscriber' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) && isset( $_GET['id'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified here, sanitized before use.
+			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'delete_subscriber_' . intval( $_GET['id'] ) ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified above.
 				$this->handle_delete( intval( $_GET['id'] ) );
 			}
 		}

@@ -392,3 +392,111 @@ function mskd_kses_email( $content ) {
 	// Apply KSES filtering with email-specific allowed tags.
 	return wp_kses( $content, $allowed_tags );
 }
+
+/**
+ * Encrypt a string using WordPress salts.
+ *
+ * Uses AES-256-CBC encryption with WordPress AUTH_KEY and SECURE_AUTH_KEY as the key.
+ * This provides better security than base64 encoding for sensitive data like SMTP passwords.
+ *
+ * @param string $value The value to encrypt.
+ * @return string|false Encrypted value in base64 format, or false on failure.
+ */
+function mskd_encrypt( $value ) {
+	if ( empty( $value ) ) {
+		return '';
+	}
+
+	// Check if openssl extension is available.
+	if ( ! function_exists( 'openssl_encrypt' ) ) {
+		// Fallback to base64 if openssl not available (legacy compatibility).
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Fallback when encryption unavailable.
+		return base64_encode( $value );
+	}
+
+	$cipher = 'aes-256-cbc';
+
+	// Use WordPress salts as encryption key.
+	if ( defined( 'AUTH_KEY' ) && defined( 'SECURE_AUTH_KEY' ) ) {
+		$key = hash( 'sha256', AUTH_KEY . SECURE_AUTH_KEY, true );
+	} else {
+		// Fallback if constants not defined.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Fallback when salts unavailable.
+		return base64_encode( $value );
+	}
+
+	// Generate a random initialization vector.
+	$iv_length = openssl_cipher_iv_length( $cipher );
+	$iv        = openssl_random_pseudo_bytes( $iv_length );
+
+	// Encrypt the value.
+	$encrypted = openssl_encrypt( $value, $cipher, $key, 0, $iv );
+
+	if ( false === $encrypted ) {
+		return false;
+	}
+
+	// Combine IV and encrypted data, then base64 encode.
+	// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Required for encryption format.
+	return base64_encode( $iv . '::' . $encrypted );
+}
+
+/**
+ * Decrypt a string encrypted with mskd_encrypt().
+ *
+ * @param string $value The encrypted value to decrypt.
+ * @return string|false Decrypted value, or false on failure.
+ */
+function mskd_decrypt( $value ) {
+	if ( empty( $value ) ) {
+		return '';
+	}
+
+	// Check if openssl extension is available.
+	if ( ! function_exists( 'openssl_decrypt' ) ) {
+		// Fallback to base64 decode if openssl not available (legacy compatibility).
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Fallback when encryption unavailable.
+		return base64_decode( $value );
+	}
+
+	$cipher = 'aes-256-cbc';
+
+	// Use WordPress salts as encryption key.
+	if ( defined( 'AUTH_KEY' ) && defined( 'SECURE_AUTH_KEY' ) ) {
+		$key = hash( 'sha256', AUTH_KEY . SECURE_AUTH_KEY, true );
+	} else {
+		// Fallback if constants not defined.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Fallback when salts unavailable.
+		return base64_decode( $value );
+	}
+
+	// Base64 decode the value.
+	// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Required for encryption format.
+	$decoded = base64_decode( $value, true );
+
+	if ( false === $decoded ) {
+		// Might be legacy base64-only format, try direct decode.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Legacy compatibility.
+		return base64_decode( $value );
+	}
+
+	// Split IV and encrypted data.
+	$parts = explode( '::', $decoded, 2 );
+
+	if ( count( $parts ) !== 2 ) {
+		// Legacy base64-only format, return direct decode.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Legacy compatibility.
+		return base64_decode( $value );
+	}
+
+	list( $iv, $encrypted ) = $parts;
+
+	// Decrypt the value.
+	$decrypted = openssl_decrypt( $encrypted, $cipher, $key, 0, $iv );
+
+	if ( false === $decrypted ) {
+		return false;
+	}
+
+	return $decrypted;
+}

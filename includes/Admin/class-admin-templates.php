@@ -59,7 +59,9 @@ class Admin_Templates {
 		}
 
 		// Handle delete template.
-		if ( isset( $_GET['action'] ) && 'delete_template' === $_GET['action'] && isset( $_GET['id'] ) && isset( $_GET['_wpnonce'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in the if condition below.
+		if ( isset( $_GET['action'] ) && 'delete_template' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) && isset( $_GET['id'] ) && isset( $_GET['_wpnonce'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified below.
 			$id = intval( $_GET['id'] );
 			if ( wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'delete_template_' . $id ) ) {
 				$this->handle_delete( $id );
@@ -67,7 +69,9 @@ class Admin_Templates {
 		}
 
 		// Handle duplicate template.
-		if ( isset( $_GET['action'] ) && 'duplicate_template' === $_GET['action'] && isset( $_GET['id'] ) && isset( $_GET['_wpnonce'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in the if condition below.
+		if ( isset( $_GET['action'] ) && 'duplicate_template' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) && isset( $_GET['id'] ) && isset( $_GET['_wpnonce'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified below.
 			$id = intval( $_GET['id'] );
 			if ( wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'duplicate_template_' . $id ) ) {
 				$this->handle_duplicate( $id );

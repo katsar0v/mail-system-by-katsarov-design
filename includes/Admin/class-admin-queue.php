@@ -49,15 +49,21 @@ class Admin_Queue {
 		}
 
 		// Handle cancel queue item action.
-		if ( isset( $_GET['action'] ) && 'cancel_queue_item' === $_GET['action'] && isset( $_GET['id'] ) ) {
-			if ( wp_verify_nonce( $_GET['_wpnonce'], 'cancel_queue_item_' . $_GET['id'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in the if condition below.
+		if ( isset( $_GET['action'] ) && 'cancel_queue_item' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) && isset( $_GET['id'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified here, sanitized before use.
+			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'cancel_queue_item_' . intval( $_GET['id'] ) ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified above.
 				$this->handle_cancel_item( intval( $_GET['id'] ) );
 			}
 		}
 
 		// Handle cancel campaign action.
-		if ( isset( $_GET['action'] ) && 'cancel_campaign' === $_GET['action'] && isset( $_GET['id'] ) ) {
-			if ( wp_verify_nonce( $_GET['_wpnonce'], 'cancel_campaign_' . $_GET['id'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in the if condition below.
+		if ( isset( $_GET['action'] ) && 'cancel_campaign' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) && isset( $_GET['id'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified here, sanitized before use.
+			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'cancel_campaign_' . intval( $_GET['id'] ) ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified above.
 				$this->handle_cancel_campaign( intval( $_GET['id'] ) );
 			}
 		}
