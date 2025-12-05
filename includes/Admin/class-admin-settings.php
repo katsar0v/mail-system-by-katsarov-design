@@ -83,6 +83,19 @@ class Admin_Settings {
 			$button_text_color = '#ffffff';
 		}
 
+		// Handle password: preserve existing if field is empty (not changing password).
+		$current_settings = get_option( 'mskd_settings', array() );
+		if ( isset( $_POST['smtp_password'] ) && ! empty( $_POST['smtp_password'] ) ) {
+			// New password provided - encrypt it.
+			$smtp_password = mskd_encrypt( sanitize_text_field( wp_unslash( $_POST['smtp_password'] ) ) );
+		} elseif ( isset( $current_settings['smtp_password'] ) ) {
+			// No password provided - keep existing.
+			$smtp_password = $current_settings['smtp_password'];
+		} else {
+			// No password at all.
+			$smtp_password = '';
+		}
+
 		$settings = array(
 			'from_name'         => sanitize_text_field( wp_unslash( $_POST['from_name'] ) ),
 			'from_email'        => sanitize_email( wp_unslash( $_POST['from_email'] ) ),
@@ -102,7 +115,7 @@ class Admin_Settings {
 			'smtp_security'     => $smtp_security,
 			'smtp_auth'         => isset( $_POST['smtp_auth'] ) ? 1 : 0,
 			'smtp_username'     => sanitize_text_field( wp_unslash( $_POST['smtp_username'] ) ),
-			'smtp_password'     => isset( $_POST['smtp_password'] ) && ! empty( $_POST['smtp_password'] ) ? mskd_encrypt( sanitize_text_field( wp_unslash( $_POST['smtp_password'] ) ) ) : '',
+			'smtp_password'     => $smtp_password,
 		);
 
 		update_option( 'mskd_settings', $settings );

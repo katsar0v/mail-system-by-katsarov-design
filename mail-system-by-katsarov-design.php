@@ -427,7 +427,19 @@ function mskd_encrypt( $value ) {
 
 	// Generate a random initialization vector.
 	$iv_length = openssl_cipher_iv_length( $cipher );
-	$iv        = openssl_random_pseudo_bytes( $iv_length );
+	
+	// Use random_bytes() for PHP 7.0+ (cryptographically secure).
+	// Falls back to openssl_random_pseudo_bytes for PHP 5.x compatibility.
+	if ( function_exists( 'random_bytes' ) ) {
+		try {
+			$iv = random_bytes( $iv_length );
+		} catch ( Exception $e ) {
+			// Fallback to openssl if random_bytes fails.
+			$iv = openssl_random_pseudo_bytes( $iv_length );
+		}
+	} else {
+		$iv = openssl_random_pseudo_bytes( $iv_length );
+	}
 
 	// Encrypt the value.
 	$encrypted = openssl_encrypt( $value, $cipher, $key, 0, $iv );
@@ -470,12 +482,13 @@ function mskd_decrypt( $value ) {
 		return base64_decode( $value );
 	}
 
-	// Base64 decode the value.
+	// Base64 decode the value with strict mode to detect new format vs legacy.
+	// Strict mode will return false for invalid base64, triggering legacy fallback.
 	// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Required for encryption format.
 	$decoded = base64_decode( $value, true );
 
 	if ( false === $decoded ) {
-		// Might be legacy base64-only format, try direct decode.
+		// Might be legacy base64-only format, try direct decode without strict mode.
 		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Legacy compatibility.
 		return base64_decode( $value );
 	}
