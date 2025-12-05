@@ -158,6 +158,18 @@ class MSKD_Cron_Handler {
 					array( '%s', '%s' ),
 					array( '%d' )
 				);
+
+				// Log Bcc recipients for audit/compliance.
+				if ( ! empty( $item->bcc ) && defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+					error_log(
+						sprintf(
+							'[MSKD] Campaign %d: Email sent to %s with Bcc to: %s',
+							$item->campaign_id,
+							$item->email,
+							$item->bcc
+						)
+					);
+				}
 			} else {
 				// Check if we should retry or mark as failed
 				$new_attempts = $item->attempts + 1;
