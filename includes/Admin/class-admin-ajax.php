@@ -402,6 +402,7 @@ class Admin_Ajax {
 		if ( $campaign_id > 0 ) {
 			// Load content from campaign in database.
 			global $wpdb;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Simple read for preview, no caching needed.
 			$campaign = $wpdb->get_row(
 				$wpdb->prepare(
 					"SELECT body FROM {$wpdb->prefix}mskd_campaigns WHERE id = %d",
@@ -424,24 +425,48 @@ class Admin_Ajax {
 			wp_die( esc_html__( 'No content to preview.', 'mail-system-by-katsarov-design' ), 400 );
 		}
 
-		// Load Email_Header_Footer trait via a helper class.
-		require_once MSKD_PLUGIN_DIR . 'includes/traits/trait-email-header-footer.php';
-
-		// Create anonymous class with trait to apply header/footer.
-		$helper = new class() {
-			use \MSKD\Traits\Email_Header_Footer;
-		};
-
 		// Get plugin settings for header/footer.
 		$settings = get_option( 'mskd_settings', array() );
 
-		// Apply header and footer to content.
-		$full_content = $helper->apply_header_footer( $content, $settings );
+		// Apply header and footer to content using static helper method.
+		$full_content = self::render_email_with_header_footer( $content, $settings );
 
 		// Output the full HTML directly (for iframe display).
 		// No JSON wrapper needed - iframe expects raw HTML.
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Admin-only preview of email HTML, already sanitized on save.
 		echo $full_content;
 		wp_die();
+	}
+
+	/**
+	 * Apply header and footer to email content.
+	 *
+	 * Static helper method that applies the configured email header and footer
+	 * to the email body. Uses the same logic as the Email_Header_Footer trait.
+	 *
+	 * @param string $content  Email body content.
+	 * @param array  $settings Plugin settings array containing 'email_header' and 'email_footer' keys.
+	 * @return string Email content with header prepended and footer appended.
+	 */
+	public static function render_email_with_header_footer( string $content, array $settings ): string {
+		$header = $settings['email_header'] ?? '';
+		$footer = $settings['email_footer'] ?? '';
+
+		// Only modify content if header or footer is set.
+		if ( empty( $header ) && empty( $footer ) ) {
+			return $content;
+		}
+
+		// Prepend header if set.
+		if ( ! empty( $header ) ) {
+			$content = $header . $content;
+		}
+
+		// Append footer if set.
+		if ( ! empty( $footer ) ) {
+			$content = $content . $footer;
+		}
+
+		return $content;
 	}
 }
