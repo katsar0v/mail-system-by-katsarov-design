@@ -287,4 +287,59 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
             </p>
         </form>
     </div>
+
+<script>
+jQuery(document).ready(function($) {
+    // Schedule type toggle
+    $('#schedule_type').on('change', function() {
+        var value = $(this).val();
+        $('.mskd-schedule-absolute, .mskd-schedule-relative').hide();
+        
+        if (value === 'absolute') {
+            $('.mskd-schedule-absolute').show();
+        } else if (value === 'relative') {
+            $('.mskd-schedule-relative').show();
+        }
+        
+        // Update button text
+        var $btn = $('.mskd-submit-btn');
+        if (value === 'now') {
+            $btn.val($btn.data('send-now'));
+        } else {
+            $btn.val($btn.data('schedule'));
+        }
+    });
+
+    // Custom from email toggle
+    $('input[name="use_custom_from"]').on('change', function() {
+        var value = $(this).val();
+        if (value === 'custom') {
+            $('#custom_from_fields').slideDown();
+            $('#from_email').prop('required', true);
+        } else {
+            $('#custom_from_fields').slideUp();
+            $('#from_email').prop('required', false);
+            $('#from_email, #from_name').val('');
+        }
+    });
+
+    // Form validation
+    $('form').on('submit', function(e) {
+        var useCustom = $('input[name="use_custom_from"]:checked').val();
+        if (useCustom === 'custom') {
+            var fromEmail = $('#from_email').val().trim();
+            if (!fromEmail || !isValidEmail(fromEmail)) {
+                e.preventDefault();
+                alert('<?php esc_html_e( 'Please enter a valid sender email address.', 'mail-system-by-katsarov-design' ); ?>');
+                $('#from_email').focus();
+                return false;
+            }
+        }
+    });
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+});
+</script>
 </div>
