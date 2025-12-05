@@ -459,8 +459,19 @@ class Admin_Email {
 			// Replace subscriber placeholders (including those in header/footer).
 			$body_with_wrapper = $this->replace_one_time_placeholders( $body_with_wrapper, $recipient_email, $recipient_name );
 
+			// Build headers array including Bcc if provided.
+			$headers = array();
+			if ( ! empty( $bcc ) ) {
+				$bcc_emails = array_map( 'trim', explode( ',', $bcc ) );
+				foreach ( $bcc_emails as $bcc_email ) {
+					if ( ! empty( $bcc_email ) && is_email( $bcc_email ) ) {
+						$headers[] = 'Bcc: ' . $bcc_email;
+					}
+				}
+			}
+
 			// Send immediately (via SMTP if configured, otherwise via PHP mail) with custom from email if provided.
-			$sent = $mailer->send( $recipient_email, $subject, $body_with_wrapper, array(), $from_email, $from_name );
+			$sent = $mailer->send( $recipient_email, $subject, $body_with_wrapper, $headers, $from_email, $from_name );
 
 			if ( ! $sent ) {
 				$this->last_mail_error = $mailer->get_last_error();
