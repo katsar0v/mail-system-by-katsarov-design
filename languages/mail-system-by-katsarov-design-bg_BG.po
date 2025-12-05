@@ -421,6 +421,10 @@ msgstr "Насрочване"
 msgid "Bcc (Optional)"
 msgstr "Скрито копие (по избор)"
 
+#: admin/partials/queue-detail.php
+msgid "BCC:"
+msgstr "СК:"
+
 #: admin/partials/compose-wizard.php
 msgid "email1@example.com, email2@example.com"
 msgstr "email1@example.com, email2@example.com"

@@ -43,6 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Support for template variables (`{first_name}`, `{last_name}`, `{email}`, `{unsubscribe_link}`, `{unsubscribe_url}`)
   - New "Email Template Settings" section in Settings page
   - Documentation in `docs/email-header-footer.md`
+- **BCC Display in Queue Details**
+  - BCC recipients are now visible in the campaign details page when viewing queue items
+  - Only displayed when BCC is configured for the campaign
 
 ---
 
