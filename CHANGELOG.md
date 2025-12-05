@@ -5,15 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.6.0] - 2025-12-05
 
 ### Added
-- **Custom Email Header and Footer**
-  - Configurable HTML header prepended to all outgoing emails
-  - Configurable HTML footer appended to all outgoing emails
-  - Support for template variables (`{first_name}`, `{last_name}`, `{email}`, `{unsubscribe_link}`, `{unsubscribe_url}`)
-  - New "Email Template Settings" section in Settings page
-  - Documentation in `docs/email-header-footer.md`
+- **Per-Campaign Custom Sender Configuration**
+  - New `from_email` and `from_name` columns in campaigns table
+  - UI controls in compose wizard, legacy compose, and one-time email forms
+  - Radio button selection between default and custom sender
+  - Client-side and server-side email validation
+  - Progressive enhancement with default fallback to global settings
+  - Custom sender data passed through email service to SMTP mailer
+  - Database upgrade from 1.5.0 to 1.6.0 with proper column addition
+  - Full backward compatibility - existing campaigns continue working unchanged
+
+### Changed
+- **Database Schema Upgrade**
+  - Campaigns table now supports per-campaign sender override
+  - Nullable columns ensure no breaking changes to existing data
+  - Proper upgrade handling in activator with version checking
 
 ### Fixed
 - **One-time emails now include header and footer**
@@ -24,6 +33,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Open and click statistics
 - A/B testing
 - Integration with popular SMTP plugins
+
+## [Unreleased]
+
+### Added
+- **Custom Email Header and Footer**
+  - Configurable HTML header prepended to all outgoing emails
+  - Configurable HTML footer appended to all outgoing emails
+  - Support for template variables (`{first_name}`, `{last_name}`, `{email}`, `{unsubscribe_link}`, `{unsubscribe_url}`)
+  - New "Email Template Settings" section in Settings page
+  - Documentation in `docs/email-header-footer.md`
 
 ---
 
