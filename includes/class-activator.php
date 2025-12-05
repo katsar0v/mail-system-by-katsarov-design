@@ -19,7 +19,7 @@ class MSKD_Activator {
 	/**
 	 * Database version for tracking schema updates
 	 */
-	const DB_VERSION = '1.5.0';
+	const DB_VERSION = '1.6.0';
 
 	/**
 	 * Activate the plugin
@@ -165,6 +165,32 @@ class MSKD_Activator {
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- Required for upgrade.
 				$wpdb->query(
 					"ALTER TABLE {$table_campaigns} ADD COLUMN bcc_sent tinyint(1) DEFAULT 0 AFTER bcc"
+				);
+			}
+		}
+
+		// Upgrade from 1.5.0 to 1.6.0: Add per-campaign from email columns
+		if ( version_compare( $from_version, '1.6.0', '<' ) ) {
+			$table_campaigns = $wpdb->prefix . 'mskd_campaigns';
+			
+			// Check if from_email column exists
+			$from_email_exists = $wpdb->get_results(
+				$wpdb->prepare(
+					"SHOW COLUMNS FROM {$table_campaigns} LIKE %s",
+					'from_email'
+				)
+			);
+			
+			if ( empty( $from_email_exists ) ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- Required for upgrade.
+				$wpdb->query(
+					"ALTER TABLE {$table_campaigns} ADD COLUMN from_email varchar(255) DEFAULT NULL AFTER bcc_sent"
+				);
+				$wpdb->query(
+					"ALTER TABLE {$table_campaigns} ADD COLUMN from_name varchar(255) DEFAULT NULL AFTER from_email"
+				);
+				$wpdb->query(
+					"ALTER TABLE {$table_campaigns} ADD INDEX from_email (from_email)"
 				);
 			}
 		}

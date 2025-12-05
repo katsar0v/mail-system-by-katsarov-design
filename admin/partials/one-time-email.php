@@ -105,6 +105,68 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
                         </p>
                     </td>
                 </tr>
+
+                <!-- Custom From Email -->
+                <tr>
+                    <th scope="row">
+                        <label for="use_custom_from"><?php esc_html_e( 'Sender Email', 'mail-system-by-katsarov-design' ); ?></label>
+                    </th>
+                    <td>
+                        <fieldset>
+                            <label>
+                                <input type="radio" name="use_custom_from" value="default" checked>
+                                <?php esc_html_e( 'Use default sender', 'mail-system-by-katsarov-design' ); ?>
+                                <span class="description">
+                                    <?php
+                                    $default_from = get_option( 'mskd_settings', array() );
+                                    $default_email = ! empty( $default_from['from_email'] ) ? $default_from['from_email'] : get_bloginfo( 'admin_email' );
+                                    printf(
+                                        esc_html__( '(%s)', 'mail-system-by-katsarov-design' ),
+                                        esc_html( $default_email )
+                                    );
+                                    ?>
+                                </span>
+                            </label>
+                            <br>
+                            <label>
+                                <input type="radio" name="use_custom_from" value="custom">
+                                <?php esc_html_e( 'Use custom sender', 'mail-system-by-katsarov-design' ); ?>
+                            </label>
+                        </fieldset>
+                        
+                        <div id="custom_from_fields" style="display: none; margin-top: 10px;">
+                            <table class="widefat" style="width: auto;">
+                                <tr>
+                                    <th style="width: 120px;">
+                                        <label for="from_email"><?php esc_html_e( 'From Email', 'mail-system-by-katsarov-design' ); ?> *</label>
+                                    </th>
+                                    <td>
+                                        <input type="email" name="from_email" id="from_email" class="regular-text"
+                                               placeholder="<?php esc_attr_e( 'sender@example.com', 'mail-system-by-katsarov-design' ); ?>"
+                                               value="<?php echo isset( $form_data['from_email'] ) ? esc_attr( $form_data['from_email'] ) : ''; ?>">
+                                        <p class="description">
+                                            <?php esc_html_e( 'Email address that will appear as the sender of this email.', 'mail-system-by-katsarov-design' ); ?>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="from_name"><?php esc_html_e( 'From Name', 'mail-system-by-katsarov-design' ); ?></label>
+                                    </th>
+                                    <td>
+                                        <input type="text" name="from_name" id="from_name" class="regular-text"
+                                               placeholder="<?php esc_attr_e( 'Sender Name', 'mail-system-by-katsarov-design' ); ?>"
+                                               value="<?php echo isset( $form_data['from_name'] ) ? esc_attr( $form_data['from_name'] ) : ''; ?>">
+                                        <p class="description">
+                                            <?php esc_html_e( 'Display name for the sender (optional).', 'mail-system-by-katsarov-design' ); ?>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+
                 <tr>
                     <th scope="row">
                         <label for="schedule_type"><?php _e( 'Scheduling', 'mail-system-by-katsarov-design' ); ?></label>
@@ -117,19 +179,19 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
                         </select>
                         
                         <div class="mskd-schedule-absolute" style="display: none; margin-top: 10px;">
-                            <input type="datetime-local" 
-                                   name="scheduled_datetime" 
-                                   id="scheduled_datetime" 
+                            <input type="datetime-local"
+                                   name="scheduled_datetime"
+                                   id="scheduled_datetime"
                                    class="mskd-datetime-picker"
                                    value="<?php echo esc_attr( $default_datetime ); ?>"
                                    min="<?php echo esc_attr( $min_datetime ); ?>"
                                    step="600">
                             <p class="description">
-                                <?php 
-                                printf( 
-                                    __( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ), 
+                                <?php
+                                printf(
+                                    __( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ),
                                     '<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
-                                ); 
+                                );
                                 ?>
                                 <br>
                                 <?php
@@ -143,12 +205,12 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
                         </div>
                         
                         <div class="mskd-schedule-relative" style="display: none; margin-top: 10px;">
-                            <input type="number" 
-                                   name="delay_value" 
-                                   id="delay_value" 
-                                   class="small-text" 
-                                   value="<?php echo esc_attr( $delay_value ); ?>" 
-                                   min="1" 
+                            <input type="number"
+                                   name="delay_value"
+                                   id="delay_value"
+                                   class="small-text"
+                                   value="<?php echo esc_attr( $delay_value ); ?>"
+                                   min="1"
                                    max="999">
                             <select name="delay_unit" id="delay_unit">
                                 <option value="minutes" <?php selected( $delay_unit, 'minutes' ); ?>><?php _e( 'minutes', 'mail-system-by-katsarov-design' ); ?></option>
