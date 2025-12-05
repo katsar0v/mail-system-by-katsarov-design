@@ -242,47 +242,50 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
     </div>
 
 <style>
-/* Div-based Form Fields */
-.mskd-form-fields {
+/* Div-based Form Fields - Table-like alignment */
+.mskd-one-time-email-form .mskd-form-fields {
     margin-top: 16px;
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.mskd-form-row {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 16px 0;
+.mskd-one-time-email-form .mskd-form-row {
+    display: table-row;
+}
+
+.mskd-one-time-email-form .mskd-form-row:not(:last-child) .mskd-form-label,
+.mskd-one-time-email-form .mskd-form-row:not(:last-child) .mskd-form-field {
     border-bottom: 1px solid #f0f0f1;
 }
 
-.mskd-form-row:last-child {
-    border-bottom: none;
+.mskd-one-time-email-form .mskd-form-label {
+    display: table-cell;
+    width: 200px;
+    padding: 16px 20px 16px 0;
+    vertical-align: top;
 }
 
-.mskd-form-label {
-    flex: 0 0 200px;
-    padding-right: 20px;
-    padding-top: 8px;
-}
-
-.mskd-form-label label {
+.mskd-one-time-email-form .mskd-form-label label {
     font-weight: 600;
     color: #1d2327;
     font-size: 14px;
 }
 
-.mskd-form-field {
-    flex: 1;
-    min-width: 0;
+.mskd-one-time-email-form .mskd-form-field {
+    display: table-cell;
+    padding: 16px 0;
+    vertical-align: top;
 }
 
-.mskd-form-field .description {
+.mskd-one-time-email-form .mskd-form-field .description {
     margin-top: 8px;
     color: #646970;
     font-size: 13px;
 }
 
 /* Custom From Fields (nested div form) */
-.mskd-custom-from-fields {
+.mskd-one-time-email-form .mskd-custom-from-fields {
     background: #f8f9fa;
     border: 1px solid #c3c4c7;
     border-radius: 4px;
@@ -290,40 +293,42 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
     margin-top: 12px;
 }
 
-.mskd-nested-form-row {
-    display: flex;
-    flex-wrap: wrap;
+.mskd-one-time-email-form .mskd-nested-form-row {
+    display: table;
+    width: 100%;
     padding: 12px 0;
     border-bottom: 1px solid #e9ecef;
 }
 
-.mskd-nested-form-row:first-child {
+.mskd-one-time-email-form .mskd-nested-form-row:first-child {
     padding-top: 0;
 }
 
-.mskd-nested-form-row:last-child {
+.mskd-one-time-email-form .mskd-nested-form-row:last-child {
     border-bottom: none;
     padding-bottom: 0;
 }
 
-.mskd-nested-form-label {
-    flex: 0 0 120px;
+.mskd-one-time-email-form .mskd-nested-form-label {
+    display: table-cell;
+    width: 120px;
     padding-right: 16px;
+    vertical-align: top;
     padding-top: 6px;
 }
 
-.mskd-nested-form-label label {
+.mskd-one-time-email-form .mskd-nested-form-label label {
     font-weight: 600;
     color: #1d2327;
     font-size: 13px;
 }
 
-.mskd-nested-form-field {
-    flex: 1;
-    min-width: 0;
+.mskd-one-time-email-form .mskd-nested-form-field {
+    display: table-cell;
+    vertical-align: top;
 }
 
-.mskd-nested-form-field .description {
+.mskd-one-time-email-form .mskd-nested-form-field .description {
     margin-top: 6px;
     font-style: italic;
     color: #646970;
@@ -331,24 +336,48 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 }
 
 @media screen and (max-width: 782px) {
-    .mskd-form-row {
-        flex-direction: column;
+    .mskd-one-time-email-form .mskd-form-fields {
+        display: block;
     }
     
-    .mskd-form-label {
-        flex: none;
-        padding-right: 0;
-        padding-bottom: 8px;
+    .mskd-one-time-email-form .mskd-form-row {
+        display: block;
+        padding: 16px 0;
+        border-bottom: 1px solid #f0f0f1;
     }
     
-    .mskd-nested-form-row {
-        flex-direction: column;
+    .mskd-one-time-email-form .mskd-form-row:last-child {
+        border-bottom: none;
     }
     
-    .mskd-nested-form-label {
-        flex: none;
-        padding-right: 0;
-        padding-bottom: 6px;
+    .mskd-one-time-email-form .mskd-form-row .mskd-form-label,
+    .mskd-one-time-email-form .mskd-form-row .mskd-form-field {
+        border-bottom: none !important;
+    }
+    
+    .mskd-one-time-email-form .mskd-form-label {
+        display: block;
+        width: auto;
+        padding: 0 0 8px 0;
+    }
+    
+    .mskd-one-time-email-form .mskd-form-field {
+        display: block;
+        padding: 0;
+    }
+    
+    .mskd-one-time-email-form .mskd-nested-form-row {
+        display: block;
+    }
+    
+    .mskd-one-time-email-form .mskd-nested-form-label {
+        display: block;
+        width: auto;
+        padding: 0 0 6px 0;
+    }
+    
+    .mskd-one-time-email-form .mskd-nested-form-field {
+        display: block;
     }
 }
 </style>
