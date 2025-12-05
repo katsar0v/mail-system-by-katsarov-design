@@ -102,7 +102,7 @@ class Admin_Settings {
 			'smtp_security'     => $smtp_security,
 			'smtp_auth'         => isset( $_POST['smtp_auth'] ) ? 1 : 0,
 			'smtp_username'     => sanitize_text_field( wp_unslash( $_POST['smtp_username'] ) ),
-			'smtp_password'     => isset( $_POST['smtp_password'] ) ? base64_encode( sanitize_text_field( wp_unslash( $_POST['smtp_password'] ) ) ) : '',
+			'smtp_password'     => isset( $_POST['smtp_password'] ) && ! empty( $_POST['smtp_password'] ) ? mskd_encrypt( sanitize_text_field( wp_unslash( $_POST['smtp_password'] ) ) ) : '',
 		);
 
 		update_option( 'mskd_settings', $settings );

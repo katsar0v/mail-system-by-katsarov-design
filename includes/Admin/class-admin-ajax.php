@@ -415,9 +415,9 @@ class Admin_Ajax {
 			}
 		} elseif ( isset( $_POST['content'] ) ) {
 			// Use content from POST (for compose wizard preview).
-			// Email HTML content must be preserved exactly (including <style> tags for MJML output).
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
-			$content = wp_unslash( $_POST['content'] );
+			// Sanitize email HTML using our custom sanitizer that allows email-specific tags.
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized with mskd_kses_email() below.
+			$content = mskd_kses_email( wp_unslash( $_POST['content'] ) );
 		}
 
 		// If no content provided, return error.
@@ -433,7 +433,7 @@ class Admin_Ajax {
 
 		// Output the full HTML directly (for iframe display).
 		// No JSON wrapper needed - iframe expects raw HTML.
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Admin-only preview of email HTML, already sanitized on save.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Admin-only preview of email HTML, sanitized with mskd_kses_email() above.
 		echo $full_content;
 		wp_die();
 	}

@@ -121,7 +121,7 @@ class MSKD_SMTP_Mailer {
 
 				if ( $mailer->SMTPAuth ) {
 					$mailer->Username = ! empty( $this->settings['smtp_username'] ) ? $this->settings['smtp_username'] : '';
-					$mailer->Password = ! empty( $this->settings['smtp_password'] ) ? base64_decode( $this->settings['smtp_password'] ) : '';
+					$mailer->Password = ! empty( $this->settings['smtp_password'] ) ? mskd_decrypt( $this->settings['smtp_password'] ) : '';
 				}
 			} else {
 				// Use PHP's mail() function as fallback.
@@ -228,7 +228,7 @@ class MSKD_SMTP_Mailer {
 
 			if ( $mailer->SMTPAuth ) {
 				$mailer->Username = ! empty( $this->settings['smtp_username'] ) ? $this->settings['smtp_username'] : '';
-				$mailer->Password = ! empty( $this->settings['smtp_password'] ) ? base64_decode( $this->settings['smtp_password'] ) : '';
+				$mailer->Password = ! empty( $this->settings['smtp_password'] ) ? mskd_decrypt( $this->settings['smtp_password'] ) : '';
 			}
 
 			// Set sender using the validated email.
