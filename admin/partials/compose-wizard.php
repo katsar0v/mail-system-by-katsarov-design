@@ -25,9 +25,24 @@ $lists = MSKD_List_Provider::get_all_lists();
 
 // Get all templates.
 $template_service     = new Template_Service();
-$templates            = $template_service->get_all( array( 'orderby' => 'type', 'order' => 'ASC' ) );
-$predefined_templates = array_filter( $templates, function( $t ) { return 'predefined' === $t->type; } );
-$custom_templates     = array_filter( $templates, function( $t ) { return 'custom' === $t->type; } );
+$templates            = $template_service->get_all(
+	array(
+		'orderby' => 'type',
+		'order'   => 'ASC',
+	)
+);
+$predefined_templates = array_filter(
+	$templates,
+	function ( $t ) {
+		return 'predefined' === $t->type;
+	}
+);
+$custom_templates     = array_filter(
+	$templates,
+	function ( $t ) {
+		return 'custom' === $t->type;
+	}
+);
 
 // Get current step from URL or default to 1.
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only step parameter.
@@ -238,7 +253,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 								</th>
 								<td>
 									<input type="text" name="subject" id="subject" class="large-text" required 
-										   value="<?php echo esc_attr( $session_data['subject'] ); ?>">
+											value="<?php echo esc_attr( $session_data['subject'] ); ?>">
 								</td>
 							</tr>
 							<tr>
@@ -254,8 +269,8 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 											'textarea_name' => 'body',
 											'textarea_rows' => 20,
 											'media_buttons' => true,
-											'teeny'         => false,
-											'quicktags'     => true,
+											'teeny'     => false,
+											'quicktags' => true,
 										)
 									);
 									?>
@@ -293,7 +308,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 		}
 		// Fallback to template content if using an existing template.
 		if ( ! $has_content && $session_data['use_visual'] && $session_data['template_id'] > 0 ) {
-			$template = $template_service->get_by_id( $session_data['template_id'] );
+			$template    = $template_service->get_by_id( $session_data['template_id'] );
 			$has_content = $template && ! empty( $template->content );
 		}
 		?>
@@ -316,7 +331,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 							</th>
 							<td>
 								<input type="text" name="subject" id="subject" class="large-text" required 
-									   value="<?php echo esc_attr( $session_data['subject'] ); ?>">
+										value="<?php echo esc_attr( $session_data['subject'] ); ?>">
 							</td>
 						</tr>
 						
@@ -330,7 +345,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 									<div class="mskd-content-preview">
 										<div class="mskd-content-preview-header">
 											<span class="dashicons dashicons-visibility"></span>
-											<?php esc_html_e( 'Content Preview', 'mail-system-by-katsarov-design' ); ?>
+											<?php esc_html_e( 'Content Preview (with header & footer)', 'mail-system-by-katsarov-design' ); ?>
 											<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&step=2' ) ); ?>" class="mskd-edit-link">
 											<span class="dashicons dashicons-edit"></span>
 											<?php esc_html_e( 'Edit', 'mail-system-by-katsarov-design' ); ?>
@@ -338,7 +353,8 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 									</div>
 									<div class="mskd-content-preview-body">
 										<iframe 
-											srcdoc="<?php echo esc_attr( $session_data['content'] ); ?>" 
+											class="mskd-email-preview-iframe" 
+											data-content="<?php echo esc_attr( $session_data['content'] ); ?>"
 											style="width: 100%; height: 300px; border: 1px solid #ddd; border-radius: 4px; background: #fff;"
 											sandbox="allow-same-origin"
 											title="<?php esc_attr_e( 'Email content preview', 'mail-system-by-katsarov-design' ); ?>"
@@ -347,14 +363,14 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 								</div>
 								<input type="hidden" name="body" value="<?php echo esc_attr( $session_data['content'] ); ?>">
 								<?php elseif ( $session_data['use_visual'] && $session_data['template_id'] > 0 ) : ?>
-									<?php 
+									<?php
 									$template = $template_service->get_by_id( $session_data['template_id'] );
 									if ( $template ) :
-									?>
+										?>
 										<div class="mskd-content-preview">
 											<div class="mskd-content-preview-header">
 												<span class="dashicons dashicons-layout"></span>
-												<?php 
+												<?php
 												/* translators: %s: template name */
 												printf( esc_html__( 'Using template: %s', 'mail-system-by-katsarov-design' ), '<strong>' . esc_html( $template->name ) . '</strong>' );
 												?>
@@ -419,30 +435,30 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 								
 								<div class="mskd-schedule-absolute" style="display: none; margin-top: 10px;">
 									<input type="datetime-local" 
-										   name="scheduled_datetime" 
-										   id="scheduled_datetime" 
-										   class="mskd-datetime-picker"
-										   value="<?php echo esc_attr( $min_datetime ); ?>"
-										   min="<?php echo esc_attr( $min_datetime ); ?>"
-										   step="600">
+											name="scheduled_datetime" 
+											id="scheduled_datetime" 
+											class="mskd-datetime-picker"
+											value="<?php echo esc_attr( $min_datetime ); ?>"
+											min="<?php echo esc_attr( $min_datetime ); ?>"
+											step="600">
 									<p class="description">
-										<?php 
-										printf( 
-											esc_html__( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ), 
+										<?php
+										printf(
+											esc_html__( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ),
 											'<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
-										); 
+										);
 										?>
 									</p>
 								</div>
 								
 								<div class="mskd-schedule-relative" style="display: none; margin-top: 10px;">
 									<input type="number" 
-										   name="delay_value" 
-										   id="delay_value" 
-										   class="small-text" 
-										   value="1" 
-										   min="1" 
-										   max="999">
+											name="delay_value" 
+											id="delay_value" 
+											class="small-text" 
+											value="1" 
+											min="1" 
+											max="999">
 									<select name="delay_unit" id="delay_unit">
 										<option value="minutes"><?php esc_html_e( 'minutes', 'mail-system-by-katsarov-design' ); ?></option>
 										<option value="hours" selected><?php esc_html_e( 'hours', 'mail-system-by-katsarov-design' ); ?></option>

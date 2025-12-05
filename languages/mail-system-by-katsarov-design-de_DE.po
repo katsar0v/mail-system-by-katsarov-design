@@ -2063,6 +2063,18 @@ msgstr "Inhalt:"
 msgid "Email Preview"
 msgstr "E-Mail-Vorschau"
 
+#: admin/partials/queue-detail.php
+msgid "Email Preview (with header & footer)"
+msgstr "E-Mail-Vorschau (mit Kopf- und Fußzeile)"
+
+#: admin/partials/compose-wizard.php
+msgid "Content Preview (with header & footer)"
+msgstr "Inhaltsvorschau (mit Kopf- und Fußzeile)"
+
+#: includes/Admin/class-admin-ajax.php
+msgid "No content to preview."
+msgstr "Kein Inhalt zum Anzeigen."
+
 #: includes/Admin/class-admin.php
 msgid "No subscribers selected."
 msgstr "Keine Abonnenten ausgewählt."
