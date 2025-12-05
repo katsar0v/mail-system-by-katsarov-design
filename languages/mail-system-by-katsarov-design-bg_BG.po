@@ -189,6 +189,10 @@ msgstr "Моля, попълнете всички задължителни по�
 msgid "Invalid recipient email address."
 msgstr "Невалиден имейл адрес на получателя."
 
+#: includes/Admin/class-admin-email.php
+msgid "Invalid Bcc email address: %s"
+msgstr "Невалиден имейл адрес за скрито копие: %s"
+
 #: admin/class-admin.php
 msgid "SMTP is not configured. Please set up SMTP in the plugin settings."
 msgstr "SMTP не е конфигуриран. Моля, настройте SMTP в настройките на плъгина."
@@ -412,6 +416,18 @@ msgstr "Налични плейсхолдери:"
 #: admin/partials/compose.php
 msgid "Scheduling"
 msgstr "Насрочване"
+
+#: admin/partials/compose-wizard.php
+msgid "Bcc (Optional)"
+msgstr "Скрито копие (по избор)"
+
+#: admin/partials/compose-wizard.php
+msgid "email1@example.com, email2@example.com"
+msgstr "email1@example.com, email2@example.com"
+
+#: admin/partials/compose-wizard.php
+msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this campaign. Bcc recipients are hidden from other recipients."
+msgstr "Въведете един или повече имейл адреси, разделени със запетая, за да получите скрито копие на тази кампания. Получателите на скрито копие са скрити от другите получатели."
 
 #: admin/partials/compose.php
 msgid "Send now"
