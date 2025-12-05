@@ -2348,6 +2348,54 @@ msgstr "Преглед"
 msgid "Button preview:"
 msgstr "Преглед на бутон:"
 
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Sender Email"
+msgstr "Имейл на подателя"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Use default sender"
+msgstr "Използвай подател по подразбиране"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Use custom sender"
+msgstr "Използвай персонализиран подател"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "From Email"
+msgstr "От имейл"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Email address that will appear as the sender of this campaign."
+msgstr "Имейл адресът, който ще се показва като подател на тази кампания."
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Email address that will appear as the sender of this email."
+msgstr "Имейл адресът, който ще се показва като подател на този имейл."
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "From Name"
+msgstr "От име"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Sender Name"
+msgstr "Име на подателя"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Display name for the sender (optional)."
+msgstr "Показвано име за подателя (по избор)."
+
+#: includes/Admin/class-admin-email.php
+msgid "Custom sender email is required when using custom sender option."
+msgstr "Персонализиран имейл на подателя е задължителен при използване на опцията за персонализиран подател."
+
+#: includes/Admin/class-admin-email.php
+msgid "Invalid custom sender email address."
+msgstr "Невалиден имейл адрес на персонализиран подател."
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Please enter a valid sender email address."
+msgstr "Моля, въведете валиден имейл адрес на подателя."
+
 #: admin/partials/settings.php
 msgid "Link preview:"
 msgstr "Преглед на линк:"

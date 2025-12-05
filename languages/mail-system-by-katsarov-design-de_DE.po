@@ -2375,6 +2375,54 @@ msgstr "Vorschau"
 msgid "Button preview:"
 msgstr "Schaltflächenvorschau:"
 
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Sender Email"
+msgstr "Absender-E-Mail"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Use default sender"
+msgstr "Standard-Absender verwenden"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Use custom sender"
+msgstr "Benutzerdefinierten Absender verwenden"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "From Email"
+msgstr "Von E-Mail"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Email address that will appear as the sender of this campaign."
+msgstr "E-Mail-Adresse, die als Absender dieser Kampagne angezeigt wird."
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Email address that will appear as the sender of this email."
+msgstr "E-Mail-Adresse, die als Absender dieser E-Mail angezeigt wird."
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "From Name"
+msgstr "Von Name"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Sender Name"
+msgstr "Absendername"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Display name for the sender (optional)."
+msgstr "Anzeigename für den Absender (optional)."
+
+#: includes/Admin/class-admin-email.php
+msgid "Custom sender email is required when using custom sender option."
+msgstr "Benutzerdefinierte Absender-E-Mail ist erforderlich bei Verwendung der benutzerdefinierten Absender-Option."
+
+#: includes/Admin/class-admin-email.php
+msgid "Invalid custom sender email address."
+msgstr "Ungültige benutzerdefinierte Absender-E-Mail-Adresse."
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Please enter a valid sender email address."
+msgstr "Bitte geben Sie eine gültige Absender-E-Mail-Adresse ein."
+
 #: admin/partials/settings.php
 msgid "Link preview:"
 msgstr "Linkvorschau:"
