@@ -193,6 +193,7 @@ class Admin_Email {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
 		$body     = wp_unslash( $_POST['body'] );
 		$list_ids = isset( $_POST['lists'] ) ? array_map( 'sanitize_text_field', $_POST['lists'] ) : array();
+		$bcc      = isset( $_POST['bcc'] ) ? sanitize_text_field( wp_unslash( $_POST['bcc'] ) ) : '';
 
 		if ( empty( $subject ) || empty( $body ) || empty( $list_ids ) ) {
 			add_settings_error(
@@ -202,6 +203,26 @@ class Admin_Email {
 				'error'
 			);
 			return;
+		}
+
+		// Validate Bcc email addresses if provided.
+		if ( ! empty( $bcc ) ) {
+			$bcc_emails = array_map( 'trim', explode( ',', $bcc ) );
+			foreach ( $bcc_emails as $bcc_email ) {
+				if ( ! empty( $bcc_email ) && ! is_email( $bcc_email ) ) {
+					add_settings_error(
+						'mskd_messages',
+						'mskd_error',
+						sprintf(
+							/* translators: %s: Invalid email address */
+							__( 'Invalid Bcc email address: %s', 'mail-system-by-katsarov-design' ),
+							esc_html( $bcc_email )
+						),
+						'error'
+					);
+					return;
+				}
+			}
 		}
 
 		// Get active subscribers from selected lists with full data.
@@ -241,6 +262,7 @@ class Admin_Email {
 				'list_ids'     => $list_ids,
 				'subscribers'  => $all_subscribers,
 				'scheduled_at' => $scheduled_at,
+				'bcc'          => $bcc,
 			)
 		);
 

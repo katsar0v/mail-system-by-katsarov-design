@@ -64,11 +64,13 @@ class MSKD_Cron_Handler {
 		$batch_size = $this->get_batch_size();
 
 		// Get pending emails - all subscribers are now in the subscribers table.
+		// Join with campaigns table to get Bcc information.
 		$queue_items = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT q.*, s.email, s.first_name, s.last_name, s.unsubscribe_token
+				"SELECT q.*, s.email, s.first_name, s.last_name, s.unsubscribe_token, c.bcc
 				FROM {$wpdb->prefix}mskd_queue q
 				INNER JOIN {$wpdb->prefix}mskd_subscribers s ON q.subscriber_id = s.id
+				LEFT JOIN {$wpdb->prefix}mskd_campaigns c ON q.campaign_id = c.id
 				WHERE q.status = 'pending' 
 				AND q.scheduled_at <= %s
 				AND s.status = 'active'
@@ -123,11 +125,23 @@ class MSKD_Cron_Handler {
 			$body    = $this->replace_placeholders( $body, $item );
 			$subject = $this->replace_placeholders( $item->subject, $item );
 
+			// Prepare headers for Bcc if available.
+			$headers = array();
+			if ( ! empty( $item->bcc ) ) {
+				// Parse multiple Bcc addresses separated by commas.
+				$bcc_emails = array_map( 'trim', explode( ',', $item->bcc ) );
+				foreach ( $bcc_emails as $bcc_email ) {
+					if ( ! empty( $bcc_email ) && is_email( $bcc_email ) ) {
+						$headers[] = 'Bcc: ' . $bcc_email;
+					}
+				}
+			}
+
 			// Send email using SMTP mailer.
 			$sent          = false;
 			$error_message = '';
 
-			$sent = $this->smtp_mailer->send( $item->email, $subject, $body );
+			$sent = $this->smtp_mailer->send( $item->email, $subject, $body, $headers );
 			if ( ! $sent ) {
 				$error_message = $this->smtp_mailer->get_last_error();
 			}
