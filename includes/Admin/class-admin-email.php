@@ -206,23 +206,15 @@ class Admin_Email {
 		}
 
 		// Validate Bcc email addresses if provided.
-		if ( ! empty( $bcc ) ) {
-			$bcc_emails = array_map( 'trim', explode( ',', $bcc ) );
-			foreach ( $bcc_emails as $bcc_email ) {
-				if ( ! empty( $bcc_email ) && ! is_email( $bcc_email ) ) {
-					add_settings_error(
-						'mskd_messages',
-						'mskd_error',
-						sprintf(
-							/* translators: %s: Invalid email address */
-							__( 'Invalid Bcc email address: %s', 'mail-system-by-katsarov-design' ),
-							esc_html( $bcc_email )
-						),
-						'error'
-					);
-					return;
-				}
-			}
+		$bcc_validation = $this->validate_bcc_emails( $bcc );
+		if ( true !== $bcc_validation ) {
+			add_settings_error(
+				'mskd_messages',
+				'mskd_error',
+				$bcc_validation,
+				'error'
+			);
+			return;
 		}
 
 		// Get active subscribers from selected lists with full data.
@@ -358,23 +350,15 @@ class Admin_Email {
 		}
 
 		// Validate Bcc email addresses if provided.
-		if ( ! empty( $bcc ) ) {
-			$bcc_emails = array_map( 'trim', explode( ',', $bcc ) );
-			foreach ( $bcc_emails as $bcc_email ) {
-				if ( ! empty( $bcc_email ) && ! is_email( $bcc_email ) ) {
-					add_settings_error(
-						'mskd_messages',
-						'mskd_error',
-						sprintf(
-							/* translators: %s: Invalid email address */
-							__( 'Invalid Bcc email address: %s', 'mail-system-by-katsarov-design' ),
-							esc_html( $bcc_email )
-						),
-						'error'
-					);
-					return;
-				}
-			}
+		$bcc_validation = $this->validate_bcc_emails( $bcc );
+		if ( true !== $bcc_validation ) {
+			add_settings_error(
+				'mskd_messages',
+				'mskd_error',
+				$bcc_validation,
+				'error'
+			);
+			return;
 		}
 
 		// Replace basic placeholders.
@@ -495,6 +479,31 @@ class Admin_Email {
 				);
 			}
 		}
+	}
+
+	/**
+	 * Validate Bcc email addresses.
+	 *
+	 * @param string $bcc Comma-separated Bcc email addresses.
+	 * @return bool|string True if valid, error message string if invalid.
+	 */
+	private function validate_bcc_emails( string $bcc ) {
+		if ( empty( $bcc ) ) {
+			return true;
+		}
+
+		$bcc_emails = array_map( 'trim', explode( ',', $bcc ) );
+		foreach ( $bcc_emails as $bcc_email ) {
+			if ( ! empty( $bcc_email ) && ! is_email( $bcc_email ) ) {
+				return sprintf(
+					/* translators: %s: Invalid email address */
+					__( 'Invalid Bcc email address: %s', 'mail-system-by-katsarov-design' ),
+					esc_html( $bcc_email )
+				);
+			}
+		}
+
+		return true;
 	}
 
 	/**
