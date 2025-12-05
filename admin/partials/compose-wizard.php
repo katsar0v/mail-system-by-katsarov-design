@@ -246,21 +246,21 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 					<form method="post" action="">
 						<?php wp_nonce_field( 'mskd_compose_wizard', 'mskd_wizard_nonce' ); ?>
 
-						<table class="form-table">
-							<tr>
-								<th scope="row">
+						<div class="mskd-form-fields">
+							<div class="mskd-form-row">
+								<div class="mskd-form-label">
 									<label for="subject"><?php esc_html_e( 'Subject', 'mail-system-by-katsarov-design' ); ?> *</label>
-								</th>
-								<td>
-									<input type="text" name="subject" id="subject" class="large-text" required 
+								</div>
+								<div class="mskd-form-field">
+									<input type="text" name="subject" id="subject" class="large-text" required
 											value="<?php echo esc_attr( $session_data['subject'] ); ?>">
-								</td>
-							</tr>
-							<tr>
-								<th scope="row">
+								</div>
+							</div>
+							<div class="mskd-form-row">
+								<div class="mskd-form-label">
 									<label for="body"><?php esc_html_e( 'Content', 'mail-system-by-katsarov-design' ); ?> *</label>
-								</th>
-								<td>
+								</div>
+								<div class="mskd-form-field">
 									<?php
 									wp_editor(
 										$session_data['content'],
@@ -278,9 +278,9 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 										<?php esc_html_e( 'Available placeholders:', 'mail-system-by-katsarov-design' ); ?>
 										<code>{first_name}</code>, <code>{last_name}</code>, <code>{email}</code>, <code>{unsubscribe_link}</code>
 									</p>
-								</td>
-							</tr>
-						</table>
+								</div>
+							</div>
+						</div>
 
 						<div class="mskd-wizard-actions">
 							<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&step=1' ) ); ?>" class="button">
@@ -323,24 +323,24 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 					<!-- Pass through content from session -->
 					<input type="hidden" name="wizard_mode" value="1">
 
-					<table class="form-table">
+					<div class="mskd-form-fields">
 						<!-- Subject (editable) -->
-						<tr>
-							<th scope="row">
+						<div class="mskd-form-row">
+							<div class="mskd-form-label">
 								<label for="subject"><?php esc_html_e( 'Subject', 'mail-system-by-katsarov-design' ); ?> *</label>
-							</th>
-							<td>
-								<input type="text" name="subject" id="subject" class="large-text" required 
+							</div>
+							<div class="mskd-form-field">
+								<input type="text" name="subject" id="subject" class="large-text" required
 										value="<?php echo esc_attr( $session_data['subject'] ); ?>">
-							</td>
-						</tr>
+							</div>
+						</div>
 						
 						<!-- Content preview -->
-						<tr>
-							<th scope="row">
+						<div class="mskd-form-row">
+							<div class="mskd-form-label">
 								<label><?php esc_html_e( 'Content', 'mail-system-by-katsarov-design' ); ?></label>
-							</th>
-							<td>
+							</div>
+							<div class="mskd-form-field">
 								<?php if ( ! empty( $session_data['content'] ) ) : ?>
 									<div class="mskd-content-preview">
 										<div class="mskd-content-preview-header">
@@ -352,8 +352,8 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 										</a>
 									</div>
 									<div class="mskd-content-preview-body">
-										<iframe 
-											class="mskd-email-preview-iframe" 
+										<iframe
+											class="mskd-email-preview-iframe"
 											data-content="<?php echo esc_attr( $session_data['content'] ); ?>"
 											style="width: 100%; height: 300px; border: 1px solid #ddd; border-radius: 4px; background: #fff;"
 											sandbox="allow-same-origin"
@@ -383,15 +383,15 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 										<?php esc_html_e( 'No content set. Please go back to Step 2 to add content.', 'mail-system-by-katsarov-design' ); ?>
 									</p>
 								<?php endif; ?>
-							</td>
-						</tr>
+							</div>
+						</div>
 
 						<!-- Recipients -->
-						<tr>
-							<th scope="row">
+						<div class="mskd-form-row">
+							<div class="mskd-form-label">
 								<label for="mskd-lists-select"><?php esc_html_e( 'Send to lists', 'mail-system-by-katsarov-design' ); ?> *</label>
-							</th>
-							<td>
+							</div>
+							<div class="mskd-form-field">
 								<?php if ( ! empty( $lists ) ) : ?>
 									<select name="lists[]" id="mskd-lists-select" class="mskd-slimselect-lists" multiple required>
 										<?php foreach ( $lists as $list ) : ?>
@@ -400,7 +400,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 											$is_external      = 'external' === $list->source;
 											$badge            = $is_external ? ' [' . __( 'Automated', 'mail-system-by-katsarov-design' ) . ']' : '';
 											?>
-											<option value="<?php echo esc_attr( $list->id ); ?>" 
+											<option value="<?php echo esc_attr( $list->id ); ?>"
 													data-subscribers="<?php echo esc_attr( $subscriber_count ); ?>"
 													data-external="<?php echo esc_attr( $is_external ? '1' : '0' ); ?>">
 												<?php echo esc_html( $list->name . $badge . ' (' . sprintf( __( '%d subscribers', 'mail-system-by-katsarov-design' ), $subscriber_count ) . ')' ); ?>
@@ -418,28 +418,28 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 										</a>
 									</p>
 								<?php endif; ?>
-							</td>
-						</tr>
+							</div>
+						</div>
 
 						<!-- Bcc -->
-						<tr>
-							<th scope="row">
+						<div class="mskd-form-row">
+							<div class="mskd-form-label">
 								<label for="bcc"><?php esc_html_e( 'Bcc (Optional)', 'mail-system-by-katsarov-design' ); ?></label>
-							</th>
-							<td>
+							</div>
+							<div class="mskd-form-field">
 								<input type="text" name="bcc" id="bcc" class="large-text" placeholder="<?php esc_attr_e( 'email1@example.com, email2@example.com', 'mail-system-by-katsarov-design' ); ?>">
 								<p class="description">
 									<?php esc_html_e( 'Enter one or more email addresses separated by commas to receive a blind carbon copy of this campaign. Bcc recipients are hidden from other recipients.', 'mail-system-by-katsarov-design' ); ?>
 								</p>
-							</td>
-						</tr>
+							</div>
+						</div>
 
 						<!-- Custom From Email -->
-						<tr>
-							<th scope="row">
+						<div class="mskd-form-row">
+							<div class="mskd-form-label">
 								<label for="use_custom_from"><?php esc_html_e( 'Sender Email', 'mail-system-by-katsarov-design' ); ?></label>
-							</th>
-							<td>
+							</div>
+							<div class="mskd-form-field">
 								<fieldset>
 									<label>
 										<input type="radio" name="use_custom_from" value="default" checked>
@@ -462,43 +462,41 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 									</label>
 								</fieldset>
 								
-								<div id="custom_from_fields" style="display: none; margin-top: 10px;">
-									<table class="widefat" style="width: auto;">
-										<tr>
-											<th style="width: 120px;">
-												<label for="from_email"><?php esc_html_e( 'From Email', 'mail-system-by-katsarov-design' ); ?> *</label>
-											</th>
-											<td>
-												<input type="email" name="from_email" id="from_email" class="regular-text"
-													   placeholder="<?php esc_attr_e( 'sender@example.com', 'mail-system-by-katsarov-design' ); ?>">
-												<p class="description">
-													<?php esc_html_e( 'Email address that will appear as the sender of this campaign.', 'mail-system-by-katsarov-design' ); ?>
-												</p>
-											</td>
-										</tr>
-										<tr>
-											<th>
-												<label for="from_name"><?php esc_html_e( 'From Name', 'mail-system-by-katsarov-design' ); ?></label>
-											</th>
-											<td>
-												<input type="text" name="from_name" id="from_name" class="regular-text"
-													   placeholder="<?php esc_attr_e( 'Sender Name', 'mail-system-by-katsarov-design' ); ?>">
-												<p class="description">
-													<?php esc_html_e( 'Display name for the sender (optional).', 'mail-system-by-katsarov-design' ); ?>
-												</p>
-											</td>
-										</tr>
-									</table>
+								<div id="custom_from_fields" class="mskd-custom-from-fields" style="display: none;">
+									<div class="mskd-nested-form-row">
+										<div class="mskd-nested-form-label">
+											<label for="from_email"><?php esc_html_e( 'From Email', 'mail-system-by-katsarov-design' ); ?> *</label>
+										</div>
+										<div class="mskd-nested-form-field">
+											<input type="email" name="from_email" id="from_email" class="regular-text"
+												   placeholder="<?php esc_attr_e( 'sender@example.com', 'mail-system-by-katsarov-design' ); ?>">
+											<p class="description">
+												<?php esc_html_e( 'Email address that will appear as the sender of this campaign.', 'mail-system-by-katsarov-design' ); ?>
+											</p>
+										</div>
+									</div>
+									<div class="mskd-nested-form-row">
+										<div class="mskd-nested-form-label">
+											<label for="from_name"><?php esc_html_e( 'From Name', 'mail-system-by-katsarov-design' ); ?></label>
+										</div>
+										<div class="mskd-nested-form-field">
+											<input type="text" name="from_name" id="from_name" class="regular-text"
+												   placeholder="<?php esc_attr_e( 'Sender Name', 'mail-system-by-katsarov-design' ); ?>">
+											<p class="description">
+												<?php esc_html_e( 'Display name for the sender (optional).', 'mail-system-by-katsarov-design' ); ?>
+											</p>
+										</div>
+									</div>
 								</div>
-							</td>
-						</tr>
+							</div>
+						</div>
 
 						<!-- Scheduling -->
-						<tr>
-							<th scope="row">
+						<div class="mskd-form-row">
+							<div class="mskd-form-label">
 								<label for="schedule_type"><?php esc_html_e( 'Scheduling', 'mail-system-by-katsarov-design' ); ?></label>
-							</th>
-							<td>
+							</div>
+							<div class="mskd-form-field">
 								<select name="schedule_type" id="schedule_type" class="mskd-schedule-type">
 									<option value="now"><?php esc_html_e( 'Send now', 'mail-system-by-katsarov-design' ); ?></option>
 									<option value="absolute"><?php esc_html_e( 'Specific date and time', 'mail-system-by-katsarov-design' ); ?></option>
@@ -506,9 +504,9 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 								</select>
 								
 								<div class="mskd-schedule-absolute" style="display: none; margin-top: 10px;">
-									<input type="datetime-local" 
-											name="scheduled_datetime" 
-											id="scheduled_datetime" 
+									<input type="datetime-local"
+											name="scheduled_datetime"
+											id="scheduled_datetime"
 											class="mskd-datetime-picker"
 											value="<?php echo esc_attr( $min_datetime ); ?>"
 											min="<?php echo esc_attr( $min_datetime ); ?>"
@@ -524,12 +522,12 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 								</div>
 								
 								<div class="mskd-schedule-relative" style="display: none; margin-top: 10px;">
-									<input type="number" 
-											name="delay_value" 
-											id="delay_value" 
-											class="small-text" 
-											value="1" 
-											min="1" 
+									<input type="number"
+											name="delay_value"
+											id="delay_value"
+											class="small-text"
+											value="1"
+											min="1"
 											max="999">
 									<select name="delay_unit" id="delay_unit">
 										<option value="minutes"><?php esc_html_e( 'minutes', 'mail-system-by-katsarov-design' ); ?></option>
@@ -538,9 +536,9 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 									</select>
 									<p class="description"><?php esc_html_e( 'Emails will be sent after the specified time.', 'mail-system-by-katsarov-design' ); ?></p>
 								</div>
-							</td>
-						</tr>
-					</table>
+							</div>
+						</div>
+					</div>
 
 					<div class="mskd-wizard-actions">
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-compose&step=2' ) ); ?>" class="button">
@@ -946,30 +944,114 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 	line-height: 1.6;
 }
 
-/* Custom From Fields */
-#custom_from_fields {
+/* Div-based Form Fields */
+.mskd-form-fields {
+	margin-top: 16px;
+}
+
+.mskd-form-row {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 16px 0;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.mskd-form-row:last-child {
+	border-bottom: none;
+}
+
+.mskd-form-label {
+	flex: 0 0 200px;
+	padding-right: 20px;
+	padding-top: 8px;
+}
+
+.mskd-form-label label {
+	font-weight: 600;
+	color: #1d2327;
+	font-size: 14px;
+}
+
+.mskd-form-field {
+	flex: 1;
+	min-width: 0;
+}
+
+.mskd-form-field .description {
+	margin-top: 8px;
+	color: #646970;
+	font-size: 13px;
+}
+
+/* Custom From Fields (nested div form) */
+.mskd-custom-from-fields {
 	background: #f8f9fa;
 	border: 1px solid #c3c4c7;
 	border-radius: 4px;
-	padding: 15px;
-	margin-top: 10px;
+	padding: 16px;
+	margin-top: 12px;
 }
 
-#custom_from_fields table {
-	margin: 0;
+.mskd-nested-form-row {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 12px 0;
+	border-bottom: 1px solid #e9ecef;
 }
 
-#custom_from_fields th {
+.mskd-nested-form-row:first-child {
+	padding-top: 0;
+}
+
+.mskd-nested-form-row:last-child {
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+.mskd-nested-form-label {
+	flex: 0 0 120px;
+	padding-right: 16px;
+	padding-top: 6px;
+}
+
+.mskd-nested-form-label label {
 	font-weight: 600;
 	color: #1d2327;
+	font-size: 13px;
 }
 
-#custom_from_fields .description {
+.mskd-nested-form-field {
+	flex: 1;
+	min-width: 0;
+}
+
+.mskd-nested-form-field .description {
+	margin-top: 6px;
 	font-style: italic;
-	color: #50575e;
+	color: #646970;
+	font-size: 12px;
 }
 
 @media screen and (max-width: 782px) {
+	.mskd-form-row {
+		flex-direction: column;
+	}
+	
+	.mskd-form-label {
+		flex: none;
+		padding-right: 0;
+		padding-bottom: 8px;
+	}
+	
+	.mskd-nested-form-row {
+		flex-direction: column;
+	}
+	
+	.mskd-nested-form-label {
+		flex: none;
+		padding-right: 0;
+		padding-bottom: 6px;
+	}
 	.mskd-wizard-steps {
 		flex-wrap: wrap;
 		gap: 12px;
