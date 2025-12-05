@@ -161,8 +161,15 @@ class MSKD_Public {
 			);
 		}
 
-		// Rate limiting: check transient for this IP
-		$ip_hash        = md5( $_SERVER['REMOTE_ADDR'] ?? 'unknown' );
+		// Rate limiting: check transient for this IP.
+		if ( ! isset( $_SERVER['REMOTE_ADDR'] ) ) {
+			wp_die(
+				__( 'Unable to verify request.', 'mail-system-by-katsarov-design' ),
+				__( 'Error', 'mail-system-by-katsarov-design' ),
+				array( 'response' => 400 )
+			);
+		}
+		$ip_hash        = md5( sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) );
 		$rate_limit_key = 'mskd_unsubscribe_' . $ip_hash;
 		$attempts       = get_transient( $rate_limit_key );
 
