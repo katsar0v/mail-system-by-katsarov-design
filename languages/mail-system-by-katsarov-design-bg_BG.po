@@ -429,6 +429,10 @@ msgstr "email1@example.com, email2@example.com"
 msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this campaign. Bcc recipients are hidden from other recipients."
 msgstr "Въведете един или повече имейл адреси, разделени със запетая, за да получите скрито копие на тази кампания. Получателите на скрито копие са скрити от другите получатели."
 
+#: admin/partials/one-time-email.php
+msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this email. Bcc recipients are hidden from the main recipient."
+msgstr "Въведете един или повече имейл адреси, разделени със запетая, за да получите скрито копие на този имейл. Получателите на скрито копие са скрити от основния получател."
+
 #: admin/partials/compose.php
 msgid "Send now"
 msgstr "Изпрати сега"

@@ -328,13 +328,19 @@ class MSKD_SMTP_Mailer {
 
 				// Handle Bcc specially using PHPMailer's addBCC method.
 				if ( 'bcc' === strtolower( $name ) ) {
-					$phpmailer->addBCC( $value );
+					// Validate email address before adding.
+					if ( is_email( $value ) ) {
+						$phpmailer->addBCC( $value );
+					}
 					continue;
 				}
 
 				// Handle Cc specially using PHPMailer's addCC method.
 				if ( 'cc' === strtolower( $name ) ) {
-					$phpmailer->addCC( $value );
+					// Validate email address before adding.
+					if ( is_email( $value ) ) {
+						$phpmailer->addCC( $value );
+					}
 					continue;
 				}
 

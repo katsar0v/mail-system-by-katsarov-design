@@ -424,6 +424,10 @@ msgstr ""
 msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this campaign. Bcc recipients are hidden from other recipients."
 msgstr ""
 
+#: admin/partials/one-time-email.php
+msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this email. Bcc recipients are hidden from the main recipient."
+msgstr ""
+
 #: admin/partials/compose.php
 msgid "Send now"
 msgstr ""

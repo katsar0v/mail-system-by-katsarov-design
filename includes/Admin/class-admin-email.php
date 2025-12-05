@@ -320,6 +320,7 @@ class Admin_Email {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
 		$body            = wp_unslash( $_POST['body'] );
 		$schedule_type   = isset( $_POST['schedule_type'] ) ? sanitize_text_field( $_POST['schedule_type'] ) : 'now';
+		$bcc             = isset( $_POST['bcc'] ) ? sanitize_text_field( wp_unslash( $_POST['bcc'] ) ) : '';
 
 		// Store form data for preservation on error.
 		$this->one_time_email_form_data = array(
@@ -331,6 +332,7 @@ class Admin_Email {
 			'scheduled_datetime' => isset( $_POST['scheduled_datetime'] ) ? sanitize_text_field( $_POST['scheduled_datetime'] ) : '',
 			'delay_value'        => isset( $_POST['delay_value'] ) ? intval( $_POST['delay_value'] ) : 1,
 			'delay_unit'         => isset( $_POST['delay_unit'] ) ? sanitize_text_field( $_POST['delay_unit'] ) : 'hours',
+			'bcc'                => $bcc,
 		);
 
 		// Validate required fields.
@@ -353,6 +355,26 @@ class Admin_Email {
 				'error'
 			);
 			return;
+		}
+
+		// Validate Bcc email addresses if provided.
+		if ( ! empty( $bcc ) ) {
+			$bcc_emails = array_map( 'trim', explode( ',', $bcc ) );
+			foreach ( $bcc_emails as $bcc_email ) {
+				if ( ! empty( $bcc_email ) && ! is_email( $bcc_email ) ) {
+					add_settings_error(
+						'mskd_messages',
+						'mskd_error',
+						sprintf(
+							/* translators: %s: Invalid email address */
+							__( 'Invalid Bcc email address: %s', 'mail-system-by-katsarov-design' ),
+							esc_html( $bcc_email )
+						),
+						'error'
+					);
+					return;
+				}
+			}
 		}
 
 		// Replace basic placeholders.
@@ -403,6 +425,7 @@ class Admin_Email {
 					'is_immediate'    => true,
 					'sent'            => $sent,
 					'error_message'   => $sent ? null : ( $this->last_mail_error ?: __( 'wp_mail() failed for one-time email', 'mail-system-by-katsarov-design' ) ),
+					'bcc'             => $bcc,
 				)
 			);
 
@@ -440,6 +463,7 @@ class Admin_Email {
 					'body'            => $body,
 					'scheduled_at'    => $scheduled_at,
 					'is_immediate'    => false,
+					'bcc'             => $bcc,
 				)
 			);
 
