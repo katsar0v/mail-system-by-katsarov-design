@@ -8,18 +8,18 @@
  * @package MSKD
  */
 
-// If uninstall not called from WordPress, exit
+// If uninstall not called from WordPress, exit.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
 global $wpdb;
 
-// Delete plugin options
+// Delete plugin options.
 delete_option( 'mskd_settings' );
 delete_option( 'mskd_db_version' );
 
-// Drop custom tables
+// Drop custom tables.
 $tables = array(
 	$wpdb->prefix . 'mskd_subscriber_list',
 	$wpdb->prefix . 'mskd_queue',
@@ -28,8 +28,9 @@ $tables = array(
 );
 
 foreach ( $tables as $table ) {
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Table cleanup during uninstall, no caching needed.
 	$wpdb->query( "DROP TABLE IF EXISTS $table" );
 }
 
-// Clear scheduled cron events
+// Clear scheduled cron events.
 wp_clear_scheduled_hook( 'mskd_process_queue' );

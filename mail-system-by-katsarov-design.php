@@ -88,11 +88,11 @@ spl_autoload_register(
 
 			// Possible file locations for legacy classes.
 			$locations = array(
-				MSKD_PLUGIN_DIR . 'includes/class-' . $class_name . '.php',
-				MSKD_PLUGIN_DIR . 'includes/models/class-' . $class_name . '.php',
-				MSKD_PLUGIN_DIR . 'includes/services/class-' . $class_name . '.php',
+				MSKD_PLUGIN_DIR . 'includes/class-mskd-' . $class_name . '.php',
+				MSKD_PLUGIN_DIR . 'includes/models/class-mskd-' . $class_name . '.php',
+				MSKD_PLUGIN_DIR . 'includes/services/class-mskd-' . $class_name . '.php',
 				MSKD_PLUGIN_DIR . 'admin/class-' . $class_name . '.php',
-				MSKD_PLUGIN_DIR . 'public/class-' . $class_name . '.php',
+				MSKD_PLUGIN_DIR . 'public/class-mskd-' . $class_name . '.php',
 			);
 
 			foreach ( $locations as $file ) {
@@ -160,7 +160,7 @@ function mskd_init() {
 	}
 
 	// Initialize public.
-	require_once MSKD_PLUGIN_DIR . 'public/class-public.php';
+	require_once MSKD_PLUGIN_DIR . 'public/class-mskd-public.php';
 	$public = new MSKD_Public();
 	$public->init();
 

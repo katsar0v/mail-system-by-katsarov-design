@@ -86,7 +86,7 @@ class MSKD_Cron_Handler {
 			return;
 		}
 
-		// Get settings
+		// Get settings.
 		$settings = get_option( 'mskd_settings', array() );
 
 		// Initialize mailer (uses SMTP if configured, otherwise PHP mail).
@@ -109,7 +109,7 @@ class MSKD_Cron_Handler {
 				continue;
 			}
 
-			// Mark as processing
+			// Mark as processing.
 			$wpdb->update(
 				$wpdb->prefix . 'mskd_queue',
 				array(
@@ -170,7 +170,7 @@ class MSKD_Cron_Handler {
 			}
 
 			if ( $sent ) {
-				// Mark as sent
+				// Mark as sent.
 				$wpdb->update(
 					$wpdb->prefix . 'mskd_queue',
 					array(
@@ -205,14 +205,14 @@ class MSKD_Cron_Handler {
 					);
 				}
 			} else {
-				// Check if we should retry or mark as failed
+				// Check if we should retry or mark as failed.
 				$new_attempts = $item->attempts + 1;
 
 				// Build error message with details.
 				$base_error = __( 'SMTP sending failed', 'mail-system-by-katsarov-design' );
 
 				if ( $new_attempts < self::MAX_ATTEMPTS ) {
-					// Schedule for retry - set back to pending with delayed schedule
+					// Schedule for retry - set back to pending with delayed schedule.
 					$retry_delay   = $new_attempts * 2; // 2, 4 minutes delay
 					$retry_message = sprintf(
 						/* translators: 1: Attempt number, 2: Error details */
@@ -220,7 +220,7 @@ class MSKD_Cron_Handler {
 						$new_attempts,
 						$error_message ? '(' . $error_message . ')' : ''
 					);
-					// Normalize to 00 seconds
+					// Normalize to 00 seconds.
 					$retry_timestamp = mskd_normalize_timestamp( strtotime( "+{$retry_delay} minutes" ) );
 					$wpdb->update(
 						$wpdb->prefix . 'mskd_queue',
@@ -234,7 +234,7 @@ class MSKD_Cron_Handler {
 						array( '%d' )
 					);
 				} else {
-					// Max attempts reached, mark as failed
+					// Max attempts reached, mark as failed.
 					$fail_message = sprintf(
 						/* translators: 1: Base error message, 2: Max attempts, 3: Error details */
 						__( '%1$s after %2$d attempts. %3$s', 'mail-system-by-katsarov-design' ),
@@ -323,11 +323,11 @@ class MSKD_Cron_Handler {
 	private function recover_stuck_emails() {
 		global $wpdb;
 
-		// Normalize to 00 seconds
+		// Normalize to 00 seconds.
 		$timeout_timestamp = mskd_normalize_timestamp( strtotime( '-' . self::PROCESSING_TIMEOUT_MINUTES . ' minutes' ) );
 		$timeout_threshold = date( 'Y-m-d H:i:s', $timeout_timestamp );
 
-		// Find emails stuck in processing status
+		// Find emails stuck in processing status.
 		$stuck_items = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT id, attempts FROM {$wpdb->prefix}mskd_queue 
@@ -339,7 +339,7 @@ class MSKD_Cron_Handler {
 
 		foreach ( $stuck_items as $item ) {
 			if ( $item->attempts < self::MAX_ATTEMPTS ) {
-				// Reset to pending for retry
+				// Reset to pending for retry.
 				$wpdb->update(
 					$wpdb->prefix . 'mskd_queue',
 					array(
@@ -352,7 +352,7 @@ class MSKD_Cron_Handler {
 					array( '%d' )
 				);
 			} else {
-				// Max attempts reached, mark as failed
+				// Max attempts reached, mark as failed.
 				$wpdb->update(
 					$wpdb->prefix . 'mskd_queue',
 					array(

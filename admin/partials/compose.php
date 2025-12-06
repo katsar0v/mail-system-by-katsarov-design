@@ -47,7 +47,7 @@ if ( isset( $_GET['template_id'] ) ) {
 	}
 }
 
-// Get minimum datetime for picker (now + 10 minutes, rounded to nearest 10 min)
+// Get minimum datetime for picker (now + 10 minutes, rounded to nearest 10 min).
 $wp_timezone     = wp_timezone();
 $now             = new DateTime( 'now', $wp_timezone );
 $minutes         = (int) $now->format( 'i' );

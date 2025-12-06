@@ -11,33 +11,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wpdb;
 
-// Check if viewing a specific campaign detail
+// Check if viewing a specific campaign detail.
 $action      = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : '';
 $campaign_id = isset( $_GET['campaign_id'] ) ? intval( $_GET['campaign_id'] ) : 0;
 $view        = isset( $_GET['view'] ) ? sanitize_text_field( $_GET['view'] ) : '';
 
-// If viewing campaign details, include the detail partial
+// If viewing campaign details, include the detail partial.
 if ( $action === 'view' && $campaign_id > 0 ) {
 	include MSKD_PLUGIN_DIR . 'admin/partials/queue-detail.php';
 	return;
 }
 
-// If viewing legacy emails (without campaign_id)
+// If viewing legacy emails (without campaign_id).
 if ( $view === 'legacy' ) {
 	include MSKD_PLUGIN_DIR . 'admin/partials/queue-legacy.php';
 	return;
 }
 
-// Pagination
+// Pagination.
 $per_page     = 20;
 $current_page = isset( $_GET['paged'] ) ? max( 1, intval( $_GET['paged'] ) ) : 1;
 $offset       = ( $current_page - 1 ) * $per_page;
 
-// Filter by status or type
+// Filter by status or type.
 $status_filter = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '';
 $type_filter   = isset( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : '';
 
-// Build WHERE clause for campaigns
+// Build WHERE clause for campaigns.
 $where = ' WHERE 1=1';
 if ( $status_filter ) {
 	$where .= $wpdb->prepare( ' AND c.status = %s', $status_filter );
@@ -50,7 +50,7 @@ if ( $type_filter === 'one-time' ) {
 	$where .= $wpdb->prepare( " AND c.status = 'pending' AND c.scheduled_at > %s", current_time( 'mysql' ) );
 }
 
-// Get campaign counts
+// Get campaign counts.
 $campaign_counts  = $wpdb->get_row(
 	$wpdb->prepare(
 		"SELECT 
@@ -75,11 +75,11 @@ $one_time_count   = $campaign_counts->one_time ?? 0;
 $campaign_count   = $campaign_counts->campaigns ?? 0;
 $scheduled_count  = $campaign_counts->scheduled ?? 0;
 
-// Get total count for current filter
+// Get total count for current filter.
 $total_items = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_campaigns c" . $where );
 $total_pages = ceil( $total_items / $per_page );
 
-// Get campaigns with aggregated queue stats
+// Get campaigns with aggregated queue stats.
 $campaigns = $wpdb->get_results(
 	$wpdb->prepare(
 		"SELECT 
@@ -109,15 +109,15 @@ $campaigns = $wpdb->get_results(
 	)
 );
 
-// Also check for orphan queue items (without campaign_id) for backwards compatibility
+// Also check for orphan queue items (without campaign_id) for backwards compatibility.
 $orphan_count = $wpdb->get_var(
 	"SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue WHERE campaign_id IS NULL"
 );
 
-// Next cron run
+// Next cron run.
 $next_cron = wp_next_scheduled( 'mskd_process_queue' );
 
-// Get configured emails per minute from settings
+// Get configured emails per minute from settings.
 $settings          = get_option( 'mskd_settings', array() );
 $emails_per_minute = isset( $settings['emails_per_minute'] ) ? absint( $settings['emails_per_minute'] ) : MSKD_BATCH_SIZE;
 ?>
