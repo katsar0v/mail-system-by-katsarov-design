@@ -398,12 +398,15 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 											<?php
 											$subscriber_count = MSKD_List_Provider::get_list_active_subscriber_count( $list );
 											$is_external      = 'external' === $list->source;
-											$badge            = $is_external ? ' [' . __( 'Automated', 'mail-system-by-katsarov-design' ) . ']' : '';
+											$badge            = $is_external ? ' [' . esc_html__( 'Automated', 'mail-system-by-katsarov-design' ) . ']' : '';
 											?>
 											<option value="<?php echo esc_attr( $list->id ); ?>"
 													data-subscribers="<?php echo esc_attr( $subscriber_count ); ?>"
 													data-external="<?php echo esc_attr( $is_external ? '1' : '0' ); ?>">
-												<?php echo esc_html( $list->name . $badge . ' (' . sprintf( __( '%d subscribers', 'mail-system-by-katsarov-design' ), $subscriber_count ) . ')' ); ?>
+												<?php
+												/* translators: %d: subscriber count */
+												echo esc_html( $list->name . $badge . ' (' . sprintf( esc_html__( '%d subscribers', 'mail-system-by-katsarov-design' ), $subscriber_count ) . ')' );
+												?>
 											</option>
 										<?php endforeach; ?>
 									</select>
@@ -449,6 +452,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 											$default_from  = get_option( 'mskd_settings', array() );
 											$default_email = ! empty( $default_from['from_email'] ) ? $default_from['from_email'] : get_bloginfo( 'admin_email' );
 											printf(
+												/* translators: %s: default email address */
 												esc_html__( '(%s)', 'mail-system-by-katsarov-design' ),
 												esc_html( $default_email )
 											);
@@ -513,6 +517,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 											step="600">
 									<p class="description">
 										<?php
+										/* translators: %s: timezone string */
 										printf(
 											esc_html__( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ),
 											'<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
