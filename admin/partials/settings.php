@@ -28,6 +28,7 @@ $smtp_port     = isset( $settings['smtp_port'] ) ? $settings['smtp_port'] : '587
 $smtp_security = isset( $settings['smtp_security'] ) ? $settings['smtp_security'] : 'tls';
 $smtp_auth     = isset( $settings['smtp_auth'] ) ? (bool) $settings['smtp_auth'] : true;
 $smtp_username = isset( $settings['smtp_username'] ) ? $settings['smtp_username'] : '';
+// phpcs:ignore WordPress.PHP.DiscouragedFunctions.base64_decode -- Used for SMTP password obfuscation, not for code obfuscation.
 $smtp_password = isset( $settings['smtp_password'] ) ? base64_decode( $settings['smtp_password'] ) : '';
 
 // Styling settings.

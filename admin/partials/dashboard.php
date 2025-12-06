@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wpdb;
 
-// Get subscriber statistics in a single query
+// Get subscriber statistics in a single query.
 $subscriber_stats     = $wpdb->get_row(
 	"SELECT 
         COUNT(*) as total,
@@ -25,10 +25,10 @@ $active_subscribers   = $subscriber_stats->active ?? 0;
 $inactive_subscribers = $subscriber_stats->inactive ?? 0;
 $unsubscribed         = $subscriber_stats->unsubscribed ?? 0;
 
-// Get list count
+// Get list count.
 $total_lists = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_lists" );
 
-// Get queue statistics in a single query
+// Get queue statistics in a single query.
 $queue_stats     = $wpdb->get_row(
 	$wpdb->prepare(
 		"SELECT 
@@ -45,10 +45,10 @@ $sent_emails     = $queue_stats->sent ?? 0;
 $failed_emails   = $queue_stats->failed ?? 0;
 $one_time_emails = $queue_stats->one_time ?? 0;
 
-// Get next cron run
+// Get next cron run.
 $next_cron = wp_next_scheduled( 'mskd_process_queue' );
 
-// Get configured emails per minute from settings
+// Get configured emails per minute from settings.
 $settings          = get_option( 'mskd_settings', array() );
 $emails_per_minute = isset( $settings['emails_per_minute'] ) ? absint( $settings['emails_per_minute'] ) : MSKD_BATCH_SIZE;
 ?>

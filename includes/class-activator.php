@@ -29,10 +29,10 @@ class MSKD_Activator {
 		self::schedule_cron();
 		self::set_default_options();
 
-		// Store database version
+		// Store database version.
 		update_option( 'mskd_db_version', self::DB_VERSION );
 
-		// Flush rewrite rules
+		// Flush rewrite rules.
 		flush_rewrite_rules();
 	}
 
@@ -173,7 +173,7 @@ class MSKD_Activator {
 		if ( version_compare( $from_version, '1.6.0', '<' ) ) {
 			$table_campaigns = $wpdb->prefix . 'mskd_campaigns';
 
-			// Check if from_email column exists
+			// Check if from_email column exists.
 			$from_email_exists = $wpdb->get_results(
 				$wpdb->prepare(
 					"SHOW COLUMNS FROM {$table_campaigns} LIKE %s",
@@ -204,7 +204,7 @@ class MSKD_Activator {
 
 		$charset_collate = $wpdb->get_charset_collate();
 
-		// Subscribers table
+		// Subscribers table.
 		$table_subscribers = $wpdb->prefix . 'mskd_subscribers';
 		$sql_subscribers   = "CREATE TABLE $table_subscribers (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -225,7 +225,7 @@ class MSKD_Activator {
             KEY opt_in_token (opt_in_token)
         ) $charset_collate;";
 
-		// Lists table
+		// Lists table.
 		$table_lists = $wpdb->prefix . 'mskd_lists';
 		$sql_lists   = "CREATE TABLE $table_lists (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -235,7 +235,7 @@ class MSKD_Activator {
             PRIMARY KEY (id)
         ) $charset_collate;";
 
-		// Subscriber-List pivot table
+		// Subscriber-List pivot table.
 		$table_subscriber_list = $wpdb->prefix . 'mskd_subscriber_list';
 		$sql_subscriber_list   = "CREATE TABLE $table_subscriber_list (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -248,7 +248,7 @@ class MSKD_Activator {
             KEY list_id (list_id)
         ) $charset_collate;";
 
-		// Campaigns table (groups emails by send operation)
+		// Campaigns table (groups emails by send operation).
 		$table_campaigns = $wpdb->prefix . 'mskd_campaigns';
 		$sql_campaigns   = "CREATE TABLE $table_campaigns (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -267,7 +267,7 @@ class MSKD_Activator {
             KEY type (type)
         ) $charset_collate;";
 
-		// Queue table
+		// Queue table.
 		$table_queue = $wpdb->prefix . 'mskd_queue';
 		$sql_queue   = "CREATE TABLE $table_queue (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -289,7 +289,7 @@ class MSKD_Activator {
             KEY scheduled_at (scheduled_at)
         ) $charset_collate;";
 
-		// Templates table
+		// Templates table.
 		$table_templates = $wpdb->prefix . 'mskd_templates';
 		$sql_templates   = "CREATE TABLE $table_templates (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -493,7 +493,7 @@ class MSKD_Activator {
 	 */
 	private static function schedule_cron() {
 		if ( ! wp_next_scheduled( 'mskd_process_queue' ) ) {
-			// Schedule at the start of the next minute (00 seconds)
+			// Schedule at the start of the next minute (00 seconds).
 			$next_minute = mskd_normalize_timestamp( time() + 60 );
 			wp_schedule_event( $next_minute, 'mskd_every_minute', 'mskd_process_queue' );
 		}
