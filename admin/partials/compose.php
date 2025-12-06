@@ -41,7 +41,7 @@ $prefilled_subject = '';
 $prefilled_content = '';
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce not needed, this is view state from URL, not form submission.
 if ( isset( $_GET['template_id'] ) ) {
-	$template_service  = new Template_Service();
+	$template_service = new Template_Service();
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce not needed, this is view state from URL, not form submission.
 	$selected_template = $template_service->get_by_id( intval( $_GET['template_id'] ) );
 	if ( $selected_template ) {
@@ -104,7 +104,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 									$is_external      = 'external' === $list->source;
 									$is_preselected   = in_array( $list->id, $preselected_list_ids, true );
 									/* translators: %d: number of subscribers in the list */
-									$badge            = $is_external ? ' [' . __( 'Automated', 'mail-system-by-katsarov-design' ) . ']' : '';
+									$badge = $is_external ? ' [' . __( 'Automated', 'mail-system-by-katsarov-design' ) . ']' : '';
 									?>
 									<option value="<?php echo esc_attr( $list->id ); ?>" 
 											data-subscribers="<?php echo esc_attr( $subscriber_count ); ?>"

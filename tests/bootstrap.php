@@ -66,20 +66,20 @@ spl_autoload_register(
 $phpmailer_dir = '/tmp/wordpress/wp-includes/PHPMailer';
 if ( ! is_dir( $phpmailer_dir ) ) {
 // phpcs:ignore WordPress.WP.AlternativeFunctions.mkdir_mkdir -- Required for test setup.
-mkdir( $phpmailer_dir, 0777, true );
+	mkdir( $phpmailer_dir, 0777, true );
 }
 
 // Create mock directory for wp-admin/includes.
 $wp_admin_includes_dir = '/tmp/wordpress/wp-admin/includes';
 if ( ! is_dir( $wp_admin_includes_dir ) ) {
 // phpcs:ignore WordPress.WP.AlternativeFunctions.mkdir_mkdir -- Required for test setup.
-mkdir( $wp_admin_includes_dir, 0777, true );
+	mkdir( $wp_admin_includes_dir, 0777, true );
 }
 
 // Create mock upgrade.php with dbDelta function stub.
 if ( ! file_exists( $wp_admin_includes_dir . '/upgrade.php' ) ) {
 // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Required for test setup.
-file_put_contents(
+	file_put_contents(
 		$wp_admin_includes_dir . '/upgrade.php',
 		'<?php
 // Mock upgrade.php for testing
@@ -95,7 +95,7 @@ if ( ! function_exists( "dbDelta" ) ) {
 // Create mock PHPMailer classes for testing.
 if ( ! file_exists( $phpmailer_dir . '/PHPMailer.php' ) ) {
 // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Required for test setup.
-file_put_contents(
+	file_put_contents(
 		$phpmailer_dir . '/PHPMailer.php',
 		'<?php
 namespace PHPMailer\PHPMailer;
@@ -122,7 +122,7 @@ class PHPMailer {
 
 if ( ! file_exists( $phpmailer_dir . '/SMTP.php' ) ) {
 // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Required for test setup.
-file_put_contents(
+	file_put_contents(
 		$phpmailer_dir . '/SMTP.php',
 		'<?php
 namespace PHPMailer\PHPMailer;
