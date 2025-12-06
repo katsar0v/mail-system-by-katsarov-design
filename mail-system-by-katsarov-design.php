@@ -12,9 +12,11 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       mail-system-by-katsarov-design
  * Domain Path:       /languages
+ *
+ * @package Mail_System_by_Katsarov_Design
  */
 
-// Prevent direct access
+// Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -26,7 +28,7 @@ define( 'MSKD_VERSION', '1.1.0' );
 define( 'MSKD_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MSKD_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'MSKD_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( 'MSKD_BATCH_SIZE', 10 ); // Number of emails to send per minute
+define( 'MSKD_BATCH_SIZE', 10 ); // Number of emails to send per minute.
 
 /**
  * Plugin autoloader.
@@ -43,19 +45,19 @@ define( 'MSKD_BATCH_SIZE', 10 ); // Number of emails to send per minute
  * - MSKD\Services\* (PSR-4): MSKD\Services\List_Service, etc.
  */
 spl_autoload_register(
-	function ( $class ) {
-		// Handle PSR-4 namespaced classes (MSKD\*)
-		if ( strpos( $class, 'MSKD\\' ) === 0 ) {
+	function ( $class_name ) {
+		// Handle PSR-4 namespaced classes (MSKD\*).
+		if ( strpos( $class_name, 'MSKD\\' ) === 0 ) {
 				// Skip test classes - they require Composer autoloader (dev only).
-			if ( strpos( $class, 'MSKD\\Tests\\' ) === 0 ) {
+			if ( strpos( $class_name, 'MSKD\\Tests\\' ) === 0 ) {
 				return;
 			}
 
 			// Convert namespace to file path.
-			// MSKD\Admin\Admin_Email -> includes/Admin/class-admin-email.php
-			// MSKD\Services\List_Service -> includes/Services/class-list-service.php
-			// MSKD\Traits\Email_Header_Footer -> includes/traits/trait-email-header-footer.php
-			$relative_class = substr( $class, 5 ); // Remove 'MSKD\' prefix.
+			// MSKD\Admin\Admin_Email -> includes/Admin/class-admin-email.php.
+			// MSKD\Services\List_Service -> includes/Services/class-list-service.php.
+			// MSKD\Traits\Email_Header_Footer -> includes/traits/trait-email-header-footer.php.
+			$relative_class = substr( $class_name, 5 ); // Remove 'MSKD\' prefix.
 			$parts          = explode( '\\', $relative_class );
 
 			// Get class name (last part) and namespace parts.
@@ -79,9 +81,9 @@ spl_autoload_register(
 		}
 
 		// Handle legacy MSKD_ prefixed classes.
-		if ( strpos( $class, 'MSKD_' ) === 0 ) {
+		if ( strpos( $class_name, 'MSKD_' ) === 0 ) {
 			// Convert class name to file path.
-			$class_name = str_replace( 'MSKD_', '', $class );
+			$class_name = str_replace( 'MSKD_', '', $class_name );
 			$class_name = strtolower( str_replace( '_', '-', $class_name ) );
 
 			// Possible file locations for legacy classes.
@@ -143,26 +145,26 @@ add_action( 'init', 'mskd_load_textdomain' );
  * Initialize the plugin
  */
 function mskd_init() {
-	// Load required files
+	// Load required files.
 	require_once MSKD_PLUGIN_DIR . 'includes/class-activator.php';
 	require_once MSKD_PLUGIN_DIR . 'includes/class-deactivator.php';
 
 	// Check for database upgrades.
 	MSKD_Activator::maybe_upgrade();
 
-	// Initialize admin
+	// Initialize admin.
 	if ( is_admin() ) {
 		require_once MSKD_PLUGIN_DIR . 'admin/class-admin.php';
 		$admin = new MSKD_Admin();
 		$admin->init();
 	}
 
-	// Initialize public
+	// Initialize public.
 	require_once MSKD_PLUGIN_DIR . 'public/class-public.php';
 	$public = new MSKD_Public();
 	$public->init();
 
-	// Initialize cron handler
+	// Initialize cron handler.
 	require_once MSKD_PLUGIN_DIR . 'includes/services/class-cron-handler.php';
 	$cron = new MSKD_Cron_Handler();
 	$cron->init();
@@ -171,11 +173,14 @@ add_action( 'plugins_loaded', 'mskd_init' );
 
 /**
  * Register custom cron schedules
+ *
+ * @param array $schedules Existing cron schedules.
+ * @return array Modified cron schedules.
  */
 function mskd_cron_schedules( $schedules ) {
 	$schedules['mskd_every_minute'] = array(
 		'interval' => 60,
-		'display'  => __( 'Every minute', 'mail-system-by-katsarov-design' ),
+		'display'  => esc_html__( 'Every minute', 'mail-system-by-katsarov-design' ),
 	);
 	return $schedules;
 }
@@ -193,7 +198,7 @@ function mskd_normalize_timestamp( $timestamp = null ) {
 	if ( null === $timestamp ) {
 		$timestamp = time();
 	}
-	// Round down to the start of the current minute (remove seconds)
+	// Round down to the start of the current minute (remove seconds).
 	return (int) ( floor( $timestamp / 60 ) * 60 );
 }
 

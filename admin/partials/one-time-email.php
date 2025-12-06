@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Get preserved form data (if any error occurred)
+// Get preserved form data (if any error occurred).
 $form_data          = isset( $form_data ) ? $form_data : array();
 $recipient_email    = isset( $form_data['recipient_email'] ) ? esc_attr( $form_data['recipient_email'] ) : '';
 $recipient_name     = isset( $form_data['recipient_name'] ) ? esc_attr( $form_data['recipient_name'] ) : '';
@@ -20,7 +20,7 @@ $scheduled_datetime = isset( $form_data['scheduled_datetime'] ) ? esc_attr( $for
 $delay_value        = isset( $form_data['delay_value'] ) ? intval( $form_data['delay_value'] ) : 1;
 $delay_unit         = isset( $form_data['delay_unit'] ) ? esc_attr( $form_data['delay_unit'] ) : 'hours';
 
-// Get minimum datetime for picker (now + 10 minutes, rounded to nearest 10 min)
+// Get minimum datetime for picker (now + 10 minutes, rounded to nearest 10 min).
 $wp_timezone     = wp_timezone();
 $now             = new DateTime( 'now', $wp_timezone );
 $minutes         = (int) $now->format( 'i' );
@@ -35,12 +35,12 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 ?>
 
 <div class="wrap mskd-wrap">
-	<h1><?php _e( 'One-time email', 'mail-system-by-katsarov-design' ); ?></h1>
+	<h1><?php esc_html_e( 'One-time email', 'mail-system-by-katsarov-design' ); ?></h1>
 
 	<?php settings_errors( 'mskd_messages' ); ?>
 
 	<p class="description">
-		<?php _e( 'Send a one-time email directly to a specific recipient. The email can be sent immediately or scheduled for later.', 'mail-system-by-katsarov-design' ); ?>
+		<?php esc_html_e( 'Send a one-time email directly to a specific recipient. The email can be sent immediately or scheduled for later.', 'mail-system-by-katsarov-design' ); ?>
 	</p>
 
 	<div class="mskd-form-wrap mskd-one-time-email-form">
@@ -50,33 +50,33 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 			<div class="mskd-form-fields">
 				<div class="mskd-form-row">
 					<div class="mskd-form-label">
-						<label for="recipient_email"><?php _e( 'Recipient email', 'mail-system-by-katsarov-design' ); ?> *</label>
+						<label for="recipient_email"><?php esc_html_e( 'Recipient email', 'mail-system-by-katsarov-design' ); ?> *</label>
 					</div>
 					<div class="mskd-form-field">
-						<input type="email" name="recipient_email" id="recipient_email" class="regular-text" value="<?php echo $recipient_email; ?>" required>
-						<p class="description"><?php _e( 'The email address to which the message will be sent.', 'mail-system-by-katsarov-design' ); ?></p>
+						<input type="email" name="recipient_email" id="recipient_email" class="regular-text" value="<?php echo esc_attr( $recipient_email ); ?>" required>
+						<p class="description"><?php esc_html_e( 'The email address to which message will be sent.', 'mail-system-by-katsarov-design' ); ?></p>
 					</div>
 				</div>
 				<div class="mskd-form-row">
 					<div class="mskd-form-label">
-						<label for="recipient_name"><?php _e( 'Recipient name', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="recipient_name"><?php esc_html_e( 'Recipient name', 'mail-system-by-katsarov-design' ); ?></label>
 					</div>
 					<div class="mskd-form-field">
-						<input type="text" name="recipient_name" id="recipient_name" class="regular-text" value="<?php echo $recipient_name; ?>">
-						<p class="description"><?php _e( 'Recipient name (optional). Can be used in content with {recipient_name}.', 'mail-system-by-katsarov-design' ); ?></p>
+						<input type="text" name="recipient_name" id="recipient_name" class="regular-text" value="<?php echo esc_attr( $recipient_name ); ?>">
+						<p class="description"><?php esc_html_e( 'Recipient name (optional). Can be used in content with {recipient_name}.', 'mail-system-by-katsarov-design' ); ?></p>
 					</div>
 				</div>
 				<div class="mskd-form-row">
 					<div class="mskd-form-label">
-						<label for="subject"><?php _e( 'Subject', 'mail-system-by-katsarov-design' ); ?> *</label>
+						<label for="subject"><?php esc_html_e( 'Subject', 'mail-system-by-katsarov-design' ); ?> *</label>
 					</div>
 					<div class="mskd-form-field">
-						<input type="text" name="subject" id="subject" class="large-text" value="<?php echo $subject_value; ?>" required>
+						<input type="text" name="subject" id="subject" class="large-text" value="<?php echo esc_attr( $subject_value ); ?>" required>
 					</div>
 				</div>
 				<div class="mskd-form-row">
 					<div class="mskd-form-label">
-						<label for="body"><?php _e( 'Content', 'mail-system-by-katsarov-design' ); ?> *</label>
+						<label for="body"><?php esc_html_e( 'Content', 'mail-system-by-katsarov-design' ); ?> *</label>
 					</div>
 					<div class="mskd-form-field">
 						<?php
@@ -93,7 +93,7 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 						);
 						?>
 						<p class="description">
-							<?php _e( 'Available placeholders:', 'mail-system-by-katsarov-design' ); ?>
+							<?php esc_html_e( 'Available placeholders:', 'mail-system-by-katsarov-design' ); ?>
 							<code>{recipient_name}</code>, <code>{recipient_email}</code>
 						</p>
 					</div>
@@ -105,7 +105,7 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 					<div class="mskd-form-field">
 						<input type="text" name="bcc" id="bcc" class="large-text" value="<?php echo isset( $form_data['bcc'] ) ? esc_attr( $form_data['bcc'] ) : ''; ?>" placeholder="<?php esc_attr_e( 'email1@example.com, email2@example.com', 'mail-system-by-katsarov-design' ); ?>">
 						<p class="description">
-							<?php esc_html_e( 'Enter one or more email addresses separated by commas to receive a blind carbon copy of this email. Bcc recipients are hidden from the main recipient.', 'mail-system-by-katsarov-design' ); ?>
+							<?php esc_html_e( 'Enter one or more email addresses separated by commas to receive a blind carbon copy of this email. Bcc recipients are hidden from main recipient.', 'mail-system-by-katsarov-design' ); ?>
 						</p>
 					</div>
 				</div>
@@ -124,6 +124,7 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 									<?php
 									$default_from  = get_option( 'mskd_settings', array() );
 									$default_email = ! empty( $default_from['from_email'] ) ? $default_from['from_email'] : get_bloginfo( 'admin_email' );
+									/* translators: %s: default email address */
 									printf(
 										esc_html__( '(%s)', 'mail-system-by-katsarov-design' ),
 										esc_html( $default_email )
@@ -171,13 +172,13 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 
 				<div class="mskd-form-row">
 					<div class="mskd-form-label">
-						<label for="schedule_type"><?php _e( 'Scheduling', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="schedule_type"><?php esc_html_e( 'Scheduling', 'mail-system-by-katsarov-design' ); ?></label>
 					</div>
 					<div class="mskd-form-field">
 						<select name="schedule_type" id="schedule_type" class="mskd-schedule-type">
-							<option value="now" <?php selected( $schedule_type, 'now' ); ?>><?php _e( 'Send now', 'mail-system-by-katsarov-design' ); ?></option>
-							<option value="absolute" <?php selected( $schedule_type, 'absolute' ); ?>><?php _e( 'Specific date and time', 'mail-system-by-katsarov-design' ); ?></option>
-							<option value="relative" <?php selected( $schedule_type, 'relative' ); ?>><?php _e( 'After a set time', 'mail-system-by-katsarov-design' ); ?></option>
+							<option value="now" <?php selected( $schedule_type, 'now' ); ?>><?php esc_html_e( 'Send now', 'mail-system-by-katsarov-design' ); ?></option>
+							<option value="absolute" <?php selected( $schedule_type, 'absolute' ); ?>><?php esc_html_e( 'Specific date and time', 'mail-system-by-katsarov-design' ); ?></option>
+							<option value="relative" <?php selected( $schedule_type, 'relative' ); ?>><?php esc_html_e( 'After a set time', 'mail-system-by-katsarov-design' ); ?></option>
 						</select>
 						
 						<div class="mskd-schedule-absolute" style="display: none; margin-top: 10px;">
@@ -190,16 +191,18 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 									step="600">
 							<p class="description">
 								<?php
+								/* translators: %s: timezone string */
 								printf(
-									__( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ),
+									esc_html__( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ),
 									'<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
 								);
 								?>
 								<br>
 								<?php
 								$current_time = new DateTime( 'now', $wp_timezone );
+								/* translators: %s: current time */
 								printf(
-									__( 'Current server time: %s', 'mail-system-by-katsarov-design' ),
+									esc_html__( 'Current server time: %s', 'mail-system-by-katsarov-design' ),
 									'<strong>' . esc_html( $current_time->format( 'H:i' ) ) . '</strong>'
 								);
 								?>
@@ -215,11 +218,11 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 									min="1"
 									max="999">
 							<select name="delay_unit" id="delay_unit">
-								<option value="minutes" <?php selected( $delay_unit, 'minutes' ); ?>><?php _e( 'minutes', 'mail-system-by-katsarov-design' ); ?></option>
-								<option value="hours" <?php selected( $delay_unit, 'hours' ); ?>><?php _e( 'hours', 'mail-system-by-katsarov-design' ); ?></option>
-								<option value="days" <?php selected( $delay_unit, 'days' ); ?>><?php _e( 'days', 'mail-system-by-katsarov-design' ); ?></option>
+								<option value="minutes" <?php selected( $delay_unit, 'minutes' ); ?>><?php esc_html_e( 'minutes', 'mail-system-by-katsarov-design' ); ?></option>
+								<option value="hours" <?php selected( $delay_unit, 'hours' ); ?>><?php esc_html_e( 'hours', 'mail-system-by-katsarov-design' ); ?></option>
+								<option value="days" <?php selected( $delay_unit, 'days' ); ?>><?php esc_html_e( 'days', 'mail-system-by-katsarov-design' ); ?></option>
 							</select>
-							<p class="description"><?php _e( 'The email will be sent after the specified time.', 'mail-system-by-katsarov-design' ); ?></p>
+							<p class="description"><?php esc_html_e( 'The email will be sent after the specified time.', 'mail-system-by-katsarov-design' ); ?></p>
 						</div>
 					</div>
 				</div>
@@ -227,7 +230,7 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 
 			<p class="submit">
 				<input type="submit" name="mskd_send_one_time_email" class="button button-primary button-large mskd-submit-btn" 
-						value="<?php _e( 'Send now', 'mail-system-by-katsarov-design' ); ?>" 
+						value="<?php esc_attr_e( 'Send now', 'mail-system-by-katsarov-design' ); ?>" 
 						data-send-now="<?php esc_attr_e( 'Send now', 'mail-system-by-katsarov-design' ); ?>"
 						data-schedule="<?php esc_attr_e( 'Schedule sending', 'mail-system-by-katsarov-design' ); ?>">
 			</p>
@@ -235,13 +238,13 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 	</div>
 
 	<div class="mskd-info-box">
-		<h3><?php _e( 'Information', 'mail-system-by-katsarov-design' ); ?></h3>
+		<h3><?php esc_html_e( 'Information', 'mail-system-by-katsarov-design' ); ?></h3>
 		<ul>
-			<li><?php _e( 'One-time emails can be sent immediately or scheduled for later.', 'mail-system-by-katsarov-design' ); ?></li>
-			<li><?php _e( 'They are not saved as templates and do not repeat.', 'mail-system-by-katsarov-design' ); ?></li>
-			<li><?php _e( 'All sent one-time emails are logged in the audit history.', 'mail-system-by-katsarov-design' ); ?></li>
-			<li><?php _e( 'Scheduled emails can be cancelled from the Queue page.', 'mail-system-by-katsarov-design' ); ?></li>
-			<li><?php _e( 'Suitable for: account activation, notifications, event reminders.', 'mail-system-by-katsarov-design' ); ?></li>
+			<li><?php esc_html_e( 'One-time emails can be sent immediately or scheduled for later.', 'mail-system-by-katsarov-design' ); ?></li>
+			<li><?php esc_html_e( 'They are not saved as templates and do not repeat.', 'mail-system-by-katsarov-design' ); ?></li>
+			<li><?php esc_html_e( 'All sent one-time emails are logged in audit history.', 'mail-system-by-katsarov-design' ); ?></li>
+			<li><?php esc_html_e( 'Scheduled emails can be cancelled from Queue page.', 'mail-system-by-katsarov-design' ); ?></li>
+			<li><?php esc_html_e( 'Suitable for: account activation, notifications, event reminders.', 'mail-system-by-katsarov-design' ); ?></li>
 		</ul>
 	</div>
 
