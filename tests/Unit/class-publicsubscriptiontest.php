@@ -35,7 +35,7 @@ class PublicSubscriptionTest extends TestCase {
 		Functions\stubs( array( 'add_action' => null ) );
 
 		// Load the public class.
-		require_once \MSKD_PLUGIN_DIR . 'public/class-public.php';
+		require_once \MSKD_PLUGIN_DIR . 'public/class-mskd-public.php';
 
 		$this->public = new \MSKD_Public();
 	}

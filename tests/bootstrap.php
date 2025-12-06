@@ -30,7 +30,7 @@ define( 'MSKD_BATCH_SIZE', 10 );
 spl_autoload_register(
 	function ( $class_name ) {
 		// Handle PSR-4 namespaced classes (MSKD\*)
-		if ( strpos( $class, 'MSKD\\' ) === 0 ) {
+		if ( strpos( $class_name, 'MSKD\\' ) === 0 ) {
 			// Skip test classes - they are handled by Composer autoloader.
 			if ( strpos( $class, 'MSKD\\Tests\\' ) === 0 ) {
 				return;
