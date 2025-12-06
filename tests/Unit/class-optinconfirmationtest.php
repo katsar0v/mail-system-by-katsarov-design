@@ -98,6 +98,7 @@ class OptInConfirmationTest extends TestCase {
 				function () use ( &$update_called ) {
 					$update_called = true;
 					// Throw to prevent reaching include/exit.
+					// phpcs:ignore WordPress.Security.EscapeOutput -- Test exception message
 					throw new \Exception( self::TEST_COMPLETE_EXCEPTION );
 				}
 			);
@@ -139,7 +140,7 @@ class OptInConfirmationTest extends TestCase {
 				Mockery::type( 'string' ),
 				Mockery::on(
 					function ( $args ) {
-						return (bool) esc_html( $args['response'] === 400 );
+						return (bool) esc_html( 400 === $args['response'] );
 					}
 				)
 			)
@@ -205,7 +206,7 @@ class OptInConfirmationTest extends TestCase {
 				Mockery::type( 'string' ),
 				Mockery::on(
 					function ( $args ) {
-						return (bool) esc_html( $args['response'] === 400 );
+						return (bool) esc_html( 400 === $args['response'] );
 					}
 				)
 			)
@@ -246,7 +247,7 @@ class OptInConfirmationTest extends TestCase {
 				Mockery::type( 'string' ),
 				Mockery::on(
 					function ( $args ) {
-						return (bool) esc_html( $args['response'] === 429 ); // Too Many Requests.
+						return (bool) esc_html( 429 === $args['response'] ); // Too Many Requests.
 					}
 				)
 			)
@@ -300,7 +301,7 @@ class OptInConfirmationTest extends TestCase {
 				Mockery::type( 'string' ),
 				Mockery::on(
 					function ( $args ) {
-						return (bool) esc_html( $args['response'] === 400 );
+						return (bool) esc_html( 400 === $args['response'] );
 					}
 				)
 			)
