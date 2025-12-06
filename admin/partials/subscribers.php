@@ -14,8 +14,8 @@ global $wpdb;
 // Load the List Provider service.
 require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
 
-$action        = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : 'list';
-$subscriber_id = isset( $_GET['id'] ) ? sanitize_text_field( $_GET['id'] ) : '';
+$action        = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : 'list';
+$subscriber_id = isset( $_GET['id'] ) ? sanitize_text_field( wp_unslash( $_GET['id'] ) ) : '';
 
 // Get all lists for dropdown (database + external).
 $lists = MSKD_List_Provider::get_all_lists();
@@ -23,7 +23,7 @@ $lists = MSKD_List_Provider::get_all_lists();
 // Get subscriber for editing (only database subscribers are editable).
 $subscriber       = null;
 $subscriber_lists = array();
-if ( $action === 'edit' && $subscriber_id ) {
+if ( 'edit' === $action && $subscriber_id ) {
 	// Check if this is an external subscriber (not editable).
 	if ( MSKD_List_Provider::is_external_id( $subscriber_id ) ) {
 		wp_redirect( admin_url( 'admin.php?page=mskd-subscribers' ) );
@@ -46,10 +46,10 @@ if ( $action === 'edit' && $subscriber_id ) {
 
 <div class="wrap mskd-wrap">
 	<h1>
-		<?php _e( 'Subscribers', 'mail-system-by-katsarov-design' ); ?>
-		<?php if ( $action === 'list' ) : ?>
+		<?php esc_html_e( 'Subscribers', 'mail-system-by-katsarov-design' ); ?>
+		<?php if ( 'list' === $action ) : ?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-subscribers&action=add' ) ); ?>" class="page-title-action">
-				<?php _e( 'Add new', 'mail-system-by-katsarov-design' ); ?>
+				<?php esc_html_e( 'Add new', 'mail-system-by-katsarov-design' ); ?>
 			</a>
 		<?php endif; ?>
 	</h1>
@@ -59,7 +59,7 @@ if ( $action === 'edit' && $subscriber_id ) {
 	<?php if ( $action === 'add' || $action === 'edit' ) : ?>
 		<!-- Add/Edit Form -->
 		<div class="mskd-form-wrap">
-			<h2><?php echo $action === 'add' ? __( 'Add subscriber', 'mail-system-by-katsarov-design' ) : __( 'Edit subscriber', 'mail-system-by-katsarov-design' ); ?></h2>
+			<h2><?php echo esc_html( $action === 'add' ? esc_html__( 'Add subscriber', 'mail-system-by-katsarov-design' ) : esc_html__( 'Edit subscriber', 'mail-system-by-katsarov-design' ) ); ?></h2>
 			
 			<form method="post" action="">
 				<?php wp_nonce_field( $action === 'add' ? 'mskd_add_subscriber' : 'mskd_edit_subscriber', 'mskd_nonce' ); ?>
@@ -71,7 +71,7 @@ if ( $action === 'edit' && $subscriber_id ) {
 				<table class="form-table">
 					<tr>
 						<th scope="row">
-							<label for="email"><?php _e( 'Email', 'mail-system-by-katsarov-design' ); ?> *</label>
+							<label for="email"><?php esc_html_e( 'Email', 'mail-system-by-katsarov-design' ); ?> *</label>
 						</th>
 						<td>
 							<input type="email" name="email" id="email" class="regular-text" required
@@ -80,7 +80,7 @@ if ( $action === 'edit' && $subscriber_id ) {
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="first_name"><?php _e( 'First name', 'mail-system-by-katsarov-design' ); ?></label>
+							<label for="first_name"><?php esc_html_e( 'First name', 'mail-system-by-katsarov-design' ); ?></label>
 						</th>
 						<td>
 							<input type="text" name="first_name" id="first_name" class="regular-text"
@@ -89,7 +89,7 @@ if ( $action === 'edit' && $subscriber_id ) {
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="last_name"><?php _e( 'Last name', 'mail-system-by-katsarov-design' ); ?></label>
+							<label for="last_name"><?php esc_html_e( 'Last name', 'mail-system-by-katsarov-design' ); ?></label>
 						</th>
 						<td>
 							<input type="text" name="last_name" id="last_name" class="regular-text"
@@ -98,25 +98,25 @@ if ( $action === 'edit' && $subscriber_id ) {
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="status"><?php _e( 'Status', 'mail-system-by-katsarov-design' ); ?></label>
+							<label for="status"><?php esc_html_e( 'Status', 'mail-system-by-katsarov-design' ); ?></label>
 						</th>
 						<td>
 							<select name="status" id="status">
 								<option value="active" <?php selected( $subscriber ? $subscriber->status : 'active', 'active' ); ?>>
-									<?php _e( 'Active', 'mail-system-by-katsarov-design' ); ?>
+									<?php esc_html_e( 'Active', 'mail-system-by-katsarov-design' ); ?>
 								</option>
 								<option value="inactive" <?php selected( $subscriber ? $subscriber->status : '', 'inactive' ); ?>>
-									<?php _e( 'Inactive', 'mail-system-by-katsarov-design' ); ?>
+									<?php esc_html_e( 'Inactive', 'mail-system-by-katsarov-design' ); ?>
 								</option>
 								<option value="unsubscribed" <?php selected( $subscriber ? $subscriber->status : '', 'unsubscribed' ); ?>>
-									<?php _e( 'Unsubscribed', 'mail-system-by-katsarov-design' ); ?>
+									<?php esc_html_e( 'Unsubscribed', 'mail-system-by-katsarov-design' ); ?>
 								</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label><?php _e( 'Lists', 'mail-system-by-katsarov-design' ); ?></label>
+							<label><?php esc_html_e( 'Lists', 'mail-system-by-katsarov-design' ); ?></label>
 						</th>
 						<td>
 							<?php
@@ -137,7 +137,7 @@ if ( $action === 'edit' && $subscriber_id ) {
 									</label>
 								<?php endforeach; ?>
 							<?php else : ?>
-								<p class="description"><?php _e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?></p>
+								<p class="description"><?php esc_html_e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?></p>
 							<?php endif; ?>
 							<?php
 							// Show external lists as info (not selectable).
@@ -150,7 +150,7 @@ if ( $action === 'edit' && $subscriber_id ) {
 							if ( ! empty( $external_lists ) ) :
 								?>
 								<p class="description" style="margin-top: 10px;">
-									<?php _e( 'Automated lists (membership managed by external plugins):', 'mail-system-by-katsarov-design' ); ?>
+									<?php esc_html_e( 'Automated lists (membership managed by external plugins):', 'mail-system-by-katsarov-design' ); ?>
 									<?php
 									$external_names = array_map(
 										function ( $list ) {
@@ -169,9 +169,9 @@ if ( $action === 'edit' && $subscriber_id ) {
 				<p class="submit">
 					<input type="submit" name="<?php echo $action === 'add' ? 'mskd_add_subscriber' : 'mskd_edit_subscriber'; ?>" 
 							class="button button-primary" 
-							value="<?php echo $action === 'add' ? __( 'Add subscriber', 'mail-system-by-katsarov-design' ) : __( 'Save changes', 'mail-system-by-katsarov-design' ); ?>">
+							value="<?php echo $action === 'add' ? esc_attr__( 'Add subscriber', 'mail-system-by-katsarov-design' ) : esc_attr__( 'Save changes', 'mail-system-by-katsarov-design' ); ?>">
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-subscribers' ) ); ?>" class="button">
-						<?php _e( 'Cancel', 'mail-system-by-katsarov-design' ); ?>
+						<?php esc_html_e( 'Cancel', 'mail-system-by-katsarov-design' ); ?>
 					</a>
 				</p>
 			</form>
@@ -335,9 +335,9 @@ if ( $action === 'edit' && $subscriber_id ) {
 								<span class="mskd-status mskd-status-<?php echo esc_attr( $sub->status ); ?>">
 									<?php
 									$statuses = array(
-										'active'       => __( 'Active', 'mail-system-by-katsarov-design' ),
-										'inactive'     => __( 'Inactive', 'mail-system-by-katsarov-design' ),
-										'unsubscribed' => __( 'Unsubscribed', 'mail-system-by-katsarov-design' ),
+										'active'       => esc_html__( 'Active', 'mail-system-by-katsarov-design' ),
+										'inactive'     => esc_html__( 'Inactive', 'mail-system-by-katsarov-design' ),
+										'unsubscribed' => esc_html__( 'Unsubscribed', 'mail-system-by-katsarov-design' ),
 									);
 									echo esc_html( $statuses[ $sub->status ] ?? $sub->status );
 									?>
@@ -385,8 +385,8 @@ if ( $action === 'edit' && $subscriber_id ) {
 						array(
 							'base'      => add_query_arg( 'paged', '%#%' ),
 							'format'    => '',
-							'prev_text' => __( '&laquo;', 'mail-system-by-katsarov-design' ),
-							'next_text' => __( '&raquo;', 'mail-system-by-katsarov-design' ),
+							'prev_text' => esc_html__( '&laquo;', 'mail-system-by-katsarov-design' ),
+							'next_text' => esc_html__( '&raquo;', 'mail-system-by-katsarov-design' ),
 							'total'     => $total_pages,
 							'current'   => $current_page,
 						)

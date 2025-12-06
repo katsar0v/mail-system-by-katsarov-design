@@ -14,11 +14,14 @@ use MSKD\Services\Template_Service;
 $template_service = new Template_Service();
 
 // Get action from URL.
-$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : 'list';
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in form handler, this just determines view state.
+$current_action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : 'list';
 
 // Get template for edit.
 $editing_template = null;
-if ( 'edit' === $action && isset( $_GET['id'] ) ) {
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in form handler, this just determines view state.
+if ( 'edit' === $current_action && isset( $_GET['id'] ) ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in form handler, this just determines view state.
 	$editing_template = $template_service->get_by_id( intval( $_GET['id'] ) );
 }
 
@@ -37,7 +40,7 @@ $predefined_templates = array_filter(
 		return 'predefined' === $t->type;
 	}
 );
-$custom_templates = array_filter(
+$custom_templates     = array_filter(
 	$templates,
 	function ( $t ) {
 		return 'custom' === $t->type;
@@ -48,7 +51,7 @@ $custom_templates = array_filter(
 <div class="wrap mskd-wrap">
 	<h1>
 		<?php esc_html_e( 'Email Templates', 'mail-system-by-katsarov-design' ); ?>
-		<?php if ( 'list' === $action ) : ?>
+		<?php if ( 'list' === $current_action ) : ?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-templates&action=add' ) ); ?>" class="page-title-action">
 				<?php esc_html_e( 'Add New', 'mail-system-by-katsarov-design' ); ?>
 			</a>
@@ -61,12 +64,12 @@ $custom_templates = array_filter(
 
 	<?php settings_errors( 'mskd_messages' ); ?>
 
-	<?php if ( 'add' === $action || 'edit' === $action ) : ?>
+	<?php if ( 'add' === $current_action || 'edit' === $current_action ) : ?>
 		<!-- Add/Edit Form -->
 		<div class="mskd-form-wrap mskd-template-form">
 			<h2>
 				<?php
-				if ( 'add' === $action ) {
+				if ( 'add' === $current_action ) {
 					esc_html_e( 'Add new template', 'mail-system-by-katsarov-design' );
 				} else {
 					esc_html_e( 'Edit template', 'mail-system-by-katsarov-design' );
@@ -76,7 +79,7 @@ $custom_templates = array_filter(
 
 			<form method="post" action="">
 				<?php
-				$nonce_action = 'add' === $action ? 'mskd_add_template' : 'mskd_edit_template';
+				$nonce_action = 'add' === $current_action ? 'mskd_add_template' : 'mskd_edit_template';
 				wp_nonce_field( $nonce_action, 'mskd_nonce' );
 				?>
 				
@@ -134,7 +137,7 @@ $custom_templates = array_filter(
 				</table>
 
 				<p class="submit">
-					<?php if ( 'add' === $action ) : ?>
+					<?php if ( 'add' === $current_action ) : ?>
 						<input type="submit" name="mskd_add_template" class="button button-primary" value="<?php esc_attr_e( 'Add template', 'mail-system-by-katsarov-design' ); ?>">
 					<?php else : ?>
 						<input type="submit" name="mskd_edit_template" class="button button-primary" value="<?php esc_attr_e( 'Save changes', 'mail-system-by-katsarov-design' ); ?>">

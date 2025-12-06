@@ -47,10 +47,12 @@ class BatchEditTest extends TestCase {
 
 		// Mock get_row for get_by_id - return subscriber objects.
 		$wpdb->shouldReceive( 'get_row' )
-			->andReturn( (object) array(
-				'id'    => 1,
-				'email' => 'test@example.com',
-			) );
+			->andReturn(
+				(object) array(
+					'id'    => 1,
+					'email' => 'test@example.com',
+				)
+			);
 
 		// Mock get_col for get_lists - return empty array.
 		$wpdb->shouldReceive( 'get_col' )
@@ -80,16 +82,18 @@ class BatchEditTest extends TestCase {
 		$call_count = 0;
 		// First subscriber exists, second doesn't.
 		$wpdb->shouldReceive( 'get_row' )
-			->andReturnUsing( function () use ( &$call_count ) {
-				++$call_count;
-				if ( 1 === $call_count ) {
-					return (object) array(
-						'id'    => 1,
-						'email' => 'test1@example.com',
-					);
+			->andReturnUsing(
+				function () use ( &$call_count ) {
+					++$call_count;
+					if ( 1 === $call_count ) {
+							return (object) array(
+								'id'    => 1,
+								'email' => 'test1@example.com',
+							);
+					}
+					return null; // Second subscriber doesn't exist.
 				}
-				return null; // Second subscriber doesn't exist.
-			} );
+			);
 
 		// Mock get_col for get_lists.
 		$wpdb->shouldReceive( 'get_col' )
@@ -139,10 +143,12 @@ class BatchEditTest extends TestCase {
 
 		// Mock get_row for get_by_id.
 		$wpdb->shouldReceive( 'get_row' )
-			->andReturn( (object) array(
-				'id'    => 1,
-				'email' => 'test@example.com',
-			) );
+			->andReturn(
+				(object) array(
+					'id'    => 1,
+					'email' => 'test@example.com',
+				)
+			);
 
 		// Mock get_col for get_lists - subscriber has lists 5, 6, 7.
 		$wpdb->shouldReceive( 'get_col' )
@@ -170,16 +176,18 @@ class BatchEditTest extends TestCase {
 		$call_count = 0;
 		// First subscriber exists, second doesn't.
 		$wpdb->shouldReceive( 'get_row' )
-			->andReturnUsing( function () use ( &$call_count ) {
-				++$call_count;
-				if ( 1 === $call_count ) {
-					return (object) array(
-						'id'    => 1,
-						'email' => 'test1@example.com',
-					);
+			->andReturnUsing(
+				function () use ( &$call_count ) {
+					++$call_count;
+					if ( 1 === $call_count ) {
+							return (object) array(
+								'id'    => 1,
+								'email' => 'test1@example.com',
+							);
+					}
+					return null; // Second subscriber doesn't exist.
 				}
-				return null; // Second subscriber doesn't exist.
-			} );
+			);
 
 		// Mock get_col for get_lists.
 		$wpdb->shouldReceive( 'get_col' )

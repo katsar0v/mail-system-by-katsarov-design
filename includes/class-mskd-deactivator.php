@@ -32,7 +32,7 @@ class MSKD_Deactivator {
 			wp_unschedule_event( $timestamp, 'mskd_process_queue' );
 		}
 
-		// Clear all scheduled hooks for this plugin
+		// Clear all scheduled hooks for this plugin.
 		wp_clear_scheduled_hook( 'mskd_process_queue' );
 	}
 }

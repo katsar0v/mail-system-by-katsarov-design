@@ -184,7 +184,7 @@ class DashboardWidgetTest extends TestCase {
 			)
 		);
 
-		require_once MSKD_PLUGIN_DIR . 'includes/services/class-cron-handler.php';
+		require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-cron-handler.php';
 		$cron_handler = new \MSKD_Cron_Handler();
 		$cron_handler->process_queue();
 

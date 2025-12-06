@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1] - 2025-12-05
+
+### Security
+- **Critical XSS Vulnerability Fix**
+  - Fixed stored XSS in email preview AJAX handler
+  - Email content now sanitized with `mskd_kses_email()` before output
+- **Improved Password Storage**
+  - Replaced weak base64 encoding with AES-256-CBC encryption for SMTP passwords
+  - Added `mskd_encrypt()` and `mskd_decrypt()` helper functions with WordPress salts
+  - Legacy base64 passwords are automatically handled for backward compatibility
+- **Input Sanitization Improvements**
+  - Added `wp_unslash()` before sanitization on GET parameters
+  - Fixed unsanitized GET parameters in nonce verification
+  - Improved REMOTE_ADDR handling with proper validation
+
+### Added
+- **Encryption Unit Tests**
+  - 12 comprehensive tests for encrypt/decrypt functions
+  - Tests for edge cases: empty values, special characters, unicode, corrupted data
+
+### Changed
+- **WPCS Compliance**
+  - Fixed variable naming to avoid overriding WordPress globals
+  - Fixed indentation (spaces to tabs) in admin partials
+  - Added proper Yoda condition checks
+
 ## [1.6.0] - 2025-12-05
 
 ### Added

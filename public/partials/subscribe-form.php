@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="mskd-form-row">
-			<button type="submit" class="mskd-submit-btn"><?php _e( 'Subscribe', 'mail-system-by-katsarov-design' ); ?></button>
+			<button type="submit" class="mskd-submit-btn"><?php esc_html_e( 'Subscribe', 'mail-system-by-katsarov-design' ); ?></button>
 		</div>
 
 		<div class="mskd-form-message" style="display: none;"></div>

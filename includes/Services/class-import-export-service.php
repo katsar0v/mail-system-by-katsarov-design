@@ -397,9 +397,9 @@ class Import_Export_Service {
 	 */
 	public function import_subscribers( array $rows, array $options = array() ): array {
 		$defaults = array(
-			'update_existing'  => false,
-			'assign_lists'     => true,
-			'target_list_ids'  => array(),
+			'update_existing' => false,
+			'assign_lists'    => true,
+			'target_list_ids' => array(),
 		);
 		$options  = wp_parse_args( $options, $defaults );
 
