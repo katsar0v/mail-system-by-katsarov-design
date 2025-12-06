@@ -85,10 +85,12 @@ class Admin_Templates {
 	 * @return void
 	 */
 	private function handle_add(): void {
-		$name    = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$name = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
 		$subject = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
 		// Email HTML content must be preserved exactly (including <style> tags for MJML output).
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing -- Admin-only, nonce-verified email content in handle_actions().
 		$content = isset( $_POST['content'] ) ? wp_unslash( $_POST['content'] ) : '';
 
 		// Validate name.
@@ -138,11 +140,14 @@ class Admin_Templates {
 	 * @return void
 	 */
 	private function handle_edit(): void {
-		$id      = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
-		$name    = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$id = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$name = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
 		$subject = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
 		// Email HTML content must be preserved exactly (including <style> tags for MJML output).
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing -- Admin-only, nonce-verified email content in handle_actions().
 		$content = isset( $_POST['content'] ) ? wp_unslash( $_POST['content'] ) : '';
 
 		// Validate name.

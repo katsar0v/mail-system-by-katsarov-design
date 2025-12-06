@@ -114,13 +114,20 @@ class MSKD_SMTP_Mailer {
 			// Configure mailer - use SMTP if configured, otherwise use PHP mail.
 			if ( $this->is_smtp_enabled() ) {
 				$mailer->isSMTP();
-				$mailer->Host       = $this->settings['smtp_host'];
-				$mailer->Port       = ! empty( $this->settings['smtp_port'] ) ? (int) $this->settings['smtp_port'] : 587;
+				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
+				$mailer->Host = $this->settings['smtp_host'];
+				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
+				$mailer->Port = ! empty( $this->settings['smtp_port'] ) ? (int) $this->settings['smtp_port'] : 587;
+				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 				$mailer->SMTPSecure = $this->get_smtp_secure();
-				$mailer->SMTPAuth   = ! empty( $this->settings['smtp_auth'] );
+				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
+				$mailer->SMTPAuth = ! empty( $this->settings['smtp_auth'] );
 
+				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 				if ( $mailer->SMTPAuth ) {
+					// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 					$mailer->Username = ! empty( $this->settings['smtp_username'] ) ? $this->settings['smtp_username'] : '';
+					// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 					$mailer->Password = ! empty( $this->settings['smtp_password'] ) ? mskd_decrypt( $this->settings['smtp_password'] ) : '';
 				}
 			} else {
@@ -146,16 +153,22 @@ class MSKD_SMTP_Mailer {
 
 			// Set email content.
 			$mailer->isHTML( true );
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 			$mailer->CharSet = 'UTF-8';
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 			$mailer->Subject = $subject;
-			$mailer->Body    = $body;
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
+			$mailer->Body = $body;
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 			$mailer->AltBody = wp_strip_all_tags( $body );
 
 			// Process additional headers.
 			$this->process_headers( $mailer, $headers );
 
 			// Enable debug mode for logging (internal only).
-			$mailer->SMTPDebug   = 0;
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
+			$mailer->SMTPDebug = 0;
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 			$mailer->Debugoutput = function ( $str, $level ) {
 				$this->debug_log[] = array(
 					'level'   => $level,
@@ -174,6 +187,7 @@ class MSKD_SMTP_Mailer {
 			return $result;
 
 		} catch ( PHPMailer\PHPMailer\Exception $e ) {
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 			$this->log_error( $mailer->ErrorInfo );
 			return false;
 		} catch ( Exception $e ) {
@@ -220,14 +234,22 @@ class MSKD_SMTP_Mailer {
 		try {
 			// Configure SMTP.
 			$mailer->isSMTP();
-			$mailer->Host       = $this->settings['smtp_host'];
-			$mailer->Port       = ! empty( $this->settings['smtp_port'] ) ? (int) $this->settings['smtp_port'] : 587;
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
+			$mailer->Host = $this->settings['smtp_host'];
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
+			$mailer->Port = ! empty( $this->settings['smtp_port'] ) ? (int) $this->settings['smtp_port'] : 587;
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 			$mailer->SMTPSecure = $this->get_smtp_secure();
-			$mailer->SMTPAuth   = ! empty( $this->settings['smtp_auth'] );
-			$mailer->Timeout    = 15;
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
+			$mailer->SMTPAuth = ! empty( $this->settings['smtp_auth'] );
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
+			$mailer->Timeout = 15;
 
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 			if ( $mailer->SMTPAuth ) {
+				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 				$mailer->Username = ! empty( $this->settings['smtp_username'] ) ? $this->settings['smtp_username'] : '';
+				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 				$mailer->Password = ! empty( $this->settings['smtp_password'] ) ? mskd_decrypt( $this->settings['smtp_password'] ) : '';
 			}
 
@@ -241,12 +263,15 @@ class MSKD_SMTP_Mailer {
 
 			// Set test email content.
 			$mailer->isHTML( true );
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 			$mailer->CharSet = 'UTF-8';
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 			$mailer->Subject = sprintf(
 				/* translators: %s: Site name */
 				__( '[%s] SMTP Test Email', 'mail-system-by-katsarov-design' ),
 				get_bloginfo( 'name' )
 			);
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 			$mailer->Body = sprintf(
 				/* translators: %1$s: Current time, %2$s: SMTP host, %3$s: SMTP port */
 				__( '<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP server:</strong> %2$s:%3$s</p>', 'mail-system-by-katsarov-design' ),
@@ -254,12 +279,14 @@ class MSKD_SMTP_Mailer {
 				$this->settings['smtp_host'],
 				$this->settings['smtp_port']
 			);
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 			$mailer->AltBody = wp_strip_all_tags( $mailer->Body );
 
 			// Try to send.
 			$result = $mailer->send();
 
 			if ( $result ) {
+				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 				$this->log_success( $to, $mailer->Subject );
 				return array(
 					'success' => true,
@@ -277,12 +304,14 @@ class MSKD_SMTP_Mailer {
 			);
 
 		} catch ( PHPMailer\PHPMailer\Exception $e ) {
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 			$this->log_error( $mailer->ErrorInfo );
 			return array(
 				'success' => false,
 				'message' => sprintf(
 					/* translators: %s: Error message */
 					__( 'SMTP error: %s', 'mail-system-by-katsarov-design' ),
+					// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
 					$mailer->ErrorInfo
 				),
 			);
@@ -370,6 +399,7 @@ class MSKD_SMTP_Mailer {
 	 */
 	private function log_success( $to, $subject ) {
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional debug logging when WP_DEBUG is enabled.
 			error_log(
 				sprintf(
 					'[MSKD SMTP] Email sent successfully to %s: %s',
@@ -389,6 +419,7 @@ class MSKD_SMTP_Mailer {
 		$this->last_error = $message;
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional debug logging when WP_DEBUG is enabled.
 			error_log( sprintf( '[MSKD SMTP] Error: %s', $message ) );
 		}
 	}

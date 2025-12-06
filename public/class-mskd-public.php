@@ -142,10 +142,12 @@ class MSKD_Public {
 	 * Handle unsubscribe requests
 	 */
 	public function handle_unsubscribe() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public unsubscribe link does not require nonce, uses token validation.
 		if ( ! isset( $_GET['mskd_unsubscribe'] ) ) {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public unsubscribe link does not require nonce, uses token validation.
 		$token = sanitize_text_field( wp_unslash( $_GET['mskd_unsubscribe'] ) );
 
 		if ( empty( $token ) ) {
