@@ -65,30 +65,35 @@ spl_autoload_register(
 // Create mock directory structure for PHPMailer.
 $phpmailer_dir = '/tmp/wordpress/wp-includes/PHPMailer';
 if ( ! is_dir( $phpmailer_dir ) ) {
-    mkdir( $phpmailer_dir, 0777, true );
+	mkdir( $phpmailer_dir, 0777, true );
 }
 
 // Create mock directory for wp-admin/includes.
 $wp_admin_includes_dir = '/tmp/wordpress/wp-admin/includes';
 if ( ! is_dir( $wp_admin_includes_dir ) ) {
-    mkdir( $wp_admin_includes_dir, 0777, true );
+	mkdir( $wp_admin_includes_dir, 0777, true );
 }
 
 // Create mock upgrade.php with dbDelta function stub.
 if ( ! file_exists( $wp_admin_includes_dir . '/upgrade.php' ) ) {
-    file_put_contents( $wp_admin_includes_dir . '/upgrade.php', '<?php
+	file_put_contents(
+		$wp_admin_includes_dir . '/upgrade.php',
+		'<?php
 // Mock upgrade.php for testing
 if ( ! function_exists( "dbDelta" ) ) {
     function dbDelta( $queries = "", $execute = true ) {
         return array();
     }
 }
-' );
+'
+	);
 }
 
 // Create mock PHPMailer classes for testing.
 if ( ! file_exists( $phpmailer_dir . '/PHPMailer.php' ) ) {
-    file_put_contents( $phpmailer_dir . '/PHPMailer.php', '<?php
+	file_put_contents(
+		$phpmailer_dir . '/PHPMailer.php',
+		'<?php
 namespace PHPMailer\PHPMailer;
 class PHPMailer {
     public $Host = "";
@@ -107,19 +112,26 @@ class PHPMailer {
     public function isHTML($isHtml = true) {}
     public function send() { return true; }
 }
-' );
+'
+	);
 }
 
 if ( ! file_exists( $phpmailer_dir . '/SMTP.php' ) ) {
-    file_put_contents( $phpmailer_dir . '/SMTP.php', '<?php
+	file_put_contents(
+		$phpmailer_dir . '/SMTP.php',
+		'<?php
 namespace PHPMailer\PHPMailer;
 class SMTP {}
-' );
+'
+	);
 }
 
 if ( ! file_exists( $phpmailer_dir . '/Exception.php' ) ) {
-    file_put_contents( $phpmailer_dir . '/Exception.php', '<?php
+	file_put_contents(
+		$phpmailer_dir . '/Exception.php',
+		'<?php
 namespace PHPMailer\PHPMailer;
 class Exception extends \Exception {}
-' );
+'
+	);
 }

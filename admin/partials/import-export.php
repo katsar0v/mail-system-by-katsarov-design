@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Get all lists for filter dropdown.
 use MSKD\Services\List_Service;
 $list_service = new List_Service();
-$lists = $list_service->get_all();
+$lists        = $list_service->get_all();
 ?>
 
 <div class="wrap mskd-wrap">

@@ -188,7 +188,7 @@ class Admin_Email {
 		// Load the List Provider service.
 		require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
 
-		$subject  = sanitize_text_field( $_POST['subject'] );
+		$subject = sanitize_text_field( $_POST['subject'] );
 		// Email HTML content must be preserved exactly (including <style> tags for MJML output).
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
 		$body     = wp_unslash( $_POST['body'] );
@@ -207,13 +207,13 @@ class Admin_Email {
 
 		// Validate custom from email if provided
 		$use_custom_from = isset( $_POST['use_custom_from'] ) ? sanitize_text_field( $_POST['use_custom_from'] ) : 'default';
-		$from_email = '';
-		$from_name = '';
+		$from_email      = '';
+		$from_name       = '';
 
 		if ( 'custom' === $use_custom_from ) {
 			$from_email = isset( $_POST['from_email'] ) ? sanitize_email( $_POST['from_email'] ) : '';
-			$from_name = isset( $_POST['from_name'] ) ? sanitize_text_field( $_POST['from_name'] ) : '';
-			
+			$from_name  = isset( $_POST['from_name'] ) ? sanitize_text_field( $_POST['from_name'] ) : '';
+
 			// Required validation
 			if ( empty( $from_email ) ) {
 				add_settings_error(
@@ -224,7 +224,7 @@ class Admin_Email {
 				);
 				return;
 			}
-			
+
 			// Format validation
 			if ( ! is_email( $from_email ) ) {
 				add_settings_error(
@@ -344,19 +344,19 @@ class Admin_Email {
 		$subject         = sanitize_text_field( $_POST['subject'] );
 		// Email HTML content must be preserved exactly (including <style> tags for MJML output).
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
-		$body            = wp_unslash( $_POST['body'] );
-		$schedule_type   = isset( $_POST['schedule_type'] ) ? sanitize_text_field( $_POST['schedule_type'] ) : 'now';
-		$bcc             = isset( $_POST['bcc'] ) ? sanitize_text_field( wp_unslash( $_POST['bcc'] ) ) : '';
+		$body          = wp_unslash( $_POST['body'] );
+		$schedule_type = isset( $_POST['schedule_type'] ) ? sanitize_text_field( $_POST['schedule_type'] ) : 'now';
+		$bcc           = isset( $_POST['bcc'] ) ? sanitize_text_field( wp_unslash( $_POST['bcc'] ) ) : '';
 
 		// Validate custom from email if provided
 		$use_custom_from = isset( $_POST['use_custom_from'] ) ? sanitize_text_field( $_POST['use_custom_from'] ) : 'default';
-		$from_email = '';
-		$from_name = '';
+		$from_email      = '';
+		$from_name       = '';
 
 		if ( 'custom' === $use_custom_from ) {
 			$from_email = isset( $_POST['from_email'] ) ? sanitize_email( $_POST['from_email'] ) : '';
-			$from_name = isset( $_POST['from_name'] ) ? sanitize_text_field( $_POST['from_name'] ) : '';
-			
+			$from_name  = isset( $_POST['from_name'] ) ? sanitize_text_field( $_POST['from_name'] ) : '';
+
 			// Required validation
 			if ( empty( $from_email ) ) {
 				add_settings_error(
@@ -367,7 +367,7 @@ class Admin_Email {
 				);
 				return;
 			}
-			
+
 			// Format validation
 			if ( ! is_email( $from_email ) ) {
 				add_settings_error(

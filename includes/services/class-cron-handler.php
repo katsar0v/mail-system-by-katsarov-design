@@ -129,7 +129,7 @@ class MSKD_Cron_Handler {
 			// Prepare headers for Bcc if available.
 			// For regular campaigns, only send Bcc with the first email (bcc_sent = 0).
 			// For one_time campaigns, always send Bcc (they only have one email).
-			$headers = array();
+			$headers         = array();
 			$should_send_bcc = false;
 
 			if ( ! empty( $item->bcc ) ) {

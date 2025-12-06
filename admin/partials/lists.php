@@ -17,7 +17,7 @@ require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in form handler, this just determines view state.
 $current_action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : 'list';
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in form handler, this just determines view state.
-$list_id        = isset( $_GET['id'] ) ? sanitize_text_field( wp_unslash( $_GET['id'] ) ) : '';
+$list_id = isset( $_GET['id'] ) ? sanitize_text_field( wp_unslash( $_GET['id'] ) ) : '';
 
 // Get list for editing (only database lists are editable).
 $list = null;

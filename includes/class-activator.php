@@ -172,7 +172,7 @@ class MSKD_Activator {
 		// Upgrade from 1.5.0 to 1.6.0: Add per-campaign from email columns
 		if ( version_compare( $from_version, '1.6.0', '<' ) ) {
 			$table_campaigns = $wpdb->prefix . 'mskd_campaigns';
-			
+
 			// Check if from_email column exists
 			$from_email_exists = $wpdb->get_results(
 				$wpdb->prepare(
@@ -180,7 +180,7 @@ class MSKD_Activator {
 					'from_email'
 				)
 			);
-			
+
 			if ( empty( $from_email_exists ) ) {
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- Required for upgrade.
 				$wpdb->query(

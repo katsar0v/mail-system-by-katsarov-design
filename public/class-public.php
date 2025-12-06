@@ -146,17 +146,17 @@ class MSKD_Public {
 			return;
 		}
 
-		$token = sanitize_text_field( $_GET['mskd_unsubscribe'] );
+		$token = sanitize_text_field( wp_unslash( $_GET['mskd_unsubscribe'] ) );
 
 		if ( empty( $token ) ) {
 			return;
 		}
 
-		// Validate token length (tokens are 32 characters)
+		// Validate token length (tokens are 32 characters).
 		if ( strlen( $token ) !== 32 || ! ctype_alnum( $token ) ) {
 			wp_die(
-				__( 'Invalid unsubscribe link.', 'mail-system-by-katsarov-design' ),
-				__( 'Error', 'mail-system-by-katsarov-design' ),
+				esc_html__( 'Invalid unsubscribe link.', 'mail-system-by-katsarov-design' ),
+				esc_html__( 'Error', 'mail-system-by-katsarov-design' ),
 				array( 'response' => 400 )
 			);
 		}
@@ -173,7 +173,7 @@ class MSKD_Public {
 		$rate_limit_key = 'mskd_unsubscribe_' . $ip_hash;
 		$attempts       = get_transient( $rate_limit_key );
 
-		if ( $attempts !== false && $attempts >= 10 ) {
+		if ( false !== $attempts && 10 <= $attempts ) {
 			wp_die(
 				__( 'Too many attempts. Please try again in 5 minutes.', 'mail-system-by-katsarov-design' ),
 				__( 'Error', 'mail-system-by-katsarov-design' ),
@@ -181,7 +181,7 @@ class MSKD_Public {
 			);
 		}
 
-		// Increment attempts
+		// Increment attempts.
 		set_transient( $rate_limit_key, ( $attempts ? $attempts + 1 : 1 ), 5 * MINUTE_IN_SECONDS );
 
 		global $wpdb;
@@ -201,7 +201,7 @@ class MSKD_Public {
 			);
 		}
 
-		// Update subscriber status
+		// Update subscriber status.
 		$wpdb->update(
 			$wpdb->prefix . 'mskd_subscribers',
 			array( 'status' => 'unsubscribed' ),
