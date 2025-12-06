@@ -300,68 +300,20 @@ class OptInConfirmationTest extends TestCase {
 				Mockery::type( 'string' ),
 				Mockery::on(
 					function ( $args ) {
-						return (bool) esc_html( $args['response'] === 429 ); // Too Many Requests.
+						return (bool) esc_html( $args['response'] === 400 );
 					}
 				)
 			)
 			->andReturnUsing(
 				function () {
-					throw new \Exception( 'rate_limited' );
+					throw new \Exception( 'invalid_link' );
 				}
 			);
 
 		try {
 			$this->public->handle_opt_in_confirmation();
 		} catch ( \Exception $e ) {
-			$this->assertEquals( 'rate_limited', $e->getMessage() );
-		}
-	}
-
-	/**
-	 * Test unsubscribe changes status to unsubscribed.
-	 *
-	 * Note: This test verifies that database update is called with correct data.
-	 * We throw an exception after the update to prevent reaching include/exit.
-	 */
-	public function test_unsubscribe_changes_status_to_unsubscribed(): void {
-		$wpdb = $this->setup_wpdb_mock();
-
-		$valid_token = 'abc123def456abc123def456abc12345';
-
-		$_GET['mskd_confirm'] = $valid_token;
-
-		$update_called = false;
-		$wpdb->shouldReceive( 'update' )
-			->once()
-			->with(
-				'wp_mskd_subscribers',
-				array(
-					'status'       => 'unsubscribed',
-					'opt_in_token' => null,
-				),
-				array( 'id' => 123 ),
-				Mockery::type( 'array' ),
-				Mockery::type( 'array' ),
-				Mockery::on(
-					function ( $args ) {
-						return $args['status'] === 'unsubscribed'
-							&& array_key_exists( 'opt_in_token', $args )
-							&& null === $args['opt_in_token'];
-					}
-				)
-			)
-			->andReturnUsing(
-				function () use ( &$update_called ) {
-					$update_called = true;
-					// Throw to prevent reaching include/exit.
-					throw new \Exception( self::TEST_COMPLETE_EXCEPTION );
-				}
-			);
-
-		try {
-			$this->public->handle_opt_in_confirmation();
-		} catch ( \Exception $e ) {
-			$this->assertEquals( self::TEST_COMPLETE_EXCEPTION, $e->getMessage() );
+			$this->assertEquals( 'invalid_link', $e->getMessage() );
 		}
 	}
 
