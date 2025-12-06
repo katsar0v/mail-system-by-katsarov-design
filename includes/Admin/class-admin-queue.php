@@ -85,6 +85,7 @@ class Admin_Queue {
 				__( 'Record not found.', 'mail-system-by-katsarov-design' ),
 				'error'
 			);
+			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page.
 			wp_redirect( admin_url( 'admin.php?page=mskd-queue' ) );
 			exit;
 		}
@@ -96,6 +97,7 @@ class Admin_Queue {
 				__( 'This email cannot be cancelled.', 'mail-system-by-katsarov-design' ),
 				'error'
 			);
+			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page.
 			wp_redirect( admin_url( 'admin.php?page=mskd-queue' ) );
 			exit;
 		}
@@ -119,12 +121,17 @@ class Admin_Queue {
 		}
 
 		// Check if we should return to campaign detail page.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only parameter for redirect URL.
 		$return_campaign = isset( $_GET['return_campaign'] ) ? intval( $_GET['return_campaign'] ) : 0;
 		if ( $return_campaign > 0 ) {
+			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page with campaign parameter.
 			wp_redirect( admin_url( 'admin.php?page=mskd-queue&action=view&campaign_id=' . $return_campaign ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only parameter for redirect URL.
 		} elseif ( isset( $_GET['view'] ) && 'legacy' === $_GET['view'] ) {
+			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page with view parameter.
 			wp_redirect( admin_url( 'admin.php?page=mskd-queue&view=legacy' ) );
 		} else {
+			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page.
 			wp_redirect( admin_url( 'admin.php?page=mskd-queue' ) );
 		}
 		exit;
@@ -146,6 +153,7 @@ class Admin_Queue {
 				__( 'Campaign not found.', 'mail-system-by-katsarov-design' ),
 				'error'
 			);
+			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page.
 			wp_redirect( admin_url( 'admin.php?page=mskd-queue' ) );
 			exit;
 		}
@@ -157,6 +165,7 @@ class Admin_Queue {
 				__( 'This campaign cannot be cancelled.', 'mail-system-by-katsarov-design' ),
 				'error'
 			);
+			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page.
 			wp_redirect( admin_url( 'admin.php?page=mskd-queue' ) );
 			exit;
 		}
@@ -168,6 +177,7 @@ class Admin_Queue {
 				'mskd_messages',
 				'mskd_success',
 				sprintf(
+					/* translators: %d: number of emails cancelled */
 					__( 'Campaign cancelled. %d emails were cancelled.', 'mail-system-by-katsarov-design' ),
 					$cancelled_count
 				),
@@ -182,6 +192,7 @@ class Admin_Queue {
 			);
 		}
 
+		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page.
 		wp_redirect( admin_url( 'admin.php?page=mskd-queue' ) );
 		exit;
 	}
