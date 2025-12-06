@@ -40,7 +40,8 @@
         "classmap": [
             "includes/",
             "admin/",
-            "public/"
+            "public/",
+            "tests/Unit/"
         ]
     },
     "scripts": {
