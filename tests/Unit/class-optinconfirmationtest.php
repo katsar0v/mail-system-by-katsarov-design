@@ -165,20 +165,6 @@ class OptInConfirmationTest extends TestCase {
 		// Token too short.
 		$_GET['mskd_confirm'] = 'shorttoken';
 
-		// Rate limit check.
-		Functions\expect( 'get_transient' )
-			->once()
-			->andReturn( false );
-
-		Functions\expect( 'set_transient' )
-			->once()
-			->andReturn( true );
-
-		// No subscriber found.
-		$wpdb->shouldReceive( 'get_row' )
-			->once()
-			->andReturn( null );
-
 		Functions\expect( 'wp_die' )
 			->once()
 			->with(
@@ -211,20 +197,6 @@ class OptInConfirmationTest extends TestCase {
 
 		// Token with special characters (32 chars but invalid).
 		$_GET['mskd_confirm'] = 'abc123!@#$%^abc123def456abc123de';
-
-		// Rate limit check.
-		Functions\expect( 'get_transient' )
-			->once()
-			->andReturn( false );
-
-		Functions\expect( 'set_transient' )
-			->once()
-			->andReturn( true );
-
-		// No subscriber found.
-		$wpdb->shouldReceive( 'get_row' )
-			->once()
-			->andReturn( null );
 
 		Functions\expect( 'wp_die' )
 			->once()
