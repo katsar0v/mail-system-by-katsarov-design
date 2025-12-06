@@ -12,7 +12,7 @@ require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 require_once dirname( __DIR__ ) . '/vendor/antecedent/patchwork/Patchwork.php';
 
 // Load base TestCase class.
-require_once __DIR__ . '/Unit/TestCase.php';
+require_once __DIR__ . '/Unit/class-testcase.php';
 
 // Define WordPress constants for testing.
 define( 'ABSPATH', '/tmp/wordpress/' );
