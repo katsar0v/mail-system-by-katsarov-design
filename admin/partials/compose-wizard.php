@@ -446,7 +446,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 										<?php esc_html_e( 'Use default sender', 'mail-system-by-katsarov-design' ); ?>
 										<span class="description">
 											<?php
-											$default_from = get_option( 'mskd_settings', array() );
+											$default_from  = get_option( 'mskd_settings', array() );
 											$default_email = ! empty( $default_from['from_email'] ) ? $default_from['from_email'] : get_bloginfo( 'admin_email' );
 											printf(
 												esc_html__( '(%s)', 'mail-system-by-katsarov-design' ),
@@ -469,7 +469,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 										</div>
 										<div class="mskd-nested-form-field">
 											<input type="email" name="from_email" id="from_email" class="regular-text"
-												   placeholder="<?php esc_attr_e( 'sender@example.com', 'mail-system-by-katsarov-design' ); ?>">
+													placeholder="<?php esc_attr_e( 'sender@example.com', 'mail-system-by-katsarov-design' ); ?>">
 											<p class="description">
 												<?php esc_html_e( 'Email address that will appear as the sender of this campaign.', 'mail-system-by-katsarov-design' ); ?>
 											</p>
@@ -481,7 +481,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 										</div>
 										<div class="mskd-nested-form-field">
 											<input type="text" name="from_name" id="from_name" class="regular-text"
-												   placeholder="<?php esc_attr_e( 'Sender Name', 'mail-system-by-katsarov-design' ); ?>">
+													placeholder="<?php esc_attr_e( 'Sender Name', 'mail-system-by-katsarov-design' ); ?>">
 											<p class="description">
 												<?php esc_html_e( 'Display name for the sender (optional).', 'mail-system-by-katsarov-design' ); ?>
 											</p>

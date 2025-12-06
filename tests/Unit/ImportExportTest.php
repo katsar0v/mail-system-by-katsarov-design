@@ -32,7 +32,7 @@ class ImportExportTest extends TestCase {
 		parent::setUp();
 
 		// Create a fresh wpdb mock with flexible prepare handling.
-		$this->wpdb = Mockery::mock( 'wpdb' );
+		$this->wpdb         = Mockery::mock( 'wpdb' );
 		$this->wpdb->prefix = 'wp_';
 		$this->wpdb->shouldReceive( 'prepare' )
 			->andReturnUsing(
@@ -45,7 +45,7 @@ class ImportExportTest extends TestCase {
 					$result = $query;
 					foreach ( $args as $arg ) {
 						$replacement = is_string( $arg ) ? "'" . $arg . "'" : (string) $arg;
-						$result = preg_replace( '/%[sd]/', $replacement, $result, 1 );
+						$result      = preg_replace( '/%[sd]/', $replacement, $result, 1 );
 					}
 					return $result;
 				}
@@ -143,7 +143,7 @@ class ImportExportTest extends TestCase {
 	 * Test parse subscribers CSV with valid data.
 	 */
 	public function test_parse_subscribers_csv_with_valid_data(): void {
-		$csv_content = "email,first_name,last_name,status\n";
+		$csv_content  = "email,first_name,last_name,status\n";
 		$csv_content .= "john@example.com,John,Doe,active\n";
 		$csv_content .= "jane@example.com,Jane,Smith,inactive\n";
 
@@ -165,7 +165,7 @@ class ImportExportTest extends TestCase {
 	 * Test parse subscribers CSV reports invalid emails.
 	 */
 	public function test_parse_subscribers_csv_reports_invalid_emails(): void {
-		$csv_content = "email,first_name\n";
+		$csv_content  = "email,first_name\n";
 		$csv_content .= "invalid-email,John\n";
 		$csv_content .= "jane@example.com,Jane\n";
 
@@ -230,7 +230,12 @@ class ImportExportTest extends TestCase {
 
 		// Mock existing subscriber.
 		$this->wpdb->shouldReceive( 'get_row' )
-			->andReturn( (object) array( 'id' => 1, 'email' => 'existing@example.com' ) );
+			->andReturn(
+				(object) array(
+					'id'    => 1,
+					'email' => 'existing@example.com',
+				)
+			);
 
 		$result = $this->service->import_subscribers( $rows );
 
@@ -255,7 +260,12 @@ class ImportExportTest extends TestCase {
 
 		// Mock existing subscriber.
 		$this->wpdb->shouldReceive( 'get_row' )
-			->andReturn( (object) array( 'id' => 1, 'email' => 'existing@example.com' ) );
+			->andReturn(
+				(object) array(
+					'id'    => 1,
+					'email' => 'existing@example.com',
+				)
+			);
 
 		// Mock update.
 		$this->wpdb->shouldReceive( 'update' )
@@ -288,7 +298,7 @@ class ImportExportTest extends TestCase {
 	 * Test parse lists CSV with valid data.
 	 */
 	public function test_parse_lists_csv_with_valid_data(): void {
-		$csv_content = "name,description\n";
+		$csv_content  = "name,description\n";
 		$csv_content .= "Newsletter,Weekly updates\n";
 		$csv_content .= "Alerts,System alerts\n";
 
@@ -346,7 +356,12 @@ class ImportExportTest extends TestCase {
 
 		// Mock existing list.
 		$this->wpdb->shouldReceive( 'get_row' )
-			->andReturn( (object) array( 'id' => 1, 'name' => 'Existing List' ) );
+			->andReturn(
+				(object) array(
+					'id'   => 1,
+					'name' => 'Existing List',
+				)
+			);
 
 		$result = $this->service->import_lists( $rows );
 
@@ -376,7 +391,12 @@ class ImportExportTest extends TestCase {
 		// Mock list exists check for target list.
 		$this->wpdb->shouldReceive( 'get_row' )
 			->with( Mockery::pattern( '/mskd_lists.*id.*=.*5/i' ), Mockery::any() )
-			->andReturn( (object) array( 'id' => 5, 'name' => 'Target List' ) );
+			->andReturn(
+				(object) array(
+					'id'   => 5,
+					'name' => 'Target List',
+				)
+			);
 
 		// Mock insert subscriber and list assignments.
 		$this->wpdb->insert_id = 1;
@@ -419,11 +439,21 @@ class ImportExportTest extends TestCase {
 		// Mock list exists check for target lists (ids 3 and 7).
 		$this->wpdb->shouldReceive( 'get_row' )
 			->with( Mockery::pattern( '/mskd_lists.*id.*=.*3/i' ), Mockery::any() )
-			->andReturn( (object) array( 'id' => 3, 'name' => 'List Three' ) );
+			->andReturn(
+				(object) array(
+					'id'   => 3,
+					'name' => 'List Three',
+				)
+			);
 
 		$this->wpdb->shouldReceive( 'get_row' )
 			->with( Mockery::pattern( '/mskd_lists.*id.*=.*7/i' ), Mockery::any() )
-			->andReturn( (object) array( 'id' => 7, 'name' => 'List Seven' ) );
+			->andReturn(
+				(object) array(
+					'id'   => 7,
+					'name' => 'List Seven',
+				)
+			);
 
 		// Mock insert subscriber.
 		$this->wpdb->insert_id = 2;
@@ -464,7 +494,12 @@ class ImportExportTest extends TestCase {
 		// Mock list lookup by name (for CSV list).
 		$this->wpdb->shouldReceive( 'get_row' )
 			->with( Mockery::pattern( '/mskd_lists.*name.*FromCSV/i' ), Mockery::any() )
-			->andReturn( (object) array( 'id' => 10, 'name' => 'FromCSV' ) );
+			->andReturn(
+				(object) array(
+					'id'   => 10,
+					'name' => 'FromCSV',
+				)
+			);
 
 		// Mock insert subscriber.
 		$this->wpdb->insert_id = 3;
@@ -544,11 +579,17 @@ class ImportExportTest extends TestCase {
 				function ( $query ) {
 					// List lookup for target list validation.
 					if ( strpos( $query, 'mskd_lists' ) !== false ) {
-						return (object) array( 'id' => 8, 'name' => 'New Target List' );
+						return (object) array(
+							'id'   => 8,
+							'name' => 'New Target List',
+						);
 					}
 					// Subscriber lookup.
 					if ( strpos( $query, 'mskd_subscribers' ) !== false ) {
-						return (object) array( 'id' => 1, 'email' => 'existing@example.com' );
+						return (object) array(
+							'id'    => 1,
+							'email' => 'existing@example.com',
+						);
 					}
 					return null;
 				}
@@ -570,8 +611,8 @@ class ImportExportTest extends TestCase {
 		$result = $this->service->import_subscribers(
 			$rows,
 			array(
-				'update_existing'  => true,
-				'target_list_ids'  => array( 8 ),
+				'update_existing' => true,
+				'target_list_ids' => array( 8 ),
 			)
 		);
 
@@ -621,7 +662,7 @@ class ImportExportTest extends TestCase {
 	 */
 	public function test_parse_subscribers_csv_handles_utf8_bom(): void {
 		// Create CSV with UTF-8 BOM.
-		$csv_content = "\xEF\xBB\xBFemail,first_name\n";
+		$csv_content  = "\xEF\xBB\xBFemail,first_name\n";
 		$csv_content .= "test@example.com,Test\n";
 
 		$temp_file = tempnam( sys_get_temp_dir(), 'mskd_test' );

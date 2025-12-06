@@ -10,7 +10,7 @@
 
 // If uninstall not called from WordPress, exit
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-    exit;
+	exit;
 }
 
 global $wpdb;
@@ -21,14 +21,14 @@ delete_option( 'mskd_db_version' );
 
 // Drop custom tables
 $tables = array(
-    $wpdb->prefix . 'mskd_subscriber_list',
-    $wpdb->prefix . 'mskd_queue',
-    $wpdb->prefix . 'mskd_subscribers',
-    $wpdb->prefix . 'mskd_lists',
+	$wpdb->prefix . 'mskd_subscriber_list',
+	$wpdb->prefix . 'mskd_queue',
+	$wpdb->prefix . 'mskd_subscribers',
+	$wpdb->prefix . 'mskd_lists',
 );
 
 foreach ( $tables as $table ) {
-    $wpdb->query( "DROP TABLE IF EXISTS $table" );
+	$wpdb->query( "DROP TABLE IF EXISTS $table" );
 }
 
 // Clear scheduled cron events

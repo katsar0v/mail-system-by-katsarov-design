@@ -17,392 +17,396 @@ use Mockery;
  */
 class UnsubscribeTest extends TestCase {
 
-    /**
-     * Exception message used to prevent exit() in tests.
-     */
-    const TEST_COMPLETE_EXCEPTION = 'test_complete';
+	/**
+	 * Exception message used to prevent exit() in tests.
+	 */
+	const TEST_COMPLETE_EXCEPTION = 'test_complete';
 
-    /**
-     * Public class instance.
-     *
-     * @var \MSKD_Public
-     */
-    protected $public;
+	/**
+	 * Public class instance.
+	 *
+	 * @var \MSKD_Public
+	 */
+	protected $public;
 
-    /**
-     * Set up test environment.
-     */
-    protected function setUp(): void {
-        parent::setUp();
+	/**
+	 * Set up test environment.
+	 */
+	protected function setUp(): void {
+		parent::setUp();
 
-        // Stub shortcode and action registration.
-        Functions\stubs( array( 'add_shortcode' => null ) );
-        Functions\stubs( array( 'add_action' => null ) );
+		// Stub shortcode and action registration.
+		Functions\stubs( array( 'add_shortcode' => null ) );
+		Functions\stubs( array( 'add_action' => null ) );
 
-        // Load the public class.
-        require_once \MSKD_PLUGIN_DIR . 'public/class-public.php';
+		// Load the public class.
+		require_once \MSKD_PLUGIN_DIR . 'public/class-public.php';
 
-        $this->public = new \MSKD_Public();
+		$this->public = new \MSKD_Public();
 
-        // Set default SERVER vars.
-        $_SERVER['REMOTE_ADDR'] = '192.168.1.1';
-    }
+		// Set default SERVER vars.
+		$_SERVER['REMOTE_ADDR'] = '192.168.1.1';
+	}
 
-    /**
-     * Test valid token unsubscribes user.
-     *
-     * Note: This test verifies the database update is called. We throw an exception
-     * after the update to prevent the code from reaching include/exit.
-     */
-    public function test_valid_token_unsubscribes_user(): void {
-        $wpdb = $this->setup_wpdb_mock();
+	/**
+	 * Test valid token unsubscribes user.
+	 *
+	 * Note: This test verifies the database update is called. We throw an exception
+	 * after the update to prevent the code from reaching include/exit.
+	 */
+	public function test_valid_token_unsubscribes_user(): void {
+		$wpdb = $this->setup_wpdb_mock();
 
-        $valid_token = 'abc123def456abc123def456abc12345'; // 32 chars.
-        $_GET['mskd_unsubscribe'] = $valid_token;
+		$valid_token              = 'abc123def456abc123def456abc12345'; // 32 chars.
+		$_GET['mskd_unsubscribe'] = $valid_token;
 
-        // Rate limit check - no previous attempts.
-        Functions\expect( 'get_transient' )
-            ->once()
-            ->andReturn( false );
+		// Rate limit check - no previous attempts.
+		Functions\expect( 'get_transient' )
+			->once()
+			->andReturn( false );
 
-        Functions\expect( 'set_transient' )
-            ->once()
-            ->andReturn( true );
+		Functions\expect( 'set_transient' )
+			->once()
+			->andReturn( true );
 
-        // Valid subscriber found.
-        $subscriber = (object) array(
-            'id'     => 123,
-            'email'  => 'user@example.com',
-            'status' => 'active',
-        );
+		// Valid subscriber found.
+		$subscriber = (object) array(
+			'id'     => 123,
+			'email'  => 'user@example.com',
+			'status' => 'active',
+		);
 
-        $wpdb->shouldReceive( 'get_row' )
-            ->once()
-            ->andReturn( $subscriber );
+		$wpdb->shouldReceive( 'get_row' )
+			->once()
+			->andReturn( $subscriber );
 
-        // Should update status to unsubscribed.
-        // Throw exception after update to prevent include/exit.
-        $update_called = false;
-        $wpdb->shouldReceive( 'update' )
-            ->once()
-            ->with(
-                'wp_mskd_subscribers',
-                array( 'status' => 'unsubscribed' ),
-                array( 'id' => 123 ),
-                Mockery::type( 'array' ),
-                Mockery::type( 'array' )
-            )
-            ->andReturnUsing( function() use ( &$update_called ) {
-                $update_called = true;
-                // Throw to prevent reaching include/exit
-                throw new \Exception( self::TEST_COMPLETE_EXCEPTION );
-            } );
-        
-        try {
-            $this->public->handle_unsubscribe();
-        } catch ( \Exception $e ) {
-            $this->assertEquals( self::TEST_COMPLETE_EXCEPTION, $e->getMessage() );
-        }
-        
-        // Verify the update was called.
-        $this->assertTrue( $update_called, 'Database update should be called to set status to unsubscribed' );
-    }
+		// Should update status to unsubscribed.
+		// Throw exception after update to prevent include/exit.
+		$update_called = false;
+		$wpdb->shouldReceive( 'update' )
+			->once()
+			->with(
+				'wp_mskd_subscribers',
+				array( 'status' => 'unsubscribed' ),
+				array( 'id' => 123 ),
+				Mockery::type( 'array' ),
+				Mockery::type( 'array' )
+			)
+			->andReturnUsing(
+				function () use ( &$update_called ) {
+					$update_called = true;
+					// Throw to prevent reaching include/exit
+					throw new \Exception( self::TEST_COMPLETE_EXCEPTION );
+				}
+			);
 
-    /**
-     * Test invalid token returns error.
-     */
-    public function test_invalid_token_returns_error(): void {
-        $wpdb = $this->setup_wpdb_mock();
+		try {
+			$this->public->handle_unsubscribe();
+		} catch ( \Exception $e ) {
+			$this->assertEquals( self::TEST_COMPLETE_EXCEPTION, $e->getMessage() );
+		}
 
-        $invalid_token = 'validformat1234567890123456789ab'; // 32 chars but not in DB.
-        $_GET['mskd_unsubscribe'] = $invalid_token;
+		// Verify the update was called.
+		$this->assertTrue( $update_called, 'Database update should be called to set status to unsubscribed' );
+	}
 
-        // Rate limit check.
-        Functions\expect( 'get_transient' )
-            ->once()
-            ->andReturn( false );
+	/**
+	 * Test invalid token returns error.
+	 */
+	public function test_invalid_token_returns_error(): void {
+		$wpdb = $this->setup_wpdb_mock();
 
-        Functions\expect( 'set_transient' )
-            ->once()
-            ->andReturn( true );
+		$invalid_token            = 'validformat1234567890123456789ab'; // 32 chars but not in DB.
+		$_GET['mskd_unsubscribe'] = $invalid_token;
 
-        // No subscriber found.
-        $wpdb->shouldReceive( 'get_row' )
-            ->once()
-            ->andReturn( null );
+		// Rate limit check.
+		Functions\expect( 'get_transient' )
+			->once()
+			->andReturn( false );
 
-        Functions\expect( 'wp_die' )
-            ->once()
-            ->with(
-                Mockery::type( 'string' ),
-                Mockery::type( 'string' ),
-                Mockery::on(
-                    function ( $args ) {
-                        return $args['response'] === 400;
-                    }
-                )
-            )
-            ->andReturnUsing(
-                function () {
-                    throw new \Exception( 'wp_die_called' );
-                }
-            );
+		Functions\expect( 'set_transient' )
+			->once()
+			->andReturn( true );
 
-        try {
-            $this->public->handle_unsubscribe();
-        } catch ( \Exception $e ) {
-            $this->assertEquals( 'wp_die_called', $e->getMessage() );
-        }
-    }
+		// No subscriber found.
+		$wpdb->shouldReceive( 'get_row' )
+			->once()
+			->andReturn( null );
 
-    /**
-     * Test invalid token format is rejected.
-     */
-    public function test_invalid_token_format_rejected(): void {
-        $this->setup_wpdb_mock();
+		Functions\expect( 'wp_die' )
+			->once()
+			->with(
+				Mockery::type( 'string' ),
+				Mockery::type( 'string' ),
+				Mockery::on(
+					function ( $args ) {
+						return $args['response'] === 400;
+					}
+				)
+			)
+			->andReturnUsing(
+				function () {
+					throw new \Exception( 'wp_die_called' );
+				}
+			);
 
-        // Token too short.
-        $_GET['mskd_unsubscribe'] = 'shorttoken';
+		try {
+			$this->public->handle_unsubscribe();
+		} catch ( \Exception $e ) {
+			$this->assertEquals( 'wp_die_called', $e->getMessage() );
+		}
+	}
 
-        Functions\expect( 'wp_die' )
-            ->once()
-            ->with(
-                Mockery::type( 'string' ),
-                Mockery::type( 'string' ),
-                Mockery::on(
-                    function ( $args ) {
-                        return $args['response'] === 400;
-                    }
-                )
-            )
-            ->andReturnUsing(
-                function () {
-                    throw new \Exception( 'wp_die_format_error' );
-                }
-            );
+	/**
+	 * Test invalid token format is rejected.
+	 */
+	public function test_invalid_token_format_rejected(): void {
+		$this->setup_wpdb_mock();
 
-        try {
-            $this->public->handle_unsubscribe();
-        } catch ( \Exception $e ) {
-            $this->assertEquals( 'wp_die_format_error', $e->getMessage() );
-        }
-    }
+		// Token too short.
+		$_GET['mskd_unsubscribe'] = 'shorttoken';
 
-    /**
-     * Test token with special characters is rejected.
-     */
-    public function test_token_with_special_chars_rejected(): void {
-        $this->setup_wpdb_mock();
+		Functions\expect( 'wp_die' )
+			->once()
+			->with(
+				Mockery::type( 'string' ),
+				Mockery::type( 'string' ),
+				Mockery::on(
+					function ( $args ) {
+						return $args['response'] === 400;
+					}
+				)
+			)
+			->andReturnUsing(
+				function () {
+					throw new \Exception( 'wp_die_format_error' );
+				}
+			);
 
-        // Token with special characters (32 chars but invalid).
-        $_GET['mskd_unsubscribe'] = 'abc123!@#$%^abc123def456abc123de';
+		try {
+			$this->public->handle_unsubscribe();
+		} catch ( \Exception $e ) {
+			$this->assertEquals( 'wp_die_format_error', $e->getMessage() );
+		}
+	}
 
-        Functions\expect( 'wp_die' )
-            ->once()
-            ->with(
-                Mockery::type( 'string' ),
-                Mockery::type( 'string' ),
-                Mockery::on(
-                    function ( $args ) {
-                        return $args['response'] === 400;
-                    }
-                )
-            )
-            ->andReturnUsing(
-                function () {
-                    throw new \Exception( 'wp_die_special_chars' );
-                }
-            );
+	/**
+	 * Test token with special characters is rejected.
+	 */
+	public function test_token_with_special_chars_rejected(): void {
+		$this->setup_wpdb_mock();
 
-        try {
-            $this->public->handle_unsubscribe();
-        } catch ( \Exception $e ) {
-            $this->assertEquals( 'wp_die_special_chars', $e->getMessage() );
-        }
-    }
+		// Token with special characters (32 chars but invalid).
+		$_GET['mskd_unsubscribe'] = 'abc123!@#$%^abc123def456abc123de';
 
-    /**
-     * Test rate limiting prevents abuse.
-     */
-    public function test_rate_limiting_prevents_abuse(): void {
-        $this->setup_wpdb_mock();
+		Functions\expect( 'wp_die' )
+			->once()
+			->with(
+				Mockery::type( 'string' ),
+				Mockery::type( 'string' ),
+				Mockery::on(
+					function ( $args ) {
+						return $args['response'] === 400;
+					}
+				)
+			)
+			->andReturnUsing(
+				function () {
+					throw new \Exception( 'wp_die_special_chars' );
+				}
+			);
 
-        $valid_token = 'abc123def456abc123def456abc12345';
-        $_GET['mskd_unsubscribe'] = $valid_token;
+		try {
+			$this->public->handle_unsubscribe();
+		} catch ( \Exception $e ) {
+			$this->assertEquals( 'wp_die_special_chars', $e->getMessage() );
+		}
+	}
 
-        // Already at rate limit (10 attempts).
-        Functions\expect( 'get_transient' )
-            ->once()
-            ->andReturn( 10 );
+	/**
+	 * Test rate limiting prevents abuse.
+	 */
+	public function test_rate_limiting_prevents_abuse(): void {
+		$this->setup_wpdb_mock();
 
-        Functions\expect( 'wp_die' )
-            ->once()
-            ->with(
-                Mockery::type( 'string' ),
-                Mockery::type( 'string' ),
-                Mockery::on(
-                    function ( $args ) {
-                        return $args['response'] === 429; // Too Many Requests.
-                    }
-                )
-            )
-            ->andReturnUsing(
-                function () {
-                    throw new \Exception( 'rate_limited' );
-                }
-            );
+		$valid_token              = 'abc123def456abc123def456abc12345';
+		$_GET['mskd_unsubscribe'] = $valid_token;
 
-        try {
-            $this->public->handle_unsubscribe();
-        } catch ( \Exception $e ) {
-            $this->assertEquals( 'rate_limited', $e->getMessage() );
-        }
-    }
+		// Already at rate limit (10 attempts).
+		Functions\expect( 'get_transient' )
+			->once()
+			->andReturn( 10 );
 
-    /**
-     * Test rate limit counter is incremented.
-     */
-    public function test_rate_limit_counter_incremented(): void {
-        $wpdb = $this->setup_wpdb_mock();
+		Functions\expect( 'wp_die' )
+			->once()
+			->with(
+				Mockery::type( 'string' ),
+				Mockery::type( 'string' ),
+				Mockery::on(
+					function ( $args ) {
+						return $args['response'] === 429; // Too Many Requests.
+					}
+				)
+			)
+			->andReturnUsing(
+				function () {
+					throw new \Exception( 'rate_limited' );
+				}
+			);
 
-        $valid_token = 'abc123def456abc123def456abc12345';
-        $_GET['mskd_unsubscribe'] = $valid_token;
+		try {
+			$this->public->handle_unsubscribe();
+		} catch ( \Exception $e ) {
+			$this->assertEquals( 'rate_limited', $e->getMessage() );
+		}
+	}
 
-        // 5 previous attempts.
-        Functions\expect( 'get_transient' )
-            ->once()
-            ->andReturn( 5 );
+	/**
+	 * Test rate limit counter is incremented.
+	 */
+	public function test_rate_limit_counter_incremented(): void {
+		$wpdb = $this->setup_wpdb_mock();
 
-        // Should increment to 6.
-        Functions\expect( 'set_transient' )
-            ->once()
-            ->with(
-                Mockery::type( 'string' ),
-                6,
-                5 * 60 // 5 minutes in seconds.
-            )
-            ->andReturn( true );
+		$valid_token              = 'abc123def456abc123def456abc12345';
+		$_GET['mskd_unsubscribe'] = $valid_token;
 
-        $wpdb->shouldReceive( 'get_row' )
-            ->once()
-            ->andReturn( null );
+		// 5 previous attempts.
+		Functions\expect( 'get_transient' )
+			->once()
+			->andReturn( 5 );
 
-        Functions\expect( 'wp_die' )
-            ->once()
-            ->andReturnUsing(
-                function () {
-                    throw new \Exception( 'wp_die_called' );
-                }
-            );
+		// Should increment to 6.
+		Functions\expect( 'set_transient' )
+			->once()
+			->with(
+				Mockery::type( 'string' ),
+				6,
+				5 * 60 // 5 minutes in seconds.
+			)
+			->andReturn( true );
 
-        try {
-            $this->public->handle_unsubscribe();
-        } catch ( \Exception $e ) {
-            $this->assertEquals( 'wp_die_called', $e->getMessage() );
-        }
-    }
+		$wpdb->shouldReceive( 'get_row' )
+			->once()
+			->andReturn( null );
 
-    /**
-     * Test unsubscribe changes status to unsubscribed.
-     *
-     * Note: This test verifies the database update is called with correct data.
-     * We throw an exception after the update to prevent include/exit.
-     */
-    public function test_unsubscribe_changes_status_to_unsubscribed(): void {
-        $wpdb = $this->setup_wpdb_mock();
+		Functions\expect( 'wp_die' )
+			->once()
+			->andReturnUsing(
+				function () {
+					throw new \Exception( 'wp_die_called' );
+				}
+			);
 
-        $valid_token = 'abc123def456abc123def456abc12345';
-        $_GET['mskd_unsubscribe'] = $valid_token;
+		try {
+			$this->public->handle_unsubscribe();
+		} catch ( \Exception $e ) {
+			$this->assertEquals( 'wp_die_called', $e->getMessage() );
+		}
+	}
 
-        Functions\expect( 'get_transient' )
-            ->once()
-            ->andReturn( false );
+	/**
+	 * Test unsubscribe changes status to unsubscribed.
+	 *
+	 * Note: This test verifies the database update is called with correct data.
+	 * We throw an exception after the update to prevent include/exit.
+	 */
+	public function test_unsubscribe_changes_status_to_unsubscribed(): void {
+		$wpdb = $this->setup_wpdb_mock();
 
-        Functions\expect( 'set_transient' )
-            ->once()
-            ->andReturn( true );
+		$valid_token              = 'abc123def456abc123def456abc12345';
+		$_GET['mskd_unsubscribe'] = $valid_token;
 
-        $subscriber = (object) array(
-            'id'     => 999,
-            'email'  => 'subscriber@example.com',
-            'status' => 'active',
-        );
+		Functions\expect( 'get_transient' )
+			->once()
+			->andReturn( false );
 
-        $wpdb->shouldReceive( 'get_row' )
-            ->once()
-            ->andReturn( $subscriber );
+		Functions\expect( 'set_transient' )
+			->once()
+			->andReturn( true );
 
-        // Verify the exact update call.
-        // Throw exception after update to prevent include/exit.
-        $update_called = false;
-        $wpdb->shouldReceive( 'update' )
-            ->once()
-            ->with(
-                'wp_mskd_subscribers',
-                array( 'status' => 'unsubscribed' ),
-                array( 'id' => 999 ),
-                array( '%s' ),
-                array( '%d' )
-            )
-            ->andReturnUsing( function() use ( &$update_called ) {
-                $update_called = true;
-                // Throw to prevent reaching include/exit
-                throw new \Exception( self::TEST_COMPLETE_EXCEPTION );
-            } );
-        
-        try {
-            $this->public->handle_unsubscribe();
-        } catch ( \Exception $e ) {
-            $this->assertEquals( self::TEST_COMPLETE_EXCEPTION, $e->getMessage() );
-        }
-        
-        // Verify the update was called.
-        $this->assertTrue( $update_called, 'Status should be updated to unsubscribed' );
-    }
+		$subscriber = (object) array(
+			'id'     => 999,
+			'email'  => 'subscriber@example.com',
+			'status' => 'active',
+		);
 
-    /**
-     * Test that no query param does nothing.
-     */
-    public function test_no_query_param_does_nothing(): void {
-        $this->setup_wpdb_mock();
+		$wpdb->shouldReceive( 'get_row' )
+			->once()
+			->andReturn( $subscriber );
 
-        // No unsubscribe param.
-        unset( $_GET['mskd_unsubscribe'] );
+		// Verify the exact update call.
+		// Throw exception after update to prevent include/exit.
+		$update_called = false;
+		$wpdb->shouldReceive( 'update' )
+			->once()
+			->with(
+				'wp_mskd_subscribers',
+				array( 'status' => 'unsubscribed' ),
+				array( 'id' => 999 ),
+				array( '%s' ),
+				array( '%d' )
+			)
+			->andReturnUsing(
+				function () use ( &$update_called ) {
+					$update_called = true;
+					// Throw to prevent reaching include/exit
+					throw new \Exception( self::TEST_COMPLETE_EXCEPTION );
+				}
+			);
 
-        // Should return early without doing anything.
-        Functions\expect( 'wp_die' )->never();
-        Functions\expect( 'get_transient' )->never();
+		try {
+			$this->public->handle_unsubscribe();
+		} catch ( \Exception $e ) {
+			$this->assertEquals( self::TEST_COMPLETE_EXCEPTION, $e->getMessage() );
+		}
 
-        $this->public->handle_unsubscribe();
+		// Verify the update was called.
+		$this->assertTrue( $update_called, 'Status should be updated to unsubscribed' );
+	}
 
-        // If we get here without exceptions, the test passes.
-        $this->assertTrue( true );
-    }
+	/**
+	 * Test that no query param does nothing.
+	 */
+	public function test_no_query_param_does_nothing(): void {
+		$this->setup_wpdb_mock();
 
-    /**
-     * Test empty token does nothing.
-     */
-    public function test_empty_token_does_nothing(): void {
-        $this->setup_wpdb_mock();
+		// No unsubscribe param.
+		unset( $_GET['mskd_unsubscribe'] );
 
-        $_GET['mskd_unsubscribe'] = '';
+		// Should return early without doing anything.
+		Functions\expect( 'wp_die' )->never();
+		Functions\expect( 'get_transient' )->never();
 
-        // Should return early.
-        Functions\expect( 'wp_die' )->never();
-        Functions\expect( 'get_transient' )->never();
+		$this->public->handle_unsubscribe();
 
-        $this->public->handle_unsubscribe();
+		// If we get here without exceptions, the test passes.
+		$this->assertTrue( true );
+	}
 
-        $this->assertTrue( true );
-    }
+	/**
+	 * Test empty token does nothing.
+	 */
+	public function test_empty_token_does_nothing(): void {
+		$this->setup_wpdb_mock();
 
-    /**
-     * Clean up after each test.
-     */
-    protected function tearDown(): void {
-        unset( $_GET['mskd_unsubscribe'] );
-        unset( $_SERVER['REMOTE_ADDR'] );
+		$_GET['mskd_unsubscribe'] = '';
 
-        parent::tearDown();
-    }
+		// Should return early.
+		Functions\expect( 'wp_die' )->never();
+		Functions\expect( 'get_transient' )->never();
+
+		$this->public->handle_unsubscribe();
+
+		$this->assertTrue( true );
+	}
+
+	/**
+	 * Clean up after each test.
+	 */
+	protected function tearDown(): void {
+		unset( $_GET['mskd_unsubscribe'] );
+		unset( $_SERVER['REMOTE_ADDR'] );
+
+		parent::tearDown();
+	}
 }
