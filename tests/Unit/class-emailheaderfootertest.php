@@ -41,7 +41,7 @@ class EmailHeaderFooterTest extends TestCase {
 		parent::setUp();
 
 		// Load the cron handler class.
-		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-cron-handler.php';
+		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-mskd-cron-handler.php';
 
 		$this->cron_handler = new \MSKD_Cron_Handler();
 

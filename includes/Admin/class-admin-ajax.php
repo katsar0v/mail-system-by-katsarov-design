@@ -67,7 +67,7 @@ class Admin_Ajax {
 		}
 
 		// Load SMTP Mailer.
-		require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+		require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-smtp-mailer.php';
 
 		$smtp_mailer = new \MSKD_SMTP_Mailer();
 		$result      = $smtp_mailer->test_connection();

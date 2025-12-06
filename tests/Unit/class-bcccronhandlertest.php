@@ -31,8 +31,8 @@ class BccCronHandlerTest extends TestCase {
 		parent::setUp();
 
 		// Load required class.
-		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
-		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-cron-handler.php';
+		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-mskd-smtp-mailer.php';
+		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-mskd-cron-handler.php';
 
 		// Mock WordPress functions.
 		Functions\when( 'current_time' )->justReturn( '2024-01-01 12:00:00' );

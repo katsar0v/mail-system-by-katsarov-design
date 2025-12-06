@@ -449,7 +449,7 @@ class Admin_Email {
 		$settings = get_option( 'mskd_settings', array() );
 
 		// Load SMTP Mailer.
-		require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+		require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-smtp-mailer.php';
 		$mailer = new \MSKD_SMTP_Mailer();
 
 		if ( $is_immediate ) {

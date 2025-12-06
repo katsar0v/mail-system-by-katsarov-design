@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Load the List Subscriber DAO.
-require_once MSKD_PLUGIN_DIR . 'includes/models/class-list-subscriber.php';
+require_once MSKD_PLUGIN_DIR . 'includes/models/class-mskd-list-subscriber.php';
 
 /**
  * Class MSKD_List_Provider
