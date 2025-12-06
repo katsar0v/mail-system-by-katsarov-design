@@ -28,7 +28,7 @@ define( 'MSKD_BATCH_SIZE', 10 );
 
 // Register plugin autoloader for traits and namespaced classes.
 spl_autoload_register(
-	function ( $class ) {
+	function ( $class_name ) {
 		// Handle PSR-4 namespaced classes (MSKD\*)
 		if ( strpos( $class, 'MSKD\\' ) === 0 ) {
 			// Skip test classes - they are handled by Composer autoloader.
@@ -65,18 +65,21 @@ spl_autoload_register(
 // Create mock directory structure for PHPMailer.
 $phpmailer_dir = '/tmp/wordpress/wp-includes/PHPMailer';
 if ( ! is_dir( $phpmailer_dir ) ) {
-	mkdir( $phpmailer_dir, 0777, true );
+// phpcs:ignore WordPress.WP.AlternativeFunctions.mkdir_mkdir -- Required for test setup.
+mkdir( $phpmailer_dir, 0777, true );
 }
 
 // Create mock directory for wp-admin/includes.
 $wp_admin_includes_dir = '/tmp/wordpress/wp-admin/includes';
 if ( ! is_dir( $wp_admin_includes_dir ) ) {
-	mkdir( $wp_admin_includes_dir, 0777, true );
+// phpcs:ignore WordPress.WP.AlternativeFunctions.mkdir_mkdir -- Required for test setup.
+mkdir( $wp_admin_includes_dir, 0777, true );
 }
 
 // Create mock upgrade.php with dbDelta function stub.
 if ( ! file_exists( $wp_admin_includes_dir . '/upgrade.php' ) ) {
-	file_put_contents(
+// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Required for test setup.
+file_put_contents(
 		$wp_admin_includes_dir . '/upgrade.php',
 		'<?php
 // Mock upgrade.php for testing
@@ -91,7 +94,8 @@ if ( ! function_exists( "dbDelta" ) ) {
 
 // Create mock PHPMailer classes for testing.
 if ( ! file_exists( $phpmailer_dir . '/PHPMailer.php' ) ) {
-	file_put_contents(
+// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Required for test setup.
+file_put_contents(
 		$phpmailer_dir . '/PHPMailer.php',
 		'<?php
 namespace PHPMailer\PHPMailer;
@@ -117,7 +121,8 @@ class PHPMailer {
 }
 
 if ( ! file_exists( $phpmailer_dir . '/SMTP.php' ) ) {
-	file_put_contents(
+// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Required for test setup.
+file_put_contents(
 		$phpmailer_dir . '/SMTP.php',
 		'<?php
 namespace PHPMailer\PHPMailer;
