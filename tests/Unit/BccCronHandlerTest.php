@@ -63,6 +63,8 @@ class BccCronHandlerTest extends TestCase {
 		$queue_item->unsubscribe_token = 'token123';
 		$queue_item->bcc       = 'bcc1@example.com, bcc2@example.com';
 		$queue_item->attempts  = 0;
+		$queue_item->from_email = null;
+		$queue_item->from_name  = null;
 
 		// Parse Bcc as the cron handler would.
 		$bcc_emails = array_map( 'trim', explode( ',', $queue_item->bcc ) );

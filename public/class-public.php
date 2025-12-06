@@ -565,11 +565,16 @@ Best regards,
 			$site_name
 		);
 
-		// Use WordPress wp_mail for sending confirmation email.
-		$mail_sent = wp_mail( $email, $subject, $body );
+		// Use SMTP mailer to respect configured from address and sender name.
+		require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+		$settings    = get_option( 'mskd_settings', array() );
+		$smtp_mailer = new MSKD_SMTP_Mailer( $settings );
+
+		// Send email using SMTP mailer (respects from_email and from_name from settings).
+		$mail_sent = $smtp_mailer->send( $email, $subject, $body );
 		if ( ! $mail_sent ) {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional logging for debugging email failures.
-			error_log( 'MSKD: Failed to send opt-in confirmation email to ' . $email );
+			error_log( 'MSKD: Failed to send opt-in confirmation email to ' . $email . '. Error: ' . $smtp_mailer->get_last_error() );
 		}
 	}
 }

@@ -189,6 +189,8 @@ class EmailHeaderFooterTest extends TestCase {
 				'status'            => 'pending',
 				'attempts'          => 0,
 				'unsubscribe_token' => 'abc123def456abc123def456abc12345',
+				'from_email'        => null,
+				'from_name'         => null,
 			),
 		);
 
@@ -255,6 +257,8 @@ class EmailHeaderFooterTest extends TestCase {
 				'status'            => 'pending',
 				'attempts'          => 0,
 				'unsubscribe_token' => 'abc123def456abc123def456abc12345',
+				'from_email'        => null,
+				'from_name'         => null,
 			),
 		);
 
@@ -320,6 +324,8 @@ class EmailHeaderFooterTest extends TestCase {
 				'status'            => 'pending',
 				'attempts'          => 0,
 				'unsubscribe_token' => 'abc123def456abc123def456abc12345',
+				'from_email'        => null,
+				'from_name'         => null,
 			),
 		);
 
@@ -384,6 +390,8 @@ class EmailHeaderFooterTest extends TestCase {
 				'status'            => 'pending',
 				'attempts'          => 0,
 				'unsubscribe_token' => 'abc123def456abc123def456abc12345',
+				'from_email'        => null,
+				'from_name'         => null,
 			),
 		);
 
@@ -448,6 +456,8 @@ class EmailHeaderFooterTest extends TestCase {
 				'status'            => 'pending',
 				'attempts'          => 0,
 				'unsubscribe_token' => 'testtoken123456789012345678901234',
+				'from_email'        => null,
+				'from_name'         => null,
 			),
 		);
 
@@ -513,6 +523,8 @@ class EmailHeaderFooterTest extends TestCase {
 				'status'            => 'pending',
 				'attempts'          => 0,
 				'unsubscribe_token' => 'abc123def456abc123def456abc12345',
+				'from_email'        => null,
+				'from_name'         => null,
 			),
 		);
 

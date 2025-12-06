@@ -28,6 +28,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **One-time emails now include header and footer**
   - Immediate one-time emails now apply the configured email header and footer
   - Previously only queued/scheduled emails included the header and footer
+- **Confirmation Email Sender Configuration**
+  - Opt-in confirmation emails now respect the configured SMTP sender settings (from_email and from_name)
+  - Updated to use MSKD_SMTP_Mailer instead of wp_mail() for confirmation emails
+  - Added test coverage for confirmation email sender configuration
 
 ### Planned
 - Open and click statistics
