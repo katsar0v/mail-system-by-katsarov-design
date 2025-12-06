@@ -21,6 +21,7 @@ $lists = MSKD_List_Provider::get_all_lists();
 
 // Get pre-selected list IDs from URL parameter (supports both single and multiple).
 $preselected_list_ids = array();
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce not needed, this is view state from URL, not form submission.
 if ( isset( $_GET['list_id'] ) ) {
 	$list_id_param = sanitize_text_field( wp_unslash( $_GET['list_id'] ) );
 	// Support comma-separated list IDs.
@@ -38,8 +39,10 @@ if ( isset( $_GET['list_id'] ) ) {
 $selected_template = null;
 $prefilled_subject = '';
 $prefilled_content = '';
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce not needed, this is view state from URL, not form submission.
 if ( isset( $_GET['template_id'] ) ) {
 	$template_service  = new Template_Service();
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce not needed, this is view state from URL, not form submission.
 	$selected_template = $template_service->get_by_id( intval( $_GET['template_id'] ) );
 	if ( $selected_template ) {
 		$prefilled_subject = $selected_template->subject;
@@ -90,7 +93,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 			<table class="form-table">
 				<tr>
 					<th scope="row">
-						<label for="mskd-lists-select"><?php _e( 'Send to lists', 'mail-system-by-katsarov-design' ); ?> *</label>
+						<label for="mskd-lists-select"><?php esc_html_e( 'Send to lists', 'mail-system-by-katsarov-design' ); ?> *</label>
 					</th>
 					<td>
 						<?php if ( ! empty( $lists ) ) : ?>
@@ -98,8 +101,9 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 								<?php foreach ( $lists as $list ) : ?>
 									<?php
 									$subscriber_count = MSKD_List_Provider::get_list_active_subscriber_count( $list );
-									$is_external      = $list->source === 'external';
+									$is_external      = 'external' === $list->source;
 									$is_preselected   = in_array( $list->id, $preselected_list_ids, true );
+									/* translators: %d: number of subscribers in the list */
 									$badge            = $is_external ? ' [' . __( 'Automated', 'mail-system-by-katsarov-design' ) . ']' : '';
 									?>
 									<option value="<?php echo esc_attr( $list->id ); ?>" 
@@ -111,13 +115,13 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 								<?php endforeach; ?>
 							</select>
 							<p class="description" style="margin-top: 8px;">
-								<?php _e( 'Start typing to search. You can select multiple lists.', 'mail-system-by-katsarov-design' ); ?>
+								<?php esc_html_e( 'Start typing to search. You can select multiple lists.', 'mail-system-by-katsarov-design' ); ?>
 							</p>
 						<?php else : ?>
 							<p class="description">
-								<?php _e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?>
+								<?php esc_html_e( 'No lists created.', 'mail-system-by-katsarov-design' ); ?>
 								<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-lists&action=add' ) ); ?>">
-									<?php _e( 'Create list', 'mail-system-by-katsarov-design' ); ?>
+									<?php esc_html_e( 'Create list', 'mail-system-by-katsarov-design' ); ?>
 								</a>
 							</p>
 						<?php endif; ?>
@@ -132,8 +136,11 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 						<?php if ( $selected_template ) : ?>
 							<p class="description">
 								<?php
-								/* translators: %s: template name */
-								printf( esc_html__( 'Using template: %s', 'mail-system-by-katsarov-design' ), '<strong>' . esc_html( $selected_template->name ) . '</strong>' );
+								printf(
+									/* translators: %s: template name */
+									esc_html__( 'Using template: %s', 'mail-system-by-katsarov-design' ),
+									'<strong>' . esc_html( $selected_template->name ) . '</strong>'
+								);
 								?>
 							</p>
 						<?php endif; ?>
@@ -225,13 +232,13 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 
 				<tr>
 					<th scope="row">
-						<label for="schedule_type"><?php _e( 'Scheduling', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="schedule_type"><?php esc_html_e( 'Scheduling', 'mail-system-by-katsarov-design' ); ?></label>
 					</th>
 					<td>
 						<select name="schedule_type" id="schedule_type" class="mskd-schedule-type">
-							<option value="now"><?php _e( 'Send now', 'mail-system-by-katsarov-design' ); ?></option>
-							<option value="absolute"><?php _e( 'Specific date and time', 'mail-system-by-katsarov-design' ); ?></option>
-							<option value="relative"><?php _e( 'After a set time', 'mail-system-by-katsarov-design' ); ?></option>
+							<option value="now"><?php esc_html_e( 'Send now', 'mail-system-by-katsarov-design' ); ?></option>
+							<option value="absolute"><?php esc_html_e( 'Specific date and time', 'mail-system-by-katsarov-design' ); ?></option>
+							<option value="relative"><?php esc_html_e( 'After a set time', 'mail-system-by-katsarov-design' ); ?></option>
 						</select>
 						
 						<div class="mskd-schedule-absolute" style="display: none; margin-top: 10px;">
@@ -245,7 +252,8 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 							<p class="description">
 								<?php
 								printf(
-									__( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ),
+									/* translators: %s: timezone string */
+									esc_html__( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ),
 									'<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
 								);
 								?>
@@ -253,7 +261,8 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 								<?php
 								$current_time = new DateTime( 'now', $wp_timezone );
 								printf(
-									__( 'Current server time: %s', 'mail-system-by-katsarov-design' ),
+									/* translators: %s: current server time in H:i format */
+									esc_html__( 'Current server time: %s', 'mail-system-by-katsarov-design' ),
 									'<strong>' . esc_html( $current_time->format( 'H:i' ) ) . '</strong>'
 								);
 								?>
@@ -268,12 +277,12 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 									value="1"
 									min="1"
 									max="999">
-							<select name="delay_unit" id="delay_unit">
-								<option value="minutes"><?php _e( 'minutes', 'mail-system-by-katsarov-design' ); ?></option>
-								<option value="hours" selected><?php _e( 'hours', 'mail-system-by-katsarov-design' ); ?></option>
-								<option value="days"><?php _e( 'days', 'mail-system-by-katsarov-design' ); ?></option>
-							</select>
-							<p class="description"><?php _e( 'Emails will be sent after the specified time.', 'mail-system-by-katsarov-design' ); ?></p>
+								<select name="delay_unit" id="delay_unit">
+									<option value="minutes"><?php esc_html_e( 'minutes', 'mail-system-by-katsarov-design' ); ?></option>
+									<option value="hours" selected><?php esc_html_e( 'hours', 'mail-system-by-katsarov-design' ); ?></option>
+									<option value="days"><?php esc_html_e( 'days', 'mail-system-by-katsarov-design' ); ?></option>
+								</select>
+								<p class="description"><?php esc_html_e( 'Emails will be sent after the specified time.', 'mail-system-by-katsarov-design' ); ?></p>
 						</div>
 					</td>
 				</tr>
@@ -281,7 +290,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 
 			<p class="submit">
 				<input type="submit" name="mskd_send_email" class="button button-primary button-large mskd-submit-btn" 
-						value="<?php _e( 'Add to queue', 'mail-system-by-katsarov-design' ); ?>"
+						value="<?php esc_attr_e( 'Add to queue', 'mail-system-by-katsarov-design' ); ?>"
 						data-send-now="<?php esc_attr_e( 'Add to queue', 'mail-system-by-katsarov-design' ); ?>"
 						data-schedule="<?php esc_attr_e( 'Schedule sending', 'mail-system-by-katsarov-design' ); ?>">
 			</p>
