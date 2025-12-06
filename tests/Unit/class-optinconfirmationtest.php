@@ -377,7 +377,7 @@ class OptInConfirmationTest extends TestCase {
 				Mockery::type( 'string' ),
 				Mockery::on(
 					function ( $args ) {
-						return (bool) esc_html( $args['response'] === 400 );
+						return (bool) esc_html( 400 === $args['response'] );
 					}
 				)
 			)
