@@ -40,7 +40,7 @@ class SubscriberTest extends TestCase {
 		Functions\stubs( array( 'current_user_can' => true ) );
 
 		// Load the admin class.
-		require_once \MSKD_PLUGIN_DIR . 'admin/class-admin.php';
+		require_once \MSKD_PLUGIN_DIR . 'admin/class-mskd-admin.php';
 
 		$this->admin = new \MSKD_Admin();
 	}

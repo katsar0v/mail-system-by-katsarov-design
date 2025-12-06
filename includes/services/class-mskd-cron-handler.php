@@ -90,7 +90,7 @@ class MSKD_Cron_Handler {
 		$settings = get_option( 'mskd_settings', array() );
 
 		// Initialize mailer (uses SMTP if configured, otherwise PHP mail).
-		require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+		require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-smtp-mailer.php';
 		$this->smtp_mailer = new MSKD_SMTP_Mailer( $settings );
 
 		foreach ( $queue_items as $item ) {

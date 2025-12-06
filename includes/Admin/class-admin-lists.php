@@ -54,7 +54,7 @@ class Admin_Lists {
 		}
 
 		// Handle edit list.
-		if ( isset( $_POST['mskd_edit_list'] ) && wp_verify_nonce( $_POST['mskd_nonce'], 'mskd_edit_list' ) ) {
+		if ( isset( $_POST['mskd_edit_list'] ) && wp_verify_nonce( wp_unslash( $_POST['mskd_nonce'] ), 'mskd_edit_list' ) ) {
 			$this->handle_edit();
 		}
 
@@ -62,7 +62,7 @@ class Admin_Lists {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in the if condition below.
 		if ( isset( $_GET['action'] ) && 'delete_list' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) && isset( $_GET['id'] ) ) {
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified here, sanitized before use.
-			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'delete_list_' . intval( $_GET['id'] ) ) ) {
+			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( wp_unslash( $_GET['_wpnonce'] ), 'delete_list_' . intval( $_GET['id'] ) ) ) {
 				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified above.
 				$this->handle_delete( intval( $_GET['id'] ) );
 			}

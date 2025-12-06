@@ -154,7 +154,7 @@ function mskd_init() {
 
 	// Initialize admin.
 	if ( is_admin() ) {
-		require_once MSKD_PLUGIN_DIR . 'admin/class-admin.php';
+		require_once MSKD_PLUGIN_DIR . 'admin/class-mskd-admin.php';
 		$admin = new MSKD_Admin();
 		$admin->init();
 	}
@@ -165,7 +165,7 @@ function mskd_init() {
 	$public->init();
 
 	// Initialize cron handler.
-	require_once MSKD_PLUGIN_DIR . 'includes/services/class-cron-handler.php';
+	require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-cron-handler.php';
 	$cron = new MSKD_Cron_Handler();
 	$cron->init();
 }
