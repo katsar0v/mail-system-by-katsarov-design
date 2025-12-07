@@ -70,10 +70,10 @@ class PublicSubscriptionTest extends TestCase {
 				'wp_mskd_subscribers',
 				Mockery::on(
 					function ( $data ) {
-						return $data['email'] === 'newuser@example.com'
-							&& $data['first_name'] === 'New'
-							&& $data['last_name'] === 'User'
-							&& $data['status'] === 'inactive'
+						return 'newuser@example.com' === $data['email']
+							&& 'New' === $data['first_name']
+							&& 'User' === $data['last_name']
+							&& 'inactive' === $data['status']
 							&& isset( $data['opt_in_token'] );
 					}
 				),
@@ -160,7 +160,7 @@ class PublicSubscriptionTest extends TestCase {
 				'wp_mskd_subscribers',
 				Mockery::on(
 					function ( $data ) {
-						return $data['status'] === 'inactive'
+						return 'inactive' === $data['status']
 							&& isset( $data['opt_in_token'] );
 					}
 				),
@@ -447,7 +447,7 @@ class PublicSubscriptionTest extends TestCase {
 		// Already in list.
 		$wpdb->shouldReceive( 'get_var' )
 			->once()
-			->andReturn( 99 ); // Returns existing ID
+			->andReturn( 99 ); // Returns existing ID.
 
 		// Should NOT insert into list again (already exists).
 		$wpdb->shouldReceive( 'insert' )

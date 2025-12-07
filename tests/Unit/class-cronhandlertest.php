@@ -88,13 +88,13 @@ class CronHandlerTest extends TestCase {
 
 		// Mark as processing.
 		$wpdb->shouldReceive( 'update' )
-			->twice() // Once for processing, once for sent
+			->twice() // Once for processing, once for sent.
 			->andReturn( 1 );
 
 		// Mock settings with SMTP enabled - use when() to override the stub.
 		Functions\when( 'get_option' )->alias(
 			function ( $option, $default = false ) {
-				if ( $option === 'mskd_settings' ) {
+				if ( 'mskd_settings' === $option ) {
 						return array(
 							'smtp_enabled' => true,
 							'smtp_host'    => 'smtp.example.com',
@@ -245,7 +245,7 @@ class CronHandlerTest extends TestCase {
 				'wp_mskd_queue',
 				Mockery::on(
 					function ( $data ) {
-						return $data['status'] === 'processing';
+						return 'processing' === $data['status'];
 					}
 				),
 				Mockery::type( 'array' ),
@@ -261,7 +261,7 @@ class CronHandlerTest extends TestCase {
 				'wp_mskd_queue',
 				Mockery::on(
 					function ( $data ) {
-						return $data['status'] === 'sent' && isset( $data['sent_at'] );
+						return 'sent' === $data['status'] && isset( $data['sent_at'] );
 					}
 				),
 				Mockery::type( 'array' ),
@@ -273,7 +273,7 @@ class CronHandlerTest extends TestCase {
 		// Mock settings with SMTP enabled - use when() to override the stub.
 		Functions\when( 'get_option' )->alias(
 			function ( $option, $default = false ) {
-				if ( $option === 'mskd_settings' ) {
+				if ( 'mskd_settings' === $option ) {
 						return array(
 							'smtp_enabled' => true,
 							'smtp_host'    => 'smtp.example.com',
@@ -311,7 +311,7 @@ class CronHandlerTest extends TestCase {
 				'subject'           => 'Subject',
 				'body'              => 'Body',
 				'status'            => 'pending',
-				'attempts'          => 2, // Already tried twice, this will be the 3rd attempt
+				'attempts'          => 2, // Already tried twice, this will be the 3rd attempt.
 				'unsubscribe_token' => 'abc123def456abc123def456abc12345',
 				'from_email'        => null,
 				'from_name'         => null,
@@ -349,7 +349,7 @@ class CronHandlerTest extends TestCase {
 				'wp_mskd_queue',
 				Mockery::on(
 					function ( $data ) {
-						return $data['status'] === 'processing';
+						return 'processing' === $data['status'];
 					}
 				),
 				Mockery::type( 'array' ),
@@ -365,7 +365,7 @@ class CronHandlerTest extends TestCase {
 				'wp_mskd_queue',
 				Mockery::on(
 					function ( $data ) {
-						return $data['status'] === 'sent' && isset( $data['sent_at'] );
+						return 'sent' === $data['status'] && isset( $data['sent_at'] );
 					}
 				),
 				Mockery::type( 'array' ),
@@ -377,7 +377,7 @@ class CronHandlerTest extends TestCase {
 		// Mock settings with SMTP enabled - use when() to override the stub.
 		Functions\when( 'get_option' )->alias(
 			function ( $option, $default = false ) {
-				if ( $option === 'mskd_settings' ) {
+				if ( 'mskd_settings' === $option ) {
 						return array(
 							'smtp_enabled' => true,
 							'smtp_host'    => 'smtp.example.com',
@@ -449,7 +449,7 @@ class CronHandlerTest extends TestCase {
 		// Mock settings with SMTP enabled - use when() to override the stub.
 		Functions\when( 'get_option' )->alias(
 			function ( $option, $default = false ) {
-				if ( $option === 'mskd_settings' ) {
+				if ( 'mskd_settings' === $option ) {
 						return array(
 							'smtp_enabled' => true,
 							'smtp_host'    => 'smtp.example.com',
@@ -526,7 +526,7 @@ class CronHandlerTest extends TestCase {
 				'wp_mskd_queue',
 				Mockery::on(
 					function ( $data ) {
-						return $data['attempts'] === 3; // Should be 2 + 1.
+						return 3 === $data['attempts']; // Should be 2 + 1.
 					}
 				),
 				Mockery::type( 'array' ),
@@ -542,7 +542,7 @@ class CronHandlerTest extends TestCase {
 		// Mock settings with SMTP enabled - use when() to override the stub.
 		Functions\when( 'get_option' )->alias(
 			function ( $option, $default = false ) {
-				if ( $option === 'mskd_settings' ) {
+				if ( 'mskd_settings' === $option ) {
 						return array(
 							'smtp_enabled' => true,
 							'smtp_host'    => 'smtp.example.com',
@@ -609,7 +609,7 @@ class CronHandlerTest extends TestCase {
 		$custom_batch_size = 25;
 		Functions\when( 'get_option' )->alias(
 			function ( $option, $default = false ) use ( $custom_batch_size ) {
-				if ( $option === 'mskd_settings' ) {
+				if ( 'mskd_settings' === $option ) {
 						return array(
 							'emails_per_minute' => $custom_batch_size,
 							'smtp_enabled'      => false,
@@ -660,7 +660,7 @@ class CronHandlerTest extends TestCase {
 		// Configure settings without emails_per_minute.
 		Functions\when( 'get_option' )->alias(
 			function ( $option, $default = false ) {
-				if ( $option === 'mskd_settings' ) {
+				if ( 'mskd_settings' === $option ) {
 						return array(
 							'smtp_enabled' => false,
 					// No emails_per_minute setting.

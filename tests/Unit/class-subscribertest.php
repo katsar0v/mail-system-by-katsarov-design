@@ -80,10 +80,10 @@ class SubscriberTest extends TestCase {
 				'wp_mskd_subscribers',
 				Mockery::on(
 					function ( $data ) {
-						return $data['email'] === 'test@example.com'
-							&& $data['first_name'] === 'John'
-							&& $data['last_name'] === 'Doe'
-							&& $data['status'] === 'active'
+						return 'test@example.com' === $data['email']
+							&& 'John' === $data['first_name']
+							&& 'Doe' === $data['last_name']
+							&& 'active' === $data['status']
 							&& ! empty( $data['unsubscribe_token'] );
 					}
 				),
@@ -222,10 +222,10 @@ class SubscriberTest extends TestCase {
 				'wp_mskd_subscribers',
 				Mockery::on(
 					function ( $data ) {
-						return $data['email'] === 'updated@example.com'
-							&& $data['first_name'] === 'Jane'
-							&& $data['last_name'] === 'Smith'
-							&& $data['status'] === 'inactive';
+						return 'updated@example.com' === $data['email']
+							&& 'Jane' === $data['first_name']
+							&& 'Smith' === $data['last_name']
+							&& 'inactive' === $data['status'];
 					}
 				),
 				array( 'id' => 123 ),
@@ -375,7 +375,7 @@ class SubscriberTest extends TestCase {
 		$_POST['email']               = 'test@example.com';
 		$_POST['first_name']          = 'Test';
 		$_POST['last_name']           = 'User';
-		$_POST['status']              = 'invalid_status'; // Invalid status
+		$_POST['status']              = 'invalid_status'; // Invalid status.
 
 		// Use when() to override stubs.
 		Functions\when( 'wp_verify_nonce' )->justReturn( true );
@@ -394,7 +394,7 @@ class SubscriberTest extends TestCase {
 				'wp_mskd_subscribers',
 				Mockery::on(
 					function ( $data ) {
-						return $data['status'] === 'active'; // Should default to active
+						return 'active' === $data['status']; // Should default to active.
 					}
 				),
 				Mockery::type( 'array' )
