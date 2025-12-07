@@ -86,7 +86,7 @@ class Admin_Subscribers {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
 		$status = isset( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : 'active';
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
-		$lists = isset( $_POST['lists'] ) ? array_map( 'intval', $_POST['lists'] ) : array();
+		$lists = isset( $_POST['lists'] ) ? array_map( 'intval', wp_unslash( $_POST['lists'] ) ) : array();
 
 		// Validate status.
 		$allowed_statuses = array( 'active', 'inactive', 'unsubscribed' );
@@ -163,7 +163,7 @@ class Admin_Subscribers {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
 		$status = isset( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : 'active';
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
-		$lists = isset( $_POST['lists'] ) ? array_map( 'intval', $_POST['lists'] ) : array();
+		$lists = isset( $_POST['lists'] ) ? array_map( 'intval', wp_unslash( $_POST['lists'] ) ) : array();
 
 		// Validate status.
 		$allowed_statuses = array( 'active', 'inactive', 'unsubscribed' );

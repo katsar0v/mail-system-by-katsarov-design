@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $wpdb;
 
 // Load required services.
-require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
+require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-list-provider.php';
 
 use MSKD\Services\Template_Service;
 

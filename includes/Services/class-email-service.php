@@ -311,6 +311,7 @@ class Email_Service {
 		// Check if item exists and is cancellable.
 		$item = $this->wpdb->get_row(
 			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT id, status FROM {$this->queue_table} WHERE id = %d",
 				$id
 			)
@@ -336,7 +337,7 @@ class Email_Service {
 			array( '%d' )
 		);
 
-		return $result !== false;
+		return false !== $result;
 	}
 
 	/**
@@ -349,6 +350,7 @@ class Email_Service {
 		// Check if campaign exists and is cancellable.
 		$campaign = $this->wpdb->get_row(
 			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT id, status FROM {$this->campaigns_table} WHERE id = %d",
 				$id
 			)
@@ -365,9 +367,10 @@ class Email_Service {
 		// Cancel all pending/processing queue items for this campaign.
 		$cancelled_count = $this->wpdb->query(
 			$this->wpdb->prepare(
-				"UPDATE {$this->queue_table} 
-                 SET status = 'cancelled', error_message = %s 
-                 WHERE campaign_id = %d AND status IN ('pending', 'processing')",
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
+				"UPDATE {$this->queue_table}
+		               SET status = 'cancelled', error_message = %s
+		               WHERE campaign_id = %d AND status IN ('pending', 'processing')",
 				__( 'Campaign cancelled by administrator', 'mail-system-by-katsarov-design' ),
 				$id
 			)
@@ -397,6 +400,7 @@ class Email_Service {
 	public function get_queue_item( int $id ): ?object {
 		return $this->wpdb->get_row(
 			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT * FROM {$this->queue_table} WHERE id = %d",
 				$id
 			)
@@ -412,6 +416,7 @@ class Email_Service {
 	public function get_campaign( int $id ): ?object {
 		return $this->wpdb->get_row(
 			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT * FROM {$this->campaigns_table} WHERE id = %d",
 				$id
 			)
@@ -448,6 +453,7 @@ class Email_Service {
 						}
 					} catch ( \Exception $e ) {
 						// Fall through to default.
+						// phpcs:ignore WordPress.CodeAnalysis.EmptyStatement.DetectedCatch -- Empty catch is intentional.
 					}
 				}
 				break;
@@ -510,6 +516,7 @@ class Email_Service {
 	 */
 	public function get_queue_stats(): array {
 		$results = $this->wpdb->get_results(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 			"SELECT status, COUNT(*) as count FROM {$this->queue_table} GROUP BY status"
 		);
 
@@ -536,7 +543,9 @@ class Email_Service {
 	 * @return bool True on success.
 	 */
 	public function truncate_queue(): bool {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names are hardcoded and safe.
 		$this->wpdb->query( "TRUNCATE TABLE {$this->queue_table}" );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names are hardcoded and safe.
 		$this->wpdb->query( "TRUNCATE TABLE {$this->campaigns_table}" );
 		return true;
 	}

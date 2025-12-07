@@ -49,11 +49,13 @@ class Admin_Templates {
 		}
 
 		// Handle add template.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce checked on line 52.
 		if ( isset( $_POST['mskd_add_template'] ) && isset( $_POST['mskd_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mskd_nonce'] ) ), 'mskd_add_template' ) ) {
 			$this->handle_add();
 		}
 
 		// Handle edit template.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce checked on line 57.
 		if ( isset( $_POST['mskd_edit_template'] ) && isset( $_POST['mskd_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mskd_nonce'] ) ), 'mskd_edit_template' ) ) {
 			$this->handle_edit();
 		}

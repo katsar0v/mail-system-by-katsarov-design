@@ -47,14 +47,22 @@ class Admin_Settings {
 	private function handle_save(): void {
 		// Validate SMTP port.
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
-		$smtp_port = isset( $_POST['smtp_port'] ) ? absint( $_POST['smtp_port'] ) : 587;
+		if ( isset( $_POST['smtp_port'] ) ) {
+			$smtp_port = absint( wp_unslash( $_POST['smtp_port'] ) );
+		} else {
+			$smtp_port = 587;
+		}
 		if ( $smtp_port < 1 || $smtp_port > 65535 ) {
 			$smtp_port = 587;
 		}
 
 		// Validate SMTP security.
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
-		$smtp_security    = isset( $_POST['smtp_security'] ) ? sanitize_text_field( wp_unslash( $_POST['smtp_security'] ) ) : '';
+		if ( isset( $_POST['smtp_security'] ) ) {
+			$smtp_security = sanitize_text_field( wp_unslash( $_POST['smtp_security'] ) );
+		} else {
+			$smtp_security = '';
+		}
 		$allowed_security = array( '', 'ssl', 'tls' );
 		if ( ! in_array( $smtp_security, $allowed_security, true ) ) {
 			$smtp_security = 'tls';
@@ -62,7 +70,11 @@ class Admin_Settings {
 
 		// Validate emails per minute (1-1000, default to MSKD_BATCH_SIZE).
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
-		$emails_per_minute = isset( $_POST['emails_per_minute'] ) ? absint( $_POST['emails_per_minute'] ) : MSKD_BATCH_SIZE;
+		if ( isset( $_POST['emails_per_minute'] ) ) {
+			$emails_per_minute = absint( wp_unslash( $_POST['emails_per_minute'] ) );
+		} else {
+			$emails_per_minute = MSKD_BATCH_SIZE;
+		}
 		if ( $emails_per_minute < 1 ) {
 			$emails_per_minute = 1;
 		} elseif ( $emails_per_minute > 1000 ) {
@@ -71,15 +83,30 @@ class Admin_Settings {
 
 		// Sanitize email header and footer (allow HTML for email templates).
 		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing -- Admin-only, nonce-verified email HTML content uses custom sanitizer.
-		$email_header = isset( $_POST['email_header'] ) ? mskd_kses_email( wp_unslash( $_POST['email_header'] ) ) : '';
-		$email_footer = isset( $_POST['email_footer'] ) ? mskd_kses_email( wp_unslash( $_POST['email_footer'] ) ) : '';
+		if ( isset( $_POST['email_header'] ) ) {
+			$email_header = mskd_kses_email( wp_unslash( $_POST['email_header'] ) );
+		} else {
+			$email_header = '';
+		}
+		if ( isset( $_POST['email_footer'] ) ) {
+			$email_footer = mskd_kses_email( wp_unslash( $_POST['email_footer'] ) );
+		} else {
+			$email_footer = '';
+		}
 		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 
 		// Validate styling colors (hex color format).
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
-		$highlight_color = isset( $_POST['highlight_color'] ) ? sanitize_hex_color( wp_unslash( $_POST['highlight_color'] ) ) : '#2271b1';
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
-		$button_text_color = isset( $_POST['button_text_color'] ) ? sanitize_hex_color( wp_unslash( $_POST['button_text_color'] ) ) : '#ffffff';
+		if ( isset( $_POST['highlight_color'] ) ) {
+			$highlight_color = sanitize_hex_color( wp_unslash( $_POST['highlight_color'] ) );
+		} else {
+			$highlight_color = '#2271b1';
+		}
+		if ( isset( $_POST['button_text_color'] ) ) {
+			$button_text_color = sanitize_hex_color( wp_unslash( $_POST['button_text_color'] ) );
+		} else {
+			$button_text_color = '#ffffff';
+		}
 
 		// Ensure valid colors (fallback to defaults if invalid).
 		if ( empty( $highlight_color ) ) {
@@ -94,7 +121,6 @@ class Admin_Settings {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
 		if ( isset( $_POST['smtp_password'] ) && ! empty( $_POST['smtp_password'] ) ) {
 			// New password provided - encrypt it.
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
 			$smtp_password = mskd_encrypt( sanitize_text_field( wp_unslash( $_POST['smtp_password'] ) ) );
 		} elseif ( isset( $current_settings['smtp_password'] ) ) {
 			// No password provided - keep existing.
@@ -104,13 +130,17 @@ class Admin_Settings {
 			$smtp_password = '';
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$from_name = isset( $_POST['from_name'] ) ? sanitize_text_field( wp_unslash( $_POST['from_name'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$from_email = isset( $_POST['from_email'] ) ? sanitize_email( wp_unslash( $_POST['from_email'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$reply_to = isset( $_POST['reply_to'] ) ? sanitize_email( wp_unslash( $_POST['reply_to'] ) ) : '';
+
 		$settings = array(
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
-			'from_name'         => isset( $_POST['from_name'] ) ? sanitize_text_field( wp_unslash( $_POST['from_name'] ) ) : '',
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
-			'from_email'        => isset( $_POST['from_email'] ) ? sanitize_email( wp_unslash( $_POST['from_email'] ) ) : '',
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
-			'reply_to'          => isset( $_POST['reply_to'] ) ? sanitize_email( wp_unslash( $_POST['reply_to'] ) ) : '',
+			'from_name'         => $from_name,
+			'from_email'        => $from_email,
+			'reply_to'          => $reply_to,
 			// Sending settings.
 			'emails_per_minute' => $emails_per_minute,
 			// Email template settings.

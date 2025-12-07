@@ -198,16 +198,26 @@ class Admin_Ajax {
 		}
 
 		// Get subscriber IDs.
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
-		$subscriber_ids = isset( $_POST['subscriber_ids'] ) ? wp_unslash( $_POST['subscriber_ids'] ) : array();
+		      // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+		if ( isset( $_POST['subscriber_ids'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+			$subscriber_ids = wp_unslash( $_POST['subscriber_ids'] );
+		} else {
+			$subscriber_ids = array();
+		}
 		if ( ! is_array( $subscriber_ids ) ) {
 			$subscriber_ids = array();
 		}
 		$subscriber_ids = array_map( 'intval', $subscriber_ids );
 
 		// Get list IDs.
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
-		$list_ids = isset( $_POST['list_ids'] ) ? wp_unslash( $_POST['list_ids'] ) : array();
+		      // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+		if ( isset( $_POST['list_ids'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+			$list_ids = wp_unslash( $_POST['list_ids'] );
+		} else {
+			$list_ids = array();
+		}
 		if ( ! is_array( $list_ids ) ) {
 			$list_ids = array();
 		}
@@ -294,16 +304,26 @@ class Admin_Ajax {
 		}
 
 		// Get subscriber IDs.
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
-		$subscriber_ids = isset( $_POST['subscriber_ids'] ) ? wp_unslash( $_POST['subscriber_ids'] ) : array();
+		      // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+		if ( isset( $_POST['subscriber_ids'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+			$subscriber_ids = wp_unslash( $_POST['subscriber_ids'] );
+		} else {
+			$subscriber_ids = array();
+		}
 		if ( ! is_array( $subscriber_ids ) ) {
 			$subscriber_ids = array();
 		}
 		$subscriber_ids = array_map( 'intval', $subscriber_ids );
 
 		// Get list IDs.
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
-		$list_ids = isset( $_POST['list_ids'] ) ? wp_unslash( $_POST['list_ids'] ) : array();
+		      // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+		if ( isset( $_POST['list_ids'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+			$list_ids = wp_unslash( $_POST['list_ids'] );
+		} else {
+			$list_ids = array();
+		}
 		if ( ! is_array( $list_ids ) ) {
 			$list_ids = array();
 		}

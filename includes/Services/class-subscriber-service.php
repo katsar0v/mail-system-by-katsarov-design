@@ -142,8 +142,10 @@ class Subscriber_Service {
 		$order           = strtoupper( $args['order'] ) === 'ASC' ? 'ASC' : 'DESC';
 
 		// Get total count.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 		$count_sql = "SELECT COUNT(DISTINCT s.id) FROM {$this->table} s {$join} WHERE {$where_sql}";
 		if ( ! empty( $values ) ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Using prepare with interpolated table name is necessary here.
 			$count_sql = $this->wpdb->prepare( $count_sql, $values );
 		}
 		$total = (int) $this->wpdb->get_var( $count_sql );
@@ -155,16 +157,18 @@ class Subscriber_Service {
 		$offset   = ( $page - 1 ) * $per_page;
 
 		// Get items.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 		$sql = "SELECT DISTINCT s.* FROM {$this->table} s {$join} WHERE {$where_sql} ORDER BY s.{$orderby} {$order} LIMIT %d OFFSET %d";
 
 		$query_values   = $values;
 		$query_values[] = $per_page;
 		$query_values[] = $offset;
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Using prepare with interpolated table name is necessary here.
 		$items = $this->wpdb->get_results( $this->wpdb->prepare( $sql, $query_values ) );
 
 		return array(
-			'items' => $items ?: array(),
+			'items' => $items ? $items : array(),
 			'total' => $total,
 			'pages' => $pages,
 		);
@@ -179,6 +183,7 @@ class Subscriber_Service {
 	public function get_by_id( int $id ): ?object {
 		return $this->wpdb->get_row(
 			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT * FROM {$this->table} WHERE id = %d",
 				$id
 			)
@@ -194,6 +199,7 @@ class Subscriber_Service {
 	public function get_by_email( string $email ): ?object {
 		return $this->wpdb->get_row(
 			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT * FROM {$this->table} WHERE email = %s",
 				$email
 			)
@@ -213,6 +219,7 @@ class Subscriber_Service {
 
 		return $this->wpdb->get_row(
 			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT * FROM {$this->table} WHERE unsubscribe_token = %s",
 				$token
 			)
@@ -364,7 +371,7 @@ class Subscriber_Service {
 			array( '%d' )
 		);
 
-		return $result !== false;
+		return false !== $result;
 	}
 
 	/**
@@ -398,7 +405,7 @@ class Subscriber_Service {
 			array( '%d' )
 		);
 
-		return $result !== false;
+		return false !== $result;
 	}
 
 	/**
@@ -410,12 +417,13 @@ class Subscriber_Service {
 	public function get_lists( int $subscriber_id ): array {
 		$results = $this->wpdb->get_col(
 			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT list_id FROM {$this->pivot_table} WHERE subscriber_id = %d",
 				$subscriber_id
 			)
 		);
 
-		return array_map( 'intval', $results ?: array() );
+		return array_map( 'intval', $results ? $results : array() );
 	}
 
 	/**
@@ -456,9 +464,10 @@ class Subscriber_Service {
 	 * @return bool True if email exists, false otherwise.
 	 */
 	public function email_exists( string $email, ?int $exclude_id = null ): bool {
-		if ( $exclude_id ) {
+		if ( null !== $exclude_id ) {
 			$exists = $this->wpdb->get_var(
 				$this->wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 					"SELECT id FROM {$this->table} WHERE email = %s AND id != %d",
 					$email,
 					$exclude_id
@@ -467,6 +476,7 @@ class Subscriber_Service {
 		} else {
 			$exists = $this->wpdb->get_var(
 				$this->wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 					"SELECT id FROM {$this->table} WHERE email = %s",
 					$email
 				)
@@ -486,12 +496,14 @@ class Subscriber_Service {
 		if ( ! empty( $status ) ) {
 			return (int) $this->wpdb->get_var(
 				$this->wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 					"SELECT COUNT(*) FROM {$this->table} WHERE status = %s",
 					$status
 				)
 			);
 		}
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 		return (int) $this->wpdb->get_var( "SELECT COUNT(*) FROM {$this->table}" );
 	}
 

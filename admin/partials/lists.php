@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $wpdb;
 
 // Load the List Provider service.
-require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
+require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-list-provider.php';
 
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in form handler, this just determines view state.
 $current_action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : 'list';

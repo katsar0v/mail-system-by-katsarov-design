@@ -61,6 +61,7 @@ class MSKD_Activator {
 			$table_queue = $wpdb->prefix . 'mskd_queue';
 
 			// Check if column exists.
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 			$column_exists = $wpdb->get_results(
 				$wpdb->prepare(
 					"SHOW COLUMNS FROM {$table_queue} LIKE %s",
@@ -83,6 +84,7 @@ class MSKD_Activator {
 			$table_queue = $wpdb->prefix . 'mskd_queue';
 
 			// Add campaign_id column to queue table.
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 			$column_exists = $wpdb->get_results(
 				$wpdb->prepare(
 					"SHOW COLUMNS FROM {$table_queue} LIKE %s",
@@ -115,6 +117,7 @@ class MSKD_Activator {
 			$table_subscribers = $wpdb->prefix . 'mskd_subscribers';
 
 			// Check if opt_in_token column exists.
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 			$column_exists = $wpdb->get_results(
 				$wpdb->prepare(
 					"SHOW COLUMNS FROM {$table_subscribers} LIKE %s",
@@ -139,6 +142,7 @@ class MSKD_Activator {
 			$table_campaigns = $wpdb->prefix . 'mskd_campaigns';
 
 			// Check if bcc column exists.
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 			$column_exists = $wpdb->get_results(
 				$wpdb->prepare(
 					"SHOW COLUMNS FROM {$table_campaigns} LIKE %s",
@@ -154,6 +158,7 @@ class MSKD_Activator {
 			}
 
 			// Check if bcc_sent column exists.
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 			$column_exists = $wpdb->get_results(
 				$wpdb->prepare(
 					"SHOW COLUMNS FROM {$table_campaigns} LIKE %s",
@@ -389,6 +394,7 @@ class MSKD_Activator {
 		$table_subscribers = $wpdb->prefix . 'mskd_subscribers';
 
 		// Check if column exists.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 		$column_exists = $wpdb->get_results(
 			$wpdb->prepare(
 				"SHOW COLUMNS FROM {$table_subscribers} LIKE %s",
@@ -420,6 +426,7 @@ class MSKD_Activator {
 
 		// Get pending queue items with subscriber_id = 0 that have subscriber_data.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 		$orphaned_items = $wpdb->get_results(
 			"SELECT id, subscriber_data FROM {$queue_table} WHERE subscriber_id = 0 AND subscriber_data IS NOT NULL AND status = 'pending'"
 		);
@@ -444,6 +451,7 @@ class MSKD_Activator {
 
 			// Check if subscriber already exists.
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 			$existing = $wpdb->get_var(
 				$wpdb->prepare(
 					"SELECT id FROM {$subscribers_table} WHERE email = %s",

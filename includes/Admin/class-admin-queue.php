@@ -127,7 +127,7 @@ class Admin_Queue {
 			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page with campaign parameter.
 			wp_redirect( admin_url( 'admin.php?page=mskd-queue&action=view&campaign_id=' . $return_campaign ) );
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only parameter for redirect URL.
-		} elseif ( isset( $_GET['view'] ) && 'legacy' === $_GET['view'] ) {
+		} elseif ( isset( $_GET['view'] ) && 'legacy' === sanitize_text_field( wp_unslash( $_GET['view'] ) ) ) {
 			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page with view parameter.
 			wp_redirect( admin_url( 'admin.php?page=mskd-queue&view=legacy' ) );
 		} else {

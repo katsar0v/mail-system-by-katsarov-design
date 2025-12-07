@@ -27,13 +27,15 @@ if ( ! $campaign ) {
 }
 
 // Pagination.
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only parameter for pagination.
 $per_page     = 50;
 $current_page = isset( $_GET['paged'] ) ? max( 1, intval( $_GET['paged'] ) ) : 1;
 $offset       = ( $current_page - 1 ) * $per_page;
 
 // Filter by status.
-$status_filter = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '';
+$status_filter = isset( $_GET['status'] ) ? sanitize_text_field( wp_unslash( $_GET['status'] ) ) : '';
 $where         = $wpdb->prepare( ' WHERE q.campaign_id = %d', $campaign_id );
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only parameter for filtering.
 if ( $status_filter ) {
 	$where .= $wpdb->prepare( ' AND q.status = %s', $status_filter );
 }
@@ -86,7 +88,7 @@ $progress_percent = $total_count > 0 ? round( ( $completed / $total_count ) * 10
 $list_ids   = $campaign->list_ids ? json_decode( $campaign->list_ids, true ) : array();
 $list_names = array();
 if ( ! empty( $list_ids ) ) {
-	require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
+	require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-list-provider.php';
 	foreach ( $list_ids as $list_id ) {
 		$list = MSKD_List_Provider::get_list( $list_id );
 		if ( $list ) {

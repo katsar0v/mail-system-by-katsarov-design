@@ -29,6 +29,7 @@ $tables = array(
 
 foreach ( $tables as $table ) {
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Table cleanup during uninstall, no caching needed.
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 	$wpdb->query( "DROP TABLE IF EXISTS $table" );
 }
 

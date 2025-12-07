@@ -67,6 +67,7 @@ class MSKD_Cron_Handler {
 		// Join with campaigns table to get Bcc information and custom from email data.
 		$queue_items = $wpdb->get_results(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names are hardcoded and safe.
 				"SELECT q.*, s.email, s.first_name, s.last_name, s.unsubscribe_token,
 				       c.bcc, c.bcc_sent, c.type as campaign_type, c.from_email, c.from_name
 				FROM {$wpdb->prefix}mskd_queue q
@@ -226,7 +227,7 @@ class MSKD_Cron_Handler {
 						$wpdb->prefix . 'mskd_queue',
 						array(
 							'status'        => 'pending',
-							'scheduled_at'  => date( 'Y-m-d H:i:s', $retry_timestamp ),
+							'scheduled_at'  => gmdate( 'Y-m-d H:i:s', $retry_timestamp ),
 							'error_message' => $retry_message,
 						),
 						array( 'id' => $item->id ),
@@ -273,14 +274,15 @@ class MSKD_Cron_Handler {
 		// Get counts of queue items for this campaign.
 		$stats = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT 
-                COUNT(*) as total,
-                SUM(CASE WHEN status IN ('pending', 'processing') THEN 1 ELSE 0 END) as pending,
-                SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
-                SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
-                SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled
-            FROM {$wpdb->prefix}mskd_queue
-            WHERE campaign_id = %d",
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
+				"SELECT
+		              COUNT(*) as total,
+		              SUM(CASE WHEN status IN ('pending', 'processing') THEN 1 ELSE 0 END) as pending,
+		              SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
+		              SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
+		              SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled
+		          FROM {$wpdb->prefix}mskd_queue
+		          WHERE campaign_id = %d",
 				$campaign_id
 			)
 		);
@@ -325,14 +327,15 @@ class MSKD_Cron_Handler {
 
 		// Normalize to 00 seconds.
 		$timeout_timestamp = mskd_normalize_timestamp( strtotime( '-' . self::PROCESSING_TIMEOUT_MINUTES . ' minutes' ) );
-		$timeout_threshold = date( 'Y-m-d H:i:s', $timeout_timestamp );
+		$timeout_threshold = gmdate( 'Y-m-d H:i:s', $timeout_timestamp );
 
 		// Find emails stuck in processing status.
 		$stuck_items = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT id, attempts FROM {$wpdb->prefix}mskd_queue 
-            WHERE status = 'processing' 
-            AND scheduled_at < %s",
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
+				"SELECT id, attempts FROM {$wpdb->prefix}mskd_queue
+		          WHERE status = 'processing'
+		          AND scheduled_at < %s",
 				$timeout_threshold
 			)
 		);
@@ -370,8 +373,8 @@ class MSKD_Cron_Handler {
 	/**
 	 * Replace placeholders in email content
 	 *
-	 * @param string $content Email content
-	 * @param object $subscriber Subscriber data
+	 * @param string $content Email content.
+	 * @param object $subscriber Subscriber data.
 	 * @return string
 	 */
 	private function replace_placeholders( $content, $subscriber ) {

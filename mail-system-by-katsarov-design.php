@@ -147,7 +147,7 @@ add_action( 'init', 'mskd_load_textdomain' );
 function mskd_init() {
 	// Load required files.
 	require_once MSKD_PLUGIN_DIR . 'includes/class-activator.php';
-	require_once MSKD_PLUGIN_DIR . 'includes/class-deactivator.php';
+	require_once MSKD_PLUGIN_DIR . 'includes/class-mskd-deactivator.php';
 
 	// Check for database upgrades.
 	MSKD_Activator::maybe_upgrade();
