@@ -56,9 +56,9 @@ class MSKD_Public {
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'mskd_public_nonce' ),
 				'strings'  => array(
-					'subscribing' => __( 'Subscribing...', 'mail-system-by-katsarov-design' ),
-					'success'     => __( 'Successfully subscribed!', 'mail-system-by-katsarov-design' ),
-					'error'       => __( 'An error occurred. Please try again.', 'mail-system-by-katsarov-design' ),
+					'subscribing' => esc_html__( 'Subscribing...', 'mail-system-by-katsarov-design' ),
+					'success'     => esc_html__( 'Successfully subscribed!', 'mail-system-by-katsarov-design' ),
+					'error'       => esc_html__( 'An error occurred. Please try again.', 'mail-system-by-katsarov-design' ),
 				),
 			)
 		);
@@ -142,39 +142,48 @@ class MSKD_Public {
 	 * Handle unsubscribe requests
 	 */
 	public function handle_unsubscribe() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public unsubscribe link does not require nonce, uses token validation.
 		if ( ! isset( $_GET['mskd_unsubscribe'] ) ) {
 			return;
 		}
 
-		$token = sanitize_text_field( $_GET['mskd_unsubscribe'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public unsubscribe link does not require nonce, uses token validation.
+		$token = sanitize_text_field( wp_unslash( $_GET['mskd_unsubscribe'] ) );
 
 		if ( empty( $token ) ) {
 			return;
 		}
 
-		// Validate token length (tokens are 32 characters)
+		// Validate token length (tokens are 32 characters).
 		if ( strlen( $token ) !== 32 || ! ctype_alnum( $token ) ) {
 			wp_die(
-				__( 'Invalid unsubscribe link.', 'mail-system-by-katsarov-design' ),
-				__( 'Error', 'mail-system-by-katsarov-design' ),
+				esc_html__( 'Invalid unsubscribe link.', 'mail-system-by-katsarov-design' ),
+				esc_html__( 'Error', 'mail-system-by-katsarov-design' ),
 				array( 'response' => 400 )
 			);
 		}
 
-		// Rate limiting: check transient for this IP
-		$ip_hash        = md5( $_SERVER['REMOTE_ADDR'] ?? 'unknown' );
+		// Rate limiting: check transient for this IP.
+		if ( ! isset( $_SERVER['REMOTE_ADDR'] ) ) {
+			wp_die(
+				esc_html__( 'Unable to verify request.', 'mail-system-by-katsarov-design' ),
+				esc_html__( 'Error', 'mail-system-by-katsarov-design' ),
+				array( 'response' => 400 )
+			);
+		}
+		$ip_hash        = md5( sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) );
 		$rate_limit_key = 'mskd_unsubscribe_' . $ip_hash;
 		$attempts       = get_transient( $rate_limit_key );
 
-		if ( $attempts !== false && $attempts >= 10 ) {
+		if ( false !== $attempts && 10 <= $attempts ) {
 			wp_die(
-				__( 'Too many attempts. Please try again in 5 minutes.', 'mail-system-by-katsarov-design' ),
-				__( 'Error', 'mail-system-by-katsarov-design' ),
+				esc_html__( 'Too many attempts. Please try again in 5 minutes.', 'mail-system-by-katsarov-design' ),
+				esc_html__( 'Error', 'mail-system-by-katsarov-design' ),
 				array( 'response' => 429 )
 			);
 		}
 
-		// Increment attempts
+		// Increment attempts.
 		set_transient( $rate_limit_key, ( $attempts ? $attempts + 1 : 1 ), 5 * MINUTE_IN_SECONDS );
 
 		global $wpdb;
@@ -188,13 +197,13 @@ class MSKD_Public {
 
 		if ( ! $subscriber ) {
 			wp_die(
-				__( 'Invalid unsubscribe link.', 'mail-system-by-katsarov-design' ),
-				__( 'Error', 'mail-system-by-katsarov-design' ),
+				esc_html__( 'Invalid unsubscribe link.', 'mail-system-by-katsarov-design' ),
+				esc_html__( 'Error', 'mail-system-by-katsarov-design' ),
 				array( 'response' => 400 )
 			);
 		}
 
-		// Update subscriber status
+		// Update subscriber status.
 		$wpdb->update(
 			$wpdb->prefix . 'mskd_subscribers',
 			array( 'status' => 'unsubscribed' ),
@@ -203,7 +212,7 @@ class MSKD_Public {
 			array( '%d' )
 		);
 
-		// Show unsubscribe confirmation page
+		// Show unsubscribe confirmation page.
 		include MSKD_PLUGIN_DIR . 'public/partials/unsubscribe.php';
 		exit;
 	}
@@ -247,7 +256,7 @@ class MSKD_Public {
 		$rate_limit_key = 'mskd_confirm_' . $ip_hash;
 		$attempts       = get_transient( $rate_limit_key );
 
-		if ( false !== $attempts && $attempts >= 10 ) {
+		if ( false !== $attempts && 10 <= $attempts ) {
 			wp_die(
 				esc_html__( 'Too many attempts. Please try again in 5 minutes.', 'mail-system-by-katsarov-design' ),
 				esc_html__( 'Error', 'mail-system-by-katsarov-design' ),
@@ -302,19 +311,19 @@ class MSKD_Public {
 	}
 
 	/**
-	 * Subscribe form shortcode
+	 * Subscribe form shortcode.
 	 *
-	 * @param array $atts Shortcode attributes
+	 * @param array $atts Shortcode attributes.
 	 * @return string
 	 */
 	public function subscribe_form_shortcode( $atts ) {
-		// Enqueue assets only when shortcode is used
+		// Enqueue assets only when shortcode is used.
 		$this->enqueue_assets();
 
 		$atts = shortcode_atts(
 			array(
 				'list_id' => 0,
-				'title'   => __( 'Subscribe', 'mail-system-by-katsarov-design' ),
+				'title'   => esc_html__( 'Subscribe', 'mail-system-by-katsarov-design' ),
 			),
 			$atts
 		);
@@ -345,7 +354,7 @@ class MSKD_Public {
 		if ( ! is_email( $email ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Please enter a valid email address.', 'mail-system-by-katsarov-design' ),
+					'message' => esc_html__( 'Please enter a valid email address.', 'mail-system-by-katsarov-design' ),
 				)
 			);
 		}
@@ -384,7 +393,7 @@ class MSKD_Public {
 					error_log( 'MSKD: Failed to update subscriber. DB error: ' . $wpdb->last_error );
 					wp_send_json_error(
 						array(
-							'message' => __( 'An error occurred. Please try again later.', 'mail-system-by-katsarov-design' ),
+							'message' => esc_html__( 'An error occurred. Please try again later.', 'mail-system-by-katsarov-design' ),
 						)
 					);
 				}
@@ -419,7 +428,7 @@ class MSKD_Public {
 						error_log( 'MSKD: Failed to update subscriber token. DB error: ' . $wpdb->last_error );
 						wp_send_json_error(
 							array(
-								'message' => __( 'An error occurred. Please try again later.', 'mail-system-by-katsarov-design' ),
+								'message' => esc_html__( 'An error occurred. Please try again later.', 'mail-system-by-katsarov-design' ),
 							)
 						);
 					}
@@ -433,7 +442,7 @@ class MSKD_Public {
 				// Already active - return early with message.
 				wp_send_json_success(
 					array(
-						'message' => __( 'You are already subscribed!', 'mail-system-by-katsarov-design' ),
+						'message' => esc_html__( 'You are already subscribed!', 'mail-system-by-katsarov-design' ),
 					)
 				);
 			}
@@ -461,7 +470,7 @@ class MSKD_Public {
 				error_log( 'MSKD: Failed to insert subscriber. DB error: ' . $wpdb->last_error );
 				wp_send_json_error(
 					array(
-						'message' => __( 'An error occurred. Please try again later.', 'mail-system-by-katsarov-design' ),
+						'message' => esc_html__( 'An error occurred. Please try again later.', 'mail-system-by-katsarov-design' ),
 					)
 				);
 			}
@@ -502,13 +511,13 @@ class MSKD_Public {
 		if ( $existing && 'active' === $existing->status ) {
 			wp_send_json_success(
 				array(
-					'message' => __( 'You are already subscribed!', 'mail-system-by-katsarov-design' ),
+					'message' => esc_html__( 'You are already subscribed!', 'mail-system-by-katsarov-design' ),
 				)
 			);
 		} else {
 			wp_send_json_success(
 				array(
-					'message' => __( 'Please check your email to confirm your subscription.', 'mail-system-by-katsarov-design' ),
+					'message' => esc_html__( 'Please check your email to confirm your subscription.', 'mail-system-by-katsarov-design' ),
 				)
 			);
 		}
@@ -533,14 +542,14 @@ class MSKD_Public {
 
 		$subject = sprintf(
 			/* translators: %s: Site name */
-			__( 'Confirm your subscription to %s', 'mail-system-by-katsarov-design' ),
+			esc_html__( 'Confirm your subscription to %s', 'mail-system-by-katsarov-design' ),
 			$site_name
 		);
 
 		$greeting = $first_name
 			/* translators: %s: Subscriber first name */
-			? sprintf( __( 'Hello %s,', 'mail-system-by-katsarov-design' ), $first_name )
-			: __( 'Hello,', 'mail-system-by-katsarov-design' );
+			? sprintf( esc_html__( 'Hello %s,', 'mail-system-by-katsarov-design' ), $first_name )
+			: esc_html__( 'Hello,', 'mail-system-by-katsarov-design' );
 
 		$body = sprintf(
 			/* translators: 1: Greeting, 2: Site name, 3: Confirmation URL, 4: Site name */
@@ -566,7 +575,7 @@ Best regards,
 		);
 
 		// Use SMTP mailer to respect configured from address and sender name.
-		require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+		require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-smtp-mailer.php';
 		$settings    = get_option( 'mskd_settings', array() );
 		$smtp_mailer = new MSKD_SMTP_Mailer( $settings );
 

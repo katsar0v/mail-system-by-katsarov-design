@@ -234,7 +234,7 @@ add_action( 'mskd_subscriber_unsubscribed', function( $email, $token ) {
 Static class for list and subscriber management.
 
 ```php
-require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
+require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-list-provider.php';
 ```
 
 #### List Methods

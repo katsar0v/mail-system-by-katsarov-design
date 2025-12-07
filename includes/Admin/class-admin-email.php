@@ -186,14 +186,17 @@ class Admin_Email {
 	 */
 	private function handle_queue_email(): void {
 		// Load the List Provider service.
-		require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
+		require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-list-provider.php';
 
-		$subject  = sanitize_text_field( $_POST['subject'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$subject = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
 		// Email HTML content must be preserved exactly (including <style> tags for MJML output).
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
-		$body     = wp_unslash( $_POST['body'] );
-		$list_ids = isset( $_POST['lists'] ) ? array_map( 'sanitize_text_field', $_POST['lists'] ) : array();
-		$bcc      = isset( $_POST['bcc'] ) ? sanitize_text_field( wp_unslash( $_POST['bcc'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing -- Admin-only, nonce-verified email content in handle_actions().
+		$body = isset( $_POST['body'] ) ? wp_unslash( $_POST['body'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$list_ids = isset( $_POST['lists'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['lists'] ) ) : array();
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$bcc = isset( $_POST['bcc'] ) ? sanitize_text_field( wp_unslash( $_POST['bcc'] ) ) : '';
 
 		if ( empty( $subject ) || empty( $body ) || empty( $list_ids ) ) {
 			add_settings_error(
@@ -206,14 +209,17 @@ class Admin_Email {
 		}
 
 		// Validate custom from email if provided
-		$use_custom_from = isset( $_POST['use_custom_from'] ) ? sanitize_text_field( $_POST['use_custom_from'] ) : 'default';
-		$from_email = '';
-		$from_name = '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$use_custom_from = isset( $_POST['use_custom_from'] ) ? sanitize_text_field( wp_unslash( $_POST['use_custom_from'] ) ) : 'default';
+		$from_email      = '';
+		$from_name       = '';
 
 		if ( 'custom' === $use_custom_from ) {
-			$from_email = isset( $_POST['from_email'] ) ? sanitize_email( $_POST['from_email'] ) : '';
-			$from_name = isset( $_POST['from_name'] ) ? sanitize_text_field( $_POST['from_name'] ) : '';
-			
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+			$from_email = isset( $_POST['from_email'] ) ? sanitize_email( wp_unslash( $_POST['from_email'] ) ) : '';
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+			$from_name = isset( $_POST['from_name'] ) ? sanitize_text_field( wp_unslash( $_POST['from_name'] ) ) : '';
+
 			// Required validation
 			if ( empty( $from_email ) ) {
 				add_settings_error(
@@ -224,7 +230,7 @@ class Admin_Email {
 				);
 				return;
 			}
-			
+
 			// Format validation
 			if ( ! is_email( $from_email ) ) {
 				add_settings_error(
@@ -339,24 +345,32 @@ class Admin_Email {
 	 * @return void
 	 */
 	private function handle_one_time_email(): void {
-		$recipient_email = sanitize_email( $_POST['recipient_email'] );
-		$recipient_name  = sanitize_text_field( $_POST['recipient_name'] );
-		$subject         = sanitize_text_field( $_POST['subject'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$recipient_email = isset( $_POST['recipient_email'] ) ? sanitize_email( wp_unslash( $_POST['recipient_email'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$recipient_name = isset( $_POST['recipient_name'] ) ? sanitize_text_field( wp_unslash( $_POST['recipient_name'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$subject = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
 		// Email HTML content must be preserved exactly (including <style> tags for MJML output).
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
-		$body            = wp_unslash( $_POST['body'] );
-		$schedule_type   = isset( $_POST['schedule_type'] ) ? sanitize_text_field( $_POST['schedule_type'] ) : 'now';
-		$bcc             = isset( $_POST['bcc'] ) ? sanitize_text_field( wp_unslash( $_POST['bcc'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing -- Admin-only, nonce-verified email content in handle_actions().
+		$body = isset( $_POST['body'] ) ? wp_unslash( $_POST['body'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$schedule_type = isset( $_POST['schedule_type'] ) ? sanitize_text_field( wp_unslash( $_POST['schedule_type'] ) ) : 'now';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$bcc = isset( $_POST['bcc'] ) ? sanitize_text_field( wp_unslash( $_POST['bcc'] ) ) : '';
 
 		// Validate custom from email if provided
-		$use_custom_from = isset( $_POST['use_custom_from'] ) ? sanitize_text_field( $_POST['use_custom_from'] ) : 'default';
-		$from_email = '';
-		$from_name = '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$use_custom_from = isset( $_POST['use_custom_from'] ) ? sanitize_text_field( wp_unslash( $_POST['use_custom_from'] ) ) : 'default';
+		$from_email      = '';
+		$from_name       = '';
 
 		if ( 'custom' === $use_custom_from ) {
-			$from_email = isset( $_POST['from_email'] ) ? sanitize_email( $_POST['from_email'] ) : '';
-			$from_name = isset( $_POST['from_name'] ) ? sanitize_text_field( $_POST['from_name'] ) : '';
-			
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+			$from_email = isset( $_POST['from_email'] ) ? sanitize_email( wp_unslash( $_POST['from_email'] ) ) : '';
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+			$from_name = isset( $_POST['from_name'] ) ? sanitize_text_field( wp_unslash( $_POST['from_name'] ) ) : '';
+
 			// Required validation
 			if ( empty( $from_email ) ) {
 				add_settings_error(
@@ -367,7 +381,7 @@ class Admin_Email {
 				);
 				return;
 			}
-			
+
 			// Format validation
 			if ( ! is_email( $from_email ) ) {
 				add_settings_error(
@@ -387,9 +401,12 @@ class Admin_Email {
 			'subject'            => $subject,
 			'body'               => $body,
 			'schedule_type'      => $schedule_type,
-			'scheduled_datetime' => isset( $_POST['scheduled_datetime'] ) ? sanitize_text_field( $_POST['scheduled_datetime'] ) : '',
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+			'scheduled_datetime' => isset( $_POST['scheduled_datetime'] ) ? sanitize_text_field( wp_unslash( $_POST['scheduled_datetime'] ) ) : '',
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
 			'delay_value'        => isset( $_POST['delay_value'] ) ? intval( $_POST['delay_value'] ) : 1,
-			'delay_unit'         => isset( $_POST['delay_unit'] ) ? sanitize_text_field( $_POST['delay_unit'] ) : 'hours',
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+			'delay_unit'         => isset( $_POST['delay_unit'] ) ? sanitize_text_field( wp_unslash( $_POST['delay_unit'] ) ) : 'hours',
 			'bcc'                => $bcc,
 			'from_email'         => $from_email,
 			'from_name'          => $from_name,
@@ -449,7 +466,7 @@ class Admin_Email {
 		$settings = get_option( 'mskd_settings', array() );
 
 		// Load SMTP Mailer.
-		require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+		require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-smtp-mailer.php';
 		$mailer = new \MSKD_SMTP_Mailer();
 
 		if ( $is_immediate ) {

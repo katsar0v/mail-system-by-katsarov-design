@@ -13,7 +13,7 @@ global $wpdb;
 
 $campaign_id = isset( $_GET['campaign_id'] ) ? intval( $_GET['campaign_id'] ) : 0;
 
-// Get campaign data
+// Get campaign data.
 $campaign = $wpdb->get_row(
 	$wpdb->prepare(
 		"SELECT * FROM {$wpdb->prefix}mskd_campaigns WHERE id = %d",
@@ -26,19 +26,21 @@ if ( ! $campaign ) {
 	return;
 }
 
-// Pagination
+// Pagination.
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only parameter for pagination.
 $per_page     = 50;
 $current_page = isset( $_GET['paged'] ) ? max( 1, intval( $_GET['paged'] ) ) : 1;
 $offset       = ( $current_page - 1 ) * $per_page;
 
-// Filter by status
-$status_filter = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '';
+// Filter by status.
+$status_filter = isset( $_GET['status'] ) ? sanitize_text_field( wp_unslash( $_GET['status'] ) ) : '';
 $where         = $wpdb->prepare( ' WHERE q.campaign_id = %d', $campaign_id );
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only parameter for filtering.
 if ( $status_filter ) {
 	$where .= $wpdb->prepare( ' AND q.status = %s', $status_filter );
 }
 
-// Get queue stats for this campaign
+// Get queue stats for this campaign.
 $queue_stats = $wpdb->get_row(
 	$wpdb->prepare(
 		"SELECT 
@@ -61,11 +63,11 @@ $sent_count       = $queue_stats->sent ?? 0;
 $failed_count     = $queue_stats->failed ?? 0;
 $cancelled_count  = $queue_stats->cancelled ?? 0;
 
-// Get total count for current filter
+// Get total count for current filter.
 $total_items = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_queue q" . $where );
 $total_pages = ceil( $total_items / $per_page );
 
-// Get queue items for this campaign
+// Get queue items for this campaign.
 $queue_items = $wpdb->get_results(
 	$wpdb->prepare(
 		"SELECT q.*, s.email, s.first_name, s.last_name 
@@ -78,15 +80,15 @@ $queue_items = $wpdb->get_results(
 	)
 );
 
-// Calculate progress
+// Calculate progress.
 $completed        = $sent_count + $failed_count + $cancelled_count;
 $progress_percent = $total_count > 0 ? round( ( $completed / $total_count ) * 100 ) : 0;
 
-// Decode list IDs
+// Decode list IDs.
 $list_ids   = $campaign->list_ids ? json_decode( $campaign->list_ids, true ) : array();
 $list_names = array();
 if ( ! empty( $list_ids ) ) {
-	require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
+	require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-list-provider.php';
 	foreach ( $list_ids as $list_id ) {
 		$list = MSKD_List_Provider::get_list( $list_id );
 		if ( $list ) {

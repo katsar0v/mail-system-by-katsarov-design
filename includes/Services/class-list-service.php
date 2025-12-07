@@ -78,10 +78,11 @@ class List_Service {
 		$order           = strtoupper( $args['order'] ) === 'DESC' ? 'DESC' : 'ASC';
 
 		$results = $this->wpdb->get_results(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 			"SELECT * FROM {$this->table} ORDER BY {$orderby} {$order}"
 		);
 
-		return $results ?: array();
+		return $results ? $results : array();
 	}
 
 	/**
@@ -93,6 +94,7 @@ class List_Service {
 	public function get_by_id( int $id ): ?object {
 		return $this->wpdb->get_row(
 			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT * FROM {$this->table} WHERE id = %d",
 				$id
 			)
@@ -108,6 +110,7 @@ class List_Service {
 	public function get_by_name( string $name ): ?object {
 		return $this->wpdb->get_row(
 			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT * FROM {$this->table} WHERE name = %s",
 				$name
 			)
@@ -180,7 +183,7 @@ class List_Service {
 			array( '%d' )
 		);
 
-		return $result !== false;
+		return false !== $result;
 	}
 
 	/**
@@ -204,7 +207,7 @@ class List_Service {
 			array( '%d' )
 		);
 
-		return $result !== false;
+		return false !== $result;
 	}
 
 	/**
@@ -218,10 +221,11 @@ class List_Service {
 		if ( ! empty( $status ) ) {
 			return (int) $this->wpdb->get_var(
 				$this->wpdb->prepare(
-					"SELECT COUNT(DISTINCT sl.subscriber_id) 
-                     FROM {$this->pivot_table} sl 
-                     INNER JOIN {$this->wpdb->prefix}mskd_subscribers s ON sl.subscriber_id = s.id 
-                     WHERE sl.list_id = %d AND s.status = %s",
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names are hardcoded and safe.
+					"SELECT COUNT(DISTINCT sl.subscriber_id)
+		                   FROM {$this->pivot_table} sl
+		                   INNER JOIN {$this->wpdb->prefix}mskd_subscribers s ON sl.subscriber_id = s.id
+		                   WHERE sl.list_id = %d AND s.status = %s",
 					$list_id,
 					$status
 				)
@@ -230,6 +234,7 @@ class List_Service {
 
 		return (int) $this->wpdb->get_var(
 			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT COUNT(*) FROM {$this->pivot_table} WHERE list_id = %d",
 				$list_id
 			)
@@ -246,21 +251,23 @@ class List_Service {
 	public function get_subscribers( int $list_id, string $status = '' ): array {
 		$where = '';
 		if ( ! empty( $status ) ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Using prepare with interpolated table name is necessary here.
 			$where = $this->wpdb->prepare( ' AND s.status = %s', $status );
 		}
 
 		$results = $this->wpdb->get_results(
 			$this->wpdb->prepare(
-				"SELECT s.* 
-                 FROM {$this->wpdb->prefix}mskd_subscribers s 
-                 INNER JOIN {$this->pivot_table} sl ON s.id = sl.subscriber_id 
-                 WHERE sl.list_id = %d{$where}
-                 ORDER BY s.email ASC",
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names are hardcoded and safe.
+				"SELECT s.*
+	                FROM {$this->wpdb->prefix}mskd_subscribers s
+	                INNER JOIN {$this->pivot_table} sl ON s.id = sl.subscriber_id
+	                WHERE sl.list_id = %d{$where}
+	                ORDER BY s.email ASC",
 				$list_id
 			)
 		);
 
-		return $results ?: array();
+		return $results ? $results : array();
 	}
 
 	/**
@@ -269,6 +276,7 @@ class List_Service {
 	 * @return int Total count.
 	 */
 	public function count(): int {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 		return (int) $this->wpdb->get_var( "SELECT COUNT(*) FROM {$this->table}" );
 	}
 
@@ -294,13 +302,14 @@ class List_Service {
 	 */
 	public function get_all_with_counts(): array {
 		$results = $this->wpdb->get_results(
-			"SELECT l.*, COUNT(sl.subscriber_id) as subscriber_count 
-             FROM {$this->table} l 
-             LEFT JOIN {$this->pivot_table} sl ON l.id = sl.list_id 
-             GROUP BY l.id 
-             ORDER BY l.name ASC"
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names are hardcoded and safe.
+			"SELECT l.*, COUNT(sl.subscriber_id) as subscriber_count
+	            FROM {$this->table} l
+	            LEFT JOIN {$this->pivot_table} sl ON l.id = sl.list_id
+	            GROUP BY l.id
+	            ORDER BY l.name ASC"
 		);
 
-		return $results ?: array();
+		return $results ? $results : array();
 	}
 }

@@ -100,12 +100,15 @@ class Import_Export_Service {
 			'created_at',
 		);
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen -- Using temp stream for CSV generation.
 		$output = fopen( 'php://temp', 'r+' );
 
 		// Write UTF-8 BOM for Excel compatibility.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Using temp stream for CSV generation.
 		fwrite( $output, "\xEF\xBB\xBF" );
 
 		// Write headers.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fputcsv -- Using temp stream for CSV generation.
 		fputcsv( $output, $headers, self::CSV_DELIMITER, self::CSV_ENCLOSURE );
 
 		// Write data rows.
@@ -128,11 +131,14 @@ class Import_Export_Service {
 				$subscriber->created_at,
 			);
 
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fputcsv -- Using temp stream for CSV generation.
 			fputcsv( $output, $row, self::CSV_DELIMITER, self::CSV_ENCLOSURE );
 		}
 
 		rewind( $output );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Using temp stream for CSV generation.
 		$csv = stream_get_contents( $output );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Using temp stream for CSV generation.
 		fclose( $output );
 
 		return $csv;
@@ -153,12 +159,15 @@ class Import_Export_Service {
 			'created_at',
 		);
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen -- Using temp stream for CSV generation.
 		$output = fopen( 'php://temp', 'r+' );
 
 		// Write UTF-8 BOM for Excel compatibility.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Using temp stream for CSV generation.
 		fwrite( $output, "\xEF\xBB\xBF" );
 
 		// Write headers.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fputcsv -- Using temp stream for CSV generation.
 		fputcsv( $output, $headers, self::CSV_DELIMITER, self::CSV_ENCLOSURE );
 
 		foreach ( $lists as $list ) {
@@ -169,11 +178,14 @@ class Import_Export_Service {
 				$list->created_at,
 			);
 
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fputcsv -- Using temp stream for CSV generation.
 			fputcsv( $output, $row, self::CSV_DELIMITER, self::CSV_ENCLOSURE );
 		}
 
 		rewind( $output );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Using temp stream for CSV generation.
 		$csv = stream_get_contents( $output );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Using temp stream for CSV generation.
 		fclose( $output );
 
 		return $csv;
@@ -303,6 +315,7 @@ class Import_Export_Service {
 		$headers = fgetcsv( $handle, 0, self::CSV_DELIMITER, self::CSV_ENCLOSURE );
 
 		if ( ! $headers ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Reading uploaded file for validation.
 			fclose( $handle );
 			return array(
 				'valid' => false,
@@ -315,6 +328,7 @@ class Import_Export_Service {
 
 		// Check for required 'email' column.
 		if ( ! in_array( 'email', $headers, true ) ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Reading uploaded file for validation.
 			fclose( $handle );
 			return array(
 				'valid' => false,
@@ -327,6 +341,7 @@ class Import_Export_Service {
 		$row_number = 1;
 
 		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition -- Standard CSV reading pattern.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fgetcsv -- Reading uploaded file for validation.
 		while ( false !== ( $row = fgetcsv( $handle, 0, self::CSV_DELIMITER, self::CSV_ENCLOSURE ) ) ) {
 			++$row_number;
 
@@ -367,6 +382,7 @@ class Import_Export_Service {
 			$rows[] = $data;
 		}
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Reading uploaded file for validation.
 		fclose( $handle );
 
 		return array(
@@ -397,9 +413,9 @@ class Import_Export_Service {
 	 */
 	public function import_subscribers( array $rows, array $options = array() ): array {
 		$defaults = array(
-			'update_existing'  => false,
-			'assign_lists'     => true,
-			'target_list_ids'  => array(),
+			'update_existing' => false,
+			'assign_lists'    => true,
+			'target_list_ids' => array(),
 		);
 		$options  = wp_parse_args( $options, $defaults );
 
@@ -512,6 +528,7 @@ class Import_Export_Service {
 	 * @return array Parse result with valid, headers, rows, total, errors.
 	 */
 	public function parse_lists_csv( string $file_path ): array {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen -- Reading uploaded file for validation.
 		$handle = fopen( $file_path, 'r' );
 
 		if ( ! $handle ) {
@@ -522,15 +539,18 @@ class Import_Export_Service {
 		}
 
 		// Skip UTF-8 BOM if present.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread -- Reading uploaded file for validation.
 		$bom = fread( $handle, 3 );
 		if ( "\xEF\xBB\xBF" !== $bom ) {
 			rewind( $handle );
 		}
 
 		// Read headers.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fgetcsv -- Reading uploaded file for validation.
 		$headers = fgetcsv( $handle, 0, self::CSV_DELIMITER, self::CSV_ENCLOSURE );
 
 		if ( ! $headers ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Reading uploaded file for validation.
 			fclose( $handle );
 			return array(
 				'valid' => false,
@@ -543,6 +563,8 @@ class Import_Export_Service {
 
 		// Check for required 'name' column.
 		if ( ! in_array( 'name', $headers, true ) ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Reading uploaded file for validation.
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Reading uploaded file for validation.
 			fclose( $handle );
 			return array(
 				'valid' => false,
@@ -555,6 +577,7 @@ class Import_Export_Service {
 		$row_number = 1;
 
 		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition -- Standard CSV reading pattern.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fgetcsv -- Reading uploaded file for validation.
 		while ( false !== ( $row = fgetcsv( $handle, 0, self::CSV_DELIMITER, self::CSV_ENCLOSURE ) ) ) {
 			++$row_number;
 

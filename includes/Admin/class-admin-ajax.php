@@ -67,7 +67,7 @@ class Admin_Ajax {
 		}
 
 		// Load SMTP Mailer.
-		require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+		require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-smtp-mailer.php';
 
 		$smtp_mailer = new \MSKD_SMTP_Mailer();
 		$result      = $smtp_mailer->test_connection();
@@ -198,16 +198,26 @@ class Admin_Ajax {
 		}
 
 		// Get subscriber IDs.
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
-		$subscriber_ids = isset( $_POST['subscriber_ids'] ) ? wp_unslash( $_POST['subscriber_ids'] ) : array();
+		      // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+		if ( isset( $_POST['subscriber_ids'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+			$subscriber_ids = wp_unslash( $_POST['subscriber_ids'] );
+		} else {
+			$subscriber_ids = array();
+		}
 		if ( ! is_array( $subscriber_ids ) ) {
 			$subscriber_ids = array();
 		}
 		$subscriber_ids = array_map( 'intval', $subscriber_ids );
 
 		// Get list IDs.
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
-		$list_ids = isset( $_POST['list_ids'] ) ? wp_unslash( $_POST['list_ids'] ) : array();
+		      // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+		if ( isset( $_POST['list_ids'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+			$list_ids = wp_unslash( $_POST['list_ids'] );
+		} else {
+			$list_ids = array();
+		}
 		if ( ! is_array( $list_ids ) ) {
 			$list_ids = array();
 		}
@@ -294,16 +304,26 @@ class Admin_Ajax {
 		}
 
 		// Get subscriber IDs.
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
-		$subscriber_ids = isset( $_POST['subscriber_ids'] ) ? wp_unslash( $_POST['subscriber_ids'] ) : array();
+		      // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+		if ( isset( $_POST['subscriber_ids'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+			$subscriber_ids = wp_unslash( $_POST['subscriber_ids'] );
+		} else {
+			$subscriber_ids = array();
+		}
 		if ( ! is_array( $subscriber_ids ) ) {
 			$subscriber_ids = array();
 		}
 		$subscriber_ids = array_map( 'intval', $subscriber_ids );
 
 		// Get list IDs.
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
-		$list_ids = isset( $_POST['list_ids'] ) ? wp_unslash( $_POST['list_ids'] ) : array();
+		      // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+		if ( isset( $_POST['list_ids'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array is sanitized with intval below.
+			$list_ids = wp_unslash( $_POST['list_ids'] );
+		} else {
+			$list_ids = array();
+		}
 		if ( ! is_array( $list_ids ) ) {
 			$list_ids = array();
 		}
@@ -415,9 +435,9 @@ class Admin_Ajax {
 			}
 		} elseif ( isset( $_POST['content'] ) ) {
 			// Use content from POST (for compose wizard preview).
-			// Email HTML content must be preserved exactly (including <style> tags for MJML output).
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email content.
-			$content = wp_unslash( $_POST['content'] );
+			// Sanitize email HTML using our custom sanitizer that allows email-specific tags.
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized with mskd_kses_email() below.
+			$content = mskd_kses_email( wp_unslash( $_POST['content'] ) );
 		}
 
 		// If no content provided, return error.
@@ -433,7 +453,7 @@ class Admin_Ajax {
 
 		// Output the full HTML directly (for iframe display).
 		// No JSON wrapper needed - iframe expects raw HTML.
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Admin-only preview of email HTML, already sanitized on save.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Admin-only preview of email HTML, sanitized with mskd_kses_email() above.
 		echo $full_content;
 		wp_die();
 	}

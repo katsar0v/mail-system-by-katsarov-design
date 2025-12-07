@@ -191,7 +191,7 @@ class MSKD_List_Subscriber {
 	 */
 	public function to_object(): object {
 		$obj              = new stdClass();
-		$obj->id          = 'ext_' . md5( $this->email ); // External ID based on email hash
+		$obj->id          = 'ext_' . md5( $this->email ); // External ID based on email hash.
 		$obj->email       = $this->email;
 		$obj->first_name  = $this->first_name;
 		$obj->last_name   = $this->last_name;

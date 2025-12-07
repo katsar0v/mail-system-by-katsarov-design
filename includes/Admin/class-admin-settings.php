@@ -33,7 +33,8 @@ class Admin_Settings {
 		}
 
 		// Handle settings save.
-		if ( isset( $_POST['mskd_save_settings'] ) && wp_verify_nonce( $_POST['mskd_nonce'], 'mskd_save_settings' ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce checked on line 36.
+		if ( isset( $_POST['mskd_save_settings'] ) && isset( $_POST['mskd_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mskd_nonce'] ) ), 'mskd_save_settings' ) ) {
 			$this->handle_save();
 		}
 	}
@@ -45,20 +46,35 @@ class Admin_Settings {
 	 */
 	private function handle_save(): void {
 		// Validate SMTP port.
-		$smtp_port = isset( $_POST['smtp_port'] ) ? absint( $_POST['smtp_port'] ) : 587;
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		if ( isset( $_POST['smtp_port'] ) ) {
+			$smtp_port = absint( wp_unslash( $_POST['smtp_port'] ) );
+		} else {
+			$smtp_port = 587;
+		}
 		if ( $smtp_port < 1 || $smtp_port > 65535 ) {
 			$smtp_port = 587;
 		}
 
 		// Validate SMTP security.
-		$smtp_security    = isset( $_POST['smtp_security'] ) ? sanitize_text_field( wp_unslash( $_POST['smtp_security'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		if ( isset( $_POST['smtp_security'] ) ) {
+			$smtp_security = sanitize_text_field( wp_unslash( $_POST['smtp_security'] ) );
+		} else {
+			$smtp_security = '';
+		}
 		$allowed_security = array( '', 'ssl', 'tls' );
 		if ( ! in_array( $smtp_security, $allowed_security, true ) ) {
 			$smtp_security = 'tls';
 		}
 
 		// Validate emails per minute (1-1000, default to MSKD_BATCH_SIZE).
-		$emails_per_minute = isset( $_POST['emails_per_minute'] ) ? absint( $_POST['emails_per_minute'] ) : MSKD_BATCH_SIZE;
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		if ( isset( $_POST['emails_per_minute'] ) ) {
+			$emails_per_minute = absint( wp_unslash( $_POST['emails_per_minute'] ) );
+		} else {
+			$emails_per_minute = MSKD_BATCH_SIZE;
+		}
 		if ( $emails_per_minute < 1 ) {
 			$emails_per_minute = 1;
 		} elseif ( $emails_per_minute > 1000 ) {
@@ -66,14 +82,31 @@ class Admin_Settings {
 		}
 
 		// Sanitize email header and footer (allow HTML for email templates).
-		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Admin-only, nonce-verified email HTML content uses custom sanitizer.
-		$email_header = isset( $_POST['email_header'] ) ? mskd_kses_email( wp_unslash( $_POST['email_header'] ) ) : '';
-		$email_footer = isset( $_POST['email_footer'] ) ? mskd_kses_email( wp_unslash( $_POST['email_footer'] ) ) : '';
-		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing -- Admin-only, nonce-verified email HTML content uses custom sanitizer.
+		if ( isset( $_POST['email_header'] ) ) {
+			$email_header = mskd_kses_email( wp_unslash( $_POST['email_header'] ) );
+		} else {
+			$email_header = '';
+		}
+		if ( isset( $_POST['email_footer'] ) ) {
+			$email_footer = mskd_kses_email( wp_unslash( $_POST['email_footer'] ) );
+		} else {
+			$email_footer = '';
+		}
+		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 
 		// Validate styling colors (hex color format).
-		$highlight_color   = isset( $_POST['highlight_color'] ) ? sanitize_hex_color( wp_unslash( $_POST['highlight_color'] ) ) : '#2271b1';
-		$button_text_color = isset( $_POST['button_text_color'] ) ? sanitize_hex_color( wp_unslash( $_POST['button_text_color'] ) ) : '#ffffff';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		if ( isset( $_POST['highlight_color'] ) ) {
+			$highlight_color = sanitize_hex_color( wp_unslash( $_POST['highlight_color'] ) );
+		} else {
+			$highlight_color = '#2271b1';
+		}
+		if ( isset( $_POST['button_text_color'] ) ) {
+			$button_text_color = sanitize_hex_color( wp_unslash( $_POST['button_text_color'] ) );
+		} else {
+			$button_text_color = '#ffffff';
+		}
 
 		// Ensure valid colors (fallback to defaults if invalid).
 		if ( empty( $highlight_color ) ) {
@@ -83,10 +116,31 @@ class Admin_Settings {
 			$button_text_color = '#ffffff';
 		}
 
+		// Handle password: preserve existing if field is empty (not changing password).
+		$current_settings = get_option( 'mskd_settings', array() );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		if ( isset( $_POST['smtp_password'] ) && ! empty( $_POST['smtp_password'] ) ) {
+			// New password provided - encrypt it.
+			$smtp_password = mskd_encrypt( sanitize_text_field( wp_unslash( $_POST['smtp_password'] ) ) );
+		} elseif ( isset( $current_settings['smtp_password'] ) ) {
+			// No password provided - keep existing.
+			$smtp_password = $current_settings['smtp_password'];
+		} else {
+			// No password at all.
+			$smtp_password = '';
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$from_name = isset( $_POST['from_name'] ) ? sanitize_text_field( wp_unslash( $_POST['from_name'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$from_email = isset( $_POST['from_email'] ) ? sanitize_email( wp_unslash( $_POST['from_email'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$reply_to = isset( $_POST['reply_to'] ) ? sanitize_email( wp_unslash( $_POST['reply_to'] ) ) : '';
+
 		$settings = array(
-			'from_name'         => sanitize_text_field( wp_unslash( $_POST['from_name'] ) ),
-			'from_email'        => sanitize_email( wp_unslash( $_POST['from_email'] ) ),
-			'reply_to'          => sanitize_email( wp_unslash( $_POST['reply_to'] ) ),
+			'from_name'         => $from_name,
+			'from_email'        => $from_email,
+			'reply_to'          => $reply_to,
 			// Sending settings.
 			'emails_per_minute' => $emails_per_minute,
 			// Email template settings.
@@ -96,13 +150,17 @@ class Admin_Settings {
 			'highlight_color'   => $highlight_color,
 			'button_text_color' => $button_text_color,
 			// SMTP Settings.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
 			'smtp_enabled'      => isset( $_POST['smtp_enabled'] ) ? 1 : 0,
-			'smtp_host'         => sanitize_text_field( wp_unslash( $_POST['smtp_host'] ) ),
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+			'smtp_host'         => isset( $_POST['smtp_host'] ) ? sanitize_text_field( wp_unslash( $_POST['smtp_host'] ) ) : '',
 			'smtp_port'         => $smtp_port,
 			'smtp_security'     => $smtp_security,
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
 			'smtp_auth'         => isset( $_POST['smtp_auth'] ) ? 1 : 0,
-			'smtp_username'     => sanitize_text_field( wp_unslash( $_POST['smtp_username'] ) ),
-			'smtp_password'     => isset( $_POST['smtp_password'] ) ? base64_encode( sanitize_text_field( wp_unslash( $_POST['smtp_password'] ) ) ) : '',
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+			'smtp_username'     => isset( $_POST['smtp_username'] ) ? sanitize_text_field( wp_unslash( $_POST['smtp_username'] ) ) : '',
+			'smtp_password'     => $smtp_password,
 		);
 
 		update_option( 'mskd_settings', $settings );

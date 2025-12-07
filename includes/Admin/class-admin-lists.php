@@ -49,18 +49,23 @@ class Admin_Lists {
 		}
 
 		// Handle add list.
-		if ( isset( $_POST['mskd_add_list'] ) && wp_verify_nonce( $_POST['mskd_nonce'], 'mskd_add_list' ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce checked on line 52.
+		if ( isset( $_POST['mskd_add_list'] ) && isset( $_POST['mskd_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mskd_nonce'] ) ), 'mskd_add_list' ) ) {
 			$this->handle_add();
 		}
 
 		// Handle edit list.
-		if ( isset( $_POST['mskd_edit_list'] ) && wp_verify_nonce( $_POST['mskd_nonce'], 'mskd_edit_list' ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce checked on line 57.
+		if ( isset( $_POST['mskd_edit_list'] ) && isset( $_POST['mskd_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mskd_nonce'] ) ), 'mskd_edit_list' ) ) {
 			$this->handle_edit();
 		}
 
 		// Handle delete list.
-		if ( isset( $_GET['action'] ) && 'delete_list' === $_GET['action'] && isset( $_GET['id'] ) ) {
-			if ( wp_verify_nonce( $_GET['_wpnonce'], 'delete_list_' . $_GET['id'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in the if condition below.
+		if ( isset( $_GET['action'] ) && 'delete_list' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) && isset( $_GET['id'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified here, sanitized before use.
+			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'delete_list_' . intval( $_GET['id'] ) ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified above.
 				$this->handle_delete( intval( $_GET['id'] ) );
 			}
 		}
@@ -72,8 +77,10 @@ class Admin_Lists {
 	 * @return void
 	 */
 	private function handle_add(): void {
-		$name        = sanitize_text_field( $_POST['name'] );
-		$description = sanitize_textarea_field( $_POST['description'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$name = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$description = isset( $_POST['description'] ) ? sanitize_textarea_field( wp_unslash( $_POST['description'] ) ) : '';
 
 		// Validate name.
 		if ( empty( $name ) ) {
@@ -117,9 +124,12 @@ class Admin_Lists {
 	 * @return void
 	 */
 	private function handle_edit(): void {
-		$id          = intval( $_POST['list_id'] );
-		$name        = sanitize_text_field( $_POST['name'] );
-		$description = sanitize_textarea_field( $_POST['description'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$id = isset( $_POST['list_id'] ) ? intval( $_POST['list_id'] ) : 0;
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$name = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$description = isset( $_POST['description'] ) ? sanitize_textarea_field( wp_unslash( $_POST['description'] ) ) : '';
 
 		// Validate name.
 		if ( empty( $name ) ) {
@@ -148,6 +158,7 @@ class Admin_Lists {
 			'success'
 		);
 
+		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page.
 		wp_redirect( admin_url( 'admin.php?page=mskd-lists' ) );
 		exit;
 	}
@@ -168,6 +179,7 @@ class Admin_Lists {
 			'success'
 		);
 
+		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page.
 		wp_redirect( admin_url( 'admin.php?page=mskd-lists' ) );
 		exit;
 	}

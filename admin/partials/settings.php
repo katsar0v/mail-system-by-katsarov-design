@@ -28,6 +28,7 @@ $smtp_port     = isset( $settings['smtp_port'] ) ? $settings['smtp_port'] : '587
 $smtp_security = isset( $settings['smtp_security'] ) ? $settings['smtp_security'] : 'tls';
 $smtp_auth     = isset( $settings['smtp_auth'] ) ? (bool) $settings['smtp_auth'] : true;
 $smtp_username = isset( $settings['smtp_username'] ) ? $settings['smtp_username'] : '';
+// phpcs:ignore WordPress.PHP.DiscouragedFunctions.base64_decode -- Used for SMTP password obfuscation, not for code obfuscation.
 $smtp_password = isset( $settings['smtp_password'] ) ? base64_decode( $settings['smtp_password'] ) : '';
 
 // Styling settings.
@@ -36,7 +37,7 @@ $button_text_color = isset( $settings['button_text_color'] ) ? $settings['button
 ?>
 
 <div class="wrap mskd-wrap">
-	<h1><?php _e( 'Settings', 'mail-system-by-katsarov-design' ); ?></h1>
+	<h1><?php esc_html_e( 'Settings', 'mail-system-by-katsarov-design' ); ?></h1>
 
 	<?php settings_errors( 'mskd_messages' ); ?>
 
@@ -44,55 +45,55 @@ $button_text_color = isset( $settings['button_text_color'] ) ? $settings['button
 		<form method="post" action="">
 			<?php wp_nonce_field( 'mskd_save_settings', 'mskd_nonce' ); ?>
 
-			<h2><?php _e( 'Sender settings', 'mail-system-by-katsarov-design' ); ?></h2>
+			<h2><?php esc_html_e( 'Sender settings', 'mail-system-by-katsarov-design' ); ?></h2>
 
 			<table class="form-table">
 				<tr>
 					<th scope="row">
-						<label for="from_name"><?php _e( 'Sender name', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="from_name"><?php esc_html_e( 'Sender Name', 'mail-system-by-katsarov-design' ); ?></label>
 					</th>
 					<td>
 						<input type="text" name="from_name" id="from_name" class="regular-text"
 								value="<?php echo esc_attr( $from_name ); ?>">
-						<p class="description"><?php _e( 'The name that will appear as sender.', 'mail-system-by-katsarov-design' ); ?></p>
+						<p class="description"><?php esc_html_e( 'The name that will appear as sender.', 'mail-system-by-katsarov-design' ); ?></p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row">
-						<label for="from_email"><?php _e( 'Sender email', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="from_email"><?php esc_html_e( 'Sender email', 'mail-system-by-katsarov-design' ); ?></label>
 					</th>
 					<td>
 						<input type="email" name="from_email" id="from_email" class="regular-text"
 								value="<?php echo esc_attr( $from_email ); ?>">
-						<p class="description"><?php _e( 'The email from which messages will be sent.', 'mail-system-by-katsarov-design' ); ?></p>
+						<p class="description"><?php esc_html_e( 'The email from which messages will be sent.', 'mail-system-by-katsarov-design' ); ?></p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row">
-						<label for="reply_to"><?php _e( 'Reply to', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="reply_to"><?php esc_html_e( 'Reply to', 'mail-system-by-katsarov-design' ); ?></label>
 					</th>
 					<td>
 						<input type="email" name="reply_to" id="reply_to" class="regular-text"
 								value="<?php echo esc_attr( $reply_to ); ?>">
-						<p class="description"><?php _e( 'Email for replies from recipients.', 'mail-system-by-katsarov-design' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Email for replies from recipients.', 'mail-system-by-katsarov-design' ); ?></p>
 					</td>
 				</tr>
 			</table>
 
 			<hr>
 
-			<h2><?php _e( 'Sending settings', 'mail-system-by-katsarov-design' ); ?></h2>
+			<h2><?php esc_html_e( 'Sending settings', 'mail-system-by-katsarov-design' ); ?></h2>
 
 			<table class="form-table">
 				<tr>
 					<th scope="row">
-						<label for="emails_per_minute"><?php _e( 'Emails per minute', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="emails_per_minute"><?php esc_html_e( 'Emails per minute', 'mail-system-by-katsarov-design' ); ?></label>
 					</th>
 					<td>
 						<input type="number" name="emails_per_minute" id="emails_per_minute" class="small-text"
 								value="<?php echo esc_attr( $emails_per_minute ); ?>"
 								min="1" max="1000">
-						<p class="description"><?php _e( 'Maximum number of emails to send per minute. Higher values may exceed your hosting provider limits.', 'mail-system-by-katsarov-design' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Maximum number of emails to send per minute. Higher values may exceed your hosting provider limits.', 'mail-system-by-katsarov-design' ); ?></p>
 					</td>
 				</tr>
 			</table>
@@ -190,151 +191,179 @@ $button_text_color = isset( $settings['button_text_color'] ) ? $settings['button
 
 			<hr>
 
-			<h2><?php _e( 'SMTP Settings', 'mail-system-by-katsarov-design' ); ?></h2>
-			<p class="description"><?php _e( 'Configure an SMTP server for more reliable email sending.', 'mail-system-by-katsarov-design' ); ?></p>
+			<h2><?php esc_html_e( 'SMTP Settings', 'mail-system-by-katsarov-design' ); ?></h2>
+			<p class="description"><?php esc_html_e( 'Configure an SMTP server for more reliable email sending.', 'mail-system-by-katsarov-design' ); ?></p>
 
 			<table class="form-table">
 				<tr>
 					<th scope="row">
-						<label for="smtp_enabled"><?php _e( 'Enable SMTP', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="smtp_enabled"><?php esc_html_e( 'Enable SMTP', 'mail-system-by-katsarov-design' ); ?></label>
 					</th>
 					<td>
 						<label>
 							<input type="checkbox" name="smtp_enabled" id="smtp_enabled" value="1"
 								<?php checked( $smtp_enabled ); ?>>
-							<?php _e( 'Use SMTP for sending emails', 'mail-system-by-katsarov-design' ); ?>
+							<?php esc_html_e( 'Use SMTP for sending emails', 'mail-system-by-katsarov-design' ); ?>
 						</label>
-						<p class="description"><?php _e( 'When enabled, emails will be sent via the specified SMTP server instead of wp_mail().', 'mail-system-by-katsarov-design' ); ?></p>
+						<p class="description"><?php esc_html_e( 'When enabled, emails will be sent via the specified SMTP server instead of wp_mail().', 'mail-system-by-katsarov-design' ); ?></p>
 					</td>
 				</tr>
 				<tr class="mskd-smtp-setting">
 					<th scope="row">
-						<label for="smtp_host"><?php _e( 'SMTP Host', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="smtp_host"><?php esc_html_e( 'SMTP Host', 'mail-system-by-katsarov-design' ); ?></label>
 					</th>
 					<td>
 						<input type="text" name="smtp_host" id="smtp_host" class="regular-text"
 								value="<?php echo esc_attr( $smtp_host ); ?>" 
 								placeholder="smtp.example.com">
-						<p class="description"><?php _e( 'SMTP server address (e.g. smtp.gmail.com, smtp.mailgun.org).', 'mail-system-by-katsarov-design' ); ?></p>
+						<p class="description"><?php esc_html_e( 'SMTP server address (e.g. smtp.gmail.com, smtp.mailgun.org).', 'mail-system-by-katsarov-design' ); ?></p>
 					</td>
 				</tr>
 				<tr class="mskd-smtp-setting">
 					<th scope="row">
-						<label for="smtp_port"><?php _e( 'SMTP Port', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="smtp_port"><?php esc_html_e( 'SMTP Port', 'mail-system-by-katsarov-design' ); ?></label>
 					</th>
 					<td>
 						<input type="number" name="smtp_port" id="smtp_port" class="small-text"
 								value="<?php echo esc_attr( $smtp_port ); ?>" 
 								min="1" max="65535">
-						<p class="description"><?php _e( 'Standard ports: 25, 465 (SSL), 587 (TLS/StartTLS).', 'mail-system-by-katsarov-design' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Standard ports: 25, 465 (SSL), 587 (TLS/StartTLS).', 'mail-system-by-katsarov-design' ); ?></p>
 					</td>
 				</tr>
 				<tr class="mskd-smtp-setting">
 					<th scope="row">
-						<label for="smtp_security"><?php _e( 'Encryption', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="smtp_security"><?php esc_html_e( 'Encryption', 'mail-system-by-katsarov-design' ); ?></label>
 					</th>
 					<td>
 						<select name="smtp_security" id="smtp_security">
-							<option value="" <?php selected( $smtp_security, '' ); ?>><?php _e( 'No encryption', 'mail-system-by-katsarov-design' ); ?></option>
+							<option value="" <?php selected( $smtp_security, '' ); ?>><?php esc_html_e( 'No encryption', 'mail-system-by-katsarov-design' ); ?></option>
 							<option value="ssl" <?php selected( $smtp_security, 'ssl' ); ?>>SSL</option>
 							<option value="tls" <?php selected( $smtp_security, 'tls' ); ?>>TLS (StartTLS)</option>
 						</select>
-						<p class="description"><?php _e( 'It is recommended to use TLS or SSL for a secure connection.', 'mail-system-by-katsarov-design' ); ?></p>
+						<p class="description"><?php esc_html_e( 'It is recommended to use TLS or SSL for a secure connection.', 'mail-system-by-katsarov-design' ); ?></p>
 					</td>
 				</tr>
 				<tr class="mskd-smtp-setting">
 					<th scope="row">
-						<label for="smtp_auth"><?php _e( 'SMTP Authentication', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="smtp_auth"><?php esc_html_e( 'SMTP Authentication', 'mail-system-by-katsarov-design' ); ?></label>
 					</th>
 					<td>
 						<label>
 							<input type="checkbox" name="smtp_auth" id="smtp_auth" value="1"
 								<?php checked( $smtp_auth ); ?>>
-							<?php _e( 'Use authentication (username and password)', 'mail-system-by-katsarov-design' ); ?>
+							<?php esc_html_e( 'Use authentication (username and password)', 'mail-system-by-katsarov-design' ); ?>
 						</label>
 					</td>
 				</tr>
 				<tr class="mskd-smtp-setting mskd-smtp-auth-setting">
 					<th scope="row">
-						<label for="smtp_username"><?php _e( 'SMTP Username', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="smtp_username"><?php esc_html_e( 'SMTP Username', 'mail-system-by-katsarov-design' ); ?></label>
 					</th>
 					<td>
 						<input type="text" name="smtp_username" id="smtp_username" class="regular-text"
 								value="<?php echo esc_attr( $smtp_username ); ?>" 
 								autocomplete="off">
-						<p class="description"><?php _e( 'Usually this is your email address or username.', 'mail-system-by-katsarov-design' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Usually this is your email address or username.', 'mail-system-by-katsarov-design' ); ?></p>
 					</td>
 				</tr>
 				<tr class="mskd-smtp-setting mskd-smtp-auth-setting">
 					<th scope="row">
-						<label for="smtp_password"><?php _e( 'SMTP Password', 'mail-system-by-katsarov-design' ); ?></label>
+						<label for="smtp_password"><?php esc_html_e( 'SMTP Password', 'mail-system-by-katsarov-design' ); ?></label>
 					</th>
 					<td>
 						<input type="password" name="smtp_password" id="smtp_password" class="regular-text"
 								value="<?php echo esc_attr( $smtp_password ); ?>" 
 								autocomplete="new-password">
-						<p class="description"><?php _e( 'For Gmail, use App Password instead of the regular password.', 'mail-system-by-katsarov-design' ); ?></p>
+						<p class="description"><?php esc_html_e( 'For Gmail, use App Password instead of the regular password.', 'mail-system-by-katsarov-design' ); ?></p>
 					</td>
 				</tr>
 				<tr class="mskd-smtp-setting">
 					<th scope="row">
-						<label><?php _e( 'Connection test', 'mail-system-by-katsarov-design' ); ?></label>
+						<label><?php esc_html_e( 'Connection test', 'mail-system-by-katsarov-design' ); ?></label>
 					</th>
 					<td>
 						<button type="button" id="mskd-smtp-test" class="button button-secondary">
-							<?php _e( 'Send test email', 'mail-system-by-katsarov-design' ); ?>
+							<?php esc_html_e( 'Send test email', 'mail-system-by-katsarov-design' ); ?>
 						</button>
 						<span id="mskd-smtp-test-result"></span>
-						<p class="description"><?php _e( 'Sends a test email to the administrator email.', 'mail-system-by-katsarov-design' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Sends a test email to the administrator email.', 'mail-system-by-katsarov-design' ); ?></p>
 					</td>
 				</tr>
 			</table>
 
 			<hr>
 
-			<h2><?php _e( 'System information', 'mail-system-by-katsarov-design' ); ?></h2>
+			<h2><?php esc_html_e( 'System information', 'mail-system-by-katsarov-design' ); ?></h2>
 
 			<table class="form-table">
 				<tr>
-					<th scope="row"><?php _e( 'Plugin version', 'mail-system-by-katsarov-design' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Plugin version', 'mail-system-by-katsarov-design' ); ?></th>
 					<td><code><?php echo esc_html( MSKD_VERSION ); ?></code></td>
 				</tr>
 				<tr>
-					<th scope="row"><?php _e( 'Sending method', 'mail-system-by-katsarov-design' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Database version', 'mail-system-by-katsarov-design' ); ?></th>
+					<td>
+						<?php
+						$current_db_version  = get_option( 'mskd_db_version', '1.0.0' );
+						$required_db_version = MSKD_Activator::DB_VERSION;
+						$is_db_up_to_date    = version_compare( $current_db_version, $required_db_version, '>=' );
+						?>
+						<span class="mskd-db-version-status <?php echo $is_db_up_to_date ? 'mskd-db-up-to-date' : 'mskd-db-outdated'; ?>">
+							<?php
+							if ( $is_db_up_to_date ) {
+								echo '<span class="dashicons dashicons-yes-alt" aria-hidden="true"></span>';
+								echo '<span class="screen-reader-text">' . esc_html__( 'Database is up to date', 'mail-system-by-katsarov-design' ) . '</span>';
+							} else {
+								echo '<span class="dashicons dashicons-warning" aria-hidden="true"></span>';
+								echo '<span class="screen-reader-text">' . esc_html__( 'Database needs update', 'mail-system-by-katsarov-design' ) . '</span>';
+							}
+							?>
+						</span>
+						<code><?php echo esc_html( $current_db_version ); ?></code>
+						<?php
+						if ( ! $is_db_up_to_date ) {
+							echo ' / <code>' . esc_html( $required_db_version ) . '</code>';
+							echo '<p class="description">' . esc_html__( 'Database schema needs update. Please deactivate and reactivate the plugin.', 'mail-system-by-katsarov-design' ) . '</p>';
+						}
+						?>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Sending method', 'mail-system-by-katsarov-design' ); ?></th>
 					<td>
 						<?php if ( $smtp_enabled && ! empty( $smtp_host ) ) : ?>
-							<span class="mskd-smtp-active"><?php _e( 'SMTP', 'mail-system-by-katsarov-design' ); ?></span>
+							<span class="mskd-smtp-active"><?php esc_html_e( 'SMTP', 'mail-system-by-katsarov-design' ); ?></span>
 							<code><?php echo esc_html( $smtp_host . ':' . $smtp_port ); ?></code>
 						<?php else : ?>
-							<span class="mskd-smtp-inactive"><?php _e( 'wp_mail() (default)', 'mail-system-by-katsarov-design' ); ?></span>
+							<span class="mskd-smtp-inactive"><?php esc_html_e( 'wp_mail() (default)', 'mail-system-by-katsarov-design' ); ?></span>
 						<?php endif; ?>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php _e( 'Sending speed', 'mail-system-by-katsarov-design' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Sending speed', 'mail-system-by-katsarov-design' ); ?></th>
 					<td>
-						<code><?php echo esc_html( $emails_per_minute ); ?> <?php _e( 'emails/minute', 'mail-system-by-katsarov-design' ); ?></code>
+						<code><?php echo esc_html( $emails_per_minute ); ?> <?php esc_html_e( 'emails/minute', 'mail-system-by-katsarov-design' ); ?></code>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php _e( 'WP-Cron status', 'mail-system-by-katsarov-design' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'WP-Cron status', 'mail-system-by-katsarov-design' ); ?></th>
 					<td>
 						<?php if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) : ?>
-							<span class="mskd-cron-disabled"><?php _e( 'Disabled (using system cron)', 'mail-system-by-katsarov-design' ); ?></span>
+							<span class="mskd-cron-disabled"><?php esc_html_e( 'Disabled (using system cron)', 'mail-system-by-katsarov-design' ); ?></span>
 						<?php else : ?>
-							<span class="mskd-cron-enabled"><?php _e( 'Active (visitor-based)', 'mail-system-by-katsarov-design' ); ?></span>
+							<span class="mskd-cron-enabled"><?php esc_html_e( 'Active (visitor-based)', 'mail-system-by-katsarov-design' ); ?></span>
 						<?php endif; ?>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php _e( 'Next run', 'mail-system-by-katsarov-design' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Next run', 'mail-system-by-katsarov-design' ); ?></th>
 					<td>
 						<?php
 						$next_cron = wp_next_scheduled( 'mskd_process_queue' );
 						if ( $next_cron ) {
 							echo esc_html( date_i18n( 'd.m.Y H:i:s', $next_cron ) );
 						} else {
-							_e( 'Not scheduled', 'mail-system-by-katsarov-design' );
+							esc_html_e( 'Not scheduled', 'mail-system-by-katsarov-design' );
 						}
 						?>
 					</td>
@@ -342,51 +371,51 @@ $button_text_color = isset( $settings['button_text_color'] ) ? $settings['button
 			</table>
 
 			<p class="submit">
-				<input type="submit" name="mskd_save_settings" class="button button-primary" 
-						value="<?php _e( 'Save settings', 'mail-system-by-katsarov-design' ); ?>">
+				<input type="submit" name="mskd_save_settings" class="button button-primary"
+						value="<?php esc_attr_e( 'Save settings', 'mail-system-by-katsarov-design' ); ?>">
 			</p>
 		</form>
 
 		<hr>
 
-		<h2 class="mskd-danger-heading"><?php _e( 'Danger Zone', 'mail-system-by-katsarov-design' ); ?></h2>
-		<p class="description mskd-danger-description"><?php _e( 'These actions are irreversible. Use with caution.', 'mail-system-by-katsarov-design' ); ?></p>
+		<h2 class="mskd-danger-heading"><?php esc_html_e( 'Danger Zone', 'mail-system-by-katsarov-design' ); ?></h2>
+		<p class="description mskd-danger-description"><?php esc_html_e( 'These actions are irreversible. Use with caution.', 'mail-system-by-katsarov-design' ); ?></p>
 
 		<table class="form-table mskd-danger-zone">
 			<tr>
 				<th scope="row">
-					<label><?php _e( 'Truncate Subscribers', 'mail-system-by-katsarov-design' ); ?></label>
+					<label><?php esc_html_e( 'Truncate Subscribers', 'mail-system-by-katsarov-design' ); ?></label>
 				</th>
 				<td>
 					<button type="button" id="mskd-truncate-subscribers" class="button mskd-button-danger">
-						<?php _e( 'Delete all subscribers', 'mail-system-by-katsarov-design' ); ?>
-					</button>
-					<span id="mskd-truncate-subscribers-result"></span>
-					<p class="description"><?php _e( 'Permanently deletes all subscribers and their list associations.', 'mail-system-by-katsarov-design' ); ?></p>
+						<?php esc_html_e( 'Delete all subscribers', 'mail-system-by-katsarov-design' ); ?>
+						</button>
+						<span id="mskd-truncate-subscribers-result"></span>
+						<p class="description"><?php esc_html_e( 'Permanently deletes all subscribers and their list associations.', 'mail-system-by-katsarov-design' ); ?></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e( 'Truncate Lists', 'mail-system-by-katsarov-design' ); ?></label>
+					<label><?php esc_html_e( 'Truncate Lists', 'mail-system-by-katsarov-design' ); ?></label>
 				</th>
 				<td>
 					<button type="button" id="mskd-truncate-lists" class="button mskd-button-danger">
-						<?php _e( 'Delete all lists', 'mail-system-by-katsarov-design' ); ?>
-					</button>
-					<span id="mskd-truncate-lists-result"></span>
-					<p class="description"><?php _e( 'Permanently deletes all mailing lists and subscriber associations.', 'mail-system-by-katsarov-design' ); ?></p>
+						<?php esc_html_e( 'Delete all lists', 'mail-system-by-katsarov-design' ); ?>
+						</button>
+						<span id="mskd-truncate-lists-result"></span>
+						<p class="description"><?php esc_html_e( 'Permanently deletes all mailing lists and subscriber associations.', 'mail-system-by-katsarov-design' ); ?></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e( 'Truncate Campaigns', 'mail-system-by-katsarov-design' ); ?></label>
+					<label><?php esc_html_e( 'Truncate Campaigns', 'mail-system-by-katsarov-design' ); ?></label>
 				</th>
 				<td>
 					<button type="button" id="mskd-truncate-queue" class="button mskd-button-danger">
-						<?php _e( 'Delete all campaigns', 'mail-system-by-katsarov-design' ); ?>
-					</button>
-					<span id="mskd-truncate-queue-result"></span>
-					<p class="description"><?php _e( 'Permanently deletes all campaigns and their queued emails (pending, processing, sent, and failed).', 'mail-system-by-katsarov-design' ); ?></p>
+						<?php esc_html_e( 'Delete all campaigns', 'mail-system-by-katsarov-design' ); ?>
+						</button>
+						<span id="mskd-truncate-queue-result"></span>
+						<p class="description"><?php esc_html_e( 'Permanently deletes all campaigns and their queued emails (pending, processing, sent, and failed).', 'mail-system-by-katsarov-design' ); ?></p>
 				</td>
 			</tr>
 		</table>

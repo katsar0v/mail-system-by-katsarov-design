@@ -41,7 +41,7 @@ class EmailHeaderFooterTest extends TestCase {
 		parent::setUp();
 
 		// Load the cron handler class.
-		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-cron-handler.php';
+		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-mskd-cron-handler.php';
 
 		$this->cron_handler = new \MSKD_Cron_Handler();
 
@@ -197,18 +197,26 @@ class EmailHeaderFooterTest extends TestCase {
 		// First get_results is for recover_stuck_emails (returns empty).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, "status = 'processing'" ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, "status = 'processing'" ) !== false;
+					}
+				)
+			)
 			->andReturn( array() );
 
 		// Second get_results is for queue items (unified query with JOIN).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'INNER JOIN' ) !== false
-					&& strpos( $query, 'mskd_subscribers' ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, 'INNER JOIN' ) !== false
+						&& strpos( $query, 'mskd_subscribers' ) !== false;
+					}
+				)
+			)
 			->andReturn( $queue_items );
 
 		$wpdb->shouldReceive( 'update' )
@@ -216,20 +224,22 @@ class EmailHeaderFooterTest extends TestCase {
 			->andReturn( 1 );
 
 		// Mock settings with header and footer configured.
-		Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
-			if ( 'mskd_settings' === $option ) {
-				return array(
-					'smtp_enabled'  => true,
-					'smtp_host'     => 'smtp.example.com',
-					'from_name'     => 'Test Site',
-					'from_email'    => 'noreply@example.com',
-					'reply_to'      => 'reply@example.com',
-					'email_header'  => '<div class="header">Welcome, {first_name}!</div>',
-					'email_footer'  => '<div class="footer">{unsubscribe_link}</div>',
-				);
+		Functions\when( 'get_option' )->alias(
+			function ( $option, $default_value = false ) {
+				if ( 'mskd_settings' === $option ) {
+						return array(
+							'smtp_enabled' => true,
+							'smtp_host'    => 'smtp.example.com',
+							'from_name'    => 'Test Site',
+							'from_email'   => 'noreply@example.com',
+							'reply_to'     => 'reply@example.com',
+							'email_header' => '<div class="header">Welcome, {first_name}!</div>',
+							'email_footer' => '<div class="footer">{unsubscribe_link}</div>',
+						);
+				}
+				return $default_value;
 			}
-			return $default;
-		});
+		);
 
 		// Process the queue - header and footer should be applied.
 		$this->cron_handler->process_queue();
@@ -265,18 +275,26 @@ class EmailHeaderFooterTest extends TestCase {
 		// First get_results is for recover_stuck_emails (returns empty).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, "status = 'processing'" ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, "status = 'processing'" ) !== false;
+					}
+				)
+			)
 			->andReturn( array() );
 
 		// Second get_results is for queue items (unified query with JOIN).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'INNER JOIN' ) !== false
-					&& strpos( $query, 'mskd_subscribers' ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, 'INNER JOIN' ) !== false
+						&& strpos( $query, 'mskd_subscribers' ) !== false;
+					}
+				)
+			)
 			->andReturn( $queue_items );
 
 		$wpdb->shouldReceive( 'update' )
@@ -284,20 +302,22 @@ class EmailHeaderFooterTest extends TestCase {
 			->andReturn( 1 );
 
 		// Mock settings without header/footer.
-		Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
-			if ( 'mskd_settings' === $option ) {
-				return array(
-					'smtp_enabled'  => true,
-					'smtp_host'     => 'smtp.example.com',
-					'from_name'     => 'Test Site',
-					'from_email'    => 'noreply@example.com',
-					'reply_to'      => 'reply@example.com',
-					'email_header'  => '',
-					'email_footer'  => '',
-				);
+		Functions\when( 'get_option' )->alias(
+			function ( $option, $default_value = false ) {
+				if ( 'mskd_settings' === $option ) {
+						return array(
+							'smtp_enabled' => true,
+							'smtp_host'    => 'smtp.example.com',
+							'from_name'    => 'Test Site',
+							'from_email'   => 'noreply@example.com',
+							'reply_to'     => 'reply@example.com',
+							'email_header' => '',
+							'email_footer' => '',
+						);
+				}
+				return $default_value;
 			}
-			return $default;
-		});
+		);
 
 		$this->cron_handler->process_queue();
 
@@ -332,18 +352,26 @@ class EmailHeaderFooterTest extends TestCase {
 		// First get_results is for recover_stuck_emails (returns empty).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, "status = 'processing'" ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, "status = 'processing'" ) !== false;
+					}
+				)
+			)
 			->andReturn( array() );
 
 		// Second get_results is for queue items (unified query with JOIN).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'INNER JOIN' ) !== false
-					&& strpos( $query, 'mskd_subscribers' ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, 'INNER JOIN' ) !== false
+						&& strpos( $query, 'mskd_subscribers' ) !== false;
+					}
+				)
+			)
 			->andReturn( $queue_items );
 
 		$wpdb->shouldReceive( 'update' )
@@ -351,20 +379,22 @@ class EmailHeaderFooterTest extends TestCase {
 			->andReturn( 1 );
 
 		// Mock settings with header only.
-		Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
-			if ( 'mskd_settings' === $option ) {
-				return array(
-					'smtp_enabled'  => true,
-					'smtp_host'     => 'smtp.example.com',
-					'from_name'     => 'Test Site',
-					'from_email'    => 'noreply@example.com',
-					'reply_to'      => 'reply@example.com',
-					'email_header'  => '<div class="header">Company Logo</div>',
-					'email_footer'  => '',
-				);
+		Functions\when( 'get_option' )->alias(
+			function ( $option, $default_value = false ) {
+				if ( 'mskd_settings' === $option ) {
+						return array(
+							'smtp_enabled' => true,
+							'smtp_host'    => 'smtp.example.com',
+							'from_name'    => 'Test Site',
+							'from_email'   => 'noreply@example.com',
+							'reply_to'     => 'reply@example.com',
+							'email_header' => '<div class="header">Company Logo</div>',
+							'email_footer' => '',
+						);
+				}
+				return $default_value;
 			}
-			return $default;
-		});
+		);
 
 		$this->cron_handler->process_queue();
 
@@ -398,18 +428,26 @@ class EmailHeaderFooterTest extends TestCase {
 		// First get_results is for recover_stuck_emails (returns empty).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, "status = 'processing'" ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, "status = 'processing'" ) !== false;
+					}
+				)
+			)
 			->andReturn( array() );
 
 		// Second get_results is for queue items (unified query with JOIN).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'INNER JOIN' ) !== false
-					&& strpos( $query, 'mskd_subscribers' ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, 'INNER JOIN' ) !== false
+						&& strpos( $query, 'mskd_subscribers' ) !== false;
+					}
+				)
+			)
 			->andReturn( $queue_items );
 
 		$wpdb->shouldReceive( 'update' )
@@ -417,20 +455,22 @@ class EmailHeaderFooterTest extends TestCase {
 			->andReturn( 1 );
 
 		// Mock settings with footer only.
-		Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
-			if ( 'mskd_settings' === $option ) {
-				return array(
-					'smtp_enabled'  => true,
-					'smtp_host'     => 'smtp.example.com',
-					'from_name'     => 'Test Site',
-					'from_email'    => 'noreply@example.com',
-					'reply_to'      => 'reply@example.com',
-					'email_header'  => '',
-					'email_footer'  => '<p>To unsubscribe: {unsubscribe_link}</p>',
-				);
+		Functions\when( 'get_option' )->alias(
+			function ( $option, $default_value = false ) {
+				if ( 'mskd_settings' === $option ) {
+						return array(
+							'smtp_enabled' => true,
+							'smtp_host'    => 'smtp.example.com',
+							'from_name'    => 'Test Site',
+							'from_email'   => 'noreply@example.com',
+							'reply_to'     => 'reply@example.com',
+							'email_header' => '',
+							'email_footer' => '<p>To unsubscribe: {unsubscribe_link}</p>',
+						);
+				}
+				return $default_value;
 			}
-			return $default;
-		});
+		);
 
 		$this->cron_handler->process_queue();
 
@@ -464,18 +504,26 @@ class EmailHeaderFooterTest extends TestCase {
 		// First get_results is for recover_stuck_emails (returns empty).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, "status = 'processing'" ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, "status = 'processing'" ) !== false;
+					}
+				)
+			)
 			->andReturn( array() );
 
 		// Second get_results is for queue items (unified query with JOIN).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'INNER JOIN' ) !== false
-					&& strpos( $query, 'mskd_subscribers' ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, 'INNER JOIN' ) !== false
+						&& strpos( $query, 'mskd_subscribers' ) !== false;
+					}
+				)
+			)
 			->andReturn( $queue_items );
 
 		$wpdb->shouldReceive( 'update' )
@@ -483,20 +531,22 @@ class EmailHeaderFooterTest extends TestCase {
 			->andReturn( 1 );
 
 		// Mock settings with header/footer containing placeholders.
-		Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
-			if ( 'mskd_settings' === $option ) {
-				return array(
-					'smtp_enabled'  => true,
-					'smtp_host'     => 'smtp.example.com',
-					'from_name'     => 'Newsletter',
-					'from_email'    => 'newsletter@example.com',
-					'reply_to'      => 'reply@example.com',
-					'email_header'  => '<div class="header">Hello, {first_name}!</div>',
-					'email_footer'  => '<div class="footer">Sent to {email}. {unsubscribe_link}</div>',
-				);
+		Functions\when( 'get_option' )->alias(
+			function ( $option, $default_value = false ) {
+				if ( 'mskd_settings' === $option ) {
+						return array(
+							'smtp_enabled' => true,
+							'smtp_host'    => 'smtp.example.com',
+							'from_name'    => 'Newsletter',
+							'from_email'   => 'newsletter@example.com',
+							'reply_to'     => 'reply@example.com',
+							'email_header' => '<div class="header">Hello, {first_name}!</div>',
+							'email_footer' => '<div class="footer">Sent to {email}. {unsubscribe_link}</div>',
+						);
+				}
+				return $default_value;
 			}
-			return $default;
-		});
+		);
 
 		$this->cron_handler->process_queue();
 
@@ -531,18 +581,26 @@ class EmailHeaderFooterTest extends TestCase {
 		// First get_results is for recover_stuck_emails (returns empty).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, "status = 'processing'" ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, "status = 'processing'" ) !== false;
+					}
+				)
+			)
 			->andReturn( array() );
 
 		// Second get_results is for queue items (unified query with JOIN).
 		$wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'INNER JOIN' ) !== false
-					&& strpos( $query, 'mskd_subscribers' ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, 'INNER JOIN' ) !== false
+						&& strpos( $query, 'mskd_subscribers' ) !== false;
+					}
+				)
+			)
 			->andReturn( $queue_items );
 
 		$wpdb->shouldReceive( 'update' )
@@ -550,19 +608,21 @@ class EmailHeaderFooterTest extends TestCase {
 			->andReturn( 1 );
 
 		// Mock settings without email_header/email_footer keys (old settings).
-		Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
-			if ( 'mskd_settings' === $option ) {
-				return array(
-					'smtp_enabled'  => true,
-					'smtp_host'     => 'smtp.example.com',
-					'from_name'     => 'Test Site',
-					'from_email'    => 'noreply@example.com',
-					'reply_to'      => 'reply@example.com',
+		Functions\when( 'get_option' )->alias(
+			function ( $option, $default_value = false ) {
+				if ( 'mskd_settings' === $option ) {
+						return array(
+							'smtp_enabled' => true,
+							'smtp_host'    => 'smtp.example.com',
+							'from_name'    => 'Test Site',
+							'from_email'   => 'noreply@example.com',
+							'reply_to'     => 'reply@example.com',
 					// email_header and email_footer are missing.
-				);
+						);
+				}
+				return $default_value;
 			}
-			return $default;
-		});
+		);
 
 		$this->cron_handler->process_queue();
 

@@ -12,9 +12,11 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       mail-system-by-katsarov-design
  * Domain Path:       /languages
+ *
+ * @package Mail_System_by_Katsarov_Design
  */
 
-// Prevent direct access
+// Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -26,7 +28,7 @@ define( 'MSKD_VERSION', '1.1.0' );
 define( 'MSKD_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MSKD_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'MSKD_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( 'MSKD_BATCH_SIZE', 10 ); // Number of emails to send per minute
+define( 'MSKD_BATCH_SIZE', 10 ); // Number of emails to send per minute.
 
 /**
  * Plugin autoloader.
@@ -43,19 +45,19 @@ define( 'MSKD_BATCH_SIZE', 10 ); // Number of emails to send per minute
  * - MSKD\Services\* (PSR-4): MSKD\Services\List_Service, etc.
  */
 spl_autoload_register(
-	function ( $class ) {
-		// Handle PSR-4 namespaced classes (MSKD\*)
-		if ( strpos( $class, 'MSKD\\' ) === 0 ) {
+	function ( $class_name ) {
+		// Handle PSR-4 namespaced classes (MSKD\*).
+		if ( strpos( $class_name, 'MSKD\\' ) === 0 ) {
 				// Skip test classes - they require Composer autoloader (dev only).
-			if ( strpos( $class, 'MSKD\\Tests\\' ) === 0 ) {
+			if ( strpos( $class_name, 'MSKD\\Tests\\' ) === 0 ) {
 				return;
 			}
 
 			// Convert namespace to file path.
-			// MSKD\Admin\Admin_Email -> includes/Admin/class-admin-email.php
-			// MSKD\Services\List_Service -> includes/Services/class-list-service.php
-			// MSKD\Traits\Email_Header_Footer -> includes/traits/trait-email-header-footer.php
-			$relative_class = substr( $class, 5 ); // Remove 'MSKD\' prefix.
+			// MSKD\Admin\Admin_Email -> includes/Admin/class-admin-email.php.
+			// MSKD\Services\List_Service -> includes/Services/class-list-service.php.
+			// MSKD\Traits\Email_Header_Footer -> includes/traits/trait-email-header-footer.php.
+			$relative_class = substr( $class_name, 5 ); // Remove 'MSKD\' prefix.
 			$parts          = explode( '\\', $relative_class );
 
 			// Get class name (last part) and namespace parts.
@@ -79,18 +81,18 @@ spl_autoload_register(
 		}
 
 		// Handle legacy MSKD_ prefixed classes.
-		if ( strpos( $class, 'MSKD_' ) === 0 ) {
+		if ( strpos( $class_name, 'MSKD_' ) === 0 ) {
 			// Convert class name to file path.
-			$class_name = str_replace( 'MSKD_', '', $class );
+			$class_name = str_replace( 'MSKD_', '', $class_name );
 			$class_name = strtolower( str_replace( '_', '-', $class_name ) );
 
 			// Possible file locations for legacy classes.
 			$locations = array(
-				MSKD_PLUGIN_DIR . 'includes/class-' . $class_name . '.php',
-				MSKD_PLUGIN_DIR . 'includes/models/class-' . $class_name . '.php',
-				MSKD_PLUGIN_DIR . 'includes/services/class-' . $class_name . '.php',
+				MSKD_PLUGIN_DIR . 'includes/class-mskd-' . $class_name . '.php',
+				MSKD_PLUGIN_DIR . 'includes/models/class-mskd-' . $class_name . '.php',
+				MSKD_PLUGIN_DIR . 'includes/services/class-mskd-' . $class_name . '.php',
 				MSKD_PLUGIN_DIR . 'admin/class-' . $class_name . '.php',
-				MSKD_PLUGIN_DIR . 'public/class-' . $class_name . '.php',
+				MSKD_PLUGIN_DIR . 'public/class-mskd-' . $class_name . '.php',
 			);
 
 			foreach ( $locations as $file ) {
@@ -143,27 +145,27 @@ add_action( 'init', 'mskd_load_textdomain' );
  * Initialize the plugin
  */
 function mskd_init() {
-	// Load required files
+	// Load required files.
 	require_once MSKD_PLUGIN_DIR . 'includes/class-activator.php';
-	require_once MSKD_PLUGIN_DIR . 'includes/class-deactivator.php';
+	require_once MSKD_PLUGIN_DIR . 'includes/class-mskd-deactivator.php';
 
 	// Check for database upgrades.
 	MSKD_Activator::maybe_upgrade();
 
-	// Initialize admin
+	// Initialize admin.
 	if ( is_admin() ) {
-		require_once MSKD_PLUGIN_DIR . 'admin/class-admin.php';
+		require_once MSKD_PLUGIN_DIR . 'admin/class-mskd-admin.php';
 		$admin = new MSKD_Admin();
 		$admin->init();
 	}
 
-	// Initialize public
-	require_once MSKD_PLUGIN_DIR . 'public/class-public.php';
+	// Initialize public.
+	require_once MSKD_PLUGIN_DIR . 'public/class-mskd-public.php';
 	$public = new MSKD_Public();
 	$public->init();
 
-	// Initialize cron handler
-	require_once MSKD_PLUGIN_DIR . 'includes/services/class-cron-handler.php';
+	// Initialize cron handler.
+	require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-cron-handler.php';
 	$cron = new MSKD_Cron_Handler();
 	$cron->init();
 }
@@ -171,11 +173,14 @@ add_action( 'plugins_loaded', 'mskd_init' );
 
 /**
  * Register custom cron schedules
+ *
+ * @param array $schedules Existing cron schedules.
+ * @return array Modified cron schedules.
  */
 function mskd_cron_schedules( $schedules ) {
 	$schedules['mskd_every_minute'] = array(
 		'interval' => 60,
-		'display'  => __( 'Every minute', 'mail-system-by-katsarov-design' ),
+		'display'  => esc_html__( 'Every minute', 'mail-system-by-katsarov-design' ),
 	);
 	return $schedules;
 }
@@ -193,7 +198,7 @@ function mskd_normalize_timestamp( $timestamp = null ) {
 	if ( null === $timestamp ) {
 		$timestamp = time();
 	}
-	// Round down to the start of the current minute (remove seconds)
+	// Round down to the start of the current minute (remove seconds).
 	return (int) ( floor( $timestamp / 60 ) * 60 );
 }
 
@@ -391,4 +396,133 @@ function mskd_kses_email( $content ) {
 
 	// Apply KSES filtering with email-specific allowed tags.
 	return wp_kses( $content, $allowed_tags );
+}
+
+/**
+ * Encrypt a string using WordPress salts.
+ *
+ * Uses AES-256-CBC encryption with WordPress AUTH_KEY and SECURE_AUTH_KEY as the key.
+ * This provides better security than base64 encoding for sensitive data like SMTP passwords.
+ *
+ * @param string $value The value to encrypt.
+ * @return string|false Encrypted value in base64 format, or false on failure.
+ */
+function mskd_encrypt( $value ) {
+	if ( empty( $value ) ) {
+		return '';
+	}
+
+	// Check if openssl extension is available.
+	if ( ! function_exists( 'openssl_encrypt' ) ) {
+		// Fallback to base64 if openssl not available (legacy compatibility).
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Fallback when encryption unavailable.
+		return base64_encode( $value );
+	}
+
+	$cipher = 'aes-256-cbc';
+
+	// Use WordPress salts as encryption key.
+	if ( defined( 'AUTH_KEY' ) && defined( 'SECURE_AUTH_KEY' ) ) {
+		$key = hash( 'sha256', AUTH_KEY . SECURE_AUTH_KEY, true );
+	} else {
+		// Fallback if constants not defined.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Fallback when salts unavailable.
+		return base64_encode( $value );
+	}
+
+	// Generate a random initialization vector.
+	$iv_length = openssl_cipher_iv_length( $cipher );
+
+	// Use random_bytes() for PHP 7.0+ (cryptographically secure).
+	// Falls back to openssl_random_pseudo_bytes for PHP 5.x compatibility.
+	if ( function_exists( 'random_bytes' ) ) {
+		try {
+			$iv = random_bytes( $iv_length );
+		} catch ( \Exception $e ) {
+			// Fallback to openssl if random_bytes fails.
+			$iv = openssl_random_pseudo_bytes( $iv_length );
+		}
+	} else {
+		$iv = openssl_random_pseudo_bytes( $iv_length );
+	}
+
+	// Encrypt the value.
+	$encrypted = openssl_encrypt( $value, $cipher, $key, 0, $iv );
+
+	if ( false === $encrypted ) {
+		return false;
+	}
+
+	// Combine IV and encrypted data, then base64 encode.
+	// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Required for encryption format.
+	return base64_encode( $iv . '::' . $encrypted );
+}
+
+/**
+ * Decrypt a string encrypted with mskd_encrypt().
+ *
+ * @param string $value The encrypted value to decrypt.
+ * @return string|false Decrypted value, or false on failure.
+ */
+function mskd_decrypt( $value ) {
+	if ( empty( $value ) ) {
+		return '';
+	}
+
+	// Check if openssl extension is available.
+	if ( ! function_exists( 'openssl_decrypt' ) ) {
+		// Fallback to base64 decode if openssl not available (legacy compatibility).
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Fallback when encryption unavailable.
+		return base64_decode( $value );
+	}
+
+	$cipher = 'aes-256-cbc';
+
+	// Use WordPress salts as encryption key.
+	if ( defined( 'AUTH_KEY' ) && defined( 'SECURE_AUTH_KEY' ) ) {
+		$key = hash( 'sha256', AUTH_KEY . SECURE_AUTH_KEY, true );
+	} else {
+		// Fallback if constants not defined.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Fallback when salts unavailable.
+		return base64_decode( $value );
+	}
+
+	// Base64 decode the value with strict mode to detect new format vs legacy.
+	// Strict mode will return false for invalid base64, triggering legacy fallback.
+	// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Required for encryption format.
+	$decoded = base64_decode( $value, true );
+
+	if ( false === $decoded ) {
+		// Might be legacy base64-only format, try direct decode without strict mode.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Legacy compatibility.
+		return base64_decode( $value );
+	}
+
+	// Split IV and encrypted data.
+	$parts = explode( '::', $decoded, 2 );
+
+	if ( count( $parts ) !== 2 ) {
+		// Legacy base64-only format, return direct decode.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Legacy compatibility.
+		return base64_decode( $value );
+	}
+
+	list( $iv, $encrypted ) = $parts;
+
+	// Validate IV length to prevent potential issues.
+	$iv_length = openssl_cipher_iv_length( $cipher );
+	if ( strlen( $iv ) !== $iv_length ) {
+		// Invalid IV length, treat as legacy format.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Legacy compatibility.
+		return base64_decode( $value );
+	}
+
+	// Decrypt the value.
+	$decrypted = openssl_decrypt( $encrypted, $cipher, $key, 0, $iv );
+
+	if ( false === $decrypted ) {
+		return false;
+	}
+
+	return $decrypted;
 }

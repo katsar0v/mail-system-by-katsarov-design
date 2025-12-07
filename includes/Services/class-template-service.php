@@ -91,15 +91,17 @@ class Template_Service {
 			$where_clause = 'WHERE ' . implode( ' AND ', $where );
 		}
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 		$query = "SELECT * FROM {$this->table} {$where_clause} ORDER BY {$orderby} {$order}";
 
 		if ( ! empty( $values ) ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Using prepare with interpolated table name is necessary here.
 			$query = $this->wpdb->prepare( $query, ...$values );
 		}
 
 		$results = $this->wpdb->get_results( $query );
 
-		return $results ?: array();
+		return $results ? $results : array();
 	}
 
 	/**
@@ -111,6 +113,7 @@ class Template_Service {
 	public function get_by_id( int $id ): ?object {
 		return $this->wpdb->get_row(
 			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT * FROM {$this->table} WHERE id = %d",
 				$id
 			)
@@ -126,6 +129,7 @@ class Template_Service {
 	public function get_by_name( string $name ): ?object {
 		return $this->wpdb->get_row(
 			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT * FROM {$this->table} WHERE name = %s",
 				$name
 			)
@@ -258,9 +262,11 @@ class Template_Service {
 			$where_clause = 'WHERE ' . implode( ' AND ', $where );
 		}
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 		$query = "SELECT COUNT(*) FROM {$this->table} {$where_clause}";
 
 		if ( ! empty( $values ) ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Using prepare with interpolated table name is necessary here.
 			$query = $this->wpdb->prepare( $query, ...$values );
 		}
 

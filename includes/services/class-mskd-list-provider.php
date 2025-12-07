@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Load the List Subscriber DAO.
-require_once MSKD_PLUGIN_DIR . 'includes/models/class-list-subscriber.php';
+require_once MSKD_PLUGIN_DIR . 'includes/models/class-mskd-list-subscriber.php';
 
 /**
  * Class MSKD_List_Provider
@@ -66,6 +66,7 @@ class MSKD_List_Provider {
 		global $wpdb;
 
 		$lists = $wpdb->get_results(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 			"SELECT * FROM {$wpdb->prefix}mskd_lists ORDER BY name ASC"
 		);
 
@@ -74,10 +75,10 @@ class MSKD_List_Provider {
 		}
 
 		// Add metadata for database lists.
-		foreach ( $lists as $list ) {
-			$list->source      = 'database';
-			$list->is_editable = true;
-			$list->provider    = null;
+		foreach ( $lists as $list_obj ) {
+			$list_obj->source      = 'database';
+			$list_obj->is_editable = true;
+			$list_obj->provider    = null;
 		}
 
 		return $lists;
@@ -182,6 +183,7 @@ class MSKD_List_Provider {
 		global $wpdb;
 		$list = $wpdb->get_row(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT * FROM {$wpdb->prefix}mskd_lists WHERE id = %d",
 				intval( $list_id )
 			)
@@ -232,13 +234,13 @@ class MSKD_List_Provider {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param object $list List object.
+	 * @param object $list_obj List object.
 	 * @return int Subscriber count.
 	 */
-	public static function get_list_subscriber_count( $list ) {
-		if ( $list->source === 'external' ) {
-			if ( isset( $list->subscriber_callback ) && is_callable( $list->subscriber_callback ) ) {
-				$subscribers = call_user_func( $list->subscriber_callback );
+	public static function get_list_subscriber_count( $list_obj ) {
+		if ( 'external' === $list_obj->source ) {
+			if ( isset( $list_obj->subscriber_callback ) && is_callable( $list_obj->subscriber_callback ) ) {
+				$subscribers = call_user_func( $list_obj->subscriber_callback );
 				return is_array( $subscribers ) ? count( $subscribers ) : 0;
 			}
 			return 0;
@@ -248,8 +250,9 @@ class MSKD_List_Provider {
 		global $wpdb;
 		return (int) $wpdb->get_var(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT COUNT(*) FROM {$wpdb->prefix}mskd_subscriber_list WHERE list_id = %d",
-				intval( $list->id )
+				intval( $list_obj->id )
 			)
 		);
 	}
@@ -259,22 +262,23 @@ class MSKD_List_Provider {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param object $list List object.
+	 * @param object $list_obj List object.
 	 * @return int Active subscriber count.
 	 */
-	public static function get_list_active_subscriber_count( $list ) {
-		if ( $list->source === 'external' ) {
-			return self::get_external_list_active_count( $list );
+	public static function get_list_active_subscriber_count( $list_obj ) {
+		if ( 'external' === $list_obj->source ) {
+			return self::get_external_list_active_count( $list_obj );
 		}
 
 		// Database list.
 		global $wpdb;
 		return (int) $wpdb->get_var(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names are hardcoded and safe.
 				"SELECT COUNT(*) FROM {$wpdb->prefix}mskd_subscriber_list sl
 				INNER JOIN {$wpdb->prefix}mskd_subscribers s ON sl.subscriber_id = s.id
 				WHERE sl.list_id = %d AND s.status = 'active'",
-				intval( $list->id )
+				intval( $list_obj->id )
 			)
 		);
 	}
@@ -311,30 +315,31 @@ class MSKD_List_Provider {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param object|string|int $list List object or list ID.
+	 * @param object|string|int $list_obj List object or list ID.
 	 * @return array Array of subscriber IDs.
 	 */
-	public static function get_list_subscriber_ids( $list ) {
-		if ( ! is_object( $list ) ) {
-			$list = self::get_list( $list );
+	public static function get_list_subscriber_ids( $list_obj ) {
+		if ( ! is_object( $list_obj ) ) {
+			$list_obj = self::get_list( $list_obj );
 		}
 
-		if ( ! $list ) {
+		if ( ! $list_obj ) {
 			return array();
 		}
 
-		if ( $list->source === 'external' ) {
-			return self::get_external_list_subscriber_ids( $list );
+		if ( 'external' === $list_obj->source ) {
+			return self::get_external_list_subscriber_ids( $list_obj );
 		}
 
 		// Database list.
 		global $wpdb;
 		return $wpdb->get_col(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names are hardcoded and safe.
 				"SELECT DISTINCT s.id FROM {$wpdb->prefix}mskd_subscribers s
 				INNER JOIN {$wpdb->prefix}mskd_subscriber_list sl ON s.id = sl.subscriber_id
 				WHERE sl.list_id = %d AND s.status = 'active'",
-				intval( $list->id )
+				intval( $list_obj->id )
 			)
 		);
 	}
@@ -347,15 +352,15 @@ class MSKD_List_Provider {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param object $list External list object.
+	 * @param object $list_obj External list object.
 	 * @return array Array of email addresses as identifiers.
 	 */
-	private static function get_external_list_subscriber_ids( $list ) {
-		if ( ! isset( $list->subscriber_callback ) || ! is_callable( $list->subscriber_callback ) ) {
+	private static function get_external_list_subscriber_ids( $list_obj ) {
+		if ( ! isset( $list_obj->subscriber_callback ) || ! is_callable( $list_obj->subscriber_callback ) ) {
 			return array();
 		}
 
-		$result = call_user_func( $list->subscriber_callback );
+		$result = call_user_func( $list_obj->subscriber_callback );
 
 		if ( ! MSKD_List_Subscriber::is_valid_callback_result( $result ) ) {
 			return array();
@@ -453,6 +458,8 @@ class MSKD_List_Provider {
 		$params[] = intval( $args['per_page'] );
 		$params[] = $offset;
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 		$query = "SELECT * FROM {$wpdb->prefix}mskd_subscribers {$where} ORDER BY created_at DESC LIMIT %d OFFSET %d";
 
 		$subscribers = $wpdb->get_results( $wpdb->prepare( $query, $params ) );
@@ -728,6 +735,10 @@ class MSKD_List_Provider {
 			$where = $wpdb->prepare( 'WHERE status = %s', $status );
 		}
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching -- Simple count query, no caching needed.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching -- Simple count query, no caching needed.
 		return (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mskd_subscribers {$where}" );
 	}
 
@@ -740,31 +751,33 @@ class MSKD_List_Provider {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param object|string|int $list  List object or list ID.
+	 * @param object|string|int $list_obj List object or list ID.
 	 * @param int|null          $limit Optional. Maximum number of subscribers to return. Default null (no limit).
 	 * @return array Array of subscriber objects with email, first_name, last_name, etc.
 	 */
-	public static function get_list_subscribers_full( $list, $limit = null ) {
-		if ( ! is_object( $list ) ) {
-			$list = self::get_list( $list );
+	public static function get_list_subscribers_full( $list_obj, $limit = null ) {
+		if ( ! is_object( $list_obj ) ) {
+			$list_obj = self::get_list( $list_obj );
 		}
 
-		if ( ! $list ) {
+		if ( ! $list_obj ) {
 			return array();
 		}
 
 		// For database lists, get full subscriber data.
-		if ( $list->source === 'database' ) {
+		if ( 'database' === $list_obj->source ) {
 			global $wpdb;
 
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Using prepare with interpolated table name is necessary here.
 			$sql = $wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names are hardcoded and safe.
 				"SELECT s.* FROM {$wpdb->prefix}mskd_subscribers s
 				INNER JOIN {$wpdb->prefix}mskd_subscriber_list sl ON s.id = sl.subscriber_id
 				WHERE sl.list_id = %d AND s.status = 'active'",
-				intval( $list->id )
+				intval( $list_obj->id )
 			);
 
-			if ( $limit !== null && $limit > 0 ) {
+			if ( null !== $limit && $limit > 0 ) {
 				$sql .= $wpdb->prepare( ' LIMIT %d', $limit );
 			}
 
@@ -779,11 +792,11 @@ class MSKD_List_Provider {
 		}
 
 		// For external lists, call the subscriber callback.
-		if ( ! isset( $list->subscriber_callback ) || ! is_callable( $list->subscriber_callback ) ) {
+		if ( ! isset( $list_obj->subscriber_callback ) || ! is_callable( $list_obj->subscriber_callback ) ) {
 			return array();
 		}
 
-		$result = call_user_func( $list->subscriber_callback );
+		$result = call_user_func( $list_obj->subscriber_callback );
 
 		if ( ! MSKD_List_Subscriber::is_valid_callback_result( $result ) ) {
 			return array();
@@ -792,7 +805,7 @@ class MSKD_List_Provider {
 		$subscribers = MSKD_List_Subscriber::from_callback_result( $result );
 
 		// Apply limit if specified.
-		if ( $limit !== null && $limit > 0 ) {
+		if ( null !== $limit && $limit > 0 ) {
 			$subscribers = array_slice( $subscribers, 0, $limit );
 		}
 

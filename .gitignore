@@ -24,3 +24,6 @@ Thumbs.db
 # Run `npm run build` to generate CSS files locally
 admin/css/
 public/css/
+
+# Project configuration
+.kilocode/

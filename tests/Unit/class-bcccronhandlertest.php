@@ -31,8 +31,8 @@ class BccCronHandlerTest extends TestCase {
 		parent::setUp();
 
 		// Load required class.
-		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
-		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-cron-handler.php';
+		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-mskd-smtp-mailer.php';
+		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-mskd-cron-handler.php';
 
 		// Mock WordPress functions.
 		Functions\when( 'current_time' )->justReturn( '2024-01-01 12:00:00' );
@@ -53,18 +53,16 @@ class BccCronHandlerTest extends TestCase {
 		// by checking the header construction in the process_queue method.
 
 		// Create a mock queue item with Bcc.
-		$queue_item            = new \stdClass();
-		$queue_item->id        = 1;
-		$queue_item->email     = 'recipient@example.com';
-		$queue_item->subject   = 'Test Subject';
-		$queue_item->body      = 'Test Body';
-		$queue_item->first_name = 'Test';
-		$queue_item->last_name = 'User';
+		$queue_item                    = new \stdClass();
+		$queue_item->id                = 1;
+		$queue_item->email             = 'recipient@example.com';
+		$queue_item->subject           = 'Test Subject';
+		$queue_item->body              = 'Test Body';
+		$queue_item->first_name        = 'Test';
+		$queue_item->last_name         = 'User';
 		$queue_item->unsubscribe_token = 'token123';
-		$queue_item->bcc       = 'bcc1@example.com, bcc2@example.com';
-		$queue_item->attempts  = 0;
-		$queue_item->from_email = null;
-		$queue_item->from_name  = null;
+		$queue_item->bcc               = 'bcc1@example.com, bcc2@example.com';
+		$queue_item->attempts          = 0;
 
 		// Parse Bcc as the cron handler would.
 		$bcc_emails = array_map( 'trim', explode( ',', $queue_item->bcc ) );
@@ -153,8 +151,8 @@ class BccCronHandlerTest extends TestCase {
 	public function test_bcc_sent_once_per_campaign(): void {
 		// Test the logic for regular campaigns.
 		$campaign_type = 'campaign';
-		$bcc_sent = 0; // Not sent yet.
-		$bcc = 'admin@example.com';
+		$bcc_sent      = 0; // Not sent yet.
+		$bcc           = 'admin@example.com';
 
 		// First email in campaign - should send Bcc.
 		$should_send_bcc = false;
@@ -189,8 +187,8 @@ class BccCronHandlerTest extends TestCase {
 	 */
 	public function test_bcc_always_sent_for_one_time(): void {
 		$campaign_type = 'one_time';
-		$bcc_sent = 0; // Doesn't matter for one-time.
-		$bcc = 'admin@example.com';
+		$bcc_sent      = 0; // Doesn't matter for one-time.
+		$bcc           = 'admin@example.com';
 
 		// One-time emails should always send Bcc.
 		$should_send_bcc = false;

@@ -24,7 +24,7 @@ class ListProviderTest extends TestCase {
 		parent::setUp();
 
 		// Load the List Provider class using the global constant.
-		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
+		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-mskd-list-provider.php';
 	}
 
 	/**
@@ -306,7 +306,7 @@ class ListProviderTest extends TestCase {
 			'id'                  => 'ext_test',
 			'name'                => 'External Test',
 			'source'              => 'external',
-			'subscriber_callback' => function() {
+			'subscriber_callback' => function () {
 				return array( 1, 2, 3, 4, 5 );
 			},
 		);
@@ -433,7 +433,7 @@ class ListProviderTest extends TestCase {
 			'id'                  => 'ext_empty_list',
 			'name'                => 'Empty List',
 			'source'              => 'external',
-			'subscriber_callback' => function() {
+			'subscriber_callback' => function () {
 				return array();
 			},
 		);
@@ -490,15 +490,21 @@ class ListProviderTest extends TestCase {
 			);
 
 		Functions\expect( 'is_email' )->andReturn( true );
-		Functions\expect( 'sanitize_key' )->andReturnUsing( function( $key ) {
-			return $key;
-		} );
-		Functions\expect( 'sanitize_email' )->andReturnUsing( function( $email ) {
-			return $email;
-		} );
-		Functions\expect( 'sanitize_text_field' )->andReturnUsing( function( $str ) {
-			return $str;
-		} );
+		Functions\expect( 'sanitize_key' )->andReturnUsing(
+			function ( $key ) {
+				return $key;
+			}
+		);
+		Functions\expect( 'sanitize_email' )->andReturnUsing(
+			function ( $email ) {
+				return $email;
+			}
+		);
+		Functions\expect( 'sanitize_text_field' )->andReturnUsing(
+			function ( $str ) {
+				return $str;
+			}
+		);
 		Functions\expect( 'wp_salt' )->andReturn( 'test_salt' );
 
 		$subscribers = \MSKD_List_Provider::get_external_subscribers();
@@ -536,15 +542,21 @@ class ListProviderTest extends TestCase {
 			);
 
 		Functions\expect( 'is_email' )->andReturn( true );
-		Functions\expect( 'sanitize_key' )->andReturnUsing( function( $key ) {
-			return $key;
-		} );
-		Functions\expect( 'sanitize_email' )->andReturnUsing( function( $email ) {
-			return $email;
-		} );
-		Functions\expect( 'sanitize_text_field' )->andReturnUsing( function( $str ) {
-			return $str;
-		} );
+		Functions\expect( 'sanitize_key' )->andReturnUsing(
+			function ( $key ) {
+				return $key;
+			}
+		);
+		Functions\expect( 'sanitize_email' )->andReturnUsing(
+			function ( $email ) {
+				return $email;
+			}
+		);
+		Functions\expect( 'sanitize_text_field' )->andReturnUsing(
+			function ( $str ) {
+				return $str;
+			}
+		);
 		Functions\expect( 'wp_salt' )->andReturn( 'test_salt' );
 
 		$subscribers = \MSKD_List_Provider::get_external_subscribers( array( 'status' => 'active' ) );
@@ -572,12 +584,16 @@ class ListProviderTest extends TestCase {
 			);
 
 		Functions\expect( 'is_email' )->with( 'invalid-email' )->andReturn( false );
-		Functions\expect( 'sanitize_key' )->andReturnUsing( function( $key ) {
-			return $key;
-		} );
-		Functions\expect( 'sanitize_email' )->andReturnUsing( function( $email ) {
-			return $email;
-		} );
+		Functions\expect( 'sanitize_key' )->andReturnUsing(
+			function ( $key ) {
+				return $key;
+			}
+		);
+		Functions\expect( 'sanitize_email' )->andReturnUsing(
+			function ( $email ) {
+				return $email;
+			}
+		);
 
 		$subscribers = \MSKD_List_Provider::get_external_subscribers();
 
@@ -628,15 +644,21 @@ class ListProviderTest extends TestCase {
 			);
 
 		Functions\expect( 'is_email' )->andReturn( true );
-		Functions\expect( 'sanitize_key' )->andReturnUsing( function( $key ) {
-			return $key;
-		} );
-		Functions\expect( 'sanitize_email' )->andReturnUsing( function( $email ) {
-			return $email;
-		} );
-		Functions\expect( 'sanitize_text_field' )->andReturnUsing( function( $str ) {
-			return $str;
-		} );
+		Functions\expect( 'sanitize_key' )->andReturnUsing(
+			function ( $key ) {
+				return $key;
+			}
+		);
+		Functions\expect( 'sanitize_email' )->andReturnUsing(
+			function ( $email ) {
+				return $email;
+			}
+		);
+		Functions\expect( 'sanitize_text_field' )->andReturnUsing(
+			function ( $str ) {
+				return $str;
+			}
+		);
 		Functions\expect( 'wp_salt' )->andReturn( 'test_salt' );
 
 		$subscriber = \MSKD_List_Provider::get_subscriber( 'ext_crm_contact_1' );
@@ -662,9 +684,13 @@ class ListProviderTest extends TestCase {
 
 		$this->wpdb->shouldReceive( 'get_row' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'mskd_subscribers' ) !== false && strpos( $query, '42' ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, 'mskd_subscribers' ) !== false && strpos( $query, '42' ) !== false;
+					}
+				)
+			)
 			->andReturn( $db_subscriber );
 
 		$subscriber = \MSKD_List_Provider::get_subscriber( 42 );
@@ -692,27 +718,42 @@ class ListProviderTest extends TestCase {
 			->with( 'mskd_register_external_subscribers', array(), Mockery::any() )
 			->andReturn(
 				array(
-					array( 'id' => 'ext_1', 'email' => 'ext1@example.com' ),
-					array( 'id' => 'ext_2', 'email' => 'ext2@example.com' ),
-					array( 'id' => 'ext_3', 'email' => 'ext3@example.com' ),
+					array(
+						'id'    => 'ext_1',
+						'email' => 'ext1@example.com',
+					),
+					array(
+						'id'    => 'ext_2',
+						'email' => 'ext2@example.com',
+					),
+					array(
+						'id'    => 'ext_3',
+						'email' => 'ext3@example.com',
+					),
 				)
 			);
 
 		Functions\expect( 'is_email' )->andReturn( true );
-		Functions\expect( 'sanitize_key' )->andReturnUsing( function( $key ) {
-			return $key;
-		} );
-		Functions\expect( 'sanitize_email' )->andReturnUsing( function( $email ) {
-			return $email;
-		} );
-		Functions\expect( 'sanitize_text_field' )->andReturnUsing( function( $str ) {
-			return $str;
-		} );
+		Functions\expect( 'sanitize_key' )->andReturnUsing(
+			function ( $key ) {
+				return $key;
+			}
+		);
+		Functions\expect( 'sanitize_email' )->andReturnUsing(
+			function ( $email ) {
+				return $email;
+			}
+		);
+		Functions\expect( 'sanitize_text_field' )->andReturnUsing(
+			function ( $str ) {
+				return $str;
+			}
+		);
 		Functions\expect( 'wp_salt' )->andReturn( 'test_salt' );
 
 		$total = \MSKD_List_Provider::get_total_subscriber_count();
 
-		$this->assertEquals( 13, $total ); // 10 database + 3 external
+		$this->assertEquals( 13, $total ); // 10 database + 3 external.
 	}
 
 	/**
@@ -734,11 +775,15 @@ class ListProviderTest extends TestCase {
 
 		$this->wpdb->shouldReceive( 'get_results' )
 			->once()
-			->with( Mockery::on( function ( $query ) {
-				return strpos( $query, 'mskd_subscribers' ) !== false 
-					&& strpos( $query, 'mskd_subscriber_list' ) !== false 
-					&& strpos( $query, "status = 'active'" ) !== false;
-			} ) )
+			->with(
+				Mockery::on(
+					function ( $query ) {
+						return strpos( $query, 'mskd_subscribers' ) !== false
+						&& strpos( $query, 'mskd_subscriber_list' ) !== false
+						&& strpos( $query, "status = 'active'" ) !== false;
+					}
+				)
+			)
 			->andReturn( $db_subscribers );
 
 		$list = (object) array(

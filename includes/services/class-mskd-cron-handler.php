@@ -67,6 +67,7 @@ class MSKD_Cron_Handler {
 		// Join with campaigns table to get Bcc information and custom from email data.
 		$queue_items = $wpdb->get_results(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names are hardcoded and safe.
 				"SELECT q.*, s.email, s.first_name, s.last_name, s.unsubscribe_token,
 				       c.bcc, c.bcc_sent, c.type as campaign_type, c.from_email, c.from_name
 				FROM {$wpdb->prefix}mskd_queue q
@@ -86,11 +87,11 @@ class MSKD_Cron_Handler {
 			return;
 		}
 
-		// Get settings
+		// Get settings.
 		$settings = get_option( 'mskd_settings', array() );
 
 		// Initialize mailer (uses SMTP if configured, otherwise PHP mail).
-		require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+		require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-smtp-mailer.php';
 		$this->smtp_mailer = new MSKD_SMTP_Mailer( $settings );
 
 		foreach ( $queue_items as $item ) {
@@ -109,7 +110,7 @@ class MSKD_Cron_Handler {
 				continue;
 			}
 
-			// Mark as processing
+			// Mark as processing.
 			$wpdb->update(
 				$wpdb->prefix . 'mskd_queue',
 				array(
@@ -129,7 +130,7 @@ class MSKD_Cron_Handler {
 			// Prepare headers for Bcc if available.
 			// For regular campaigns, only send Bcc with the first email (bcc_sent = 0).
 			// For one_time campaigns, always send Bcc (they only have one email).
-			$headers = array();
+			$headers         = array();
 			$should_send_bcc = false;
 
 			if ( ! empty( $item->bcc ) ) {
@@ -170,7 +171,7 @@ class MSKD_Cron_Handler {
 			}
 
 			if ( $sent ) {
-				// Mark as sent
+				// Mark as sent.
 				$wpdb->update(
 					$wpdb->prefix . 'mskd_queue',
 					array(
@@ -205,14 +206,14 @@ class MSKD_Cron_Handler {
 					);
 				}
 			} else {
-				// Check if we should retry or mark as failed
+				// Check if we should retry or mark as failed.
 				$new_attempts = $item->attempts + 1;
 
 				// Build error message with details.
 				$base_error = __( 'SMTP sending failed', 'mail-system-by-katsarov-design' );
 
 				if ( $new_attempts < self::MAX_ATTEMPTS ) {
-					// Schedule for retry - set back to pending with delayed schedule
+					// Schedule for retry - set back to pending with delayed schedule.
 					$retry_delay   = $new_attempts * 2; // 2, 4 minutes delay
 					$retry_message = sprintf(
 						/* translators: 1: Attempt number, 2: Error details */
@@ -220,13 +221,13 @@ class MSKD_Cron_Handler {
 						$new_attempts,
 						$error_message ? '(' . $error_message . ')' : ''
 					);
-					// Normalize to 00 seconds
+					// Normalize to 00 seconds.
 					$retry_timestamp = mskd_normalize_timestamp( strtotime( "+{$retry_delay} minutes" ) );
 					$wpdb->update(
 						$wpdb->prefix . 'mskd_queue',
 						array(
 							'status'        => 'pending',
-							'scheduled_at'  => date( 'Y-m-d H:i:s', $retry_timestamp ),
+							'scheduled_at'  => gmdate( 'Y-m-d H:i:s', $retry_timestamp ),
 							'error_message' => $retry_message,
 						),
 						array( 'id' => $item->id ),
@@ -234,7 +235,7 @@ class MSKD_Cron_Handler {
 						array( '%d' )
 					);
 				} else {
-					// Max attempts reached, mark as failed
+					// Max attempts reached, mark as failed.
 					$fail_message = sprintf(
 						/* translators: 1: Base error message, 2: Max attempts, 3: Error details */
 						__( '%1$s after %2$d attempts. %3$s', 'mail-system-by-katsarov-design' ),
@@ -273,14 +274,15 @@ class MSKD_Cron_Handler {
 		// Get counts of queue items for this campaign.
 		$stats = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT 
-                COUNT(*) as total,
-                SUM(CASE WHEN status IN ('pending', 'processing') THEN 1 ELSE 0 END) as pending,
-                SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
-                SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
-                SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled
-            FROM {$wpdb->prefix}mskd_queue
-            WHERE campaign_id = %d",
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
+				"SELECT
+		              COUNT(*) as total,
+		              SUM(CASE WHEN status IN ('pending', 'processing') THEN 1 ELSE 0 END) as pending,
+		              SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
+		              SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
+		              SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled
+		          FROM {$wpdb->prefix}mskd_queue
+		          WHERE campaign_id = %d",
 				$campaign_id
 			)
 		);
@@ -323,23 +325,24 @@ class MSKD_Cron_Handler {
 	private function recover_stuck_emails() {
 		global $wpdb;
 
-		// Normalize to 00 seconds
+		// Normalize to 00 seconds.
 		$timeout_timestamp = mskd_normalize_timestamp( strtotime( '-' . self::PROCESSING_TIMEOUT_MINUTES . ' minutes' ) );
-		$timeout_threshold = date( 'Y-m-d H:i:s', $timeout_timestamp );
+		$timeout_threshold = gmdate( 'Y-m-d H:i:s', $timeout_timestamp );
 
-		// Find emails stuck in processing status
+		// Find emails stuck in processing status.
 		$stuck_items = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT id, attempts FROM {$wpdb->prefix}mskd_queue 
-            WHERE status = 'processing' 
-            AND scheduled_at < %s",
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
+				"SELECT id, attempts FROM {$wpdb->prefix}mskd_queue
+		          WHERE status = 'processing'
+		          AND scheduled_at < %s",
 				$timeout_threshold
 			)
 		);
 
 		foreach ( $stuck_items as $item ) {
 			if ( $item->attempts < self::MAX_ATTEMPTS ) {
-				// Reset to pending for retry
+				// Reset to pending for retry.
 				$wpdb->update(
 					$wpdb->prefix . 'mskd_queue',
 					array(
@@ -352,7 +355,7 @@ class MSKD_Cron_Handler {
 					array( '%d' )
 				);
 			} else {
-				// Max attempts reached, mark as failed
+				// Max attempts reached, mark as failed.
 				$wpdb->update(
 					$wpdb->prefix . 'mskd_queue',
 					array(
@@ -370,8 +373,8 @@ class MSKD_Cron_Handler {
 	/**
 	 * Replace placeholders in email content
 	 *
-	 * @param string $content Email content
-	 * @param object $subscriber Subscriber data
+	 * @param string $content Email content.
+	 * @param object $subscriber Subscriber data.
 	 * @return string
 	 */
 	private function replace_placeholders( $content, $subscriber ) {

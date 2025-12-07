@@ -49,18 +49,23 @@ class Admin_Subscribers {
 		}
 
 		// Handle add subscriber.
-		if ( isset( $_POST['mskd_add_subscriber'] ) && wp_verify_nonce( $_POST['mskd_nonce'], 'mskd_add_subscriber' ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce checked on line 52.
+		if ( isset( $_POST['mskd_add_subscriber'] ) && isset( $_POST['mskd_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mskd_nonce'] ) ), 'mskd_add_subscriber' ) ) {
 			$this->handle_add();
 		}
 
 		// Handle edit subscriber.
-		if ( isset( $_POST['mskd_edit_subscriber'] ) && wp_verify_nonce( $_POST['mskd_nonce'], 'mskd_edit_subscriber' ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce checked on line 57.
+		if ( isset( $_POST['mskd_edit_subscriber'] ) && isset( $_POST['mskd_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mskd_nonce'] ) ), 'mskd_edit_subscriber' ) ) {
 			$this->handle_edit();
 		}
 
 		// Handle delete subscriber.
-		if ( isset( $_GET['action'] ) && 'delete_subscriber' === $_GET['action'] && isset( $_GET['id'] ) ) {
-			if ( wp_verify_nonce( $_GET['_wpnonce'], 'delete_subscriber_' . $_GET['id'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified in the if condition below.
+		if ( isset( $_GET['action'] ) && 'delete_subscriber' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) && isset( $_GET['id'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified here, sanitized before use.
+			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'delete_subscriber_' . intval( $_GET['id'] ) ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified above.
 				$this->handle_delete( intval( $_GET['id'] ) );
 			}
 		}
@@ -72,11 +77,16 @@ class Admin_Subscribers {
 	 * @return void
 	 */
 	private function handle_add(): void {
-		$email      = sanitize_email( $_POST['email'] );
-		$first_name = sanitize_text_field( $_POST['first_name'] );
-		$last_name  = sanitize_text_field( $_POST['last_name'] );
-		$status     = sanitize_text_field( $_POST['status'] );
-		$lists      = isset( $_POST['lists'] ) ? array_map( 'intval', $_POST['lists'] ) : array();
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$first_name = isset( $_POST['first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['first_name'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$last_name = isset( $_POST['last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['last_name'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$status = isset( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : 'active';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$lists = isset( $_POST['lists'] ) ? array_map( 'intval', wp_unslash( $_POST['lists'] ) ) : array();
 
 		// Validate status.
 		$allowed_statuses = array( 'active', 'inactive', 'unsubscribed' );
@@ -142,12 +152,18 @@ class Admin_Subscribers {
 	 * @return void
 	 */
 	private function handle_edit(): void {
-		$id         = intval( $_POST['subscriber_id'] );
-		$email      = sanitize_email( $_POST['email'] );
-		$first_name = sanitize_text_field( $_POST['first_name'] );
-		$last_name  = sanitize_text_field( $_POST['last_name'] );
-		$status     = sanitize_text_field( $_POST['status'] );
-		$lists      = isset( $_POST['lists'] ) ? array_map( 'intval', $_POST['lists'] ) : array();
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$id = isset( $_POST['subscriber_id'] ) ? intval( $_POST['subscriber_id'] ) : 0;
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$first_name = isset( $_POST['first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['first_name'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$last_name = isset( $_POST['last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['last_name'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$status = isset( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : 'active';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+		$lists = isset( $_POST['lists'] ) ? array_map( 'intval', wp_unslash( $_POST['lists'] ) ) : array();
 
 		// Validate status.
 		$allowed_statuses = array( 'active', 'inactive', 'unsubscribed' );
@@ -198,6 +214,7 @@ class Admin_Subscribers {
 			'success'
 		);
 
+		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page.
 		wp_redirect( admin_url( 'admin.php?page=mskd-subscribers' ) );
 		exit;
 	}
@@ -218,6 +235,7 @@ class Admin_Subscribers {
 			'success'
 		);
 
+		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirecting to admin page.
 		wp_redirect( admin_url( 'admin.php?page=mskd-subscribers' ) );
 		exit;
 	}
