@@ -14,7 +14,9 @@ global $wpdb;
 // Load the List Provider service.
 require_once MSKD_PLUGIN_DIR . 'includes/services/class-list-provider.php';
 
-$action        = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : 'list';
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce not needed for reading view state.
+$current_action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : 'list';
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce not needed for reading view state.
 $subscriber_id = isset( $_GET['id'] ) ? sanitize_text_field( wp_unslash( $_GET['id'] ) ) : '';
 
 // Get all lists for dropdown (database + external).
@@ -23,7 +25,7 @@ $lists = MSKD_List_Provider::get_all_lists();
 // Get subscriber for editing (only database subscribers are editable).
 $subscriber       = null;
 $subscriber_lists = array();
-if ( 'edit' === $action && $subscriber_id ) {
+if ( 'edit' === $current_action && $subscriber_id ) {
 	// Check if this is an external subscriber (not editable).
 	if ( MSKD_List_Provider::is_external_id( $subscriber_id ) ) {
 		wp_redirect( admin_url( 'admin.php?page=mskd-subscribers' ) );
@@ -47,7 +49,7 @@ if ( 'edit' === $action && $subscriber_id ) {
 <div class="wrap mskd-wrap">
 	<h1>
 		<?php esc_html_e( 'Subscribers', 'mail-system-by-katsarov-design' ); ?>
-		<?php if ( 'list' === $action ) : ?>
+		<?php if ( 'list' === $current_action ) : ?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-subscribers&action=add' ) ); ?>" class="page-title-action">
 				<?php esc_html_e( 'Add new', 'mail-system-by-katsarov-design' ); ?>
 			</a>
@@ -56,15 +58,15 @@ if ( 'edit' === $action && $subscriber_id ) {
 
 	<?php settings_errors( 'mskd_messages' ); ?>
 
-	<?php if ( $action === 'add' || $action === 'edit' ) : ?>
+	<?php if ( 'add' === $current_action || 'edit' === $current_action ) : ?>
 		<!-- Add/Edit Form -->
 		<div class="mskd-form-wrap">
-			<h2><?php echo esc_html( $action === 'add' ? esc_html__( 'Add subscriber', 'mail-system-by-katsarov-design' ) : esc_html__( 'Edit subscriber', 'mail-system-by-katsarov-design' ) ); ?></h2>
+			<h2><?php echo esc_html( 'add' === $current_action ? esc_html__( 'Add subscriber', 'mail-system-by-katsarov-design' ) : esc_html__( 'Edit subscriber', 'mail-system-by-katsarov-design' ) ); ?></h2>
 			
 			<form method="post" action="">
-				<?php wp_nonce_field( $action === 'add' ? 'mskd_add_subscriber' : 'mskd_edit_subscriber', 'mskd_nonce' ); ?>
+				<?php wp_nonce_field( 'add' === $current_action ? 'mskd_add_subscriber' : 'mskd_edit_subscriber', 'mskd_nonce' ); ?>
 				
-				<?php if ( $action === 'edit' ) : ?>
+				<?php if ( 'edit' === $current_action ) : ?>
 					<input type="hidden" name="subscriber_id" value="<?php echo esc_attr( $subscriber_id ); ?>">
 				<?php endif; ?>
 
@@ -123,8 +125,8 @@ if ( 'edit' === $action && $subscriber_id ) {
 							// Only show database lists for subscriber assignment (external lists manage their own subscribers).
 							$database_lists = array_filter(
 								$lists,
-								function ( $list ) {
-									return $list->source === 'database';
+								function ( $list_item ) {
+									return 'database' === $list_item->source;
 								}
 							);
 							?>
@@ -143,8 +145,8 @@ if ( 'edit' === $action && $subscriber_id ) {
 							// Show external lists as info (not selectable).
 							$external_lists = array_filter(
 								$lists,
-								function ( $list ) {
-									return $list->source === 'external';
+								function ( $list_item ) {
+									return 'external' === $list_item->source;
 								}
 							);
 							if ( ! empty( $external_lists ) ) :
@@ -158,7 +160,7 @@ if ( 'edit' === $action && $subscriber_id ) {
 										},
 										$external_lists
 									);
-									echo implode( ', ', $external_names );
+									echo esc_html( implode( ', ', $external_names ) );
 									?>
 								</p>
 							<?php endif; ?>
@@ -167,9 +169,9 @@ if ( 'edit' === $action && $subscriber_id ) {
 				</table>
 
 				<p class="submit">
-					<input type="submit" name="<?php echo $action === 'add' ? 'mskd_add_subscriber' : 'mskd_edit_subscriber'; ?>" 
+					<input type="submit" name="<?php echo 'add' === $current_action ? 'mskd_add_subscriber' : 'mskd_edit_subscriber'; ?>" 
 							class="button button-primary" 
-							value="<?php echo $action === 'add' ? esc_attr__( 'Add subscriber', 'mail-system-by-katsarov-design' ) : esc_attr__( 'Save changes', 'mail-system-by-katsarov-design' ); ?>">
+							value="<?php echo 'add' === $current_action ? esc_attr__( 'Add subscriber', 'mail-system-by-katsarov-design' ) : esc_attr__( 'Save changes', 'mail-system-by-katsarov-design' ); ?>">
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-subscribers' ) ); ?>" class="button">
 						<?php esc_html_e( 'Cancel', 'mail-system-by-katsarov-design' ); ?>
 					</a>
@@ -181,7 +183,7 @@ if ( 'edit' === $action && $subscriber_id ) {
 		<!-- Subscribers List -->
 		<?php
 		// Pagination.
-		$per_page = 20;
+		$items_per_page = 20;
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce not needed for reading pagination.
 		$current_page = isset( $_GET['paged'] ) ? max( 1, intval( $_GET['paged'] ) ) : 1;
 
@@ -194,11 +196,11 @@ if ( 'edit' === $action && $subscriber_id ) {
 		$external_subs = MSKD_List_Provider::get_external_subscribers( array( 'status' => $status_filter ) );
 		$ext_count     = count( $external_subs );
 		$total_items   = $db_count + $ext_count;
-		$total_pages   = ceil( $total_items / $per_page );
+		$total_pages   = ceil( $total_items / $items_per_page );
 		$has_external  = $ext_count > 0;
 
 		// Calculate pagination across database + external subscribers.
-		$offset          = ( $current_page - 1 ) * $per_page;
+		$offset          = ( $current_page - 1 ) * $items_per_page;
 		$all_subscribers = array();
 
 		if ( $offset < $db_count ) {
@@ -206,12 +208,12 @@ if ( 'edit' === $action && $subscriber_id ) {
 			$db_subscribers  = MSKD_List_Provider::get_database_subscribers(
 				array(
 					'status'   => $status_filter,
-					'per_page' => $per_page,
+					'per_page' => $items_per_page,
 					'page'     => $current_page,
 				)
 			);
 			$all_subscribers = $db_subscribers;
-			$remaining       = $per_page - count( $db_subscribers );
+			$remaining       = $items_per_page - count( $db_subscribers );
 
 			// If we have room left on this page, add external subscribers.
 			if ( $remaining > 0 && $ext_count > 0 ) {
@@ -221,15 +223,15 @@ if ( 'edit' === $action && $subscriber_id ) {
 			// We've passed all database subscribers, show external only.
 			$ext_offset = $offset - $db_count;
 			if ( $ext_offset < $ext_count ) {
-				$all_subscribers = array_slice( $external_subs, $ext_offset, $per_page );
+				$all_subscribers = array_slice( $external_subs, $ext_offset, $items_per_page );
 			}
 		}
 
 		// Get database lists for batch action dropdown.
 		$database_lists = array_filter(
 			$lists,
-			function ( $list ) {
-				return 'database' === $list->source;
+			function ( $list_item ) {
+				return 'database' === $list_item->source;
 			}
 		);
 		?>

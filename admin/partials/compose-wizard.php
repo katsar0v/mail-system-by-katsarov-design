@@ -517,8 +517,8 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 											step="600">
 									<p class="description">
 										<?php
-										/* translators: %s: timezone string */
 										printf(
+											/* translators: %s: timezone string */
 											esc_html__( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ),
 											'<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
 										);

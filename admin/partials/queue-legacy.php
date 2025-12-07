@@ -64,15 +64,15 @@ $queue_items = $wpdb->get_results(
 <div class="wrap mskd-wrap">
 	<h1>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue' ) ); ?>" class="page-title-action" style="margin-right: 10px;">
-			← <?php _e( 'Back to Queue', 'mail-system-by-katsarov-design' ); ?>
+			← <?php esc_html_e( 'Back to Queue', 'mail-system-by-katsarov-design' ); ?>
 		</a>
-		<?php _e( 'Legacy Emails', 'mail-system-by-katsarov-design' ); ?>
+		<?php esc_html_e( 'Legacy Emails', 'mail-system-by-katsarov-design' ); ?>
 	</h1>
 
 	<?php settings_errors( 'mskd_messages' ); ?>
 
 	<div class="notice notice-info inline">
-		<p><?php _e( 'These emails were sent before the campaign system was introduced. They are not grouped by campaign.', 'mail-system-by-katsarov-design' ); ?></p>
+		<p><?php esc_html_e( 'These emails were sent before the campaign system was introduced. They are not grouped by campaign.', 'mail-system-by-katsarov-design' ); ?></p>
 	</div>
 
 	<!-- Filters -->
@@ -80,35 +80,35 @@ $queue_items = $wpdb->get_results(
 		<li>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&view=legacy' ) ); ?>" 
 				class="<?php echo empty( $status_filter ) ? 'current' : ''; ?>">
-				<?php _e( 'All', 'mail-system-by-katsarov-design' ); ?>
+				<?php esc_html_e( 'All', 'mail-system-by-katsarov-design' ); ?>
 				<span class="count">(<?php echo esc_html( $total_count ); ?>)</span>
 			</a> |
 		</li>
 		<li>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&view=legacy&status=pending' ) ); ?>"
 				class="<?php echo $status_filter === 'pending' ? 'current' : ''; ?>">
-				<?php _e( 'Pending', 'mail-system-by-katsarov-design' ); ?>
+				<?php esc_html_e( 'Pending', 'mail-system-by-katsarov-design' ); ?>
 				<span class="count">(<?php echo esc_html( $pending_count ); ?>)</span>
 			</a> |
 		</li>
 		<li>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&view=legacy&status=sent' ) ); ?>"
 				class="<?php echo $status_filter === 'sent' ? 'current' : ''; ?>">
-				<?php _e( 'Sent', 'mail-system-by-katsarov-design' ); ?>
+				<?php esc_html_e( 'Sent', 'mail-system-by-katsarov-design' ); ?>
 				<span class="count">(<?php echo esc_html( $sent_count ); ?>)</span>
 			</a> |
 		</li>
 		<li>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&view=legacy&status=failed' ) ); ?>"
 				class="<?php echo $status_filter === 'failed' ? 'current' : ''; ?>">
-				<?php _e( 'Failed', 'mail-system-by-katsarov-design' ); ?>
+				<?php esc_html_e( 'Failed', 'mail-system-by-katsarov-design' ); ?>
 				<span class="count">(<?php echo esc_html( $failed_count ); ?>)</span>
 			</a> |
 		</li>
 		<li>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-queue&view=legacy&status=cancelled' ) ); ?>"
 				class="<?php echo $status_filter === 'cancelled' ? 'current' : ''; ?>">
-				<?php _e( 'Cancelled', 'mail-system-by-katsarov-design' ); ?>
+				<?php esc_html_e( 'Cancelled', 'mail-system-by-katsarov-design' ); ?>
 				<span class="count">(<?php echo esc_html( $cancelled_count ); ?>)</span>
 			</a>
 		</li>
@@ -117,14 +117,14 @@ $queue_items = $wpdb->get_results(
 	<table class="wp-list-table widefat fixed striped">
 		<thead>
 			<tr>
-				<th scope="col" style="width: 50px;"><?php _e( 'ID', 'mail-system-by-katsarov-design' ); ?></th>
-				<th scope="col"><?php _e( 'Recipient', 'mail-system-by-katsarov-design' ); ?></th>
-				<th scope="col"><?php _e( 'Subject', 'mail-system-by-katsarov-design' ); ?></th>
-				<th scope="col" style="width: 100px;"><?php _e( 'Status', 'mail-system-by-katsarov-design' ); ?></th>
-				<th scope="col" style="width: 80px;"><?php _e( 'Attempts', 'mail-system-by-katsarov-design' ); ?></th>
-				<th scope="col"><?php _e( 'Scheduled', 'mail-system-by-katsarov-design' ); ?></th>
-				<th scope="col"><?php _e( 'Sent', 'mail-system-by-katsarov-design' ); ?></th>
-				<th scope="col" style="width: 100px;"><?php _e( 'Actions', 'mail-system-by-katsarov-design' ); ?></th>
+				<th scope="col" style="width: 50px;"><?php esc_html_e( 'ID', 'mail-system-by-katsarov-design' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Recipient', 'mail-system-by-katsarov-design' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Subject', 'mail-system-by-katsarov-design' ); ?></th>
+				<th scope="col" style="width: 100px;"><?php esc_html_e( 'Status', 'mail-system-by-katsarov-design' ); ?></th>
+				<th scope="col" style="width: 80px;"><?php esc_html_e( 'Attempts', 'mail-system-by-katsarov-design' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Scheduled', 'mail-system-by-katsarov-design' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Sent', 'mail-system-by-katsarov-design' ); ?></th>
+				<th scope="col" style="width: 100px;"><?php esc_html_e( 'Actions', 'mail-system-by-katsarov-design' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -149,16 +149,16 @@ $queue_items = $wpdb->get_results(
 								<?php if ( ! empty( $external_data->first_name ) || ! empty( $external_data->last_name ) ) : ?>
 									<br><small><?php echo esc_html( trim( ( $external_data->first_name ?? '' ) . ' ' . ( $external_data->last_name ?? '' ) ) ); ?></small>
 								<?php endif; ?>
-								<span class="mskd-external-badge"><?php _e( 'External', 'mail-system-by-katsarov-design' ); ?></span>
+								<span class="mskd-external-badge"><?php esc_html_e( 'External', 'mail-system-by-katsarov-design' ); ?></span>
 							<?php elseif ( $item->subscriber_id == MSKD_Admin::ONE_TIME_EMAIL_SUBSCRIBER_ID ) : ?>
-								<em class="mskd-one-time-email"><?php _e( 'One-time email', 'mail-system-by-katsarov-design' ); ?></em>
+								<em class="mskd-one-time-email"><?php esc_html_e( 'One-time email', 'mail-system-by-katsarov-design' ); ?></em>
 							<?php elseif ( $item->email ) : ?>
 								<?php echo esc_html( $item->email ); ?>
 								<?php if ( $item->first_name || $item->last_name ) : ?>
 									<br><small><?php echo esc_html( trim( $item->first_name . ' ' . $item->last_name ) ); ?></small>
 								<?php endif; ?>
 							<?php else : ?>
-								<em><?php _e( 'Deleted subscriber', 'mail-system-by-katsarov-design' ); ?></em>
+								<em><?php esc_html_e( 'Deleted subscriber', 'mail-system-by-katsarov-design' ); ?></em>
 							<?php endif; ?>
 						</td>
 						<td><?php echo esc_html( $item->subject ); ?></td>
@@ -176,7 +176,7 @@ $queue_items = $wpdb->get_results(
 								?>
 							</span>
 							<?php if ( $is_future_scheduled && $item->status === 'pending' ) : ?>
-								<br><small class="mskd-scheduled-badge"><?php _e( 'Scheduled', 'mail-system-by-katsarov-design' ); ?></small>
+								<br><small class="mskd-scheduled-badge"><?php esc_html_e( 'Scheduled', 'mail-system-by-katsarov-design' ); ?></small>
 							<?php endif; ?>
 							<?php if ( $item->status === 'failed' && $item->error_message ) : ?>
 								<br><small class="mskd-error-msg"><?php echo esc_html( $item->error_message ); ?></small>
@@ -215,7 +215,7 @@ $queue_items = $wpdb->get_results(
 								" 
 									class="mskd-delete-link mskd-cancel-link"
 									title="<?php esc_attr_e( 'Cancel sending', 'mail-system-by-katsarov-design' ); ?>">
-									<?php _e( 'Cancel', 'mail-system-by-katsarov-design' ); ?>
+									<?php esc_html_e( 'Cancel', 'mail-system-by-katsarov-design' ); ?>
 								</a>
 							<?php else : ?>
 								—
@@ -225,7 +225,7 @@ $queue_items = $wpdb->get_results(
 				<?php endforeach; ?>
 			<?php else : ?>
 				<tr>
-					<td colspan="8"><?php _e( 'No legacy emails.', 'mail-system-by-katsarov-design' ); ?></td>
+					<td colspan="8"><?php esc_html_e( 'No legacy emails.', 'mail-system-by-katsarov-design' ); ?></td>
 				</tr>
 			<?php endif; ?>
 		</tbody>

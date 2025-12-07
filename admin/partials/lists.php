@@ -167,7 +167,7 @@ if ( 'edit' === $current_action && $list_id ) {
 													printf(
 														/* translators: %d: number of additional subscribers */
 														esc_html__( '... and %d more', 'mail-system-by-katsarov-design' ),
-														$subscriber_count - 10
+														esc_html( $subscriber_count - 10 )
 													);
 													?>
 												</div>

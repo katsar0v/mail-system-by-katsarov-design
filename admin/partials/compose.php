@@ -110,7 +110,10 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 											data-subscribers="<?php echo esc_attr( $subscriber_count ); ?>"
 											data-external="<?php echo esc_attr( $is_external ? '1' : '0' ); ?>"
 											<?php selected( $is_preselected ); ?>>
-										<?php echo esc_html( $list->name . $badge . ' (' . sprintf( __( '%d subscribers', 'mail-system-by-katsarov-design' ), $subscriber_count ) . ')' ); ?>
+										<?php
+										/* translators: %d: subscriber count */
+										echo esc_html( $list->name . $badge . ' (' . sprintf( __( '%d subscribers', 'mail-system-by-katsarov-design' ), $subscriber_count ) . ')' );
+										?>
 									</option>
 								<?php endforeach; ?>
 							</select>
@@ -186,6 +189,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 									$default_from  = get_option( 'mskd_settings', array() );
 									$default_email = ! empty( $default_from['from_email'] ) ? $default_from['from_email'] : get_bloginfo( 'admin_email' );
 									printf(
+									/* translators: %s: default email address */
 										esc_html__( '(%s)', 'mail-system-by-katsarov-design' ),
 										esc_html( $default_email )
 									);

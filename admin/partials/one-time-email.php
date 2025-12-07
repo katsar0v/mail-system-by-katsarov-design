@@ -124,8 +124,8 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 									<?php
 									$default_from  = get_option( 'mskd_settings', array() );
 									$default_email = ! empty( $default_from['from_email'] ) ? $default_from['from_email'] : get_bloginfo( 'admin_email' );
-									/* translators: %s: default email address */
 									printf(
+										/* translators: %s: default email address */
 										esc_html__( '(%s)', 'mail-system-by-katsarov-design' ),
 										esc_html( $default_email )
 									);
@@ -191,8 +191,8 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 									step="600">
 							<p class="description">
 								<?php
-								/* translators: %s: timezone string */
 								printf(
+									/* translators: %s: timezone string */
 									esc_html__( 'Timezone: %s. Select time in 10-minute intervals.', 'mail-system-by-katsarov-design' ),
 									'<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
 								);
@@ -200,8 +200,8 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 								<br>
 								<?php
 								$current_time = new DateTime( 'now', $wp_timezone );
-								/* translators: %s: current time */
 								printf(
+									/* translators: %s: current time */
 									esc_html__( 'Current server time: %s', 'mail-system-by-katsarov-design' ),
 									'<strong>' . esc_html( $current_time->format( 'H:i' ) ) . '</strong>'
 								);
