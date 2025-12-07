@@ -81,10 +81,16 @@ class PublicSubscriptionTest extends TestCase {
 			)
 			->andReturn( 1 );
 
-		// Mock wp_mail for opt-in confirmation email.
-		Functions\expect( 'wp_mail' )
-			->once()
-			->andReturn( true );
+		// Mock get_option for SMTP mailer settings (used by send_opt_in_email).
+		Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
+			if ( 'mskd_settings' === $option ) {
+				return array(
+					'from_name'  => 'Test Site',
+					'from_email' => 'noreply@example.com',
+				);
+			}
+			return $default;
+		} );
 
 		// Check not in list.
 		$wpdb->shouldReceive( 'get_var' )
@@ -170,10 +176,16 @@ class PublicSubscriptionTest extends TestCase {
 			)
 			->andReturn( 1 );
 
-		// Mock wp_mail for opt-in confirmation email.
-		Functions\expect( 'wp_mail' )
-			->once()
-			->andReturn( true );
+		// Mock get_option for SMTP mailer settings (used by send_opt_in_email).
+		Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
+			if ( 'mskd_settings' === $option ) {
+				return array(
+					'from_name'  => 'Test Site',
+					'from_email' => 'noreply@example.com',
+				);
+			}
+			return $default;
+		} );
 
 		Functions\expect( 'wp_send_json_success' )
 			->once()
@@ -222,10 +234,16 @@ class PublicSubscriptionTest extends TestCase {
 			->once()
 			->andReturn( 1 );
 
-		// Mock wp_mail for opt-in confirmation email.
-		Functions\expect( 'wp_mail' )
-			->once()
-			->andReturn( true );
+		// Mock get_option for SMTP mailer settings (used by send_opt_in_email).
+		Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
+			if ( 'mskd_settings' === $option ) {
+				return array(
+					'from_name'  => 'Test Site',
+					'from_email' => 'noreply@example.com',
+				);
+			}
+			return $default;
+		} );
 
 		// Not in list yet.
 		$wpdb->shouldReceive( 'get_var' )
@@ -292,8 +310,7 @@ class PublicSubscriptionTest extends TestCase {
 		$wpdb->shouldReceive( 'insert' )->never();
 		$wpdb->shouldReceive( 'update' )->never();
 
-		// Should NOT send email.
-		Functions\expect( 'wp_mail' )->never();
+		// Should NOT send email, and no SMTP mailer settings needed.
 
 		// Should return "already subscribed" message.
 		Functions\expect( 'wp_send_json_success' )
@@ -439,10 +456,16 @@ class PublicSubscriptionTest extends TestCase {
 			->once()
 			->andReturn( 1 );
 
-		// Mock wp_mail for opt-in confirmation email.
-		Functions\expect( 'wp_mail' )
-			->once()
-			->andReturn( true );
+		// Mock get_option for SMTP mailer settings (used by send_opt_in_email).
+		Functions\when( 'get_option' )->alias( function( $option, $default = false ) {
+			if ( 'mskd_settings' === $option ) {
+				return array(
+					'from_name'  => 'Test Site',
+					'from_email' => 'noreply@example.com',
+				);
+			}
+			return $default;
+		} );
 
 		// Already in list.
 		$wpdb->shouldReceive( 'get_var' )

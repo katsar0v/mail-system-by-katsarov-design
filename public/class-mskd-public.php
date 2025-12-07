@@ -575,7 +575,7 @@ Best regards,
 		);
 
 		// Use SMTP mailer to respect configured from address and sender name.
-		require_once MSKD_PLUGIN_DIR . 'includes/services/class-smtp-mailer.php';
+		require_once MSKD_PLUGIN_DIR . 'includes/services/class-mskd-smtp-mailer.php';
 		$settings    = get_option( 'mskd_settings', array() );
 		$smtp_mailer = new MSKD_SMTP_Mailer( $settings );
 
