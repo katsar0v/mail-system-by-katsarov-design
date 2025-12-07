@@ -1,4 +1,4 @@
-# Copilot Instructions for Mail System by Katsarov Design
+# Instructions for Mail System by Katsarov Design
 
 WordPress plugin for email newsletter management with subscribers, lists, and queue processing. Full Bulgarian UI.
 
@@ -50,12 +50,6 @@ docker exec -it <php-container> bash -c "cd /var/www/html/wp-content/plugins/mai
 composer test                    # All tests
 ./vendor/bin/phpunit tests/Unit/SubscriberTest.php  # Single file
 ```
-
-**Test patterns** (see `tests/Unit/TestCase.php`):
-- Extend `MSKD\Tests\Unit\TestCase` for base mocks
-- Use `$this->setup_wpdb_mock()` to mock `$wpdb`
-- Use `Functions\expect()` / `Functions\stubs()` for WP functions
-- Clean `$_POST`, `$_GET` in `tearDown()`
 
 ## SCSS Structure
 
