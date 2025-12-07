@@ -82,6 +82,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - BCC recipients are now visible in the campaign details page when viewing queue items
   - Only displayed when BCC is configured for the campaign
 
+### Fixed
+- **Repository Cleanup**
+  - Removed temporary PHP CodeSniffer report files (`phpcs_remaining.txt` and `phpcs_report.txt`)
+  - These files were generated during development and should not be committed to the repository
+
 ---
 
 ## [1.1.0] - 2025-11-28
