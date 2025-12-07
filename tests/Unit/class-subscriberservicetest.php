@@ -89,10 +89,7 @@ class Subscriber_Service_Test extends TestCase {
 				)
 			);
 
-		// Mock wpdb prepare.
-		$this->wpdb->shouldReceive( 'prepare' )
-			->once()
-			->andReturn( 'prepared_query' );
+		// Note: prepare() is already mocked in create_wpdb_mock() with andReturnUsing().
 
 		$result = $this->subscriber_service->batch_get_or_create( $emails_data );
 
@@ -128,41 +125,32 @@ class Subscriber_Service_Test extends TestCase {
 			->once()
 			->andReturn( array() );
 
-		// Mock wpdb prepare for get_results.
-		$this->wpdb->shouldReceive( 'prepare' )
-			->once()
-			->andReturn( 'prepared_query' );
+		// Note: prepare() is already mocked in create_wpdb_mock() with andReturnUsing().
 
 		// Mock wpdb insert for new subscribers.
+		$insert_id = 0;
 		$this->wpdb->shouldReceive( 'insert' )
 			->twice()
-			->andReturn( true );
-		$this->wpdb->insert_id = 1; // First insert returns ID 1.
-		
+			->andReturnUsing( function () use ( &$insert_id ) {
+				++$insert_id;
+				$this->wpdb->insert_id = $insert_id;
+				return true;
+			} );
+
 		// Mock get_by_id for retrieving created subscribers.
 		$this->wpdb->shouldReceive( 'get_row' )
 			->twice()
-			->andReturn(
-				(object) array(
-					'id' => 1,
-					'email' => 'new1@example.com',
+			->andReturnUsing( function () use ( &$insert_id ) {
+				static $call_count = 0;
+				++$call_count;
+				return (object) array(
+					'id' => $call_count,
+					'email' => "new{$call_count}@example.com",
 					'first_name' => 'New',
-					'last_name' => 'One',
+					'last_name' => $call_count === 1 ? 'One' : 'Two',
 					'status' => 'active',
-				),
-				(object) array(
-					'id' => 2,
-					'email' => 'new2@example.com',
-					'first_name' => 'New',
-					'last_name' => 'Two',
-					'status' => 'active',
-				)
-			);
-
-		// Mock wpdb prepare for get_row.
-		$this->wpdb->shouldReceive( 'prepare' )
-			->twice()
-			->andReturn( 'prepared_query' );
+				);
+			} );
 
 		$result = $this->subscriber_service->batch_get_or_create( $emails_data );
 
@@ -209,10 +197,7 @@ class Subscriber_Service_Test extends TestCase {
 				)
 			);
 
-		// Mock wpdb prepare.
-		$this->wpdb->shouldReceive( 'prepare' )
-			->once()
-			->andReturn( 'prepared_query' );
+		// Note: prepare() is already mocked in create_wpdb_mock() with andReturnUsing().
 
 		$result = $this->subscriber_service->batch_get_by_ids( $ids );
 
@@ -269,11 +254,15 @@ class Subscriber_Service_Test extends TestCase {
 			),
 		);
 
-		// Mock wpdb insert.
+		// Mock wpdb insert with dynamic insert_id.
+		$insert_id = 0;
 		$this->wpdb->shouldReceive( 'insert' )
 			->twice()
-			->andReturn( true );
-		$this->wpdb->insert_id = 1; // First insert returns ID 1.
+			->andReturnUsing( function () use ( &$insert_id ) {
+				++$insert_id;
+				$this->wpdb->insert_id = $insert_id;
+				return true;
+			} );
 
 		$result = $this->subscriber_service->batch_create( $subscribers_data );
 

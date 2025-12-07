@@ -129,44 +129,44 @@ class Email_Service {
 	}
 
 	/**
-		* Batch queue subscribers for a campaign with chunking to handle large lists.
-		*
-		* @param int    $campaign_id   Campaign ID.
-		* @param array  $subscribers   Array of subscriber objects.
-		* @param string $subject       Email subject.
-		* @param string $body          Email body.
-		* @param string $scheduled_at  MySQL datetime for scheduling.
-		* @param int    $chunk_size    Number of subscribers to process in each chunk. Default 500.
-		* @return int Number of subscribers queued.
-		*/
+	 * Batch queue subscribers for a campaign with chunking to handle large lists.
+	 *
+	 * @param int    $campaign_id   Campaign ID.
+	 * @param array  $subscribers   Array of subscriber objects.
+	 * @param string $subject       Email subject.
+	 * @param string $body          Email body.
+	 * @param string $scheduled_at  MySQL datetime for scheduling.
+	 * @param int    $chunk_size    Number of subscribers to process in each chunk. Default 500.
+	 * @return int Number of subscribers queued.
+	 */
 	private function batch_queue_subscribers( int $campaign_id, array $subscribers, string $subject, string $body, string $scheduled_at, int $chunk_size = 500 ): int {
 		if ( empty( $subscribers ) ) {
 			return 0;
 		}
 
 		$queued_total = 0;
-		$chunks = array_chunk( $subscribers, $chunk_size );
+		$chunks       = array_chunk( $subscribers, $chunk_size );
 
 		foreach ( $chunks as $chunk ) {
 			$queued_in_chunk = $this->process_subscriber_chunk( $campaign_id, $chunk, $subject, $body, $scheduled_at );
-			$queued_total += $queued_in_chunk;
+			$queued_total   += $queued_in_chunk;
 		}
 
 		return $queued_total;
 	}
 
 	/**
-		* Process a chunk of subscribers for queueing.
-		*
-		* @param int    $campaign_id  Campaign ID.
-		* @param array  $chunk        Array of subscriber objects.
-		* @param string $subject      Email subject.
-		* @param string $body         Email body.
-		* @param string $scheduled_at MySQL datetime for scheduling.
-		* @return int Number of subscribers queued in this chunk.
-		*/
+	 * Process a chunk of subscribers for queueing.
+	 *
+	 * @param int    $campaign_id  Campaign ID.
+	 * @param array  $chunk        Array of subscriber objects.
+	 * @param string $subject      Email subject.
+	 * @param string $body         Email body.
+	 * @param string $scheduled_at MySQL datetime for scheduling.
+	 * @return int Number of subscribers queued in this chunk.
+	 */
 	private function process_subscriber_chunk( int $campaign_id, array $chunk, string $subject, string $body, string $scheduled_at ): int {
-		$external_subscribers = array();
+		$external_subscribers    = array();
 		$internal_subscriber_ids = array();
 
 		// Separate external and internal subscribers.
@@ -200,7 +200,7 @@ class Email_Service {
 		// Prepare queue data for valid subscribers.
 		$queue_items = array();
 		foreach ( $chunk as $subscriber ) {
-			$is_external = \MSKD_List_Provider::is_external_id( $subscriber->id ?? '' );
+			$is_external   = \MSKD_List_Provider::is_external_id( $subscriber->id ?? '' );
 			$db_subscriber = null;
 			$subscriber_id = null;
 
@@ -236,17 +236,17 @@ class Email_Service {
 	}
 
 	/**
-		* Batch insert queue items into the database.
-		*
-		* @param array $queue_items Array of queue item data arrays.
-		* @return int Number of items inserted.
-		*/
+	 * Batch insert queue items into the database.
+	 *
+	 * @param array $queue_items Array of queue item data arrays.
+	 * @return int Number of items inserted.
+	 */
 	private function batch_insert_queue_items( array $queue_items ): int {
 		if ( empty( $queue_items ) ) {
 			return 0;
 		}
 
-		$values = array();
+		$values       = array();
 		$placeholders = array();
 
 		foreach ( $queue_items as $item ) {
@@ -271,7 +271,7 @@ class Email_Service {
 	}
 
 	/**
-		* Queue a one-time email.
+	 * Queue a one-time email.
 	 *
 	 * @param array $data {
 	 *     Email data.

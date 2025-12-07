@@ -7,6 +7,7 @@
 
 namespace MSKD\Tests\Unit;
 
+use Brain\Monkey\Functions;
 use MSKD\Services\Email_Service;
 use MSKD\Services\Subscriber_Service;
 use Mockery;
@@ -151,10 +152,7 @@ class Email_Service_Test extends TestCase {
 			->once()
 			->andReturn( 3 ); // 3 items inserted.
 
-		// Mock wpdb prepare for batch insert.
-		$this->wpdb->shouldReceive( 'prepare' )
-			->once()
-			->andReturn( 'prepared_query' );
+		// Note: prepare() is already mocked in create_wpdb_mock() with andReturnUsing().
 
 		// Execute queue_campaign.
 		$campaign_data = array(
@@ -231,10 +229,7 @@ class Email_Service_Test extends TestCase {
 			->once()
 			->andReturn( 1 ); // Only 1 item inserted.
 
-		// Mock wpdb prepare for batch insert.
-		$this->wpdb->shouldReceive( 'prepare' )
-			->once()
-			->andReturn( 'prepared_query' );
+		// Note: prepare() is already mocked in create_wpdb_mock() with andReturnUsing().
 
 		// Execute queue_campaign.
 		$campaign_data = array(
@@ -351,10 +346,7 @@ class Email_Service_Test extends TestCase {
 			->twice()
 			->andReturn( 500, 500 ); // 500 items inserted in each chunk.
 
-		// Mock wpdb prepare for batch insert.
-		$this->wpdb->shouldReceive( 'prepare' )
-			->twice()
-			->andReturn( 'prepared_query' );
+		// Note: prepare() is already mocked in create_wpdb_mock() with andReturnUsing().
 
 		// Execute queue_campaign.
 		$campaign_data = array(
@@ -373,24 +365,6 @@ class Email_Service_Test extends TestCase {
 	 * Test batch queue subscribers with empty list.
 	 */
 	public function test_batch_queue_subscribers_empty_list() {
-		// Mock wpdb insert for campaign creation.
-		$this->wpdb->shouldReceive( 'insert' )
-			->once()
-			->andReturn( true );
-		$this->wpdb->insert_id = 1; // Campaign ID.
-
-		// Mock option functions.
-		Functions\stubs(
-			array(
-				'get_option'    => function ( $option, $default ) {
-					return 'mskd_total_campaigns_created' === $option ? 0 : $default;
-				},
-				'update_option' => function () {
-					return true;
-				},
-			)
-		);
-
 		// Execute queue_campaign with empty subscribers.
 		$campaign_data = array(
 			'subject' => 'Test Subject',
@@ -400,7 +374,7 @@ class Email_Service_Test extends TestCase {
 
 		$result = $this->email_service->queue_campaign( $campaign_data );
 
-		// Assert campaign was created but no queue items.
-		$this->assertEquals( 1, $result );
+		// Assert false is returned when no subscribers are provided.
+		$this->assertFalse( $result );
 	}
 }

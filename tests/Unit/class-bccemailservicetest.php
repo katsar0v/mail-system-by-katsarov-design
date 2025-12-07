@@ -64,6 +64,18 @@ class BccEmailServiceTest extends TestCase {
 				)
 			);
 
+		// Mock wpdb->get_results for batch processing.
+		$this->wpdb->shouldReceive( 'get_results' )
+			->andReturn(
+				array(
+					(object) array(
+						'id'     => 1,
+						'email'  => 'subscriber@example.com',
+						'status' => 'active',
+					),
+				)
+			);
+
 		// Mock wpdb insert to capture data.
 		$captured_data = null;
 		$this->wpdb->shouldReceive( 'insert' )
@@ -81,13 +93,8 @@ class BccEmailServiceTest extends TestCase {
 
 		$this->wpdb->insert_id = 123;
 
-		// Mock queue inserts.
-		$this->wpdb->shouldReceive( 'insert' )
-			->with(
-				Mockery::pattern( '/mskd_queue$/' ),
-				Mockery::any(),
-				Mockery::any()
-			)
+		// Mock wpdb query for batch queue inserts.
+		$this->wpdb->shouldReceive( 'query' )
 			->andReturn( 1 );
 
 		// Create campaign with Bcc.
@@ -127,6 +134,18 @@ class BccEmailServiceTest extends TestCase {
 				)
 			);
 
+		// Mock wpdb->get_results for batch processing.
+		$this->wpdb->shouldReceive( 'get_results' )
+			->andReturn(
+				array(
+					(object) array(
+						'id'     => 1,
+						'email'  => 'subscriber@example.com',
+						'status' => 'active',
+					),
+				)
+			);
+
 		// Mock wpdb insert.
 		$captured_data = null;
 		$this->wpdb->shouldReceive( 'insert' )
@@ -145,13 +164,8 @@ class BccEmailServiceTest extends TestCase {
 
 		$this->wpdb->insert_id = 456;
 
-		// Mock queue inserts.
-		$this->wpdb->shouldReceive( 'insert' )
-			->with(
-				Mockery::pattern( '/mskd_queue$/' ),
-				Mockery::any(),
-				Mockery::any()
-			)
+		// Mock wpdb query for batch queue inserts.
+		$this->wpdb->shouldReceive( 'query' )
 			->andReturn( 1 );
 
 		// Create campaign without Bcc.

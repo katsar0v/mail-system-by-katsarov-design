@@ -674,14 +674,14 @@ class Subscriber_Service {
 	}
 
 	/**
-		* Batch get or create subscribers by emails.
-		*
-		* For each email, if subscriber exists, returns existing record (preserves current status).
-		* If not, creates new subscriber with generated token.
-		*
-		* @param array $emails_data Array of email data with email, first_name, last_name, source.
-		* @return array Array of subscriber objects indexed by email.
-		*/
+	 * Batch get or create subscribers by emails.
+	 *
+	 * For each email, if subscriber exists, returns existing record (preserves current status).
+	 * If not, creates new subscriber with generated token.
+	 *
+	 * @param array $emails_data Array of email data with email, first_name, last_name, source.
+	 * @return array Array of subscriber objects indexed by email.
+	 */
 	public function batch_get_or_create( array $emails_data ): array {
 		if ( empty( $emails_data ) ) {
 			return array();
@@ -700,10 +700,10 @@ class Subscriber_Service {
 		}
 
 		// Get existing subscribers in a single query.
-		$placeholders = implode( ',', array_fill( 0, count( $emails ), '%s' ) );
+		$placeholders         = implode( ',', array_fill( 0, count( $emails ), '%s' ) );
 		$existing_subscribers = $this->wpdb->get_results(
 			$this->wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Table name hardcoded, using splat operator.
 				"SELECT * FROM {$this->table} WHERE email IN ({$placeholders})",
 				...$emails
 			)
@@ -715,14 +715,14 @@ class Subscriber_Service {
 			$existing_by_email[ $subscriber->email ] = $subscriber;
 		}
 
-		$result = array();
+		$result          = array();
 		$new_subscribers = array();
 
 		foreach ( $emails_data as $data ) {
-			$email = sanitize_email( $data['email'] ?? '' );
+			$email      = sanitize_email( $data['email'] ?? '' );
 			$first_name = $data['first_name'] ?? '';
-			$last_name = $data['last_name'] ?? '';
-			$source = $data['source'] ?? self::SOURCE_INTERNAL;
+			$last_name  = $data['last_name'] ?? '';
+			$source     = $data['source'] ?? self::SOURCE_INTERNAL;
 
 			if ( empty( $email ) || ! is_email( $email ) ) {
 				continue;
@@ -749,7 +749,7 @@ class Subscriber_Service {
 			$created_ids = $this->batch_create( $new_subscribers );
 			foreach ( $created_ids as $i => $id ) {
 				if ( $id ) {
-					$email = $new_subscribers[ $i ]['email'];
+					$email            = $new_subscribers[ $i ]['email'];
 					$result[ $email ] = $this->get_by_id( $id );
 				}
 			}
@@ -759,11 +759,11 @@ class Subscriber_Service {
 	}
 
 	/**
-		* Batch create subscribers.
-		*
-		* @param array $subscribers_data Array of subscriber data arrays.
-		* @return array Array of created subscriber IDs (false for failed creations).
-		*/
+	 * Batch create subscribers.
+	 *
+	 * @param array $subscribers_data Array of subscriber data arrays.
+	 * @return array Array of created subscriber IDs (false for failed creations).
+	 */
 	public function batch_create( array $subscribers_data ): array {
 		if ( empty( $subscribers_data ) ) {
 			return array();
@@ -810,27 +810,32 @@ class Subscriber_Service {
 	}
 
 	/**
-		* Batch get subscribers by IDs.
-		*
-		* @param array $ids Array of subscriber IDs.
-		* @return array Array of subscriber objects indexed by ID.
-		*/
+	 * Batch get subscribers by IDs.
+	 *
+	 * @param array $ids Array of subscriber IDs.
+	 * @return array Array of subscriber objects indexed by ID.
+	 */
 	public function batch_get_by_ids( array $ids ): array {
 		if ( empty( $ids ) ) {
 			return array();
 		}
 
 		$ids = array_map( 'intval', $ids );
-		$ids = array_filter( $ids, function( $id ) { return $id > 0; } );
+		$ids = array_filter(
+			$ids,
+			function ( $id ) {
+				return $id > 0;
+			}
+		);
 
 		if ( empty( $ids ) ) {
 			return array();
 		}
 
 		$placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
-		$subscribers = $this->wpdb->get_results(
+		$subscribers  = $this->wpdb->get_results(
 			$this->wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Table name hardcoded, using splat operator.
 				"SELECT * FROM {$this->table} WHERE id IN ({$placeholders})",
 				...$ids
 			)

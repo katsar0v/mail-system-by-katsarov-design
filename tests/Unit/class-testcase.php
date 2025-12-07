@@ -225,9 +225,23 @@ abstract class TestCase extends PHPUnitTestCase {
 		$wpdb->shouldReceive( 'prepare' )
 			->andReturnUsing(
 				function ( $query, ...$args ) {
+					// Flatten args if nested (handles splat operator patterns).
+					$flat_args = array();
+					foreach ( $args as $arg ) {
+						if ( is_array( $arg ) ) {
+							$flat_args = array_merge( $flat_args, $arg );
+						} else {
+							$flat_args[] = $arg;
+						}
+					}
+
 					// Simple placeholder replacement for testing.
+					// Count placeholders and only use as many args as needed.
+					$placeholder_count = preg_match_all( '/%[sdf]/', $query );
+					$flat_args         = array_slice( $flat_args, 0, $placeholder_count );
+
 					$query = str_replace( '%s', "'%s'", $query );
-					return vsprintf( $query, $args );
+					return empty( $flat_args ) ? $query : vsprintf( $query, $flat_args );
 				}
 			);
 		return $wpdb;
