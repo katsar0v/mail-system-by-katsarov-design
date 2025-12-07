@@ -2403,3 +2403,11 @@ msgstr "Моля, въведете валиден имейл адрес на п�
 #: admin/partials/settings.php
 msgid "Link preview:"
 msgstr "Преглед на линк:"
+
+#: admin/partials/settings.php
+msgid "Database version"
+msgstr "Версия на базата данни"
+
+#: admin/partials/settings.php
+msgid "requires update to"
+msgstr "изисква актуализация до"

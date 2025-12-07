@@ -2615,3 +2615,11 @@ msgstr ""
 #: public/partials/unsubscribe.php:69
 msgid "You will no longer receive emails from us."
 msgstr ""
+
+#: admin/partials/settings.php
+msgid "Database version"
+msgstr ""
+
+#: admin/partials/settings.php
+msgid "requires update to"
+msgstr ""

@@ -2430,3 +2430,11 @@ msgstr "Bitte geben Sie eine gültige Absender-E-Mail-Adresse ein."
 #: admin/partials/settings.php
 msgid "Link preview:"
 msgstr "Linkvorschau:"
+
+#: admin/partials/settings.php
+msgid "Database version"
+msgstr "Datenbankversion"
+
+#: admin/partials/settings.php
+msgid "requires update to"
+msgstr "erfordert Aktualisierung auf"

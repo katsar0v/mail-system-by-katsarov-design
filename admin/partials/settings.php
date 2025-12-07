@@ -301,6 +301,34 @@ $button_text_color = isset( $settings['button_text_color'] ) ? $settings['button
 					<td><code><?php echo esc_html( MSKD_VERSION ); ?></code></td>
 				</tr>
 				<tr>
+					<th scope="row"><?php esc_html_e( 'Database version', 'mail-system-by-katsarov-design' ); ?></th>
+					<td>
+						<?php
+						$current_db_version = get_option( 'mskd_db_version', '1.0.0' );
+						$required_db_version = MSKD_Activator::DB_VERSION;
+						$is_db_up_to_date = version_compare( $current_db_version, $required_db_version, '>=' );
+						?>
+						<span class="mskd-db-version-status <?php echo $is_db_up_to_date ? 'mskd-db-up-to-date' : 'mskd-db-outdated'; ?>">
+							<?php
+							if ( $is_db_up_to_date ) {
+								echo '<span class="dashicons dashicons-yes-alt" aria-hidden="true"></span>';
+								echo '<span class="screen-reader-text">' . esc_html__( 'Database is up to date', 'mail-system-by-katsarov-design' ) . '</span>';
+							} else {
+								echo '<span class="dashicons dashicons-warning" aria-hidden="true"></span>';
+								echo '<span class="screen-reader-text">' . esc_html__( 'Database needs update', 'mail-system-by-katsarov-design' ) . '</span>';
+							}
+							?>
+						</span>
+						<code><?php echo esc_html( $current_db_version ); ?></code>
+						<?php
+						if ( ! $is_db_up_to_date ) {
+							echo ' / <code>' . esc_html( $required_db_version ) . '</code>';
+							echo '<p class="description">' . esc_html__( 'Database schema needs update. Please deactivate and reactivate the plugin.', 'mail-system-by-katsarov-design' ) . '</p>';
+						}
+						?>
+					</td>
+				</tr>
+				<tr>
 					<th scope="row"><?php esc_html_e( 'Sending method', 'mail-system-by-katsarov-design' ); ?></th>
 					<td>
 						<?php if ( $smtp_enabled && ! empty( $smtp_host ) ) : ?>
