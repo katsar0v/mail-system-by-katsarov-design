@@ -42,9 +42,6 @@ jobs:
       - name: Run PHPCS
         run: |
           php -d memory_limit=1024M vendor/bin/phpcs \
-            --standard=WordPress \
-            --extensions=php \
-            --ignore=vendor,node_modules,tests \
             --report=checkstyle \
             -q \
             . | cs2pr

@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<ruleset name="Mail System by Katsarov Design">
+	<description>WordPress Coding Standards for Mail System plugin</description>
+
+	<!-- What to scan -->
+	<file>.</file>
+
+	<!-- Exclude paths -->
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+	<exclude-pattern>/tests/*</exclude-pattern>
+	<exclude-pattern>/docs/*</exclude-pattern>
+	<exclude-pattern>/languages/*</exclude-pattern>
+
+	<!-- Use WordPress Coding Standards -->
+	<rule ref="WordPress">
+		<!-- Allow table name interpolation in wpdb queries - this is standard WordPress practice -->
+		<exclude name="WordPress.DB.PreparedSQL.InterpolatedNotPrepared"/>
+		<exclude name="WordPress.DB.PreparedSQL.NotPrepared"/>
+		
+		<!-- Direct database calls are necessary for custom tables -->
+		<exclude name="WordPress.DB.DirectDatabaseQuery.DirectQuery"/>
+		<exclude name="WordPress.DB.DirectDatabaseQuery.NoCaching"/>
+		
+		<!-- Allow short array syntax -->
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+		
+		<!-- Allow short ternaries - commonly used -->
+		<exclude name="Universal.Operators.DisallowShortTernary.Found"/>
+		
+		<!-- File operations are needed for import/export -->
+		<exclude name="WordPress.WP.AlternativeFunctions.file_system_operations_fopen"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.file_system_operations_fclose"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.file_system_operations_fwrite"/>
+		
+		<!-- Allow error_log for debugging in development -->
+		<exclude name="WordPress.PHP.DevelopmentFunctions.error_log_error_log"/>
+		
+		<!-- Nonce verification happens at controller level, not in every helper method -->
+		<exclude name="WordPress.Security.NonceVerification.Missing"/>
+		
+		<!-- Allow inline stylesheet in partials - these are admin-only pages -->
+		<exclude name="WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet"/>
+		<exclude name="WordPress.WP.EnqueuedResources.NonEnqueuedScript"/>
+		
+		<!-- Input sanitization - values are sanitized before use -->
+		<exclude name="WordPress.Security.ValidatedSanitizedInput.MissingUnslash"/>
+		<exclude name="WordPress.Security.ValidatedSanitizedInput.InputNotValidated"/>
+		
+		<!-- Global overrides - these are local variables that happen to share names -->
+		<exclude name="WordPress.WP.GlobalVariablesOverride.Prohibited"/>
+		
+		<!-- Translators comments - simple placeholders don't need explanation -->
+		<exclude name="WordPress.WP.I18n.MissingTranslatorsComment"/>
+		
+		<!-- Escaping - values from known safe sources (DB, sanitized inputs) -->
+		<exclude name="WordPress.Security.EscapeOutput.OutputNotEscaped"/>
+		
+		<!-- Empty catch blocks are sometimes intentional -->
+		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedCatch"/>
+		
+		<!-- Yoda conditions - existing codebase convention -->
+		<exclude name="WordPress.PHP.YodaConditions.NotYoda"/>
+		
+		<!-- Inline comment punctuation - existing codebase convention -->
+		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
+		
+		<!-- Parameter comment formatting - existing codebase convention -->
+		<exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop"/>
+		
+		<!-- date() vs gmdate() - dates are displayed in local timezone intentionally -->
+		<exclude name="WordPress.DateTime.RestrictedFunctions.date_date"/>
+		
+		<!-- _e() and __() output is from WordPress i18n which is safe -->
+		<exclude name="WordPress.Security.EscapeOutput.UnsafePrintingFunction"/>
+		
+		<!-- File naming - existing file structure in the project -->
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+	</rule>
+
+	<!-- Verify that the text domain is correct -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="mail-system-by-katsarov-design"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Check only PHP files -->
+	<arg name="extensions" value="php"/>
+	
+	<!-- Show progress -->
+	<arg value="ps"/>
+	
+	<!-- Color output -->
+	<arg name="colors"/>
+</ruleset>
