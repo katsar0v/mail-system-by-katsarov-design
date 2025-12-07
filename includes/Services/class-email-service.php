@@ -122,60 +122,156 @@ class Email_Service {
 		$total_campaigns = (int) get_option( 'mskd_total_campaigns_created', 0 );
 		update_option( 'mskd_total_campaigns_created', $total_campaigns + 1 );
 
-		// Add subscribers to queue.
-		$queued = 0;
-		foreach ( $subscribers as $subscriber ) {
-			$is_external = \MSKD_List_Provider::is_external_id( $subscriber->id ?? '' );
-
-			// For external subscribers, get or create a subscriber record with unsubscribe token.
-			if ( $is_external ) {
-				$db_subscriber = $this->subscriber_service->get_or_create(
-					$subscriber->email,
-					$subscriber->first_name ?? '',
-					$subscriber->last_name ?? '',
-					Subscriber_Service::SOURCE_EXTERNAL
-				);
-
-				// Skip if subscriber is unsubscribed or couldn't be created.
-				if ( ! $db_subscriber || 'unsubscribed' === $db_subscriber->status ) {
-					continue;
-				}
-
-				$subscriber_id = (int) $db_subscriber->id;
-			} else {
-				// For internal subscribers, check if they're unsubscribed.
-				$db_subscriber = $this->subscriber_service->get_by_id( (int) $subscriber->id );
-				if ( ! $db_subscriber || 'unsubscribed' === $db_subscriber->status ) {
-					continue;
-				}
-				$subscriber_id = (int) $subscriber->id;
-			}
-
-			$queue_data = array(
-				'campaign_id'   => $campaign_id,
-				'subscriber_id' => $subscriber_id,
-				'subject'       => $subject,
-				'body'          => $body,
-				'status'        => 'pending',
-				'scheduled_at'  => $scheduled_at,
-			);
-
-			$result = $this->wpdb->insert(
-				$this->queue_table,
-				$queue_data,
-				array( '%d', '%d', '%s', '%s', '%s', '%s' )
-			);
-
-			if ( $result ) {
-				++$queued;
-			}
-		}
+		// Add subscribers to queue using batch processing.
+		$queued = $this->batch_queue_subscribers( $campaign_id, $subscribers, $subject, $body, $scheduled_at );
 
 		return $campaign_id;
 	}
 
 	/**
-	 * Queue a one-time email.
+		* Batch queue subscribers for a campaign with chunking to handle large lists.
+		*
+		* @param int    $campaign_id   Campaign ID.
+		* @param array  $subscribers   Array of subscriber objects.
+		* @param string $subject       Email subject.
+		* @param string $body          Email body.
+		* @param string $scheduled_at  MySQL datetime for scheduling.
+		* @param int    $chunk_size    Number of subscribers to process in each chunk. Default 500.
+		* @return int Number of subscribers queued.
+		*/
+	private function batch_queue_subscribers( int $campaign_id, array $subscribers, string $subject, string $body, string $scheduled_at, int $chunk_size = 500 ): int {
+		if ( empty( $subscribers ) ) {
+			return 0;
+		}
+
+		$queued_total = 0;
+		$chunks = array_chunk( $subscribers, $chunk_size );
+
+		foreach ( $chunks as $chunk ) {
+			$queued_in_chunk = $this->process_subscriber_chunk( $campaign_id, $chunk, $subject, $body, $scheduled_at );
+			$queued_total += $queued_in_chunk;
+		}
+
+		return $queued_total;
+	}
+
+	/**
+		* Process a chunk of subscribers for queueing.
+		*
+		* @param int    $campaign_id  Campaign ID.
+		* @param array  $chunk        Array of subscriber objects.
+		* @param string $subject      Email subject.
+		* @param string $body         Email body.
+		* @param string $scheduled_at MySQL datetime for scheduling.
+		* @return int Number of subscribers queued in this chunk.
+		*/
+	private function process_subscriber_chunk( int $campaign_id, array $chunk, string $subject, string $body, string $scheduled_at ): int {
+		$external_subscribers = array();
+		$internal_subscriber_ids = array();
+
+		// Separate external and internal subscribers.
+		foreach ( $chunk as $subscriber ) {
+			$is_external = \MSKD_List_Provider::is_external_id( $subscriber->id ?? '' );
+
+			if ( $is_external ) {
+				$external_subscribers[] = array(
+					'email'      => $subscriber->email,
+					'first_name' => $subscriber->first_name ?? '',
+					'last_name'  => $subscriber->last_name ?? '',
+					'source'     => Subscriber_Service::SOURCE_EXTERNAL,
+				);
+			} else {
+				$internal_subscriber_ids[] = (int) $subscriber->id;
+			}
+		}
+
+		// Batch process external subscribers.
+		$external_db_subscribers = array();
+		if ( ! empty( $external_subscribers ) ) {
+			$external_db_subscribers = $this->subscriber_service->batch_get_or_create( $external_subscribers );
+		}
+
+		// Batch get internal subscribers.
+		$internal_db_subscribers = array();
+		if ( ! empty( $internal_subscriber_ids ) ) {
+			$internal_db_subscribers = $this->subscriber_service->batch_get_by_ids( $internal_subscriber_ids );
+		}
+
+		// Prepare queue data for valid subscribers.
+		$queue_items = array();
+		foreach ( $chunk as $subscriber ) {
+			$is_external = \MSKD_List_Provider::is_external_id( $subscriber->id ?? '' );
+			$db_subscriber = null;
+			$subscriber_id = null;
+
+			if ( $is_external ) {
+				$email = $subscriber->email;
+				if ( isset( $external_db_subscribers[ $email ] ) ) {
+					$db_subscriber = $external_db_subscribers[ $email ];
+				}
+			} else {
+				$subscriber_id = (int) $subscriber->id;
+				if ( isset( $internal_db_subscribers[ $subscriber_id ] ) ) {
+					$db_subscriber = $internal_db_subscribers[ $subscriber_id ];
+				}
+			}
+
+			// Skip if subscriber is unsubscribed or couldn't be found/created.
+			if ( ! $db_subscriber || 'unsubscribed' === $db_subscriber->status ) {
+				continue;
+			}
+
+			$queue_items[] = array(
+				'campaign_id'   => $campaign_id,
+				'subscriber_id' => (int) $db_subscriber->id,
+				'subject'       => $subject,
+				'body'          => $body,
+				'status'        => 'pending',
+				'scheduled_at'  => $scheduled_at,
+			);
+		}
+
+		// Batch insert queue items.
+		return $this->batch_insert_queue_items( $queue_items );
+	}
+
+	/**
+		* Batch insert queue items into the database.
+		*
+		* @param array $queue_items Array of queue item data arrays.
+		* @return int Number of items inserted.
+		*/
+	private function batch_insert_queue_items( array $queue_items ): int {
+		if ( empty( $queue_items ) ) {
+			return 0;
+		}
+
+		$values = array();
+		$placeholders = array();
+
+		foreach ( $queue_items as $item ) {
+			$values[] = $item['campaign_id'];
+			$values[] = $item['subscriber_id'];
+			$values[] = $item['subject'];
+			$values[] = $item['body'];
+			$values[] = $item['status'];
+			$values[] = $item['scheduled_at'];
+
+			$placeholders[] = '( %d, %d, %s, %s, %s, %s )';
+		}
+
+		$placeholder_string = implode( ', ', $placeholders );
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
+		$sql = "INSERT INTO {$this->queue_table} (campaign_id, subscriber_id, subject, body, status, scheduled_at) VALUES {$placeholder_string}";
+
+		$result = $this->wpdb->query( $this->wpdb->prepare( $sql, $values ) );
+
+		return false !== $result ? count( $queue_items ) : 0;
+	}
+
+	/**
+		* Queue a one-time email.
 	 *
 	 * @param array $data {
 	 *     Email data.
