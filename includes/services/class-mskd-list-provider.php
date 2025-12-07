@@ -238,9 +238,9 @@ class MSKD_List_Provider {
 	 * @return int Subscriber count.
 	 */
 	public static function get_list_subscriber_count( $list_obj ) {
-		if ( 'external' === $list->source ) {
+		if ( 'external' === $list_obj->source ) {
 			if ( isset( $list_obj->subscriber_callback ) && is_callable( $list_obj->subscriber_callback ) ) {
-				$subscribers = call_user_func( $list->subscriber_callback );
+				$subscribers = call_user_func( $list_obj->subscriber_callback );
 				return is_array( $subscribers ) ? count( $subscribers ) : 0;
 			}
 			return 0;
@@ -252,7 +252,7 @@ class MSKD_List_Provider {
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
 				"SELECT COUNT(*) FROM {$wpdb->prefix}mskd_subscriber_list WHERE list_id = %d",
-				intval( $list->id )
+				intval( $list_obj->id )
 			)
 		);
 	}

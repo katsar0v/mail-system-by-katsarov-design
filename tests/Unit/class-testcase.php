@@ -104,6 +104,9 @@ abstract class TestCase extends PHPUnitTestCase {
 				'wp_unslash'              => function ( $value ) {
 					return is_array( $value ) ? array_map( 'stripslashes_deep', $value ) : stripslashes( $value );
 				},
+				'stripslashes_deep'       => function ( $value ) {
+					return is_array( $value ) ? array_map( 'stripslashes_deep', $value ) : stripslashes( $value );
+				},
 			)
 		);
 

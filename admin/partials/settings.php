@@ -304,9 +304,9 @@ $button_text_color = isset( $settings['button_text_color'] ) ? $settings['button
 					<th scope="row"><?php esc_html_e( 'Database version', 'mail-system-by-katsarov-design' ); ?></th>
 					<td>
 						<?php
-						$current_db_version = get_option( 'mskd_db_version', '1.0.0' );
+						$current_db_version  = get_option( 'mskd_db_version', '1.0.0' );
 						$required_db_version = MSKD_Activator::DB_VERSION;
-						$is_db_up_to_date = version_compare( $current_db_version, $required_db_version, '>=' );
+						$is_db_up_to_date    = version_compare( $current_db_version, $required_db_version, '>=' );
 						?>
 						<span class="mskd-db-version-status <?php echo $is_db_up_to_date ? 'mskd-db-up-to-date' : 'mskd-db-outdated'; ?>">
 							<?php
