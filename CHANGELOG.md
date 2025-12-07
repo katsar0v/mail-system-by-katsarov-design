@@ -59,6 +59,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated to use MSKD_SMTP_Mailer instead of wp_mail() for confirmation emails
   - Added test coverage for confirmation email sender configuration
 
+### Fixed
+- **Missing Translations in One-Time Email**
+  - Synced string literals in `admin/partials/one-time-email.php` with POT file
+  - Added missing definite article "the" to match translation keys
+
 ### Planned
 - Open and click statistics
 - A/B testing

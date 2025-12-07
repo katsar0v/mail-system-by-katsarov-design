@@ -54,7 +54,7 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 					</div>
 					<div class="mskd-form-field">
 						<input type="email" name="recipient_email" id="recipient_email" class="regular-text" value="<?php echo esc_attr( $recipient_email ); ?>" required>
-						<p class="description"><?php esc_html_e( 'The email address to which message will be sent.', 'mail-system-by-katsarov-design' ); ?></p>
+						<p class="description"><?php esc_html_e( 'The email address to which the message will be sent.', 'mail-system-by-katsarov-design' ); ?></p>
 					</div>
 				</div>
 				<div class="mskd-form-row">
@@ -105,7 +105,7 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 					<div class="mskd-form-field">
 						<input type="text" name="bcc" id="bcc" class="large-text" value="<?php echo isset( $form_data['bcc'] ) ? esc_attr( $form_data['bcc'] ) : ''; ?>" placeholder="<?php esc_attr_e( 'email1@example.com, email2@example.com', 'mail-system-by-katsarov-design' ); ?>">
 						<p class="description">
-							<?php esc_html_e( 'Enter one or more email addresses separated by commas to receive a blind carbon copy of this email. Bcc recipients are hidden from main recipient.', 'mail-system-by-katsarov-design' ); ?>
+							<?php esc_html_e( 'Enter one or more email addresses separated by commas to receive a blind carbon copy of this email. Bcc recipients are hidden from the main recipient.', 'mail-system-by-katsarov-design' ); ?>
 						</p>
 					</div>
 				</div>
@@ -242,8 +242,8 @@ $default_datetime = $scheduled_datetime ? $scheduled_datetime : $min_datetime;
 		<ul>
 			<li><?php esc_html_e( 'One-time emails can be sent immediately or scheduled for later.', 'mail-system-by-katsarov-design' ); ?></li>
 			<li><?php esc_html_e( 'They are not saved as templates and do not repeat.', 'mail-system-by-katsarov-design' ); ?></li>
-			<li><?php esc_html_e( 'All sent one-time emails are logged in audit history.', 'mail-system-by-katsarov-design' ); ?></li>
-			<li><?php esc_html_e( 'Scheduled emails can be cancelled from Queue page.', 'mail-system-by-katsarov-design' ); ?></li>
+			<li><?php esc_html_e( 'All sent one-time emails are logged in the audit history.', 'mail-system-by-katsarov-design' ); ?></li>
+			<li><?php esc_html_e( 'Scheduled emails can be cancelled from the Queue page.', 'mail-system-by-katsarov-design' ); ?></li>
 			<li><?php esc_html_e( 'Suitable for: account activation, notifications, event reminders.', 'mail-system-by-katsarov-design' ); ?></li>
 		</ul>
 	</div>
