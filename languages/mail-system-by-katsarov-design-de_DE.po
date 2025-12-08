@@ -2438,3 +2438,240 @@ msgstr "Datenbankversion"
 #: admin/partials/settings.php
 msgid "requires update to"
 msgstr "erfordert Aktualisierung auf"
+
+#: admin/partials/compose.php
+msgid "Choose how to compose your email:"
+msgstr "Wählen Sie, wie Sie Ihre E-Mail erstellen möchten:"
+
+#: admin/partials/compose.php
+msgid "Or use the standard editor below to compose your email with HTML."
+msgstr "Oder verwenden Sie den Standard-Editor unten, um Ihre E-Mail mit HTML zu erstellen."
+
+#: admin/partials/compose-wizard.php
+msgid "Create your email using the HTML editor with full control over the code."
+msgstr "Erstellen Sie Ihre E-Mail mit dem HTML-Editor mit voller Kontrolle über den Code."
+
+#: admin/partials/compose-wizard.php
+msgid "Build your email with our drag-and-drop visual editor. No coding required."
+msgstr "Erstellen Sie Ihre E-Mail mit unserem Drag-and-Drop-Visual-Editor. Keine Programmierung erforderlich."
+
+#: admin/partials/compose-wizard.php
+msgid "Use the visual editor to design your email. Click the button below to open the editor."
+msgstr "Verwenden Sie den visuellen Editor, um Ihre E-Mail zu gestalten. Klicken Sie auf die Schaltfläche unten, um den Editor zu öffnen."
+
+#: admin/partials/compose-wizard.php
+msgid "The visual editor will open in a new window. When you save your template, you can continue to the next step."
+msgstr "Der visuelle Editor wird in einem neuen Fenster geöffnet. Wenn Sie Ihre Vorlage speichern, können Sie mit dem nächsten Schritt fortfahren."
+
+#: admin/partials/compose-wizard.php
+msgid "Email content preview"
+msgstr "E-Mail-Inhaltsvorschau"
+
+#: admin/partials/import-export.php
+msgid "active, inactive, or unsubscribed"
+msgstr "aktiv, inaktiv oder abgemeldet"
+
+#: admin/partials/import-export.php
+msgid "Email address"
+msgstr "E-Mail-Adresse"
+
+#: admin/partials/subscribers.php
+msgid "Add New"
+msgstr "Neu hinzufügen"
+
+#: admin/partials/templates.php
+msgid "Created"
+msgstr "Erstellt"
+
+#: admin/partials/templates.php
+msgid "New Template"
+msgstr "Neue Vorlage"
+
+#: admin/partials/templates.php
+msgid "Untitled Template"
+msgstr "Unbenannte Vorlage"
+
+#: admin/partials/templates.php
+msgid "These templates are provided by the system. You can duplicate them to create custom versions."
+msgstr "Diese Vorlagen werden vom System bereitgestellt. Sie können sie duplizieren, um benutzerdefinierte Versionen zu erstellen."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Save"
+msgstr "Speichern"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Saving..."
+msgstr "Speichern..."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Saved!"
+msgstr "Gespeichert!"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Save & Continue"
+msgstr "Speichern & Fortfahren"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Content saved successfully."
+msgstr "Inhalt wurde erfolgreich gespeichert."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Error saving template"
+msgstr "Fehler beim Speichern der Vorlage"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Template created successfully."
+msgstr "Vorlage wurde erfolgreich erstellt."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Failed to create template."
+msgstr "Vorlage konnte nicht erstellt werden."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Export HTML"
+msgstr "HTML exportieren"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Visual Editor Error"
+msgstr "Visueller Editor Fehler"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Visual Editor Not Available. The visual editor needs to be built. Please run: cd admin/editor && npm install && npm run build"
+msgstr "Visueller Editor nicht verfügbar. Der visuelle Editor muss erstellt werden. Bitte führen Sie aus: cd admin/editor && npm install && npm run build"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Redirecting to Visual Editor..."
+msgstr "Weiterleitung zum visuellen Editor..."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Invalid JSON content."
+msgstr "Ungültiger JSON-Inhalt."
+
+#: includes/Admin/class-admin.php
+msgid "Permission denied."
+msgstr "Zugriff verweigert."
+
+#: includes/Admin/class-admin.php
+msgid "You do not have permission to access this page."
+msgstr "Sie haben keine Berechtigung, auf diese Seite zuzugreifen."
+
+#: admin/partials/shortcodes.php
+msgid "Automated lists (membership managed by external plugins):"
+msgstr "Automatische Listen (Mitgliedschaft wird von externen Plugins verwaltet):"
+
+#: admin/partials/shortcodes.php
+msgid "Copy any shortcode below and paste it into your page or post to display the subscription form."
+msgstr "Kopieren Sie einen Shortcode unten und fügen Sie ihn in Ihre Seite oder Ihren Beitrag ein, um das Anmeldeformular anzuzeigen."
+
+#: admin/partials/shortcodes.php
+msgid "The ID of the list to subscribe to. If omitted, subscribers are added without a list."
+msgstr "Die ID der Liste, die abonniert werden soll. Wenn weggelassen, werden Abonnenten ohne Liste hinzugefügt."
+
+#: admin/partials/queue.php
+msgid "Scheduled for"
+msgstr "Geplant für"
+
+#: admin/partials/queue-detail.php
+msgid "Are you sure you want to cancel this campaign? All pending emails will be cancelled."
+msgstr "Sind Sie sicher, dass Sie diese Kampagne abbrechen möchten? Alle ausstehenden E-Mails werden abgebrochen."
+
+#: admin/partials/queue-detail.php
+msgid "Error cancelling campaign."
+msgstr "Fehler beim Abbrechen der Kampagne."
+
+#: includes/Admin/class-admin-menu.php
+msgid "Mail System:"
+msgstr "Mail System:"
+
+#: includes/Services/class-list-service.php
+msgid "List name is required."
+msgstr "Der Listenname ist erforderlich."
+
+#: public/partials/opt-in-confirm.php
+msgid "Thank you for confirming your subscription. You will now receive our emails."
+msgstr "Vielen Dank für die Bestätigung Ihres Abonnements. Sie werden jetzt unsere E-Mails erhalten."
+
+#: admin/partials/settings.php
+msgid "Your database schema (version %1$s) is outdated. Version %2$s is required for the plugin to work correctly."
+msgstr "Ihr Datenbankschema (Version %1$s) ist veraltet. Version %2$s ist erforderlich, damit das Plugin korrekt funktioniert."
+
+#: admin/partials/settings.php
+msgid "Some required database columns are missing. This may cause subscription confirmation links to fail. Click the button below to repair the database."
+msgstr "Einige erforderliche Datenbankspalten fehlen. Dies kann dazu führen, dass Abonnement-Bestätigungslinks fehlschlagen. Klicken Sie auf die Schaltfläche unten, um die Datenbank zu reparieren."
+
+#. Plugin Name of the plugin
+#: mail-system-by-katsarov-design.php
+msgid "Mail System by Katsarov Design"
+msgstr "Mail System von Katsarov Design"
+
+#. Plugin URI of the plugin
+#: mail-system-by-katsarov-design.php
+msgid "https://katsarov.design/plugins/mail-system"
+msgstr "https://katsarov.design/plugins/mail-system"
+
+#. Description of the plugin
+#: mail-system-by-katsarov-design.php
+msgid "Email newsletter management system with subscribers, lists, and sending queue."
+msgstr "E-Mail-Newsletter-Verwaltungssystem mit Abonnenten, Listen und Sendewarteschlange."
+
+#. Author of the plugin
+#: mail-system-by-katsarov-design.php
+msgid "Katsarov Design"
+msgstr "Katsarov Design"
+
+#. Author URI of the plugin
+#: mail-system-by-katsarov-design.php
+msgid "https://katsarov.design"
+msgstr "https://katsarov.design"
+
+#: includes/class-pagination.php
+msgid "&laquo;"
+msgstr "&laquo;"
+
+#: includes/class-pagination.php
+msgid "&raquo;"
+msgstr "&raquo;"
+
+#: admin/partials/compose.php
+msgid "(%s)"
+msgstr "(%s)"
+
+#: admin/partials/one-time-email.php
+msgid "sender@example.com"
+msgstr "sender@example.com"
+
+#: admin/partials/import-export.php
+msgid "If a subscriber with the same email already exists, update their information."
+msgstr "Wenn ein Abonnent mit derselben E-Mail bereits existiert, aktualisieren Sie seine Informationen."
+
+#: admin/partials/import-export.php
+msgid "Assign subscribers to lists specified in the \"lists\" column. New lists will be created automatically."
+msgstr "Abonnenten den in der Spalte \"Listen\" angegebenen Listen zuweisen. Neue Listen werden automatisch erstellt."
+
+#: admin/partials/subscribers.php
+msgid "External subscribers are managed by third-party plugins and appear as read-only."
+msgstr "Externe Abonnenten werden von Drittanbieter-Plugins verwaltet und erscheinen als schreibgeschützt."
+
+#: admin/partials/settings.php
+msgid "Configure custom header and footer that will be added to all outgoing emails. Supports HTML and template variables."
+msgstr "Konfigurieren Sie benutzerdefinierte Kopf- und Fußzeilen, die allen ausgehenden E-Mails hinzugefügt werden. Unterstützt HTML und Vorlagenvariablen."
+
+#: admin/class-admin.php
+msgid "For more reliable email sending, we recommend using system cron instead of WP-Cron."
+msgstr "Für zuverlässigeres E-Mail-Versenden empfehlen wir die Verwendung von System-Cron anstelle von WP-Cron."
+
+#: includes/services/class-smtp-mailer.php
+msgid "<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP server:</strong> %2$s:%3$s</p>"
+msgstr "<h2>SMTP Test-E-Mail</h2><p>Diese E-Mail bestätigt, dass die SMTP-Einstellungen korrekt funktionieren.</p><p><strong>Zeit:</strong> %1$s</p><p><strong>SMTP-Server:</strong> %2$s:%3$s</p>"
+
+#: admin/class-admin.php
+msgid "Are you sure you want to delete ALL subscribers? This action cannot be undone!"
+msgstr "Sind Sie sicher, dass Sie ALLE Abonnenten löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
+
+#: admin/class-admin.php
+msgid "Are you sure you want to delete ALL lists? This action cannot be undone!"
+msgstr "Sind Sie sicher, dass Sie ALLE Listen löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
+
+#: admin/class-admin.php
+msgid "Are you sure you want to delete ALL campaigns? This action cannot be undone!"
+msgstr "Sind Sie sicher, dass Sie ALLE Kampagnen löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
