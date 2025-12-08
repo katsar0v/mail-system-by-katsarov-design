@@ -34,6 +34,9 @@ $smtp_password = isset( $settings['smtp_password'] ) ? base64_decode( $settings[
 // Styling settings.
 $highlight_color   = isset( $settings['highlight_color'] ) ? $settings['highlight_color'] : '#2271b1';
 $button_text_color = isset( $settings['button_text_color'] ) ? $settings['button_text_color'] : '#ffffff';
+
+// Subscription Form Settings.
+$show_name_field = isset( $settings['show_name_field'] ) ? (bool) $settings['show_name_field'] : true;
 ?>
 
 <div class="wrap mskd-wrap">
@@ -94,6 +97,26 @@ $button_text_color = isset( $settings['button_text_color'] ) ? $settings['button
 								value="<?php echo esc_attr( $emails_per_minute ); ?>"
 								min="1" max="1000">
 						<p class="description"><?php esc_html_e( 'Maximum number of emails to send per minute. Higher values may exceed your hosting provider limits.', 'mail-system-by-katsarov-design' ); ?></p>
+					</td>
+				</tr>
+			</table>
+
+			<hr>
+
+			<h2><?php esc_html_e( 'Subscription Form', 'mail-system-by-katsarov-design' ); ?></h2>
+
+			<table class="form-table">
+				<tr>
+					<th scope="row">
+						<label for="show_name_field"><?php esc_html_e( 'Show Name Field', 'mail-system-by-katsarov-design' ); ?></label>
+					</th>
+					<td>
+						<label>
+							<input type="checkbox" name="show_name_field" id="show_name_field" value="1"
+								<?php checked( $show_name_field ); ?>>
+							<?php esc_html_e( 'Display the "Name" field in the subscription form', 'mail-system-by-katsarov-design' ); ?>
+						</label>
+						<p class="description"><?php esc_html_e( 'If unchecked, only the email field will be shown.', 'mail-system-by-katsarov-design' ); ?></p>
 					</td>
 				</tr>
 			</table>

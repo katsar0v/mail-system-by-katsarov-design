@@ -328,6 +328,8 @@ class MSKD_Public {
 			$atts
 		);
 
+		$settings = get_option( 'mskd_settings', array() );
+
 		ob_start();
 		include MSKD_PLUGIN_DIR . 'public/partials/subscribe-form.php';
 		return ob_get_clean();
