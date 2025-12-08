@@ -18,11 +18,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<form class="mskd-subscribe-form" method="post">
 		<input type="hidden" name="list_id" value="<?php echo esc_attr( $atts['list_id'] ); ?>">
 		
+		<?php if ( ! isset( $settings['show_name_field'] ) || ! empty( $settings['show_name_field'] ) ) : ?>
 		<div class="mskd-form-row">
 			<input type="text" name="first_name" 
 					placeholder="<?php esc_attr_e( 'Name', 'mail-system-by-katsarov-design' ); ?>" 
 					class="mskd-input">
 		</div>
+		<?php endif; ?>
 
 		<div class="mskd-form-row">
 			<input type="email" name="email" required

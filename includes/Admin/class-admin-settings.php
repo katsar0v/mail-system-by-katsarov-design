@@ -149,6 +149,9 @@ class Admin_Settings {
 			// Styling settings.
 			'highlight_color'   => $highlight_color,
 			'button_text_color' => $button_text_color,
+			// Subscription Form Settings.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
+			'show_name_field'   => isset( $_POST['show_name_field'] ) ? 1 : 0,
 			// SMTP Settings.
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in handle_actions() before calling this method.
 			'smtp_enabled'      => isset( $_POST['smtp_enabled'] ) ? 1 : 0,
@@ -197,6 +200,7 @@ class Admin_Settings {
 			'email_footer'      => '',
 			'highlight_color'   => '#2271b1',
 			'button_text_color' => '#ffffff',
+			'show_name_field'   => 1,
 			'smtp_enabled'      => 0,
 			'smtp_host'         => '',
 			'smtp_port'         => 587,
