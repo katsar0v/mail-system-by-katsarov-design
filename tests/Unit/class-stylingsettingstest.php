@@ -153,6 +153,7 @@ class StylingSettingsTest extends TestCase {
 			'email_footer',
 			'highlight_color',
 			'button_text_color',
+			'show_name_field',
 			'smtp_enabled',
 			'smtp_host',
 			'smtp_port',

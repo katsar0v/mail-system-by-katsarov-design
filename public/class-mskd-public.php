@@ -328,6 +328,7 @@ class MSKD_Public {
 			$atts
 		);
 
+		// Fetch all settings for use in template (show_name_field setting is used in subscribe-form.php)
 		$settings = get_option( 'mskd_settings', array() );
 
 		ob_start();
