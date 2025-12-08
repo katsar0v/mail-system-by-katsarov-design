@@ -55,7 +55,7 @@ spl_autoload_register(
 
 			// Convert namespace to file path.
 			// MSKD\Admin\Admin_Email -> includes/Admin/class-admin-email.php.
-			// MSKD\Services\List_Service -> includes/Services/class-list-service.php.
+			// MSKD\Services\List_Service -> includes/services/class-list-service.php.
 			// MSKD\Traits\Email_Header_Footer -> includes/traits/trait-email-header-footer.php.
 			$relative_class = substr( $class_name, 5 ); // Remove 'MSKD\' prefix.
 			$parts          = explode( '\\', $relative_class );
@@ -70,9 +70,13 @@ spl_autoload_register(
 			// Determine file prefix based on namespace (trait- for Traits namespace, class- otherwise).
 			$file_prefix = ( 'Traits' === $namespace_path ) ? 'trait-' : 'class-';
 
-			// Lowercase the namespace path for traits directory (traits vs Traits).
-			$dir_path = ( 'Traits' === $namespace_path ) ? strtolower( $namespace_path ) : $namespace_path;
-			$file     = MSKD_PLUGIN_DIR . 'includes/' . $dir_path . '/' . $file_prefix . $file_name . '.php';
+			// Lowercase the namespace path for services and traits directory.
+			$dir_path = $namespace_path;
+			if ( 'Traits' === $namespace_path || 'Services' === $namespace_path ) {
+				$dir_path = strtolower( $namespace_path );
+			}
+
+			$file = MSKD_PLUGIN_DIR . 'includes/' . $dir_path . '/' . $file_prefix . $file_name . '.php';
 
 			if ( file_exists( $file ) ) {
 				require_once $file;

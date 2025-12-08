@@ -34,7 +34,10 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "MSKD\\": "includes/",
+            "MSKD\\Admin\\": "includes/Admin/",
+            "MSKD\\Services\\": "includes/services/",
+            "MSKD\\Traits\\": "includes/traits/",
+            "MSKD\\Models\\": "includes/models/",
             "MSKD\\Tests\\": "tests/"
         },
         "classmap": [

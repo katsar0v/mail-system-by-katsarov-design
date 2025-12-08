@@ -34,8 +34,8 @@ class BccValidationTest extends TestCase {
 		$this->setup_wpdb_mock();
 
 		// Load required services and classes.
-		require_once \MSKD_PLUGIN_DIR . 'includes/Services/class-subscriber-service.php';
-		require_once \MSKD_PLUGIN_DIR . 'includes/Services/class-email-service.php';
+		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-subscriber-service.php';
+		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-email-service.php';
 		require_once \MSKD_PLUGIN_DIR . 'includes/Admin/class-admin-email.php';
 
 		// Mock WordPress functions.

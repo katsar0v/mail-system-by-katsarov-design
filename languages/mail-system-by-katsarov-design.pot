@@ -2327,99 +2327,99 @@ msgstr ""
 msgid "Failed after maximum attempts (stuck)"
 msgstr ""
 
-#: includes/Services/class-email-service.php:332
+#: includes/services/class-email-service.php:332
 msgid "Cancelled by administrator"
 msgstr ""
 
-#: includes/Services/class-email-service.php:371
+#: includes/services/class-email-service.php:371
 msgid "Campaign cancelled by administrator"
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:235
+#: includes/services/class-import-export-service.php:235
 msgid "File size exceeds the maximum limit of 5MB."
 msgstr ""
 
 #. translators: %s: expected format
-#: includes/Services/class-import-export-service.php:246
+#: includes/services/class-import-export-service.php:246
 #, php-format
 msgid "Invalid file format. Expected %s file."
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:263
+#: includes/services/class-import-export-service.php:263
 msgid "Invalid file type. The file content does not match the expected format."
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:292
-#: includes/Services/class-import-export-service.php:520
+#: includes/services/class-import-export-service.php:292
+#: includes/services/class-import-export-service.php:520
 msgid "Could not read the file."
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:309
-#: includes/Services/class-import-export-service.php:537
+#: includes/services/class-import-export-service.php:309
+#: includes/services/class-import-export-service.php:537
 msgid "Could not read CSV headers."
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:321
+#: includes/services/class-import-export-service.php:321
 msgid "The CSV file must contain an \"email\" column."
 msgstr ""
 
 #. translators: 1: row number, 2: email value
-#: includes/Services/class-import-export-service.php:348
+#: includes/services/class-import-export-service.php:348
 #, php-format
 msgid "Row %1$d: Invalid email address \"%2$s\"."
 msgstr ""
 
 #. translators: %s: email address
-#: includes/Services/class-import-export-service.php:481
+#: includes/services/class-import-export-service.php:481
 #, php-format
 msgid "Failed to import subscriber: %s"
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:549
+#: includes/services/class-import-export-service.php:549
 msgid "The CSV file must contain a \"name\" column."
 msgstr ""
 
 #. translators: %d: row number
-#: includes/Services/class-import-export-service.php:576
+#: includes/services/class-import-export-service.php:576
 #, php-format
 msgid "Row %d: List name is required."
 msgstr ""
 
 #. translators: %s: list name
-#: includes/Services/class-import-export-service.php:641
+#: includes/services/class-import-export-service.php:641
 #, php-format
 msgid "Failed to import list: %s"
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:728
+#: includes/services/class-import-export-service.php:728
 msgid "File exceeds the maximum upload size."
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:729
+#: includes/services/class-import-export-service.php:729
 msgid "File exceeds the maximum form size."
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:730
+#: includes/services/class-import-export-service.php:730
 msgid "File was only partially uploaded."
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:731
+#: includes/services/class-import-export-service.php:731
 msgid "No file was uploaded."
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:732
+#: includes/services/class-import-export-service.php:732
 msgid "Missing temporary folder."
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:733
+#: includes/services/class-import-export-service.php:733
 msgid "Failed to write file to disk."
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:734
+#: includes/services/class-import-export-service.php:734
 msgid "A PHP extension stopped the file upload."
 msgstr ""
 
-#: includes/Services/class-import-export-service.php:737
+#: includes/services/class-import-export-service.php:737
 msgid "Unknown upload error."
 msgstr ""
 
@@ -2466,41 +2466,41 @@ msgid "Error: %s"
 msgstr ""
 
 #. translators: %d: subscriber ID
-#: includes/Services/class-subscriber-service.php:568
-#: includes/Services/class-subscriber-service.php:643
+#: includes/services/class-subscriber-service.php:568
+#: includes/services/class-subscriber-service.php:643
 #, php-format
 msgid "Subscriber ID %d not found."
 msgstr ""
 
-#: includes/Services/class-template-service.php:283
+#: includes/services/class-template-service.php:283
 msgid " (Copy)"
 msgstr ""
 
-#: includes/Services/class-template-service.php:365
+#: includes/services/class-template-service.php:365
 msgid "Blank Template"
 msgstr ""
 
-#: includes/Services/class-template-service.php:374
+#: includes/services/class-template-service.php:374
 msgid "Newsletter"
 msgstr ""
 
-#: includes/Services/class-template-service.php:375
+#: includes/services/class-template-service.php:375
 msgid "Your Newsletter Title"
 msgstr ""
 
-#: includes/Services/class-template-service.php:383
+#: includes/services/class-template-service.php:383
 msgid "Welcome Email"
 msgstr ""
 
-#: includes/Services/class-template-service.php:384
+#: includes/services/class-template-service.php:384
 msgid "Welcome to {site_name}!"
 msgstr ""
 
-#: includes/Services/class-template-service.php:392
+#: includes/services/class-template-service.php:392
 msgid "Promotional"
 msgstr ""
 
-#: includes/Services/class-template-service.php:393
+#: includes/services/class-template-service.php:393
 msgid "Special Offer Just for You!"
 msgstr ""
 
