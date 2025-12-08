@@ -72,6 +72,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Option to hide Name field in Subscribe Form**
+  - New "Show Name Field" setting in Admin > Settings > Subscription Form
+  - Toggle to show or hide the Name field in the public subscription form
+  - Default behavior preserves showing the Name field for existing installations
 - **Custom Email Header and Footer**
   - Configurable HTML header prepended to all outgoing emails
   - Configurable HTML footer appended to all outgoing emails
