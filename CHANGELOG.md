@@ -7,79 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-- **Translation Updates**
-  - Added missing "Show Name Field" and "Subscription Form" translations in Bulgarian (`bg_BG`)
-  - Fixed duplicate message definitions in `bg_BG.po` and `de_DE.po` preventing compilation
-  - Corrected corrupted headers in German translation file
-  - Recompiled MO files for both languages
-
-## [1.6.1] - 2025-12-05
-
-### Security
-- **Critical XSS Vulnerability Fix**
-  - Fixed stored XSS in email preview AJAX handler
-  - Email content now sanitized with `mskd_kses_email()` before output
-- **Improved Password Storage**
-  - Replaced weak base64 encoding with AES-256-CBC encryption for SMTP passwords
-  - Added `mskd_encrypt()` and `mskd_decrypt()` helper functions with WordPress salts
-  - Legacy base64 passwords are automatically handled for backward compatibility
-- **Input Sanitization Improvements**
-  - Added `wp_unslash()` before sanitization on GET parameters
-  - Fixed unsanitized GET parameters in nonce verification
-  - Improved REMOTE_ADDR handling with proper validation
-
-### Added
-- **Encryption Unit Tests**
-  - 12 comprehensive tests for encrypt/decrypt functions
-  - Tests for edge cases: empty values, special characters, unicode, corrupted data
-
-### Changed
-- **WPCS Compliance**
-  - Fixed variable naming to avoid overriding WordPress globals
-  - Fixed indentation (spaces to tabs) in admin partials
-  - Added proper Yoda condition checks
-
-## [1.6.0] - 2025-12-05
-
-### Added
-- **Per-Campaign Custom Sender Configuration**
-  - New `from_email` and `from_name` columns in campaigns table
-  - UI controls in compose wizard, legacy compose, and one-time email forms
-  - Radio button selection between default and custom sender
-  - Client-side and server-side email validation
-  - Progressive enhancement with default fallback to global settings
-  - Custom sender data passed through email service to SMTP mailer
-  - Database upgrade from 1.5.0 to 1.6.0 with proper column addition
-  - Full backward compatibility - existing campaigns continue working unchanged
-
-### Changed
-- **Database Schema Upgrade**
-  - Campaigns table now supports per-campaign sender override
-  - Nullable columns ensure no breaking changes to existing data
-  - Proper upgrade handling in activator with version checking
-
-### Fixed
-- **One-time emails now include header and footer**
-  - Immediate one-time emails now apply the configured email header and footer
-  - Previously only queued/scheduled emails included the header and footer
-- **Confirmation Email Sender Configuration**
-  - Opt-in confirmation emails now respect the configured SMTP sender settings (from_email and from_name)
-  - Updated to use MSKD_SMTP_Mailer instead of wp_mail() for confirmation emails
-  - Added test coverage for confirmation email sender configuration
-
-### Fixed
-- **Missing Translations in One-Time Email**
-  - Synced string literals in `admin/partials/one-time-email.php` with POT file
-  - Added missing definite article "the" to match translation keys
-
-### Planned
-- Open and click statistics
-- A/B testing
-- Integration with popular SMTP plugins
-
-## [Unreleased]
-
 ### Added
 - **Option to hide Name field in Subscribe Form**
   - New "Show Name Field" setting in Admin > Settings > Subscription Form
@@ -102,6 +29,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added `batch_create()` for creating multiple subscribers at once
   - Added `batch_get_by_ids()` for retrieving multiple subscribers by IDs
   - Comprehensive unit tests for batch processing functionality
+- **Per-Campaign Custom Sender Configuration**
+  - New `from_email` and `from_name` columns in campaigns table
+  - UI controls in compose wizard, legacy compose, and one-time email forms
+  - Radio button selection between default and custom sender
+  - Client-side and server-side email validation
+  - Progressive enhancement with default fallback to global settings
+  - Custom sender data passed through email service to SMTP mailer
+  - Database upgrade from 1.5.0 to 1.6.0 with proper column addition
+  - Full backward compatibility - existing campaigns continue working unchanged
+- **Encryption Unit Tests**
+  - 12 comprehensive tests for encrypt/decrypt functions
+  - Tests for edge cases: empty values, special characters, unicode, corrupted data
+
+### Changed
+- **Database Schema Upgrade**
+  - Campaigns table now supports per-campaign sender override
+  - Nullable columns ensure no breaking changes to existing data
+  - Proper upgrade handling in activator with version checking
+- **WPCS Compliance**
+  - Fixed variable naming to avoid overriding WordPress globals
+  - Fixed indentation (spaces to tabs) in admin partials
+  - Added proper Yoda condition checks
 
 ### Performance
 - Improved performance when handling large email campaigns through batch processing
@@ -112,6 +61,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Repository Cleanup**
   - Removed temporary PHP CodeSniffer report files (`phpcs_remaining.txt` and `phpcs_report.txt`)
   - These files were generated during development and should not be committed to the repository
+- **One-time emails now include header and footer**
+  - Immediate one-time emails now apply the configured email header and footer
+  - Previously only queued/scheduled emails included the header and footer
+- **Confirmation Email Sender Configuration**
+  - Opt-in confirmation emails now respect the configured SMTP sender settings (from_email and from_name)
+  - Updated to use MSKD_SMTP_Mailer instead of wp_mail() for confirmation emails
+  - Added test coverage for confirmation email sender configuration
+- **Missing Translations in One-Time Email**
+  - Synced string literals in `admin/partials/one-time-email.php` with POT file
+  - Added missing definite article "the" to match translation keys
+- **Translation Updates**
+  - Added missing "Show Name Field" and "Subscription Form" translations in Bulgarian (`bg_BG`)
+  - Fixed duplicate message definitions in `bg_BG.po` and `de_DE.po` preventing compilation
+  - Corrected corrupted headers in German translation file
+  - Recompiled MO files for both languages
+
+### Security
+- **Critical XSS Vulnerability Fix**
+  - Fixed stored XSS in email preview AJAX handler
+  - Email content now sanitized with `mskd_kses_email()` before output
+- **Improved Password Storage**
+  - Replaced weak base64 encoding with AES-256-CBC encryption for SMTP passwords
+  - Added `mskd_encrypt()` and `mskd_decrypt()` helper functions with WordPress salts
+  - Legacy base64 passwords are automatically handled for backward compatibility
+- **Input Sanitization Improvements**
+  - Added `wp_unslash()` before sanitization on GET parameters
+  - Fixed unsanitized GET parameters in nonce verification
+  - Improved REMOTE_ADDR handling with proper validation
+
+### Planned
+- Open and click statistics
+- A/B testing
+- Integration with popular SMTP plugins
 
 ---
 
