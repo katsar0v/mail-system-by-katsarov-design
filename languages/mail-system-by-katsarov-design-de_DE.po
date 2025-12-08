@@ -86,11 +86,14 @@ msgid "Recommendation for Mail System:"
 msgstr "Empfehlung für Mail-System:"
 
 #: admin/class-admin.php
+#, fuzzy
 msgid ""
 "For more reliable email sending, we recommend using system cron instead of "
 "WP-Cron."
 msgstr ""
 "Für zuverlässigeren E-Mail-Versand empfehlen wir die Verwendung von System-"
+"Cron anstelle von WP-Cron.\n"
+"Für zuverlässigeres E-Mail-Versenden empfehlen wir die Verwendung von System-"
 "Cron anstelle von WP-Cron."
 
 #: admin/class-admin.php
@@ -120,6 +123,18 @@ msgstr "Fehler beim Hinzufügen des Abonnenten."
 #: admin/class-admin.php
 msgid "Subscriber updated successfully."
 msgstr "Abonnent erfolgreich aktualisiert."
+
+#: admin/partials/settings.php
+msgid "Show Name Field"
+msgstr "Namensfeld anzeigen"
+
+#: admin/partials/settings.php
+msgid "Display the \"Name\" field in the subscription form"
+msgstr "Das Feld \"Name\" im Abonnementformular anzeigen"
+
+#: admin/partials/settings.php
+msgid "If unchecked, only the email field will be shown."
+msgstr "Wenn nicht ausgewählt, wird nur das E-Mail-Feld angezeigt."
 
 #: admin/class-admin.php
 msgid "Subscriber deleted successfully."
@@ -432,12 +447,23 @@ msgid "email1@example.com, email2@example.com"
 msgstr "email1@example.com, email2@example.com"
 
 #: admin/partials/compose-wizard.php
-msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this campaign. Bcc recipients are hidden from other recipients."
-msgstr "Geben Sie eine oder mehrere durch Kommas getrennte E-Mail-Adressen ein, um eine Blindkopie dieser Kampagne zu erhalten. Bcc-Empfänger sind für andere Empfänger verborgen."
+msgid ""
+"Enter one or more email addresses separated by commas to receive a blind "
+"carbon copy of this campaign. Bcc recipients are hidden from other "
+"recipients."
+msgstr ""
+"Geben Sie eine oder mehrere durch Kommas getrennte E-Mail-Adressen ein, um "
+"eine Blindkopie dieser Kampagne zu erhalten. Bcc-Empfänger sind für andere "
+"Empfänger verborgen."
 
 #: admin/partials/one-time-email.php
-msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this email. Bcc recipients are hidden from the main recipient."
-msgstr "Geben Sie eine oder mehrere durch Kommas getrennte E-Mail-Adressen ein, um eine Blindkopie dieser E-Mail zu erhalten. Bcc-Empfänger sind für den Hauptempfänger verborgen."
+msgid ""
+"Enter one or more email addresses separated by commas to receive a blind "
+"carbon copy of this email. Bcc recipients are hidden from the main recipient."
+msgstr ""
+"Geben Sie eine oder mehrere durch Kommas getrennte E-Mail-Adressen ein, um "
+"eine Blindkopie dieser E-Mail zu erhalten. Bcc-Empfänger sind für den "
+"Hauptempfänger verborgen."
 
 #: admin/partials/compose.php
 msgid "Send now"
@@ -853,12 +879,16 @@ msgid "[%s] SMTP Test Email"
 msgstr "[%s] SMTP-Test-E-Mail"
 
 #: includes/services/class-smtp-mailer.php
+#, fuzzy
 msgid ""
 "<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are "
 "working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP "
 "server:</strong> %2$s:%3$s</p>"
 msgstr ""
 "<h2>SMTP-Test-E-Mail</h2><p>Diese E-Mail bestätigt, dass die SMTP-"
+"Einstellungen korrekt funktionieren.</p><p><strong>Zeit:</strong> %1$s</"
+"p><p><strong>SMTP-Server:</strong> %2$s:%3$s</p>\n"
+"<h2>SMTP Test-E-Mail</h2><p>Diese E-Mail bestätigt, dass die SMTP-"
 "Einstellungen korrekt funktionieren.</p><p><strong>Zeit:</strong> %1$s</"
 "p><p><strong>SMTP-Server:</strong> %2$s:%3$s</p>"
 
@@ -926,11 +956,7 @@ msgstr "Sie werden keine E-Mails mehr von uns erhalten."
 #, fuzzy
 msgid "Back to site"
 msgstr ""
-"#-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
 "Zurück zur Website\n"
-"#-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
 "Zurück zur Seite"
 
 #: includes/services/class-list-provider.php admin/partials/queue.php
@@ -970,12 +996,15 @@ msgid "External subscribers cannot be edited"
 msgstr "Externe Abonnenten können nicht bearbeitet werden"
 
 #: admin/partials/subscribers.php
+#, fuzzy
 msgid ""
 "External subscribers are managed by third-party plugins and appear as read-"
 "only."
 msgstr ""
 "Externe Abonnenten werden von Drittanbieter-Plugins verwaltet und werden als "
-"schreibgeschützt angezeigt."
+"schreibgeschützt angezeigt.\n"
+"Externe Abonnenten werden von Drittanbieter-Plugins verwaltet und erscheinen "
+"als schreibgeschützt."
 
 #: admin/partials/lists.php
 msgid "Send email"
@@ -1595,11 +1624,14 @@ msgid "Import options"
 msgstr "Importoptionen"
 
 #: admin/partials/import-export.php
+#, fuzzy
 msgid ""
 "Assign subscribers to lists specified in the \"lists\" column. New lists "
 "will be created automatically."
 msgstr ""
 "Abonnenten den in der Spalte \"lists\" angegebenen Listen zuweisen. Neue "
+"Listen werden automatisch erstellt.\n"
+"Abonnenten den in der Spalte \"Listen\" angegebenen Listen zuweisen. Neue "
 "Listen werden automatisch erstellt."
 
 #: admin/partials/import-export.php
@@ -1804,17 +1836,12 @@ msgstr "Werbeangebot"
 msgid "Special Offer Just for You!"
 msgstr "Sonderangebot nur für Sie!"
 
-#. #-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov Design 1.0.0)  #-#-#-#-#
 #. translators: %s: template name
 #: admin/partials/compose.php admin/partials/compose-wizard.php
 #, fuzzy
 msgid "Using template: %s"
 msgstr ""
-"#-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
 "Verwendete Vorlage: %s\n"
-"#-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
 "Vorlage wird verwendet: %s"
 
 #: admin/partials/compose.php
@@ -2021,12 +2048,15 @@ msgid "Copy failed"
 msgstr "Kopieren fehlgeschlagen"
 
 #: admin/partials/shortcodes.php
+#, fuzzy
 msgid ""
 "Copy any shortcode below and paste it into your page or post to display the "
 "subscription form."
 msgstr ""
 "Kopieren Sie einen beliebigen Shortcode unten und fügen Sie ihn in Ihre "
-"Seite oder Ihren Beitrag ein, um das Anmeldeformular anzuzeigen."
+"Seite oder Ihren Beitrag ein, um das Anmeldeformular anzuzeigen.\n"
+"Kopieren Sie einen Shortcode unten und fügen Sie ihn in Ihre Seite oder "
+"Ihren Beitrag ein, um das Anmeldeformular anzuzeigen."
 
 #: admin/partials/shortcodes.php
 msgid "General Subscription Form"
@@ -2291,10 +2321,13 @@ msgid "Subscription Confirmed!"
 msgstr "Abonnement bestätigt!"
 
 #: public/partials/opt-in-confirm.php
+#, fuzzy
 msgid ""
 "Thank you for confirming your subscription. You will now receive our emails."
 msgstr ""
 "Vielen Dank für die Bestätigung Ihres Abonnements. Sie werden nun unsere E-"
+"Mails erhalten.\n"
+"Vielen Dank für die Bestätigung Ihres Abonnements. Sie werden jetzt unsere E-"
 "Mails erhalten."
 
 #: public/class-public.php
@@ -2305,7 +2338,7 @@ msgstr "Anfrage kann nicht verifiziert werden."
 msgid "Mail System Database Update Required"
 msgstr "Mail System Datenbankaktualisierung erforderlich"
 
-#: includes/Admin/class-admin.php
+#: includes/Admin/class-admin.php admin/partials/settings.php
 #, php-format
 msgid ""
 "Your database schema (version %1$s) is outdated. Version %2$s is required "
@@ -2322,14 +2355,18 @@ msgstr "Datenbank jetzt aktualisieren"
 msgid "Mail System Database Repair Required"
 msgstr "Mail System Datenbankreparatur erforderlich"
 
-#: includes/Admin/class-admin.php
+#: includes/Admin/class-admin.php admin/partials/settings.php
+#, fuzzy
 msgid ""
 "Some required database columns are missing. This may cause subscription "
 "confirmation links to fail. Click the button below to repair the database."
 msgstr ""
 "Einige erforderliche Datenbankspalten fehlen. Dies kann dazu führen, dass "
 "Bestätigungslinks für Abonnements fehlschlagen. Klicken Sie auf die "
-"Schaltfläche unten, um die Datenbank zu reparieren."
+"Schaltfläche unten, um die Datenbank zu reparieren.\n"
+"Einige erforderliche Datenbankspalten fehlen. Dies kann dazu führen, dass "
+"Abonnement-Bestätigungslinks fehlschlagen. Klicken Sie auf die Schaltfläche "
+"unten, um die Datenbank zu reparieren."
 
 #: includes/Admin/class-admin.php
 msgid "Repair Database Now"
@@ -2352,8 +2389,11 @@ msgid "Styling"
 msgstr "Styling"
 
 #: admin/partials/settings.php
-msgid "Customize the appearance of subscription forms and the unsubscribe page."
-msgstr "Passen Sie das Erscheinungsbild von Anmeldeformularen und der Abmeldeseite an."
+msgid ""
+"Customize the appearance of subscription forms and the unsubscribe page."
+msgstr ""
+"Passen Sie das Erscheinungsbild von Anmeldeformularen und der Abmeldeseite "
+"an."
 
 #: admin/partials/settings.php
 msgid "Highlight Color"
@@ -2379,51 +2419,63 @@ msgstr "Vorschau"
 msgid "Button preview:"
 msgstr "Schaltflächenvorschau:"
 
-#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
+#: admin/partials/one-time-email.php
 msgid "Sender Email"
 msgstr "Absender-E-Mail"
 
-#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
+#: admin/partials/one-time-email.php
 msgid "Use default sender"
 msgstr "Standard-Absender verwenden"
 
-#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
+#: admin/partials/one-time-email.php
 msgid "Use custom sender"
 msgstr "Benutzerdefinierten Absender verwenden"
 
-#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
+#: admin/partials/one-time-email.php
 msgid "From Email"
 msgstr "Von E-Mail"
 
-#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
+#: admin/partials/one-time-email.php
 msgid "Email address that will appear as the sender of this campaign."
 msgstr "E-Mail-Adresse, die als Absender dieser Kampagne angezeigt wird."
 
-#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
+#: admin/partials/one-time-email.php
 msgid "Email address that will appear as the sender of this email."
 msgstr "E-Mail-Adresse, die als Absender dieser E-Mail angezeigt wird."
 
-#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
+#: admin/partials/one-time-email.php
 msgid "From Name"
 msgstr "Von Name"
 
-#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
+#: admin/partials/one-time-email.php
 msgid "Sender Name"
 msgstr "Absendername"
 
-#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
+#: admin/partials/one-time-email.php
 msgid "Display name for the sender (optional)."
 msgstr "Anzeigename für den Absender (optional)."
 
 #: includes/Admin/class-admin-email.php
 msgid "Custom sender email is required when using custom sender option."
-msgstr "Benutzerdefinierte Absender-E-Mail ist erforderlich bei Verwendung der benutzerdefinierten Absender-Option."
+msgstr ""
+"Benutzerdefinierte Absender-E-Mail ist erforderlich bei Verwendung der "
+"benutzerdefinierten Absender-Option."
 
 #: includes/Admin/class-admin-email.php
 msgid "Invalid custom sender email address."
 msgstr "Ungültige benutzerdefinierte Absender-E-Mail-Adresse."
 
-#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+#: admin/partials/compose.php admin/partials/compose-wizard.php
+#: admin/partials/one-time-email.php
 msgid "Please enter a valid sender email address."
 msgstr "Bitte geben Sie eine gültige Absender-E-Mail-Adresse ein."
 
@@ -2445,23 +2497,9 @@ msgstr "Wählen Sie, wie Sie Ihre E-Mail erstellen möchten:"
 
 #: admin/partials/compose.php
 msgid "Or use the standard editor below to compose your email with HTML."
-msgstr "Oder verwenden Sie den Standard-Editor unten, um Ihre E-Mail mit HTML zu erstellen."
-
-#: admin/partials/compose-wizard.php
-msgid "Create your email using the HTML editor with full control over the code."
-msgstr "Erstellen Sie Ihre E-Mail mit dem HTML-Editor mit voller Kontrolle über den Code."
-
-#: admin/partials/compose-wizard.php
-msgid "Build your email with our drag-and-drop visual editor. No coding required."
-msgstr "Erstellen Sie Ihre E-Mail mit unserem Drag-and-Drop-Visual-Editor. Keine Programmierung erforderlich."
-
-#: admin/partials/compose-wizard.php
-msgid "Use the visual editor to design your email. Click the button below to open the editor."
-msgstr "Verwenden Sie den visuellen Editor, um Ihre E-Mail zu gestalten. Klicken Sie auf die Schaltfläche unten, um den Editor zu öffnen."
-
-#: admin/partials/compose-wizard.php
-msgid "The visual editor will open in a new window. When you save your template, you can continue to the next step."
-msgstr "Der visuelle Editor wird in einem neuen Fenster geöffnet. Wenn Sie Ihre Vorlage speichern, können Sie mit dem nächsten Schritt fortfahren."
+msgstr ""
+"Oder verwenden Sie den Standard-Editor unten, um Ihre E-Mail mit HTML zu "
+"erstellen."
 
 #: admin/partials/compose-wizard.php
 msgid "Email content preview"
@@ -2490,10 +2528,6 @@ msgstr "Neue Vorlage"
 #: admin/partials/templates.php
 msgid "Untitled Template"
 msgstr "Unbenannte Vorlage"
-
-#: admin/partials/templates.php
-msgid "These templates are provided by the system. You can duplicate them to create custom versions."
-msgstr "Diese Vorlagen werden vom System bereitgestellt. Sie können sie duplizieren, um benutzerdefinierte Versionen zu erstellen."
 
 #: includes/Admin/class-admin-visual-editor.php
 msgid "Save"
@@ -2536,8 +2570,12 @@ msgid "Visual Editor Error"
 msgstr "Visueller Editor Fehler"
 
 #: includes/Admin/class-admin-visual-editor.php
-msgid "Visual Editor Not Available. The visual editor needs to be built. Please run: cd admin/editor && npm install && npm run build"
-msgstr "Visueller Editor nicht verfügbar. Der visuelle Editor muss erstellt werden. Bitte führen Sie aus: cd admin/editor && npm install && npm run build"
+msgid ""
+"Visual Editor Not Available. The visual editor needs to be built. Please "
+"run: cd admin/editor && npm install && npm run build"
+msgstr ""
+"Visueller Editor nicht verfügbar. Der visuelle Editor muss erstellt werden. "
+"Bitte führen Sie aus: cd admin/editor && npm install && npm run build"
 
 #: includes/Admin/class-admin-visual-editor.php
 msgid "Redirecting to Visual Editor..."
@@ -2557,23 +2595,12 @@ msgstr "Sie haben keine Berechtigung, auf diese Seite zuzugreifen."
 
 #: admin/partials/shortcodes.php
 msgid "Automated lists (membership managed by external plugins):"
-msgstr "Automatische Listen (Mitgliedschaft wird von externen Plugins verwaltet):"
-
-#: admin/partials/shortcodes.php
-msgid "Copy any shortcode below and paste it into your page or post to display the subscription form."
-msgstr "Kopieren Sie einen Shortcode unten und fügen Sie ihn in Ihre Seite oder Ihren Beitrag ein, um das Anmeldeformular anzuzeigen."
-
-#: admin/partials/shortcodes.php
-msgid "The ID of the list to subscribe to. If omitted, subscribers are added without a list."
-msgstr "Die ID der Liste, die abonniert werden soll. Wenn weggelassen, werden Abonnenten ohne Liste hinzugefügt."
+msgstr ""
+"Automatische Listen (Mitgliedschaft wird von externen Plugins verwaltet):"
 
 #: admin/partials/queue.php
 msgid "Scheduled for"
 msgstr "Geplant für"
-
-#: admin/partials/queue-detail.php
-msgid "Are you sure you want to cancel this campaign? All pending emails will be cancelled."
-msgstr "Sind Sie sicher, dass Sie diese Kampagne abbrechen möchten? Alle ausstehenden E-Mails werden abgebrochen."
 
 #: admin/partials/queue-detail.php
 msgid "Error cancelling campaign."
@@ -2587,18 +2614,6 @@ msgstr "Mail System:"
 msgid "List name is required."
 msgstr "Der Listenname ist erforderlich."
 
-#: public/partials/opt-in-confirm.php
-msgid "Thank you for confirming your subscription. You will now receive our emails."
-msgstr "Vielen Dank für die Bestätigung Ihres Abonnements. Sie werden jetzt unsere E-Mails erhalten."
-
-#: admin/partials/settings.php
-msgid "Your database schema (version %1$s) is outdated. Version %2$s is required for the plugin to work correctly."
-msgstr "Ihr Datenbankschema (Version %1$s) ist veraltet. Version %2$s ist erforderlich, damit das Plugin korrekt funktioniert."
-
-#: admin/partials/settings.php
-msgid "Some required database columns are missing. This may cause subscription confirmation links to fail. Click the button below to repair the database."
-msgstr "Einige erforderliche Datenbankspalten fehlen. Dies kann dazu führen, dass Abonnement-Bestätigungslinks fehlschlagen. Klicken Sie auf die Schaltfläche unten, um die Datenbank zu reparieren."
-
 #. Plugin Name of the plugin
 #: mail-system-by-katsarov-design.php
 msgid "Mail System by Katsarov Design"
@@ -2611,8 +2626,12 @@ msgstr "https://katsarov.design/plugins/mail-system"
 
 #. Description of the plugin
 #: mail-system-by-katsarov-design.php
-msgid "Email newsletter management system with subscribers, lists, and sending queue."
-msgstr "E-Mail-Newsletter-Verwaltungssystem mit Abonnenten, Listen und Sendewarteschlange."
+msgid ""
+"Email newsletter management system with subscribers, lists, and sending "
+"queue."
+msgstr ""
+"E-Mail-Newsletter-Verwaltungssystem mit Abonnenten, Listen und "
+"Sendewarteschlange."
 
 #. Author of the plugin
 #: mail-system-by-katsarov-design.php
@@ -2639,39 +2658,3 @@ msgstr "(%s)"
 #: admin/partials/one-time-email.php
 msgid "sender@example.com"
 msgstr "sender@example.com"
-
-#: admin/partials/import-export.php
-msgid "If a subscriber with the same email already exists, update their information."
-msgstr "Wenn ein Abonnent mit derselben E-Mail bereits existiert, aktualisieren Sie seine Informationen."
-
-#: admin/partials/import-export.php
-msgid "Assign subscribers to lists specified in the \"lists\" column. New lists will be created automatically."
-msgstr "Abonnenten den in der Spalte \"Listen\" angegebenen Listen zuweisen. Neue Listen werden automatisch erstellt."
-
-#: admin/partials/subscribers.php
-msgid "External subscribers are managed by third-party plugins and appear as read-only."
-msgstr "Externe Abonnenten werden von Drittanbieter-Plugins verwaltet und erscheinen als schreibgeschützt."
-
-#: admin/partials/settings.php
-msgid "Configure custom header and footer that will be added to all outgoing emails. Supports HTML and template variables."
-msgstr "Konfigurieren Sie benutzerdefinierte Kopf- und Fußzeilen, die allen ausgehenden E-Mails hinzugefügt werden. Unterstützt HTML und Vorlagenvariablen."
-
-#: admin/class-admin.php
-msgid "For more reliable email sending, we recommend using system cron instead of WP-Cron."
-msgstr "Für zuverlässigeres E-Mail-Versenden empfehlen wir die Verwendung von System-Cron anstelle von WP-Cron."
-
-#: includes/services/class-smtp-mailer.php
-msgid "<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP server:</strong> %2$s:%3$s</p>"
-msgstr "<h2>SMTP Test-E-Mail</h2><p>Diese E-Mail bestätigt, dass die SMTP-Einstellungen korrekt funktionieren.</p><p><strong>Zeit:</strong> %1$s</p><p><strong>SMTP-Server:</strong> %2$s:%3$s</p>"
-
-#: admin/class-admin.php
-msgid "Are you sure you want to delete ALL subscribers? This action cannot be undone!"
-msgstr "Sind Sie sicher, dass Sie ALLE Abonnenten löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
-
-#: admin/class-admin.php
-msgid "Are you sure you want to delete ALL lists? This action cannot be undone!"
-msgstr "Sind Sie sicher, dass Sie ALLE Listen löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
-
-#: admin/class-admin.php
-msgid "Are you sure you want to delete ALL campaigns? This action cannot be undone!"
-msgstr "Sind Sie sicher, dass Sie ALLE Kampagnen löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden!"
