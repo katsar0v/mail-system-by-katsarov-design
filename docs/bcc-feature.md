@@ -24,7 +24,7 @@ Successfully implemented comprehensive Bcc (Blind Carbon Copy) support for the M
 
 ### 3. Backend Changes
 
-#### Email Service (`includes/Services/class-email-service.php`)
+#### Email Service (`includes/services/class-email-service.php`)
 - `queue_campaign()`: Now accepts and stores Bcc parameter
 - `queue_one_time()`: Now accepts and stores Bcc parameter
 - Both methods maintain consistent API
@@ -134,7 +134,7 @@ Campaign Form → Admin_Email::handle_queue_email()
 
 ### Core Files (11 files)
 1. `includes/class-activator.php` - Database migration
-2. `includes/Services/class-email-service.php` - Bcc storage
+2. `includes/services/class-email-service.php` - Bcc storage
 3. `includes/Admin/class-admin-email.php` - Form handling & validation
 4. `includes/services/class-cron-handler.php` - Queue processing
 5. `includes/services/class-smtp-mailer.php` - Email sending

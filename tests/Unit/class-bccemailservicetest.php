@@ -34,8 +34,8 @@ class BccEmailServiceTest extends TestCase {
 		$this->setup_wpdb_mock();
 
 		// Load required services.
-		require_once \MSKD_PLUGIN_DIR . 'includes/Services/class-subscriber-service.php';
-		require_once \MSKD_PLUGIN_DIR . 'includes/Services/class-email-service.php';
+		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-subscriber-service.php';
+		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-email-service.php';
 
 		// Mock WordPress functions.
 		Functions\when( 'wp_json_encode' )->returnArg();

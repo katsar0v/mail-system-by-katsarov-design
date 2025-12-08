@@ -1384,85 +1384,85 @@ msgstr "Име на списък (задължително)"
 msgid "List description"
 msgstr "Описание на списък"
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "File size exceeds the maximum limit of 5MB."
 msgstr "Размерът на файла надвишава максималния лимит от 5MB."
 
 #. translators: %s: expected format
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "Invalid file format. Expected %s file."
 msgstr "Невалиден формат на файла. Очаква се %s файл."
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "Invalid file type. The file content does not match the expected format."
 msgstr ""
 "Невалиден тип файл. Съдържанието на файла не съответства на очаквания формат."
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "Could not read the file."
 msgstr "Файлът не може да бъде прочетен."
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "Could not read CSV headers."
 msgstr "CSV заглавията не могат да бъдат прочетени."
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "The CSV file must contain an \"email\" column."
 msgstr "CSV файлът трябва да съдържа колона \"email\"."
 
 #. translators: 1: row number, 2: email value
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "Row %1$d: Invalid email address \"%2$s\"."
 msgstr "Ред %1$d: Невалиден имейл адрес \"%2$s\"."
 
 #. translators: %s: email address
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "Failed to import subscriber: %s"
 msgstr "Неуспешен импорт на абонат: %s"
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "The CSV file must contain a \"name\" column."
 msgstr "CSV файлът трябва да съдържа колона \"name\"."
 
 #. translators: %d: row number
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "Row %d: List name is required."
 msgstr "Ред %d: Името на списъка е задължително."
 
 #. translators: %s: list name
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "Failed to import list: %s"
 msgstr "Неуспешен импорт на списък: %s"
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "File exceeds the maximum upload size."
 msgstr "Файлът надвишава максималния размер за качване."
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "File exceeds the maximum form size."
 msgstr "Файлът надвишава максималния размер на формуляра."
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "File was only partially uploaded."
 msgstr "Файлът беше качен само частично."
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "No file was uploaded."
 msgstr "Не беше качен файл."
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "Missing temporary folder."
 msgstr "Липсваща временна папка."
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "Failed to write file to disk."
 msgstr "Неуспешен запис на файла на диска."
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "A PHP extension stopped the file upload."
 msgstr "PHP разширение спря качването на файла."
 
-#: includes/Services/class-import-export-service.php
+#: includes/services/class-import-export-service.php
 msgid "Unknown upload error."
 msgstr "Неизвестна грешка при качване."
 
@@ -1748,35 +1748,35 @@ msgstr "Все още няма персонализирани шаблони."
 msgid "Create your first template"
 msgstr "Създайте първия си шаблон"
 
-#: includes/Services/class-template-service.php
+#: includes/services/class-template-service.php
 msgid " (Copy)"
 msgstr " (Копие)"
 
-#: includes/Services/class-template-service.php
+#: includes/services/class-template-service.php
 msgid "Blank Template"
 msgstr "Празен шаблон"
 
-#: includes/Services/class-template-service.php
+#: includes/services/class-template-service.php
 msgid "Newsletter"
 msgstr "Бюлетин"
 
-#: includes/Services/class-template-service.php
+#: includes/services/class-template-service.php
 msgid "Your Newsletter Title"
 msgstr "Заглавие на вашия бюлетин"
 
-#: includes/Services/class-template-service.php
+#: includes/services/class-template-service.php
 msgid "Welcome Email"
 msgstr "Поздравително писмо"
 
-#: includes/Services/class-template-service.php
+#: includes/services/class-template-service.php
 msgid "Welcome to {site_name}!"
 msgstr "Добре дошли в {site_name}!"
 
-#: includes/Services/class-template-service.php
+#: includes/services/class-template-service.php
 msgid "Promotional"
 msgstr "Промоционален"
 
-#: includes/Services/class-template-service.php
+#: includes/services/class-template-service.php
 msgid "Special Offer Just for You!"
 msgstr "Специална оферта само за вас!"
 
@@ -2119,7 +2119,7 @@ msgid "No subscribers were updated."
 msgstr "Нито един абонат не беше обновен."
 
 #. translators: %d: subscriber ID
-#: includes/Services/class-subscriber-service.php
+#: includes/services/class-subscriber-service.php
 msgid "Subscriber ID %d not found."
 msgstr "Абонат с ID %d не е намерен."
 
