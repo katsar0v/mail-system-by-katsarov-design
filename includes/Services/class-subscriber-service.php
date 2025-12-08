@@ -672,4 +672,180 @@ class Subscriber_Service {
 
 		return $result;
 	}
+
+	/**
+	 * Batch get or create subscribers by emails.
+	 *
+	 * For each email, if subscriber exists, returns existing record (preserves current status).
+	 * If not, creates new subscriber with generated token.
+	 *
+	 * @param array $emails_data Array of email data with email, first_name, last_name, source.
+	 * @return array Array of subscriber objects indexed by email.
+	 */
+	public function batch_get_or_create( array $emails_data ): array {
+		if ( empty( $emails_data ) ) {
+			return array();
+		}
+
+		$emails = array();
+		foreach ( $emails_data as $data ) {
+			$email = sanitize_email( $data['email'] ?? '' );
+			if ( ! empty( $email ) && is_email( $email ) ) {
+				$emails[] = $email;
+			}
+		}
+
+		if ( empty( $emails ) ) {
+			return array();
+		}
+
+		// Get existing subscribers in a single query.
+		$placeholders         = implode( ',', array_fill( 0, count( $emails ), '%s' ) );
+		$existing_subscribers = $this->wpdb->get_results(
+			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Table name hardcoded, using splat operator.
+				"SELECT * FROM {$this->table} WHERE email IN ({$placeholders})",
+				...$emails
+			)
+		);
+
+		// Index existing subscribers by email for quick lookup.
+		$existing_by_email = array();
+		foreach ( $existing_subscribers as $subscriber ) {
+			$existing_by_email[ $subscriber->email ] = $subscriber;
+		}
+
+		$result          = array();
+		$new_subscribers = array();
+
+		foreach ( $emails_data as $data ) {
+			$email      = sanitize_email( $data['email'] ?? '' );
+			$first_name = $data['first_name'] ?? '';
+			$last_name  = $data['last_name'] ?? '';
+			$source     = $data['source'] ?? self::SOURCE_INTERNAL;
+
+			if ( empty( $email ) || ! is_email( $email ) ) {
+				continue;
+			}
+
+			// Return existing subscriber if found.
+			if ( isset( $existing_by_email[ $email ] ) ) {
+				$result[ $email ] = $existing_by_email[ $email ];
+				continue;
+			}
+
+			// Prepare for batch creation.
+			$new_subscribers[] = array(
+				'email'      => $email,
+				'first_name' => $first_name,
+				'last_name'  => $last_name,
+				'status'     => 'active',
+				'source'     => $source,
+			);
+		}
+
+		// Batch create new subscribers if any.
+		if ( ! empty( $new_subscribers ) ) {
+			$created_ids = $this->batch_create( $new_subscribers );
+			foreach ( $created_ids as $i => $id ) {
+				if ( $id ) {
+					$email            = $new_subscribers[ $i ]['email'];
+					$result[ $email ] = $this->get_by_id( $id );
+				}
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Batch create subscribers.
+	 *
+	 * @param array $subscribers_data Array of subscriber data arrays.
+	 * @return array Array of created subscriber IDs (false for failed creations).
+	 */
+	public function batch_create( array $subscribers_data ): array {
+		if ( empty( $subscribers_data ) ) {
+			return array();
+		}
+
+		$ids = array();
+		foreach ( $subscribers_data as $data ) {
+			$defaults = array(
+				'email'      => '',
+				'first_name' => '',
+				'last_name'  => '',
+				'status'     => 'active',
+				'source'     => self::SOURCE_INTERNAL,
+			);
+
+			$data = wp_parse_args( $data, $defaults );
+
+			// Validate source.
+			$valid_sources = array( self::SOURCE_INTERNAL, self::SOURCE_EXTERNAL, self::SOURCE_ONE_TIME );
+			if ( ! in_array( $data['source'], $valid_sources, true ) ) {
+				$data['source'] = self::SOURCE_INTERNAL;
+			}
+
+			// Generate unsubscribe token.
+			$token = wp_generate_password( 32, false );
+
+			$result = $this->wpdb->insert(
+				$this->table,
+				array(
+					'email'             => $data['email'],
+					'first_name'        => $data['first_name'],
+					'last_name'         => $data['last_name'],
+					'status'            => $data['status'],
+					'source'            => $data['source'],
+					'unsubscribe_token' => $token,
+				),
+				array( '%s', '%s', '%s', '%s', '%s', '%s' )
+			);
+
+			$ids[] = $result ? $this->wpdb->insert_id : false;
+		}
+
+		return $ids;
+	}
+
+	/**
+	 * Batch get subscribers by IDs.
+	 *
+	 * @param array $ids Array of subscriber IDs.
+	 * @return array Array of subscriber objects indexed by ID.
+	 */
+	public function batch_get_by_ids( array $ids ): array {
+		if ( empty( $ids ) ) {
+			return array();
+		}
+
+		$ids = array_map( 'intval', $ids );
+		$ids = array_filter(
+			$ids,
+			function ( $id ) {
+				return $id > 0;
+			}
+		);
+
+		if ( empty( $ids ) ) {
+			return array();
+		}
+
+		$placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+		$subscribers  = $this->wpdb->get_results(
+			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Table name hardcoded, using splat operator.
+				"SELECT * FROM {$this->table} WHERE id IN ({$placeholders})",
+				...$ids
+			)
+		);
+
+		$result = array();
+		foreach ( $subscribers as $subscriber ) {
+			$result[ $subscriber->id ] = $subscriber;
+		}
+
+		return $result;
+	}
 }

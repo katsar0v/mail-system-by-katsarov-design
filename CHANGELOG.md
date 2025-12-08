@@ -81,6 +81,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BCC Display in Queue Details**
   - BCC recipients are now visible in the campaign details page when viewing queue items
   - Only displayed when BCC is configured for the campaign
+- **Batch Processing for Email Queue Operations**
+  - Added `batch_queue_subscribers()` method to Email_Service for chunking large subscriber lists
+  - Added `process_subscriber_chunk()` to handle individual chunks efficiently
+  - Added `batch_insert_queue_items()` for optimized database inserts
+  - Added `batch_get_or_create()` method to Subscriber_Service for bulk subscriber operations
+  - Added `batch_create()` for creating multiple subscribers at once
+  - Added `batch_get_by_ids()` for retrieving multiple subscribers by IDs
+  - Comprehensive unit tests for batch processing functionality
+
+### Performance
+- Improved performance when handling large email campaigns through batch processing
+- Reduced database queries by batching operations
+- Prevents memory issues when processing large subscriber lists
 
 ### Fixed
 - **Repository Cleanup**
