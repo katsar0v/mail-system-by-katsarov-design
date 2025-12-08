@@ -2411,3 +2411,204 @@ msgstr "Версия на базата данни"
 #: admin/partials/settings.php
 msgid "requires update to"
 msgstr "изисква актуализация до"
+
+#: admin/partials/compose.php
+msgid "Choose how to compose your email:"
+msgstr "Изберете как да съставите вашия имейл:"
+
+#: admin/partials/compose.php
+msgid "Or use the standard editor below to compose your email with HTML."
+msgstr "Или използвайте стандартния редактор по-долу, за да съставите вашия имейл с HTML."
+
+#: admin/partials/compose-wizard.php
+msgid "Create your email using the HTML editor with full control over the code."
+msgstr "Създайте вашия имейл с HTML редактора с пълен контрол върху кода."
+
+#: admin/partials/compose-wizard.php
+msgid "Build your email with our drag-and-drop visual editor. No coding required."
+msgstr "Изградете вашия имейл с нашия визуален редактор за плъзгане и пускане. Не се изисква програмиране."
+
+#: admin/partials/compose-wizard.php
+msgid "Use the visual editor to design your email. Click the button below to open the editor."
+msgstr "Използвайте визуалния редактор, за да дизайнвате вашия имейл. Кликнете бутона по-долу, за да отворите редактора."
+
+#: admin/partials/compose-wizard.php
+msgid "The visual editor will open in a new window. When you save your template, you can continue to the next step."
+msgstr "Визуалният редактор ще се отвори в нов прозорец. Когато запазите шаблона си, можете да продължите към следващата стъпка."
+
+#: admin/partials/compose-wizard.php
+msgid "Email content preview"
+msgstr "Преглед на съдържанието на имейла"
+
+#: admin/partials/import-export.php
+msgid "active, inactive, or unsubscribed"
+msgstr "активен, неактивен или отписан"
+
+#: admin/partials/import-export.php
+msgid "Email address"
+msgstr "Имейл адрес"
+
+#: admin/partials/subscribers.php
+msgid "Add New"
+msgstr "Добави нов"
+
+#: admin/partials/templates.php
+msgid "Created"
+msgstr "Създаден"
+
+#: admin/partials/templates.php
+msgid "New Template"
+msgstr "Нов шаблон"
+
+#: admin/partials/templates.php
+msgid "Untitled Template"
+msgstr "Шаблон без име"
+
+#: admin/partials/templates.php
+msgid "These templates are provided by the system. You can duplicate them to create custom versions."
+msgstr "Тези шаблони са предоставени от системата. Можете да ги дублирате, за да създадете персонализирани версии."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Save"
+msgstr "Запази"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Saving..."
+msgstr "Запазване..."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Saved!"
+msgstr "Запазено!"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Save & Continue"
+msgstr "Запази и продължи"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Content saved successfully."
+msgstr "Съдържанието е запазено успешно."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Error saving template"
+msgstr "Грешка при запазване на шаблона"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Template created successfully."
+msgstr "Шаблонът е създаден успешно."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Failed to create template."
+msgstr "Неуспешно създаване на шаблон."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Export HTML"
+msgstr "Експортирай HTML"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Visual Editor Error"
+msgstr "Грешка на визуалния редактор"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Visual Editor Not Available. The visual editor needs to be built. Please run: cd admin/editor && npm install && npm run build"
+msgstr "Визуалният редактор не е наличен. Визуалният редактор трябва да бъде изграден. Моля, изпълнете: cd admin/editor && npm install && npm run build"
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Redirecting to Visual Editor..."
+msgstr "Пренасочване към визуалния редактор..."
+
+#: includes/Admin/class-admin-visual-editor.php
+msgid "Invalid JSON content."
+msgstr "Невалидно JSON съдържание."
+
+#: includes/Admin/class-admin.php
+msgid "Permission denied."
+msgstr "Достъпът е отказан."
+
+#: includes/Admin/class-admin.php
+msgid "You do not have permission to access this page."
+msgstr "Нямате права за достъп до тази страница."
+
+#: admin/partials/shortcodes.php
+msgid "Automated lists (membership managed by external plugins):"
+msgstr "Автоматични списъци (членството се управлява от външни плъгини):"
+
+#: admin/partials/shortcodes.php
+msgid "Copy any shortcode below and paste it into your page or post to display the subscription form."
+msgstr "Копирайте шорткода по-долу и го поставете във вашата страница или публикация, за да покажете формуляра за абонамент."
+
+#: admin/partials/shortcodes.php
+msgid "The ID of the list to subscribe to. If omitted, subscribers are added without a list."
+msgstr "ID на списъка за абониране. Ако е пропуснато, абонатите се добавят без списък."
+
+#: admin/partials/queue.php
+msgid "Scheduled for"
+msgstr "Насрочен за"
+
+#: admin/partials/queue-detail.php
+msgid "Are you sure you want to cancel this campaign? All pending emails will be cancelled."
+msgstr "Сигурни ли сте, че искате да отмените тази кампания? Всички чакащи имейли ще бъдат отменени."
+
+#: admin/partials/queue-detail.php
+msgid "Error cancelling campaign."
+msgstr "Грешка при отмяна на кампанията."
+
+#: includes/Admin/class-admin-menu.php
+msgid "Mail System:"
+msgstr "Мейл Система:"
+
+#: includes/Services/class-list-service.php
+msgid "List name is required."
+msgstr "Името на списъка е задължително."
+
+#: public/partials/opt-in-confirm.php
+msgid "Thank you for confirming your subscription. You will now receive our emails."
+msgstr "Благодарим ви за потвърждаването на абонамента. Вече ще получавате нашите имейли."
+
+#: admin/partials/settings.php
+msgid "Your database schema (version %1$s) is outdated. Version %2$s is required for the plugin to work correctly."
+msgstr "Схемата на вашата база данни (версия %1$s) е остаряла. Версия %2$s е необходима, за да работи плъгинът правилно."
+
+#: admin/partials/settings.php
+msgid "Some required database columns are missing. This may cause subscription confirmation links to fail. Click the button below to repair the database."
+msgstr "Някои задължителни колони в базата данни липсват. Това може да доведе до неуспешни връзки за потвърждение на абонамент. Кликнете бутона по-долу, за да поправите базата данни."
+
+#. Plugin Name of the plugin
+#: mail-system-by-katsarov-design.php
+msgid "Mail System by Katsarov Design"
+msgstr "Мейл Система от Katsarov Design"
+
+#. Plugin URI of the plugin
+#: mail-system-by-katsarov-design.php
+msgid "https://katsarov.design/plugins/mail-system"
+msgstr "https://katsarov.design/plugins/mail-system"
+
+#. Description of the plugin
+#: mail-system-by-katsarov-design.php
+msgid "Email newsletter management system with subscribers, lists, and sending queue."
+msgstr "Система за управление на имейл бюлетини с абонати, списъци и опашка за изпращане."
+
+#. Author of the plugin
+#: mail-system-by-katsarov-design.php
+msgid "Katsarov Design"
+msgstr "Katsarov Design"
+
+#. Author URI of the plugin
+#: mail-system-by-katsarov-design.php
+msgid "https://katsarov.design"
+msgstr "https://katsarov.design"
+
+#: includes/class-pagination.php
+msgid "&laquo;"
+msgstr "&laquo;"
+
+#: includes/class-pagination.php
+msgid "&raquo;"
+msgstr "&raquo;"
+
+#: admin/partials/compose.php
+msgid "(%s)"
+msgstr "(%s)"
+
+#: admin/partials/one-time-email.php
+msgid "sender@example.com"
+msgstr "sender@example.com"
