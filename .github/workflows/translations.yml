@@ -1,0 +1,37 @@
+name: Translations
+
+on:
+  pull_request:
+    paths:
+      - 'languages/*.po'
+      - 'languages/*.pot'
+
+jobs:
+  verify-translations:
+    name: Verify MO Files Updated
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: wp-cli
+
+      - name: Compile MO files
+        run: wp i18n make-mo languages/
+
+      - name: Check for uncommitted MO changes
+        run: |
+          if git diff --exit-code languages/*.mo; then
+            echo "✅ MO files are up to date"
+          else
+            echo "❌ MO files are outdated! Please run: composer translations"
+            echo ""
+            echo "The following MO files need to be recompiled:"
+            git diff --name-only languages/*.mo
+            exit 1
+          fi
