@@ -2627,7 +2627,7 @@ msgstr "Грешка при отмяна на кампанията."
 msgid "Mail System:"
 msgstr "Мейл Система:"
 
-#: includes/services/class-list-service.php
+#: includes/Services/class-list-service.php
 msgid "List name is required."
 msgstr "Името на списъка е задължително."
 
