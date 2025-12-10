@@ -70,7 +70,7 @@ class Admin_Queue {
 
 		// Handle campaign creation success message.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Just displaying a message based on a flag.
-		if ( isset( $_GET['campaign_created'] ) && '1' === $_GET['campaign_created'] ) {
+		if ( isset( $_GET['campaign_created'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['campaign_created'] ) ) ) {
 			$message = get_transient( 'mskd_campaign_success_message' );
 			if ( $message ) {
 				add_settings_error(
