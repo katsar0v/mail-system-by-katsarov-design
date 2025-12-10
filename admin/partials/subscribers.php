@@ -234,7 +234,33 @@ if ( 'edit' === $current_action && $subscriber_id ) {
 				return 'database' === $list_item->source;
 			}
 		);
+
+		// Calculate stats for the statistics box.
+		$total_subs_count    = MSKD_List_Provider::get_total_subscriber_count();
+		$active_subs_count   = MSKD_List_Provider::get_total_subscriber_count( 'active' );
+		$inactive_subs_count = MSKD_List_Provider::get_total_subscriber_count( 'inactive' );
+		$unsub_subs_count    = MSKD_List_Provider::get_total_subscriber_count( 'unsubscribed' );
 		?>
+
+		<!-- Statistics Box -->
+		<div class="mskd-subscribers-stats">
+			<div class="mskd-stat-card">
+				<span class="mskd-stat-label"><?php esc_html_e( 'Total Subscribers', 'mail-system-by-katsarov-design' ); ?></span>
+				<span class="mskd-stat-value"><?php echo esc_html( $total_subs_count ); ?></span>
+			</div>
+			<div class="mskd-stat-card">
+				<span class="mskd-stat-label"><?php esc_html_e( 'Active', 'mail-system-by-katsarov-design' ); ?></span>
+				<span class="mskd-stat-value mskd-text-active"><?php echo esc_html( $active_subs_count ); ?></span>
+			</div>
+			<div class="mskd-stat-card">
+				<span class="mskd-stat-label"><?php esc_html_e( 'Inactive', 'mail-system-by-katsarov-design' ); ?></span>
+				<span class="mskd-stat-value mskd-text-inactive"><?php echo esc_html( $inactive_subs_count ); ?></span>
+			</div>
+			<div class="mskd-stat-card">
+				<span class="mskd-stat-label"><?php esc_html_e( 'Unsubscribed', 'mail-system-by-katsarov-design' ); ?></span>
+				<span class="mskd-stat-value mskd-text-unsubscribed"><?php echo esc_html( $unsub_subs_count ); ?></span>
+			</div>
+		</div>
 
 		<!-- Filters -->
 		<ul class="subsubsub">
