@@ -393,7 +393,7 @@ $min_datetime = $now->format( 'Y-m-d\TH:i' );
 							</div>
 							<div class="mskd-form-field">
 								<?php if ( ! empty( $lists ) ) : ?>
-									<select name="lists[]" id="mskd-lists-select" class="mskd-slimselect-lists" multiple required>
+									<select name="lists[]" id="mskd-lists-select" class="mskd-slimselect-lists" multiple>
 										<?php foreach ( $lists as $list ) : ?>
 											<?php
 											$subscriber_count = MSKD_List_Provider::get_list_active_subscriber_count( $list );
@@ -1146,6 +1146,14 @@ jQuery(document).ready(function($) {
 
 	// Form validation
 	$('form').on('submit', function(e) {
+		// Validate recipients
+		var lists = $('#mskd-lists-select').val();
+		if (!lists || lists.length === 0) {
+			e.preventDefault();
+			alert('<?php esc_html_e( 'Please select at least one list.', 'mail-system-by-katsarov-design' ); ?>');
+			return false;
+		}
+
 		var useCustom = $('input[name="use_custom_from"]:checked').val();
 		if (useCustom === 'custom') {
 			var fromEmail = $('#from_email').val().trim();
