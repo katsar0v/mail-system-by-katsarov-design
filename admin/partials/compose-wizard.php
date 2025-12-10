@@ -1150,7 +1150,7 @@ jQuery(document).ready(function($) {
 		var lists = $('#mskd-lists-select').val();
 		if (!lists || lists.length === 0) {
 			e.preventDefault();
-			alert('<?php esc_html_e( 'Please select at least one list.', 'mail-system-by-katsarov-design' ); ?>');
+			alert('<?php echo esc_js( __( 'Please select at least one list.', 'mail-system-by-katsarov-design' ) ); ?>');
 			return false;
 		}
 
