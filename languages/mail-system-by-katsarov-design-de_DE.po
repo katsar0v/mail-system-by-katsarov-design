@@ -2610,7 +2610,7 @@ msgstr "Fehler beim Abbrechen der Kampagne."
 msgid "Mail System:"
 msgstr "Mail System:"
 
-#: includes/Services/class-list-service.php
+#: includes/services/class-list-service.php
 msgid "List name is required."
 msgstr "Der Listenname ist erforderlich."
 
