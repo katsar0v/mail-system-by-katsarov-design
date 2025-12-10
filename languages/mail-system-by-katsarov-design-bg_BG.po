@@ -121,6 +121,7 @@ msgstr "Грешка при добавяне на абонат."
 msgid "Subscriber updated successfully."
 msgstr "Абонатът е обновен успешно."
 
+<<<<<<< HEAD
 #: admin/partials/settings.php
 msgid "Subscription Form"
 msgstr "Форма за абонамент"
@@ -137,6 +138,8 @@ msgstr "Показване на поле \"Име\" във формата за �
 msgid "If unchecked, only the email field will be shown."
 msgstr "Ако не е избрано, ще се показва само полето за имейл."
 
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 #: admin/class-admin.php
 msgid "Subscriber deleted successfully."
 msgstr "Абонатът е изтрит успешно."
@@ -446,6 +449,7 @@ msgid "email1@example.com, email2@example.com"
 msgstr "email1@example.com, email2@example.com"
 
 #: admin/partials/compose-wizard.php
+<<<<<<< HEAD
 msgid ""
 "Enter one or more email addresses separated by commas to receive a blind "
 "carbon copy of this campaign. Bcc recipients are hidden from other "
@@ -463,6 +467,14 @@ msgstr ""
 "Въведете един или повече имейл адреси, разделени със запетая, за да получите "
 "скрито копие на този имейл. Получателите на скрито копие са скрити от "
 "основния получател."
+=======
+msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this campaign. Bcc recipients are hidden from other recipients."
+msgstr "Въведете един или повече имейл адреси, разделени със запетая, за да получите скрито копие на тази кампания. Получателите на скрито копие са скрити от другите получатели."
+
+#: admin/partials/one-time-email.php
+msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this email. Bcc recipients are hidden from the main recipient."
+msgstr "Въведете един или повече имейл адреси, разделени със запетая, за да получите скрито копие на този имейл. Получателите на скрито копие са скрити от основния получател."
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 
 #: admin/partials/compose.php
 msgid "Send now"
@@ -1411,20 +1423,33 @@ msgstr "Име на списък (задължително)"
 msgid "List description"
 msgstr "Описание на списък"
 
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "File size exceeds the maximum limit of 5MB."
 msgstr "Размерът на файла надвишава максималния лимит от 5MB."
 
 #. translators: %s: expected format
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
 msgid "Invalid file format. Expected %s file."
 msgstr "Невалиден формат на файла. Очаква се %s файл."
 
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+msgid "Invalid file format. Expected %s file."
+msgstr "Невалиден формат на файла. Очаква се %s файл."
+
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Invalid file type. The file content does not match the expected format."
 msgstr ""
 "Невалиден тип файл. Съдържанието на файла не съответства на очаквания формат."
 
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
 msgid "Could not read the file."
 msgstr "Файлът не може да бъде прочетен."
@@ -1434,29 +1459,57 @@ msgid "Could not read CSV headers."
 msgstr "CSV заглавията не могат да бъдат прочетени."
 
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+msgid "Could not read the file."
+msgstr "Файлът не може да бъде прочетен."
+
+#: includes/Services/class-import-export-service.php
+msgid "Could not read CSV headers."
+msgstr "CSV заглавията не могат да бъдат прочетени."
+
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "The CSV file must contain an \"email\" column."
 msgstr "CSV файлът трябва да съдържа колона \"email\"."
 
 #. translators: 1: row number, 2: email value
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Row %1$d: Invalid email address \"%2$s\"."
 msgstr "Ред %1$d: Невалиден имейл адрес \"%2$s\"."
 
 #. translators: %s: email address
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
 msgid "Failed to import subscriber: %s"
 msgstr "Неуспешен импорт на абонат: %s"
 
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+msgid "Failed to import subscriber: %s"
+msgstr "Неуспешен импорт на абонат: %s"
+
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "The CSV file must contain a \"name\" column."
 msgstr "CSV файлът трябва да съдържа колона \"name\"."
 
 #. translators: %d: row number
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Row %d: List name is required."
 msgstr "Ред %d: Името на списъка е задължително."
 
 #. translators: %s: list name
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
 msgid "Failed to import list: %s"
 msgstr "Неуспешен импорт на списък: %s"
@@ -1490,6 +1543,41 @@ msgid "A PHP extension stopped the file upload."
 msgstr "PHP разширение спря качването на файла."
 
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+msgid "Failed to import list: %s"
+msgstr "Неуспешен импорт на списък: %s"
+
+#: includes/Services/class-import-export-service.php
+msgid "File exceeds the maximum upload size."
+msgstr "Файлът надвишава максималния размер за качване."
+
+#: includes/Services/class-import-export-service.php
+msgid "File exceeds the maximum form size."
+msgstr "Файлът надвишава максималния размер на формуляра."
+
+#: includes/Services/class-import-export-service.php
+msgid "File was only partially uploaded."
+msgstr "Файлът беше качен само частично."
+
+#: includes/Services/class-import-export-service.php
+msgid "No file was uploaded."
+msgstr "Не беше качен файл."
+
+#: includes/Services/class-import-export-service.php
+msgid "Missing temporary folder."
+msgstr "Липсваща временна папка."
+
+#: includes/Services/class-import-export-service.php
+msgid "Failed to write file to disk."
+msgstr "Неуспешен запис на файла на диска."
+
+#: includes/Services/class-import-export-service.php
+msgid "A PHP extension stopped the file upload."
+msgstr "PHP разширение спря качването на файла."
+
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Unknown upload error."
 msgstr "Неизвестна грешка при качване."
 
@@ -1726,11 +1814,15 @@ msgid "Predefined Templates"
 msgstr "Предварително дефинирани шаблони"
 
 #: admin/partials/templates.php
+<<<<<<< HEAD
 #, fuzzy
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid ""
 "These templates are provided by the system. You can duplicate them to create "
 "custom versions."
 msgstr ""
+<<<<<<< HEAD
 "#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
 "Design 1.0.0)  #-#-#-#-#\n"
 "Тези шаблони се предоставят от системата. Можете да ги дублирате, за да "
@@ -1738,6 +1830,9 @@ msgstr ""
 "#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
 "Design 1.0.0)  #-#-#-#-#\n"
 "Тези шаблони са предоставени от системата. Можете да ги дублирате, за да "
+=======
+"Тези шаблони се предоставят от системата. Можете да ги дублирате, за да "
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 "създадете персонализирани версии."
 
 #: admin/partials/templates.php
@@ -1782,6 +1877,7 @@ msgstr "Все още няма персонализирани шаблони."
 msgid "Create your first template"
 msgstr "Създайте първия си шаблон"
 
+<<<<<<< HEAD
 #: includes/services/class-template-service.php
 msgid " (Copy)"
 msgstr " (Копие)"
@@ -1811,6 +1907,37 @@ msgid "Promotional"
 msgstr "Промоционален"
 
 #: includes/services/class-template-service.php
+=======
+#: includes/Services/class-template-service.php
+msgid " (Copy)"
+msgstr " (Копие)"
+
+#: includes/Services/class-template-service.php
+msgid "Blank Template"
+msgstr "Празен шаблон"
+
+#: includes/Services/class-template-service.php
+msgid "Newsletter"
+msgstr "Бюлетин"
+
+#: includes/Services/class-template-service.php
+msgid "Your Newsletter Title"
+msgstr "Заглавие на вашия бюлетин"
+
+#: includes/Services/class-template-service.php
+msgid "Welcome Email"
+msgstr "Поздравително писмо"
+
+#: includes/Services/class-template-service.php
+msgid "Welcome to {site_name}!"
+msgstr "Добре дошли в {site_name}!"
+
+#: includes/Services/class-template-service.php
+msgid "Promotional"
+msgstr "Промоционален"
+
+#: includes/Services/class-template-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Special Offer Just for You!"
 msgstr "Специална оферта само за вас!"
 
@@ -1920,6 +2047,7 @@ msgid "Start from Scratch"
 msgstr "Започнете от нулата"
 
 #: admin/partials/compose-wizard.php
+<<<<<<< HEAD
 #, fuzzy
 msgid ""
 "Create your email using the HTML editor with full control over the code."
@@ -1943,6 +2071,17 @@ msgstr ""
 "#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
 "Design 1.0.0)  #-#-#-#-#\n"
 "Изградете вашия имейл с нашия визуален редактор за плъзгане и пускане. Не се "
+=======
+msgid ""
+"Create your email using the HTML editor with full control over the code."
+msgstr "Създайте своя имейл с HTML редактор с пълен контрол над кода."
+
+#: admin/partials/compose-wizard.php
+msgid ""
+"Build your email with our drag-and-drop visual editor. No coding required."
+msgstr ""
+"Създайте имейла си с нашия визуален редактор с плъзгане и пускане. Не се "
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 "изисква програмиране."
 
 #: admin/partials/compose-wizard.php
@@ -1962,11 +2101,15 @@ msgid "Edit Your Email"
 msgstr "Редактирайте имейла си"
 
 #: admin/partials/compose-wizard.php
+<<<<<<< HEAD
 #, fuzzy
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid ""
 "Use the visual editor to design your email. Click the button below to open "
 "the editor."
 msgstr ""
+<<<<<<< HEAD
 "#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
 "Design 1.0.0)  #-#-#-#-#\n"
 "Използвайте визуалния редактор, за да проектирате имейла си. Кликнете върху "
@@ -1974,6 +2117,9 @@ msgstr ""
 "#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
 "Design 1.0.0)  #-#-#-#-#\n"
 "Използвайте визуалния редактор, за да дизайнвате вашия имейл. Кликнете "
+=======
+"Използвайте визуалния редактор, за да проектирате имейла си. Кликнете върху "
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 "бутона по-долу, за да отворите редактора."
 
 #: admin/partials/compose-wizard.php
@@ -2048,11 +2194,15 @@ msgid "Copy failed"
 msgstr "Копирането не успя"
 
 #: admin/partials/shortcodes.php
+<<<<<<< HEAD
 #, fuzzy
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid ""
 "Copy any shortcode below and paste it into your page or post to display the "
 "subscription form."
 msgstr ""
+<<<<<<< HEAD
 "#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
 "Design 1.0.0)  #-#-#-#-#\n"
 "Копирайте който и да е шорткод по-долу и го поставете във вашата страница "
@@ -2061,6 +2211,10 @@ msgstr ""
 "Design 1.0.0)  #-#-#-#-#\n"
 "Копирайте шорткода по-долу и го поставете във вашата страница или "
 "публикация, за да покажете формуляра за абонамент."
+=======
+"Копирайте който и да е шорткод по-долу и го поставете във вашата страница "
+"или публикация, за да покажете формуляра за абонамент."
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 
 #: admin/partials/shortcodes.php
 msgid "General Subscription Form"
@@ -2181,7 +2335,11 @@ msgid "No subscribers were updated."
 msgstr "Нито един абонат не беше обновен."
 
 #. translators: %d: subscriber ID
+<<<<<<< HEAD
 #: includes/services/class-subscriber-service.php
+=======
+#: includes/Services/class-subscriber-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Subscriber ID %d not found."
 msgstr "Абонат с ID %d не е намерен."
 
@@ -2326,6 +2484,7 @@ msgid "Subscription Confirmed!"
 msgstr "Абонаментът е потвърден!"
 
 #: public/partials/opt-in-confirm.php
+<<<<<<< HEAD
 #, fuzzy
 msgid ""
 "Thank you for confirming your subscription. You will now receive our emails."
@@ -2337,6 +2496,12 @@ msgstr ""
 "#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
 "Design 1.0.0)  #-#-#-#-#\n"
 "Благодарим ви за потвърждаването на абонамента. Вече ще получавате нашите "
+=======
+msgid ""
+"Thank you for confirming your subscription. You will now receive our emails."
+msgstr ""
+"Благодарим ви, че потвърдихте абонамента си. Сега ще получавате нашите "
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 "имейли."
 
 #: public/class-public.php
@@ -2347,12 +2512,18 @@ msgstr "Заявката не може да бъде потвърдена."
 msgid "Mail System Database Update Required"
 msgstr "Необходима е актуализация на базата данни на Mail System"
 
+<<<<<<< HEAD
 #: includes/Admin/class-admin.php admin/partials/settings.php
 #, fuzzy, php-format
+=======
+#: includes/Admin/class-admin.php
+#, php-format
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid ""
 "Your database schema (version %1$s) is outdated. Version %2$s is required "
 "for the plugin to work correctly."
 msgstr ""
+<<<<<<< HEAD
 "#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
 "Design 1.0.0)  #-#-#-#-#\n"
 "Схемата на базата данни (версия %1$s) е остаряла. За правилната работа на "
@@ -2361,6 +2532,10 @@ msgstr ""
 "Design 1.0.0)  #-#-#-#-#\n"
 "Схемата на вашата база данни (версия %1$s) е остаряла. Версия %2$s е "
 "необходима, за да работи плъгинът правилно."
+=======
+"Схемата на базата данни (версия %1$s) е остаряла. За правилната работа на "
+"плъгина е необходима версия %2$s."
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 
 #: includes/Admin/class-admin.php
 msgid "Update Database Now"
@@ -2370,12 +2545,17 @@ msgstr "Актуализирай базата данни сега"
 msgid "Mail System Database Repair Required"
 msgstr "Необходим е ремонт на базата данни на Mail System"
 
+<<<<<<< HEAD
 #: includes/Admin/class-admin.php admin/partials/settings.php
 #, fuzzy
+=======
+#: includes/Admin/class-admin.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid ""
 "Some required database columns are missing. This may cause subscription "
 "confirmation links to fail. Click the button below to repair the database."
 msgstr ""
+<<<<<<< HEAD
 "#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
 "Design 1.0.0)  #-#-#-#-#\n"
 "Някои необходими колони в базата данни липсват. Това може да причини неуспех "
@@ -2386,6 +2566,11 @@ msgstr ""
 "Някои задължителни колони в базата данни липсват. Това може да доведе до "
 "неуспешни връзки за потвърждение на абонамент. Кликнете бутона по-долу, за "
 "да поправите базата данни."
+=======
+"Някои необходими колони в базата данни липсват. Това може да причини неуспех "
+"на линковете за потвърждение на абонамент. Кликнете бутона по-долу, за да "
+"поправите базата данни."
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 
 #: includes/Admin/class-admin.php
 msgid "Repair Database Now"
@@ -2408,10 +2593,15 @@ msgid "Styling"
 msgstr "Стилизиране"
 
 #: admin/partials/settings.php
+<<<<<<< HEAD
 msgid ""
 "Customize the appearance of subscription forms and the unsubscribe page."
 msgstr ""
 "Персонализирайте визията на формите за абонамент и страницата за отписване."
+=======
+msgid "Customize the appearance of subscription forms and the unsubscribe page."
+msgstr "Персонализирайте визията на формите за абонамент и страницата за отписване."
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 
 #: admin/partials/settings.php
 msgid "Highlight Color"
@@ -2437,6 +2627,7 @@ msgstr "Преглед"
 msgid "Button preview:"
 msgstr "Преглед на бутон:"
 
+<<<<<<< HEAD
 #: admin/partials/compose.php admin/partials/compose-wizard.php
 #: admin/partials/one-time-email.php
 msgid "Sender Email"
@@ -2479,21 +2670,64 @@ msgstr "Име на подателя"
 
 #: admin/partials/compose.php admin/partials/compose-wizard.php
 #: admin/partials/one-time-email.php
+=======
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Sender Email"
+msgstr "Имейл на подателя"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Use default sender"
+msgstr "Използвай подател по подразбиране"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Use custom sender"
+msgstr "Използвай персонализиран подател"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "From Email"
+msgstr "От имейл"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Email address that will appear as the sender of this campaign."
+msgstr "Имейл адресът, който ще се показва като подател на тази кампания."
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Email address that will appear as the sender of this email."
+msgstr "Имейл адресът, който ще се показва като подател на този имейл."
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "From Name"
+msgstr "От име"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Sender Name"
+msgstr "Име на подателя"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Display name for the sender (optional)."
 msgstr "Показвано име за подателя (по избор)."
 
 #: includes/Admin/class-admin-email.php
 msgid "Custom sender email is required when using custom sender option."
+<<<<<<< HEAD
 msgstr ""
 "Персонализиран имейл на подателя е задължителен при използване на опцията за "
 "персонализиран подател."
+=======
+msgstr "Персонализиран имейл на подателя е задължителен при използване на опцията за персонализиран подател."
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 
 #: includes/Admin/class-admin-email.php
 msgid "Invalid custom sender email address."
 msgstr "Невалиден имейл адрес на персонализиран подател."
 
+<<<<<<< HEAD
 #: admin/partials/compose.php admin/partials/compose-wizard.php
 #: admin/partials/one-time-email.php
+=======
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Please enter a valid sender email address."
 msgstr "Моля, въведете валиден имейл адрес на подателя."
 
@@ -2508,6 +2742,7 @@ msgstr "Версия на базата данни"
 #: admin/partials/settings.php
 msgid "requires update to"
 msgstr "изисква актуализация до"
+<<<<<<< HEAD
 
 #: admin/partials/compose.php
 msgid "Choose how to compose your email:"
@@ -2675,3 +2910,5 @@ msgstr "(%s)"
 #: admin/partials/one-time-email.php
 msgid "sender@example.com"
 msgstr "sender@example.com"
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)

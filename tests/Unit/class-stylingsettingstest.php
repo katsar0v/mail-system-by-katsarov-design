@@ -153,7 +153,10 @@ class StylingSettingsTest extends TestCase {
 			'email_footer',
 			'highlight_color',
 			'button_text_color',
+<<<<<<< HEAD
 			'show_name_field',
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 			'smtp_enabled',
 			'smtp_host',
 			'smtp_port',

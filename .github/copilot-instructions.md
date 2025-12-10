@@ -12,9 +12,15 @@ mail-system-by-katsarov-design.php  → Entry point, constants (MSKD_*), built-i
 │   ├── class-activator.php         → DB table creation, cron scheduling, default options
 │   ├── class-deactivator.php       → Cron cleanup
 │   ├── Admin/                      → PSR-4 namespaced admin classes (MSKD\Admin\*)
+<<<<<<< HEAD
 │   └── services/
 │       ├── class-cron-handler.php  → Queue processing (10 emails/min via MSKD_BATCH_SIZE)
        ├── class-list-service.php  → PSR-4 namespaced service classes (MSKD\Services\*)
+=======
+│   ├── Services/                   → PSR-4 namespaced service classes (MSKD\Services\*)
+│   └── services/
+│       ├── class-cron-handler.php  → Queue processing (10 emails/min via MSKD_BATCH_SIZE)
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 │       └── class-smtp-mailer.php   → PHPMailer wrapper for SMTP sending
 ```
 

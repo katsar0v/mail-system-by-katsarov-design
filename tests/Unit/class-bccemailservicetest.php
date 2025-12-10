@@ -34,8 +34,13 @@ class BccEmailServiceTest extends TestCase {
 		$this->setup_wpdb_mock();
 
 		// Load required services.
+<<<<<<< HEAD
 		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-subscriber-service.php';
 		require_once \MSKD_PLUGIN_DIR . 'includes/services/class-email-service.php';
+=======
+		require_once \MSKD_PLUGIN_DIR . 'includes/Services/class-subscriber-service.php';
+		require_once \MSKD_PLUGIN_DIR . 'includes/Services/class-email-service.php';
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 
 		// Mock WordPress functions.
 		Functions\when( 'wp_json_encode' )->returnArg();

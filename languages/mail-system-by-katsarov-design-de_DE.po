@@ -86,14 +86,20 @@ msgid "Recommendation for Mail System:"
 msgstr "Empfehlung für Mail-System:"
 
 #: admin/class-admin.php
+<<<<<<< HEAD
 #, fuzzy
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid ""
 "For more reliable email sending, we recommend using system cron instead of "
 "WP-Cron."
 msgstr ""
 "Für zuverlässigeren E-Mail-Versand empfehlen wir die Verwendung von System-"
+<<<<<<< HEAD
 "Cron anstelle von WP-Cron.\n"
 "Für zuverlässigeres E-Mail-Versenden empfehlen wir die Verwendung von System-"
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 "Cron anstelle von WP-Cron."
 
 #: admin/class-admin.php
@@ -124,6 +130,7 @@ msgstr "Fehler beim Hinzufügen des Abonnenten."
 msgid "Subscriber updated successfully."
 msgstr "Abonnent erfolgreich aktualisiert."
 
+<<<<<<< HEAD
 #: admin/partials/settings.php
 msgid "Show Name Field"
 msgstr "Namensfeld anzeigen"
@@ -136,6 +143,8 @@ msgstr "Das Feld \"Name\" im Abonnementformular anzeigen"
 msgid "If unchecked, only the email field will be shown."
 msgstr "Wenn nicht ausgewählt, wird nur das E-Mail-Feld angezeigt."
 
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 #: admin/class-admin.php
 msgid "Subscriber deleted successfully."
 msgstr "Abonnent erfolgreich gelöscht."
@@ -447,6 +456,7 @@ msgid "email1@example.com, email2@example.com"
 msgstr "email1@example.com, email2@example.com"
 
 #: admin/partials/compose-wizard.php
+<<<<<<< HEAD
 msgid ""
 "Enter one or more email addresses separated by commas to receive a blind "
 "carbon copy of this campaign. Bcc recipients are hidden from other "
@@ -464,6 +474,14 @@ msgstr ""
 "Geben Sie eine oder mehrere durch Kommas getrennte E-Mail-Adressen ein, um "
 "eine Blindkopie dieser E-Mail zu erhalten. Bcc-Empfänger sind für den "
 "Hauptempfänger verborgen."
+=======
+msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this campaign. Bcc recipients are hidden from other recipients."
+msgstr "Geben Sie eine oder mehrere durch Kommas getrennte E-Mail-Adressen ein, um eine Blindkopie dieser Kampagne zu erhalten. Bcc-Empfänger sind für andere Empfänger verborgen."
+
+#: admin/partials/one-time-email.php
+msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this email. Bcc recipients are hidden from the main recipient."
+msgstr "Geben Sie eine oder mehrere durch Kommas getrennte E-Mail-Adressen ein, um eine Blindkopie dieser E-Mail zu erhalten. Bcc-Empfänger sind für den Hauptempfänger verborgen."
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 
 #: admin/partials/compose.php
 msgid "Send now"
@@ -879,7 +897,10 @@ msgid "[%s] SMTP Test Email"
 msgstr "[%s] SMTP-Test-E-Mail"
 
 #: includes/services/class-smtp-mailer.php
+<<<<<<< HEAD
 #, fuzzy
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid ""
 "<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are "
 "working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP "
@@ -887,9 +908,12 @@ msgid ""
 msgstr ""
 "<h2>SMTP-Test-E-Mail</h2><p>Diese E-Mail bestätigt, dass die SMTP-"
 "Einstellungen korrekt funktionieren.</p><p><strong>Zeit:</strong> %1$s</"
+<<<<<<< HEAD
 "p><p><strong>SMTP-Server:</strong> %2$s:%3$s</p>\n"
 "<h2>SMTP Test-E-Mail</h2><p>Diese E-Mail bestätigt, dass die SMTP-"
 "Einstellungen korrekt funktionieren.</p><p><strong>Zeit:</strong> %1$s</"
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 "p><p><strong>SMTP-Server:</strong> %2$s:%3$s</p>"
 
 #: includes/services/class-smtp-mailer.php
@@ -956,7 +980,15 @@ msgstr "Sie werden keine E-Mails mehr von uns erhalten."
 #, fuzzy
 msgid "Back to site"
 msgstr ""
+<<<<<<< HEAD
 "Zurück zur Website\n"
+=======
+"#-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov "
+"Design 1.0.0)  #-#-#-#-#\n"
+"Zurück zur Website\n"
+"#-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov "
+"Design 1.0.0)  #-#-#-#-#\n"
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 "Zurück zur Seite"
 
 #: includes/services/class-list-provider.php admin/partials/queue.php
@@ -996,15 +1028,22 @@ msgid "External subscribers cannot be edited"
 msgstr "Externe Abonnenten können nicht bearbeitet werden"
 
 #: admin/partials/subscribers.php
+<<<<<<< HEAD
 #, fuzzy
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid ""
 "External subscribers are managed by third-party plugins and appear as read-"
 "only."
 msgstr ""
 "Externe Abonnenten werden von Drittanbieter-Plugins verwaltet und werden als "
+<<<<<<< HEAD
 "schreibgeschützt angezeigt.\n"
 "Externe Abonnenten werden von Drittanbieter-Plugins verwaltet und erscheinen "
 "als schreibgeschützt."
+=======
+"schreibgeschützt angezeigt."
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 
 #: admin/partials/lists.php
 msgid "Send email"
@@ -1435,20 +1474,33 @@ msgstr "Listenname (erforderlich)"
 msgid "List description"
 msgstr "Listenbeschreibung"
 
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "File size exceeds the maximum limit of 5MB."
 msgstr "Die Dateigröße überschreitet das maximale Limit von 5MB."
 
 #. translators: %s: expected format
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
 msgid "Invalid file format. Expected %s file."
 msgstr "Ungültiges Dateiformat. %s-Datei erwartet."
 
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+msgid "Invalid file format. Expected %s file."
+msgstr "Ungültiges Dateiformat. %s-Datei erwartet."
+
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Invalid file type. The file content does not match the expected format."
 msgstr ""
 "Ungültiger Dateityp. Der Dateiinhalt entspricht nicht dem erwarteten Format."
 
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
 msgid "Could not read the file."
 msgstr "Die Datei konnte nicht gelesen werden."
@@ -1458,29 +1510,57 @@ msgid "Could not read CSV headers."
 msgstr "CSV-Header konnten nicht gelesen werden."
 
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+msgid "Could not read the file."
+msgstr "Die Datei konnte nicht gelesen werden."
+
+#: includes/Services/class-import-export-service.php
+msgid "Could not read CSV headers."
+msgstr "CSV-Header konnten nicht gelesen werden."
+
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "The CSV file must contain an \"email\" column."
 msgstr "Die CSV-Datei muss eine \"email\"-Spalte enthalten."
 
 #. translators: 1: row number, 2: email value
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Row %1$d: Invalid email address \"%2$s\"."
 msgstr "Zeile %1$d: Ungültige E-Mail-Adresse \"%2$s\"."
 
 #. translators: %s: email address
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
 msgid "Failed to import subscriber: %s"
 msgstr "Import des Abonnenten fehlgeschlagen: %s"
 
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+msgid "Failed to import subscriber: %s"
+msgstr "Import des Abonnenten fehlgeschlagen: %s"
+
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "The CSV file must contain a \"name\" column."
 msgstr "Die CSV-Datei muss eine \"name\"-Spalte enthalten."
 
 #. translators: %d: row number
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Row %d: List name is required."
 msgstr "Zeile %d: Listenname ist erforderlich."
 
 #. translators: %s: list name
+<<<<<<< HEAD
 #: includes/services/class-import-export-service.php
 msgid "Failed to import list: %s"
 msgstr "Import der Liste fehlgeschlagen: %s"
@@ -1514,6 +1594,41 @@ msgid "A PHP extension stopped the file upload."
 msgstr "Eine PHP-Erweiterung hat den Datei-Upload gestoppt."
 
 #: includes/services/class-import-export-service.php
+=======
+#: includes/Services/class-import-export-service.php
+msgid "Failed to import list: %s"
+msgstr "Import der Liste fehlgeschlagen: %s"
+
+#: includes/Services/class-import-export-service.php
+msgid "File exceeds the maximum upload size."
+msgstr "Die Datei überschreitet die maximale Upload-Größe."
+
+#: includes/Services/class-import-export-service.php
+msgid "File exceeds the maximum form size."
+msgstr "Die Datei überschreitet die maximale Formulargröße."
+
+#: includes/Services/class-import-export-service.php
+msgid "File was only partially uploaded."
+msgstr "Die Datei wurde nur teilweise hochgeladen."
+
+#: includes/Services/class-import-export-service.php
+msgid "No file was uploaded."
+msgstr "Keine Datei wurde hochgeladen."
+
+#: includes/Services/class-import-export-service.php
+msgid "Missing temporary folder."
+msgstr "Temporärer Ordner fehlt."
+
+#: includes/Services/class-import-export-service.php
+msgid "Failed to write file to disk."
+msgstr "Datei konnte nicht auf Festplatte geschrieben werden."
+
+#: includes/Services/class-import-export-service.php
+msgid "A PHP extension stopped the file upload."
+msgstr "Eine PHP-Erweiterung hat den Datei-Upload gestoppt."
+
+#: includes/Services/class-import-export-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Unknown upload error."
 msgstr "Unbekannter Upload-Fehler."
 
@@ -1624,14 +1739,20 @@ msgid "Import options"
 msgstr "Importoptionen"
 
 #: admin/partials/import-export.php
+<<<<<<< HEAD
 #, fuzzy
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid ""
 "Assign subscribers to lists specified in the \"lists\" column. New lists "
 "will be created automatically."
 msgstr ""
 "Abonnenten den in der Spalte \"lists\" angegebenen Listen zuweisen. Neue "
+<<<<<<< HEAD
 "Listen werden automatisch erstellt.\n"
 "Abonnenten den in der Spalte \"Listen\" angegebenen Listen zuweisen. Neue "
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 "Listen werden automatisch erstellt."
 
 #: admin/partials/import-export.php
@@ -1804,6 +1925,7 @@ msgstr "Noch keine benutzerdefinierten Vorlagen."
 msgid "Create your first template"
 msgstr "Erstellen Sie Ihre erste Vorlage"
 
+<<<<<<< HEAD
 #: includes/services/class-template-service.php
 msgid " (Copy)"
 msgstr " (Kopie)"
@@ -1836,12 +1958,55 @@ msgstr "Werbeangebot"
 msgid "Special Offer Just for You!"
 msgstr "Sonderangebot nur für Sie!"
 
+=======
+#: includes/Services/class-template-service.php
+msgid " (Copy)"
+msgstr " (Kopie)"
+
+#: includes/Services/class-template-service.php
+msgid "Blank Template"
+msgstr "Leere Vorlage"
+
+#: includes/Services/class-template-service.php
+msgid "Newsletter"
+msgstr "Newsletter"
+
+#: includes/Services/class-template-service.php
+msgid "Your Newsletter Title"
+msgstr "Ihr Newsletter-Titel"
+
+#: includes/Services/class-template-service.php
+msgid "Welcome Email"
+msgstr "Willkommens-E-Mail"
+
+#: includes/Services/class-template-service.php
+msgid "Welcome to {site_name}!"
+msgstr "Willkommen bei {site_name}!"
+
+#: includes/Services/class-template-service.php
+msgid "Promotional"
+msgstr "Werbeangebot"
+
+#: includes/Services/class-template-service.php
+msgid "Special Offer Just for You!"
+msgstr "Sonderangebot nur für Sie!"
+
+#. #-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov Design 1.0.0)  #-#-#-#-#
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 #. translators: %s: template name
 #: admin/partials/compose.php admin/partials/compose-wizard.php
 #, fuzzy
 msgid "Using template: %s"
 msgstr ""
+<<<<<<< HEAD
 "Verwendete Vorlage: %s\n"
+=======
+"#-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov "
+"Design 1.0.0)  #-#-#-#-#\n"
+"Verwendete Vorlage: %s\n"
+"#-#-#-#-#  mail-system-by-katsarov-design-de_DE.po (Mail System by Katsarov "
+"Design 1.0.0)  #-#-#-#-#\n"
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 "Vorlage wird verwendet: %s"
 
 #: admin/partials/compose.php
@@ -2048,15 +2213,22 @@ msgid "Copy failed"
 msgstr "Kopieren fehlgeschlagen"
 
 #: admin/partials/shortcodes.php
+<<<<<<< HEAD
 #, fuzzy
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid ""
 "Copy any shortcode below and paste it into your page or post to display the "
 "subscription form."
 msgstr ""
 "Kopieren Sie einen beliebigen Shortcode unten und fügen Sie ihn in Ihre "
+<<<<<<< HEAD
 "Seite oder Ihren Beitrag ein, um das Anmeldeformular anzuzeigen.\n"
 "Kopieren Sie einen Shortcode unten und fügen Sie ihn in Ihre Seite oder "
 "Ihren Beitrag ein, um das Anmeldeformular anzuzeigen."
+=======
+"Seite oder Ihren Beitrag ein, um das Anmeldeformular anzuzeigen."
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 
 #: admin/partials/shortcodes.php
 msgid "General Subscription Form"
@@ -2176,7 +2348,11 @@ msgid "No subscribers were updated."
 msgstr "Keine Abonnenten wurden aktualisiert."
 
 #. translators: %d: subscriber ID
+<<<<<<< HEAD
 #: includes/services/class-subscriber-service.php
+=======
+#: includes/Services/class-subscriber-service.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Subscriber ID %d not found."
 msgstr "Abonnenten-ID %d nicht gefunden."
 
@@ -2321,13 +2497,19 @@ msgid "Subscription Confirmed!"
 msgstr "Abonnement bestätigt!"
 
 #: public/partials/opt-in-confirm.php
+<<<<<<< HEAD
 #, fuzzy
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid ""
 "Thank you for confirming your subscription. You will now receive our emails."
 msgstr ""
 "Vielen Dank für die Bestätigung Ihres Abonnements. Sie werden nun unsere E-"
+<<<<<<< HEAD
 "Mails erhalten.\n"
 "Vielen Dank für die Bestätigung Ihres Abonnements. Sie werden jetzt unsere E-"
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 "Mails erhalten."
 
 #: public/class-public.php
@@ -2338,7 +2520,11 @@ msgstr "Anfrage kann nicht verifiziert werden."
 msgid "Mail System Database Update Required"
 msgstr "Mail System Datenbankaktualisierung erforderlich"
 
+<<<<<<< HEAD
 #: includes/Admin/class-admin.php admin/partials/settings.php
+=======
+#: includes/Admin/class-admin.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 #, php-format
 msgid ""
 "Your database schema (version %1$s) is outdated. Version %2$s is required "
@@ -2355,18 +2541,26 @@ msgstr "Datenbank jetzt aktualisieren"
 msgid "Mail System Database Repair Required"
 msgstr "Mail System Datenbankreparatur erforderlich"
 
+<<<<<<< HEAD
 #: includes/Admin/class-admin.php admin/partials/settings.php
 #, fuzzy
+=======
+#: includes/Admin/class-admin.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid ""
 "Some required database columns are missing. This may cause subscription "
 "confirmation links to fail. Click the button below to repair the database."
 msgstr ""
 "Einige erforderliche Datenbankspalten fehlen. Dies kann dazu führen, dass "
 "Bestätigungslinks für Abonnements fehlschlagen. Klicken Sie auf die "
+<<<<<<< HEAD
 "Schaltfläche unten, um die Datenbank zu reparieren.\n"
 "Einige erforderliche Datenbankspalten fehlen. Dies kann dazu führen, dass "
 "Abonnement-Bestätigungslinks fehlschlagen. Klicken Sie auf die Schaltfläche "
 "unten, um die Datenbank zu reparieren."
+=======
+"Schaltfläche unten, um die Datenbank zu reparieren."
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 
 #: includes/Admin/class-admin.php
 msgid "Repair Database Now"
@@ -2389,11 +2583,16 @@ msgid "Styling"
 msgstr "Styling"
 
 #: admin/partials/settings.php
+<<<<<<< HEAD
 msgid ""
 "Customize the appearance of subscription forms and the unsubscribe page."
 msgstr ""
 "Passen Sie das Erscheinungsbild von Anmeldeformularen und der Abmeldeseite "
 "an."
+=======
+msgid "Customize the appearance of subscription forms and the unsubscribe page."
+msgstr "Passen Sie das Erscheinungsbild von Anmeldeformularen und der Abmeldeseite an."
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 
 #: admin/partials/settings.php
 msgid "Highlight Color"
@@ -2419,6 +2618,7 @@ msgstr "Vorschau"
 msgid "Button preview:"
 msgstr "Schaltflächenvorschau:"
 
+<<<<<<< HEAD
 #: admin/partials/compose.php admin/partials/compose-wizard.php
 #: admin/partials/one-time-email.php
 msgid "Sender Email"
@@ -2461,21 +2661,64 @@ msgstr "Absendername"
 
 #: admin/partials/compose.php admin/partials/compose-wizard.php
 #: admin/partials/one-time-email.php
+=======
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Sender Email"
+msgstr "Absender-E-Mail"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Use default sender"
+msgstr "Standard-Absender verwenden"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Use custom sender"
+msgstr "Benutzerdefinierten Absender verwenden"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "From Email"
+msgstr "Von E-Mail"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Email address that will appear as the sender of this campaign."
+msgstr "E-Mail-Adresse, die als Absender dieser Kampagne angezeigt wird."
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Email address that will appear as the sender of this email."
+msgstr "E-Mail-Adresse, die als Absender dieser E-Mail angezeigt wird."
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "From Name"
+msgstr "Von Name"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+msgid "Sender Name"
+msgstr "Absendername"
+
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Display name for the sender (optional)."
 msgstr "Anzeigename für den Absender (optional)."
 
 #: includes/Admin/class-admin-email.php
 msgid "Custom sender email is required when using custom sender option."
+<<<<<<< HEAD
 msgstr ""
 "Benutzerdefinierte Absender-E-Mail ist erforderlich bei Verwendung der "
 "benutzerdefinierten Absender-Option."
+=======
+msgstr "Benutzerdefinierte Absender-E-Mail ist erforderlich bei Verwendung der benutzerdefinierten Absender-Option."
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 
 #: includes/Admin/class-admin-email.php
 msgid "Invalid custom sender email address."
 msgstr "Ungültige benutzerdefinierte Absender-E-Mail-Adresse."
 
+<<<<<<< HEAD
 #: admin/partials/compose.php admin/partials/compose-wizard.php
 #: admin/partials/one-time-email.php
+=======
+#: admin/partials/compose.php admin/partials/compose-wizard.php admin/partials/one-time-email.php
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
 msgid "Please enter a valid sender email address."
 msgstr "Bitte geben Sie eine gültige Absender-E-Mail-Adresse ein."
 
@@ -2490,6 +2733,7 @@ msgstr "Datenbankversion"
 #: admin/partials/settings.php
 msgid "requires update to"
 msgstr "erfordert Aktualisierung auf"
+<<<<<<< HEAD
 
 #: admin/partials/compose.php
 msgid "Choose how to compose your email:"
@@ -2658,3 +2902,5 @@ msgstr "(%s)"
 #: admin/partials/one-time-email.php
 msgid "sender@example.com"
 msgstr "sender@example.com"
+=======
+>>>>>>> 0c090b1 (Add subscriber statistics box to admin subscribers page)
