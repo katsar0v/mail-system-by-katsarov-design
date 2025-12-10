@@ -67,6 +67,21 @@ class Admin_Queue {
 				$this->handle_cancel_campaign( intval( $_GET['id'] ) );
 			}
 		}
+
+		// Handle campaign creation success message.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Just displaying a message based on a flag.
+		if ( isset( $_GET['campaign_created'] ) && '1' === $_GET['campaign_created'] ) {
+			$message = get_transient( 'mskd_campaign_success_message' );
+			if ( $message ) {
+				add_settings_error(
+					'mskd_messages',
+					'mskd_success',
+					$message,
+					'success'
+				);
+				delete_transient( 'mskd_campaign_success_message' );
+			}
+		}
 	}
 
 	/**
