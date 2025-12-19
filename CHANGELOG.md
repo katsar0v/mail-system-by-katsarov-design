@@ -70,6 +70,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevents memory issues when processing large subscriber lists
 
 ### Fixed
+- **Dedupe Subscribers in Campaign Queue**
+  - Fixed issue where subscribers belonging to multiple lists would receive duplicate emails in the same campaign.
+  - Ensures each subscriber (by email or ID) is queued only once per campaign.
 - **Campaign Wizard Validation**
   - Fixed console error "invalid form control is not focusable" when no recipient lists are selected in Step 3
   - Added visible alert message "Please select at least one list" for better user feedback

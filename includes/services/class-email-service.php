@@ -82,7 +82,7 @@ class Email_Service {
 		$subject      = $data['subject'] ?? '';
 		$body         = $data['body'] ?? '';
 		$list_ids     = $data['list_ids'] ?? array();
-		$subscribers  = $data['subscribers'] ?? array();
+		$subscribers  = $this->dedupe_subscribers( $data['subscribers'] ?? array() );
 		$scheduled_at = $data['scheduled_at'] ?? mskd_current_time_normalized();
 		$bcc          = $data['bcc'] ?? '';
 		$from_email   = $data['from_email'] ?? null;
@@ -126,6 +126,54 @@ class Email_Service {
 		$queued = $this->batch_queue_subscribers( $campaign_id, $subscribers, $subject, $body, $scheduled_at );
 
 		return $campaign_id;
+	}
+
+	/**
+	 * Dedupe subscribers by email (case-insensitive) and ID to avoid duplicate queue items.
+	 * If either the email or ID has already been processed (even when the other differs),
+	 * the subscriber is skipped to ensure a single send per recipient across lists.
+	 *
+	 * @param array $subscribers Array of subscriber objects.
+	 * @return array
+	 */
+	private function dedupe_subscribers( array $subscribers ): array {
+		$unique      = array();
+		$seen_emails = array();
+		$seen_ids    = array();
+
+		foreach ( $subscribers as $subscriber ) {
+			$raw_email = isset( $subscriber->email ) ? trim( (string) $subscriber->email ) : '';
+			$email     = '' !== $raw_email ? strtolower( $raw_email ) : '';
+			$id        = isset( $subscriber->id ) ? (string) $subscriber->id : '';
+
+			$email_seen  = $email && isset( $seen_emails[ $email ] );
+			$id_seen     = '' !== $id && isset( $seen_ids[ $id ] );
+			$should_skip = $email_seen || $id_seen; // Enforce single send per email or subscriber ID.
+
+			if ( $should_skip ) {
+				if ( $email ) {
+					$seen_emails[ $email ] = true;
+				}
+
+				if ( '' !== $id ) {
+					$seen_ids[ $id ] = true;
+				}
+
+				continue;
+			}
+
+			if ( $email ) {
+				$seen_emails[ $email ] = true;
+			}
+
+			if ( '' !== $id ) {
+				$seen_ids[ $id ] = true;
+			}
+
+			$unique[] = $subscriber;
+		}
+
+		return $unique;
 	}
 
 	/**

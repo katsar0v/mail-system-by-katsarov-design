@@ -168,6 +168,103 @@ class Email_Service_Test extends TestCase {
 	}
 
 	/**
+	 * Test that duplicate subscribers across lists are deduped before queueing.
+	 */
+	public function test_queue_campaign_dedupes_duplicate_subscribers(): void {
+		// Mock wpdb insert for campaign creation and capture total recipients (should be deduped).
+		$this->wpdb->shouldReceive( 'insert' )
+			->once()
+			->with(
+				'wp_mskd_campaigns',
+				Mockery::on(
+					function ( $data ) {
+						return isset( $data['total_recipients'] ) && 2 === $data['total_recipients'];
+					}
+				),
+				Mockery::type( 'array' )
+			)
+			->andReturn( true );
+		$this->wpdb->insert_id = 1; // Campaign ID.
+
+		// Mock option functions.
+		Functions\stubs(
+			array(
+				'get_option'    => function ( $option, $default ) {
+					return 'mskd_total_campaigns_created' === $option ? 0 : $default;
+				},
+				'update_option' => function () {
+					return true;
+				},
+			)
+		);
+
+		$subscribers = array(
+			(object) array(
+				'id'         => 1,
+				'email'      => 'duplicate@example.com',
+				'first_name' => 'Primary',
+				'last_name'  => 'User',
+			),
+			(object) array(
+				'id'         => 1,
+				'email'      => 'duplicate@example.com',
+				'first_name' => 'Duplicate',
+				'last_name'  => 'User',
+			),
+			(object) array(
+				'id'         => 'ext_1',
+				'email'      => 'DUPLICATE@example.com',
+				'first_name' => 'External',
+				'last_name'  => 'Duplicate',
+			),
+			(object) array(
+				'id'         => 2,
+				'email'      => 'unique@example.com',
+				'first_name' => 'Unique',
+				'last_name'  => 'User',
+			),
+		);
+
+		// Only unique internal IDs 1 and 2 should be fetched.
+		$this->subscriber_service->shouldReceive( 'batch_get_by_ids' )
+			->once()
+			->with( array( 1, 2 ) )
+			->andReturn(
+				array(
+					1 => (object) array(
+						'id'     => 1,
+						'email'  => 'duplicate@example.com',
+						'status' => 'active',
+					),
+					2 => (object) array(
+						'id'     => 2,
+						'email'  => 'unique@example.com',
+						'status' => 'active',
+					),
+				)
+			);
+
+		// No external subscribers should remain after dedupe.
+		$this->subscriber_service->shouldReceive( 'batch_get_or_create' )
+			->never();
+
+		// Only two queue items should be inserted.
+		$this->wpdb->shouldReceive( 'query' )
+			->once()
+			->andReturn( 2 );
+
+		$campaign_data = array(
+			'subject'     => 'Test Subject',
+			'body'        => 'Test Body',
+			'subscribers' => $subscribers,
+		);
+
+		$result = $this->email_service->queue_campaign( $campaign_data );
+
+		$this->assertEquals( 1, $result );
+	}
+
+	/**
 	 * Test batch queue subscribers with unsubscribed subscribers filtered out.
 	 */
 	public function test_batch_queue_subscribers_filters_unsubscribed() {
