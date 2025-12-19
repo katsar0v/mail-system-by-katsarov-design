@@ -149,7 +149,7 @@ class Email_Service {
 				continue;
 			}
 
-			if ( '' !== $id && isset( $seen_ids[ $id ] ) ) {
+			if ( $id && isset( $seen_ids[ $id ] ) ) {
 				continue;
 			}
 
