@@ -1146,12 +1146,15 @@ jQuery(document).ready(function($) {
 
 	// Form validation
 	$('form').on('submit', function(e) {
-		// Validate recipients
-		var lists = $('#mskd-lists-select').val();
-		if (!lists || lists.length === 0) {
-			e.preventDefault();
-			alert('<?php echo esc_js( __( 'Please select at least one list.', 'mail-system-by-katsarov-design' ) ); ?>');
-			return false;
+		// Only validate recipients on step 3 (where the list select exists)
+		var $listsSelect = $('#mskd-lists-select');
+		if ($listsSelect.length > 0) {
+			var lists = $listsSelect.val();
+			if (!lists || lists.length === 0) {
+				e.preventDefault();
+				alert('<?php echo esc_js( __( 'Please select at least one list.', 'mail-system-by-katsarov-design' ) ); ?>');
+				return false;
+			}
 		}
 
 		var useCustom = $('input[name="use_custom_from"]:checked').val();
