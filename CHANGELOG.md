@@ -70,6 +70,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevents memory issues when processing large subscriber lists
 
 ### Fixed
+- **Directory Naming**
+  - Fixed inconsistent directory naming references in translation files
 - **Redirect to queue page after campaign creation (#71)**
   - Users are now redirected to the queue page after successfully creating or scheduling a campaign
   - Success message is preserved and displayed on the queue page
