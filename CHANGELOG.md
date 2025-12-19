@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Compose Wizard Step 1 Validation**
+  - Fixed bug where "Please select at least one list" alert incorrectly appeared when clicking Continue in step 1
+  - List validation now only triggers in step 3 where list selection is available
+
 ## [1.1.1] - 2025-12-19
 
 ### Added
