@@ -1730,17 +1730,10 @@ msgid "Predefined Templates"
 msgstr "Предварително дефинирани шаблони"
 
 #: admin/partials/templates.php
-#, fuzzy
 msgid ""
 "These templates are provided by the system. You can duplicate them to create "
 "custom versions."
 msgstr ""
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
-"Тези шаблони се предоставят от системата. Можете да ги дублирате, за да "
-"създадете персонализирани версии.\n"
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
 "Тези шаблони са предоставени от системата. Можете да ги дублирате, за да "
 "създадете персонализирани версии."
 
@@ -1818,18 +1811,10 @@ msgstr "Промоционален"
 msgid "Special Offer Just for You!"
 msgstr "Специална оферта само за вас!"
 
-#. #-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov Design 1.0.0)  #-#-#-#-#
 #. translators: %s: template name
 #: admin/partials/compose.php admin/partials/compose-wizard.php
-#, fuzzy
 msgid "Using template: %s"
-msgstr ""
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
-"Използване на шаблон: %s\n"
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
-"Използва се шаблон: %s"
+msgstr "Използва се шаблон: %s"
 
 #: admin/partials/compose.php
 msgid "Choose how to compose your email"
@@ -1924,28 +1909,14 @@ msgid "Start from Scratch"
 msgstr "Започнете от нулата"
 
 #: admin/partials/compose-wizard.php
-#, fuzzy
 msgid ""
 "Create your email using the HTML editor with full control over the code."
-msgstr ""
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
-"Създайте своя имейл с HTML редактор с пълен контрол над кода.\n"
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
-"Създайте вашия имейл с HTML редактора с пълен контрол върху кода."
+msgstr "Създайте вашия имейл с HTML редактора с пълен контрол върху кода."
 
 #: admin/partials/compose-wizard.php
-#, fuzzy
 msgid ""
 "Build your email with our drag-and-drop visual editor. No coding required."
 msgstr ""
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
-"Създайте имейла си с нашия визуален редактор с плъзгане и пускане. Не се "
-"изисква програмиране.\n"
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
 "Изградете вашия имейл с нашия визуален редактор за плъзгане и пускане. Не се "
 "изисква програмиране."
 
@@ -1966,18 +1937,11 @@ msgid "Edit Your Email"
 msgstr "Редактирайте имейла си"
 
 #: admin/partials/compose-wizard.php
-#, fuzzy
 msgid ""
 "Use the visual editor to design your email. Click the button below to open "
 "the editor."
 msgstr ""
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
 "Използвайте визуалния редактор, за да проектирате имейла си. Кликнете върху "
-"бутона по-долу, за да отворите редактора.\n"
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
-"Използвайте визуалния редактор, за да дизайнвате вашия имейл. Кликнете "
 "бутона по-долу, за да отворите редактора."
 
 #: admin/partials/compose-wizard.php
@@ -2052,19 +2016,12 @@ msgid "Copy failed"
 msgstr "Копирането не успя"
 
 #: admin/partials/shortcodes.php
-#, fuzzy
 msgid ""
 "Copy any shortcode below and paste it into your page or post to display the "
 "subscription form."
 msgstr ""
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
 "Копирайте който и да е шорткод по-долу и го поставете във вашата страница "
-"или публикация, за да покажете формуляра за абонамент.\n"
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
-"Копирайте шорткода по-долу и го поставете във вашата страница или "
-"публикация, за да покажете формуляра за абонамент."
+"или публикация, за да покажете формуляра за абонамент."
 
 #: admin/partials/shortcodes.php
 msgid "General Subscription Form"
@@ -2330,17 +2287,10 @@ msgid "Subscription Confirmed!"
 msgstr "Абонаментът е потвърден!"
 
 #: public/partials/opt-in-confirm.php
-#, fuzzy
 msgid ""
 "Thank you for confirming your subscription. You will now receive our emails."
 msgstr ""
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
 "Благодарим ви, че потвърдихте абонамента си. Сега ще получавате нашите "
-"имейли.\n"
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
-"Благодарим ви за потвърждаването на абонамента. Вече ще получавате нашите "
 "имейли."
 
 #: public/class-public.php
@@ -2352,19 +2302,13 @@ msgid "Mail System Database Update Required"
 msgstr "Необходима е актуализация на базата данни на Mail System"
 
 #: includes/Admin/class-admin.php admin/partials/settings.php
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "Your database schema (version %1$s) is outdated. Version %2$s is required "
 "for the plugin to work correctly."
 msgstr ""
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
 "Схемата на базата данни (версия %1$s) е остаряла. За правилната работа на "
-"плъгина е необходима версия %2$s.\n"
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
-"Схемата на вашата база данни (версия %1$s) е остаряла. Версия %2$s е "
-"необходима, за да работи плъгинът правилно."
+"плъгина е необходима версия %2$s."
 
 #: includes/Admin/class-admin.php
 msgid "Update Database Now"
@@ -2375,21 +2319,13 @@ msgid "Mail System Database Repair Required"
 msgstr "Необходим е ремонт на базата данни на Mail System"
 
 #: includes/Admin/class-admin.php admin/partials/settings.php
-#, fuzzy
 msgid ""
 "Some required database columns are missing. This may cause subscription "
 "confirmation links to fail. Click the button below to repair the database."
 msgstr ""
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
 "Някои необходими колони в базата данни липсват. Това може да причини неуспех "
 "на линковете за потвърждение на абонамент. Кликнете бутона по-долу, за да "
-"поправите базата данни.\n"
-"#-#-#-#-#  mail-system-by-katsarov-design-bg_BG.po (Mail System by Katsarov "
-"Design 1.0.0)  #-#-#-#-#\n"
-"Някои задължителни колони в базата данни липсват. Това може да доведе до "
-"неуспешни връзки за потвърждение на абонамент. Кликнете бутона по-долу, за "
-"да поправите базата данни."
+"поправите базата данни."
 
 #: includes/Admin/class-admin.php
 msgid "Repair Database Now"
