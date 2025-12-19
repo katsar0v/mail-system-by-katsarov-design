@@ -70,6 +70,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevents memory issues when processing large subscriber lists
 
 ### Fixed
+- **Campaign Wizard Validation**
+  - Fixed console error "invalid form control is not focusable" when no recipient lists are selected in Step 3
+  - Added visible alert message "Please select at least one list" for better user feedback
+  - Replaced browser-native validation with custom JavaScript validation for the lists selector
 - **Directory Naming**
   - Fixed inconsistent directory naming references in translation files
 - **Redirect to queue page after campaign creation (#71)**
