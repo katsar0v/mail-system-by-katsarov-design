@@ -120,6 +120,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - **Missing Translation**
   - Added missing translation for "Total Subscribers" in Bulgarian language
+- **Corrupted Bulgarian Translations** (PR #90)
+  - Removed msgcat merge markers that were showing in the UI
+  - Cleaned 9 translation entries with embedded `#-#-#-#-#` markers
+  - Recompiled Bulgarian MO file
 
 ### Planned
 - Open and click statistics
