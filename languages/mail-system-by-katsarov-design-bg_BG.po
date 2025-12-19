@@ -16,6 +16,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: admin/partials/subscribers.php
+msgid "Total Subscribers"
+msgstr "Общо абонати"
+
 #: mail-system-by-katsarov-design.php
 msgid "Every minute"
 msgstr "Всяка минута"

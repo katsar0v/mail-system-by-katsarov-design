@@ -1,6 +1,6 @@
 {
   "name": "mail-system-by-katsarov-design",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "WordPress Mail System Plugin by Katsarov Design",
   "main": "mail-system-by-katsarov-design.php",
   "scripts": {
