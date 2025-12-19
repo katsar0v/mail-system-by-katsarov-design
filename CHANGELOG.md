@@ -8,10 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Lists Column in Subscribers Page** (Issue #84)
+  - New "Lists" column displaying which list(s) each subscriber belongs to
+  - Multiple lists are stacked vertically for easy readability
+  - Efficient batch query to fetch list data for all displayed subscribers
+  - Added `batch_get_lists()` method to Subscriber_Service for optimized fetching
 - **Option to hide Name field in Subscribe Form**
   - New "Show Name Field" setting in Admin > Settings > Subscription Form
   - Toggle to show or hide the Name field in the public subscription form
   - Default behavior preserves showing the Name field for existing installations
+- **Subscriber Statistics Box**
+  - Added a visible box at the top of the subscribers page displaying:
+    - Total subscribers count
+    - Active subscribers count
+    - Inactive subscribers count
+    - Unsubscribed count
+  - Improved usability for administrators to quickly assess subscriber base health
 - **Custom Email Header and Footer**
   - Configurable HTML header prepended to all outgoing emails
   - Configurable HTML footer appended to all outgoing emails
@@ -58,6 +70,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevents memory issues when processing large subscriber lists
 
 ### Fixed
+- **Redirect to queue page after campaign creation (#71)**
+  - Users are now redirected to the queue page after successfully creating or scheduling a campaign
+  - Success message is preserved and displayed on the queue page
 - **Repository Cleanup**
   - Removed temporary PHP CodeSniffer report files (`phpcs_remaining.txt` and `phpcs_report.txt`)
   - These files were generated during development and should not be committed to the repository
