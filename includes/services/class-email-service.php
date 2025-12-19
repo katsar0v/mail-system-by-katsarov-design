@@ -142,12 +142,15 @@ class Email_Service {
 		$seen_ids     = array();
 
 		foreach ( $subscribers as $subscriber ) {
-			$email = isset( $subscriber->email ) ? strtolower( trim( $subscriber->email ) ) : '';
-			$id    = isset( $subscriber->id ) ? (string) $subscriber->id : '';
+			$raw_email = isset( $subscriber->email ) ? trim( (string) $subscriber->email ) : '';
+			$email     = '' !== $raw_email ? strtolower( $raw_email ) : '';
+			$id        = isset( $subscriber->id ) ? (string) $subscriber->id : '';
 
 			$already_seen = ( $email && isset( $seen_emails[ $email ] ) ) || ( '' !== $id && isset( $seen_ids[ $id ] ) );
 
 			if ( $already_seen ) {
+				// Capture any additional identifiers from duplicates to prevent later misses
+				// (e.g., first entry has email only, second has same email plus ID).
 				if ( $email ) {
 					$seen_emails[ $email ] = true;
 				}
