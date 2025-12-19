@@ -228,6 +228,11 @@ if ( 'edit' === $current_action && $subscriber_id ) {
 		}
 
 		// Get database lists for batch action dropdown.
+		// Get list assignments for all subscribers on this page.
+		$subscriber_service   = new \MSKD\Services\Subscriber_Service();
+		$subscriber_ids       = array_filter( array_map( fn( $s ) => isset( $s->id ) && ! isset( $s->source ) ? (int) $s->id : null, $all_subscribers ) );
+		$subscriber_lists_map = ! empty( $subscriber_ids ) ? $subscriber_service->batch_get_lists( $subscriber_ids ) : array();
+
 		$database_lists = array_filter(
 			$lists,
 			function ( $list_item ) {
@@ -333,6 +338,7 @@ if ( 'edit' === $current_action && $subscriber_id ) {
 					<th scope="col"><?php esc_html_e( 'Email', 'mail-system-by-katsarov-design' ); ?></th>
 					<th scope="col"><?php esc_html_e( 'Status', 'mail-system-by-katsarov-design' ); ?></th>
 					<th scope="col"><?php esc_html_e( 'Date', 'mail-system-by-katsarov-design' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Lists', 'mail-system-by-katsarov-design' ); ?></th>
 					<th scope="col"><?php esc_html_e( 'Actions', 'mail-system-by-katsarov-design' ); ?></th>
 				</tr>
 			</thead>
@@ -378,6 +384,20 @@ if ( 'edit' === $current_action && $subscriber_id ) {
 									<span class="mskd-readonly-text">—</span>
 								<?php endif; ?>
 							</td>
+							<td class="mskd-lists-column">
+								<?php
+								$lists_for_sub = $subscriber_lists_map[ $sub->id ] ?? array();
+								if ( ! empty( $lists_for_sub ) ) :
+									foreach ( $lists_for_sub as $list_item ) :
+										?>
+										<div class="mskd-list-badge"><?php echo esc_html( $list_item->name ); ?></div>
+										<?php
+									endforeach;
+								else :
+									?>
+									<span class="mskd-text-muted">—</span>
+								<?php endif; ?>
+							</td>
 							<td>
 								<?php if ( $is_editable ) : ?>
 									<a href="<?php echo esc_url( admin_url( 'admin.php?page=mskd-subscribers&action=edit&id=' . $sub->id ) ); ?>">
@@ -397,7 +417,7 @@ if ( 'edit' === $current_action && $subscriber_id ) {
 					<?php endforeach; ?>
 				<?php else : ?>
 					<tr>
-						<td colspan="<?php echo ! empty( $database_lists ) ? '5' : '4'; ?>"><?php esc_html_e( 'No subscribers found.', 'mail-system-by-katsarov-design' ); ?></td>
+						<td colspan="<?php echo ! empty( $database_lists ) ? '6' : '5'; ?>"><?php esc_html_e( 'No subscribers found.', 'mail-system-by-katsarov-design' ); ?></td>
 					</tr>
 				<?php endif; ?>
 			</tbody>

@@ -427,6 +427,59 @@ class Subscriber_Service {
 	}
 
 	/**
+	 * Get lists with names for multiple subscribers.
+	 *
+	 * Efficiently fetches list details for multiple subscribers in a single query.
+	 *
+	 * @param array $subscriber_ids Array of subscriber IDs.
+	 * @return array Associative array: subscriber_id => array of list objects (with id and name).
+	 */
+	public function batch_get_lists( array $subscriber_ids ): array {
+		if ( empty( $subscriber_ids ) ) {
+			return array();
+		}
+
+		$subscriber_ids = array_map( 'intval', $subscriber_ids );
+		$subscriber_ids = array_filter(
+			$subscriber_ids,
+			function ( $id ) {
+				return $id > 0;
+			}
+		);
+
+		if ( empty( $subscriber_ids ) ) {
+			return array();
+		}
+
+		$placeholders = implode( ',', array_fill( 0, count( $subscriber_ids ), '%d' ) );
+
+		// Get list assignments with list names in a single query.
+		$results = $this->wpdb->get_results(
+			$this->wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Table names hardcoded, using splat operator.
+				"SELECT sl.subscriber_id, l.id, l.name FROM {$this->pivot_table} sl INNER JOIN {$this->wpdb->prefix}mskd_lists l ON sl.list_id = l.id WHERE sl.subscriber_id IN ({$placeholders}) ORDER BY l.name ASC",
+				...$subscriber_ids
+			)
+		);
+
+		// Group results by subscriber_id.
+		$grouped = array();
+		foreach ( $results as $row ) {
+			$sub_id = (int) $row->subscriber_id;
+			if ( ! isset( $grouped[ $sub_id ] ) ) {
+				$grouped[ $sub_id ] = array();
+			}
+			$grouped[ $sub_id ][] = (object) array(
+				'id'   => (int) $row->id,
+				'name' => $row->name,
+			);
+		}
+
+		return $grouped;
+	}
+
+
+	/**
 	 * Sync subscriber's list associations.
 	 *
 	 * Removes all existing associations and adds the new ones.
