@@ -137,17 +137,17 @@ class Email_Service {
 	 * @return array
 	 */
 	private function dedupe_subscribers( array $subscribers ): array {
-		$unique       = array();
-		$seen_emails  = array();
-		$seen_ids     = array();
+		$unique      = array();
+		$seen_emails = array();
+		$seen_ids    = array();
 
 		foreach ( $subscribers as $subscriber ) {
 			$raw_email = isset( $subscriber->email ) ? trim( (string) $subscriber->email ) : '';
 			$email     = '' !== $raw_email ? strtolower( $raw_email ) : '';
 			$id        = isset( $subscriber->id ) ? (string) $subscriber->id : '';
 
-			$email_seen = $email && isset( $seen_emails[ $email ] );
-			$id_seen    = '' !== $id && isset( $seen_ids[ $id ] );
+			$email_seen  = $email && isset( $seen_emails[ $email ] );
+			$id_seen     = '' !== $id && isset( $seen_ids[ $id ] );
 			$should_skip = $email_seen || $id_seen; // Enforce single send per email or subscriber ID.
 
 			if ( $should_skip ) {
