@@ -82,7 +82,7 @@ class Email_Service {
 		$subject      = $data['subject'] ?? '';
 		$body         = $data['body'] ?? '';
 		$list_ids     = $data['list_ids'] ?? array();
-		$subscribers  = $data['subscribers'] ?? array();
+		$subscribers  = $this->dedupe_subscribers( $data['subscribers'] ?? array() );
 		$scheduled_at = $data['scheduled_at'] ?? mskd_current_time_normalized();
 		$bcc          = $data['bcc'] ?? '';
 		$from_email   = $data['from_email'] ?? null;
@@ -126,6 +126,39 @@ class Email_Service {
 		$queued = $this->batch_queue_subscribers( $campaign_id, $subscribers, $subject, $body, $scheduled_at );
 
 		return $campaign_id;
+	}
+
+	/**
+	 * Dedupe subscribers by email (case-insensitive) and ID to avoid duplicate queue items.
+	 *
+	 * @param array $subscribers Array of subscriber objects.
+	 * @return array
+	 */
+	private function dedupe_subscribers( array $subscribers ): array {
+		$unique       = array();
+		$seen_emails  = array();
+		$seen_ids     = array();
+
+		foreach ( $subscribers as $subscriber ) {
+			$email = isset( $subscriber->email ) ? strtolower( trim( $subscriber->email ) ) : '';
+			$id    = isset( $subscriber->id ) ? (string) $subscriber->id : '';
+
+			if ( ( $email && isset( $seen_emails[ $email ] ) ) || ( '' !== $id && isset( $seen_ids[ $id ] ) ) ) {
+				continue;
+			}
+
+			if ( $email ) {
+				$seen_emails[ $email ] = true;
+			}
+
+			if ( '' !== $id ) {
+				$seen_ids[ $id ] = true;
+			}
+
+			$unique[] = $subscriber;
+		}
+
+		return array_values( $unique );
 	}
 
 	/**
