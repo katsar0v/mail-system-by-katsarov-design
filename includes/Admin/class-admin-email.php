@@ -311,14 +311,9 @@ class Admin_Email {
 		$queued = count( $all_subscribers );
 
 		if ( $is_immediate ) {
-			add_settings_error(
-				'mskd_messages',
-				'mskd_success',
-				sprintf(
-					__( '%d emails have been added to the sending queue.', 'mail-system-by-katsarov-design' ),
-					$queued
-				),
-				'success'
+			$message = sprintf(
+				__( '%d emails have been added to the sending queue.', 'mail-system-by-katsarov-design' ),
+				$queued
 			);
 		} else {
 			// Format scheduled time for display.
@@ -326,17 +321,19 @@ class Admin_Email {
 			$scheduled_date = new \DateTime( $scheduled_at, $wp_timezone );
 			$formatted_date = $scheduled_date->format( 'd.m.Y H:i' );
 
-			add_settings_error(
-				'mskd_messages',
-				'mskd_success',
-				sprintf(
-					__( '%1$d emails have been scheduled for %2$s.', 'mail-system-by-katsarov-design' ),
-					$queued,
-					esc_html( $formatted_date )
-				),
-				'success'
+			$message = sprintf(
+				__( '%1$d emails have been scheduled for %2$s.', 'mail-system-by-katsarov-design' ),
+				$queued,
+				esc_html( $formatted_date )
 			);
 		}
+
+		// Set transient for the success message to be displayed on the queue page.
+		set_transient( 'mskd_campaign_success_message', $message, 60 );
+
+		// Redirect to the queue page.
+		wp_safe_redirect( admin_url( 'admin.php?page=mskd-queue&campaign_created=1' ) );
+		exit;
 	}
 
 	/**

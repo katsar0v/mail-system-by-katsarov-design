@@ -65,6 +65,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevents memory issues when processing large subscriber lists
 
 ### Fixed
+- **Redirect to queue page after campaign creation (#71)**
+  - Users are now redirected to the queue page after successfully creating or scheduling a campaign
+  - Success message is preserved and displayed on the queue page
 - **Repository Cleanup**
   - Removed temporary PHP CodeSniffer report files (`phpcs_remaining.txt` and `phpcs_report.txt`)
   - These files were generated during development and should not be committed to the repository
