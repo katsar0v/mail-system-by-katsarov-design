@@ -143,7 +143,11 @@ class Email_Service {
 			$email = isset( $subscriber->email ) ? strtolower( trim( $subscriber->email ) ) : '';
 			$id    = isset( $subscriber->id ) ? (string) $subscriber->id : '';
 
-			if ( ( $email && isset( $seen_emails[ $email ] ) ) || ( '' !== $id && isset( $seen_ids[ $id ] ) ) ) {
+			if ( $email && isset( $seen_emails[ $email ] ) ) {
+				continue;
+			}
+
+			if ( '' !== $id && isset( $seen_ids[ $id ] ) ) {
 				continue;
 			}
 
@@ -158,7 +162,7 @@ class Email_Service {
 			$unique[] = $subscriber;
 		}
 
-		return array_values( $unique );
+		return $unique;
 	}
 
 	/**
