@@ -130,8 +130,8 @@ class Email_Service {
 
 	/**
 	 * Dedupe subscribers by email (case-insensitive) and ID to avoid duplicate queue items.
-	 * If either the email or ID has already been processed, the subscriber is skipped to
-	 * ensure a single send per recipient even when they belong to multiple lists.
+	 * If either the email or ID has already been processed (even when the other differs),
+	 * the subscriber is skipped to ensure a single send per recipient across lists.
 	 *
 	 * @param array $subscribers Array of subscriber objects.
 	 * @return array
@@ -149,7 +149,7 @@ class Email_Service {
 				continue;
 			}
 
-			if ( $id && isset( $seen_ids[ $id ] ) ) {
+			if ( '' !== $id && isset( $seen_ids[ $id ] ) ) {
 				continue;
 			}
 
