@@ -148,6 +148,19 @@ class Email_Service {
 
 			$email_seen = $email && isset( $seen_emails[ $email ] );
 			$id_seen    = '' !== $id && isset( $seen_ids[ $id ] );
+			$should_skip = $email_seen || $id_seen; // Enforce single send per email or subscriber ID.
+
+			if ( $should_skip ) {
+				if ( $email ) {
+					$seen_emails[ $email ] = true;
+				}
+
+				if ( '' !== $id ) {
+					$seen_ids[ $id ] = true;
+				}
+
+				continue;
+			}
 
 			if ( $email ) {
 				$seen_emails[ $email ] = true;
@@ -155,10 +168,6 @@ class Email_Service {
 
 			if ( '' !== $id ) {
 				$seen_ids[ $id ] = true;
-			}
-
-			if ( $email_seen || $id_seen ) {
-				continue;
 			}
 
 			$unique[] = $subscriber;
