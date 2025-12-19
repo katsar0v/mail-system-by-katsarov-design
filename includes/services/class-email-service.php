@@ -145,11 +145,17 @@ class Email_Service {
 			$email = isset( $subscriber->email ) ? strtolower( trim( $subscriber->email ) ) : '';
 			$id    = isset( $subscriber->id ) ? (string) $subscriber->id : '';
 
-			if ( $email && isset( $seen_emails[ $email ] ) ) {
-				continue;
-			}
+			$already_seen = ( $email && isset( $seen_emails[ $email ] ) ) || ( '' !== $id && isset( $seen_ids[ $id ] ) );
 
-			if ( '' !== $id && isset( $seen_ids[ $id ] ) ) {
+			if ( $already_seen ) {
+				if ( $email ) {
+					$seen_emails[ $email ] = true;
+				}
+
+				if ( '' !== $id ) {
+					$seen_ids[ $id ] = true;
+				}
+
 				continue;
 			}
 
