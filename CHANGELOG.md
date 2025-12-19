@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2025-12-19
+
 ### Added
+
 - **Lists Column in Subscribers Page** (Issue #84)
   - New "Lists" column displaying which list(s) each subscriber belongs to
   - Multiple lists are stacked vertically for easy readability
@@ -113,6 +116,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added `wp_unslash()` before sanitization on GET parameters
   - Fixed unsanitized GET parameters in nonce verification
   - Improved REMOTE_ADDR handling with proper validation
+
+### Fixed
+- **Missing Translation**
+  - Added missing translation for "Total Subscribers" in Bulgarian language
 
 ### Planned
 - Open and click statistics
