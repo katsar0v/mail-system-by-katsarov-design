@@ -17,3 +17,26 @@
     color: $color-error !important;
   }
 }
+
+// Lists column in subscribers table
+.mskd-lists-column {
+  max-width: 150px;
+}
+
+.mskd-list-badge {
+  display: block;
+  padding: 2px 6px;
+  margin-bottom: 3px;
+  background: #f0f0f1;
+  border-radius: 3px;
+  font-size: 12px;
+  line-height: 1.4;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.mskd-text-muted {
+  color: #666;
+}

@@ -212,3 +212,41 @@
     color: $color-wp-text-light;
     cursor: help;
 }
+
+// Subscribers Stats Box
+.mskd-subscribers-stats {
+	display: flex;
+	gap: 20px;
+	margin-bottom: 20px;
+	flex-wrap: wrap;
+
+	.mskd-stat-card {
+		background: #fff;
+		border: 1px solid #ccd0d4;
+		border-left: 4px solid $color-primary;
+		padding: 15px 20px;
+		box-shadow: 0 1px 1px rgba(0,0,0,.04);
+		flex: 1;
+		min-width: 150px;
+		display: flex;
+		flex-direction: column;
+
+		.mskd-stat-label {
+			color: #646970;
+			font-size: 13px;
+			font-weight: 500;
+			text-transform: uppercase;
+			margin-bottom: 5px;
+		}
+
+		.mskd-stat-value {
+			font-size: 24px;
+			font-weight: 600;
+			color: #1d2327;
+
+			&.mskd-text-active { color: $color-success; }
+			&.mskd-text-inactive { color: $color-warning; }
+			&.mskd-text-unsubscribed { color: $color-error; }
+		}
+	}
+}
