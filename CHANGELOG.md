@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Lists Column in Subscribers Page** (Issue #84)
+  - New "Lists" column displaying which list(s) each subscriber belongs to
+  - Multiple lists are stacked vertically for easy readability
+  - Efficient batch query to fetch list data for all displayed subscribers
+  - Added `batch_get_lists()` method to Subscriber_Service for optimized fetching
 - **Option to hide Name field in Subscribe Form**
   - New "Show Name Field" setting in Admin > Settings > Subscription Form
   - Toggle to show or hide the Name field in the public subscription form
