@@ -281,7 +281,7 @@ $emails_per_minute = isset( $settings['emails_per_minute'] ) ? absint( $settings
 						</td>
 						<td>
 							<?php if ( $campaign->type === 'one_time' ) : ?>
-								<span class="mskd-badge mskd-badge-onetime"><?php esc_html_e( 'One-time', 'mail-system' ); ?></span>
+								<span class="mskd-badge mskd-badge-onetime"><?php echo esc_html( _x( 'One-time', 'campaign type', 'mail-system' ) ); ?></span>
 							<?php else : ?>
 								<span class="mskd-badge mskd-badge-campaign"><?php esc_html_e( 'Campaign', 'mail-system' ); ?></span>
 							<?php endif; ?>
@@ -337,16 +337,16 @@ $emails_per_minute = isset( $settings['emails_per_minute'] ) ? absint( $settings
 							<span class="mskd-status mskd-status-<?php echo esc_attr( $campaign->status ); ?>">
 								<?php
 								$statuses = array(
-									'pending'    => __( 'Pending', 'mail-system' ),
-									'processing' => __( 'Processing', 'mail-system' ),
-									'completed'  => __( 'Completed', 'mail-system' ),
-									'cancelled'  => __( 'Cancelled', 'mail-system' ),
+									'pending'    => _x( 'Pending', 'campaign status', 'mail-system' ),
+									'processing' => _x( 'Processing', 'campaign status', 'mail-system' ),
+									'completed'  => _x( 'Completed', 'campaign status', 'mail-system' ),
+									'cancelled'  => _x( 'Cancelled', 'campaign status', 'mail-system' ),
 								);
 								echo esc_html( $statuses[ $campaign->status ] ?? $campaign->status );
 								?>
 							</span>
 							<?php if ( $is_future_scheduled && $campaign->status === 'pending' ) : ?>
-								<br><small class="mskd-scheduled-badge"><?php esc_html_e( 'Scheduled', 'mail-system' ); ?></small>
+								<br><small class="mskd-scheduled-badge"><?php echo esc_html( _x( 'Scheduled', 'campaign status', 'mail-system' ) ); ?></small>
 							<?php endif; ?>
 						</td>
 						<td>

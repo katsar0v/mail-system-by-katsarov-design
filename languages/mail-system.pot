@@ -2981,3 +2981,103 @@ msgstr ""
 #: admin/partials/api-access.php:74
 msgid "e.g. Newsletter scheduler"
 msgstr ""
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign status"
+msgid "Pending"
+msgstr ""
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign status"
+msgid "Processing"
+msgstr ""
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign status"
+msgid "Completed"
+msgstr ""
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign status"
+msgid "Cancelled"
+msgstr ""
+
+#: admin/partials/queue.php
+msgctxt "campaign status"
+msgid "Scheduled"
+msgstr ""
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Pending"
+msgstr ""
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Processing"
+msgstr ""
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Sent"
+msgstr ""
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Failed"
+msgstr ""
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Cancelled"
+msgstr ""
+
+#: admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Scheduled"
+msgstr ""
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign type"
+msgid "One-time"
+msgstr ""
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "table column header"
+msgid "Sent"
+msgstr ""
+
+#: admin/partials/queue-detail.php
+msgctxt "table column header"
+msgid "Opened"
+msgstr ""
+
+#: admin/partials/queue-legacy.php
+msgctxt "table column header"
+msgid "Scheduled"
+msgstr ""
+
+#: admin/partials/subscribers.php, includes/Admin/class-admin-assets.php
+msgctxt "subscriber status"
+msgid "Active"
+msgstr ""
+
+#: admin/partials/subscribers.php, includes/Admin/class-admin-assets.php
+msgctxt "subscriber status"
+msgid "Inactive"
+msgstr ""
+
+#: admin/partials/subscribers.php
+msgctxt "subscriber status"
+msgid "Unsubscribed"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgctxt "cron status"
+msgid "Active"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgctxt "cron status"
+msgid "Inactive"
+msgstr ""

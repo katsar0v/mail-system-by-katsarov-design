@@ -160,7 +160,7 @@ $emails_per_minute = isset( $settings['emails_per_minute'] ) ? absint( $settings
 				<h3><?php esc_html_e( 'Cron status', 'mail-system' ); ?></h3>
 				<?php if ( $next_cron ) : ?>
 					<div class="mskd-stat-info">
-						<span class="mskd-cron-active"><?php esc_html_e( 'Active', 'mail-system' ); ?></span>
+						<span class="mskd-cron-active"><?php echo esc_html( _x( 'Active', 'cron status', 'mail-system' ) ); ?></span>
 					<?php
 					/* translators: %s: next cron scheduled time */
 					printf( esc_html__( 'Next run: %s', 'mail-system' ), '<p>' . esc_html( date_i18n( 'd.m.Y H:i:s', $next_cron ) ) . '</p>' );
@@ -168,7 +168,7 @@ $emails_per_minute = isset( $settings['emails_per_minute'] ) ? absint( $settings
 					</div>
 				<?php else : ?>
 					<div class="mskd-stat-info">
-						<span class="mskd-cron-inactive"><?php esc_html_e( 'Inactive', 'mail-system' ); ?></span>
+						<span class="mskd-cron-inactive"><?php echo esc_html( _x( 'Inactive', 'cron status', 'mail-system' ) ); ?></span>
 					</div>
 				<?php endif; ?>
 				<p class="description">

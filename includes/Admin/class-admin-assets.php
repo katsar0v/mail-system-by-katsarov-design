@@ -173,8 +173,8 @@ class Admin_Assets {
 			'copy_error'                          => __( 'Copy failed', 'mail-system' ),
 			'no_subscribers_selected'             => __( 'No subscribers selected.', 'mail-system' ),
 			'no_lists_selected'                   => __( 'No lists selected.', 'mail-system' ),
-			'status_active'                       => __( 'Active', 'mail-system' ),
-			'status_inactive'                     => __( 'Inactive', 'mail-system' ),
+			'status_active'                       => _x( 'Active', 'subscriber status', 'mail-system' ),
+			'status_inactive'                     => _x( 'Inactive', 'subscriber status', 'mail-system' ),
 		);
 	}
 }

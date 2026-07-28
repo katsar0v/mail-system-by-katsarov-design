@@ -169,16 +169,16 @@ $can_cancel = in_array( $campaign->status, array( 'pending', 'processing' ), tru
 			<span class="mskd-status mskd-status-<?php echo esc_attr( $campaign->status ); ?>">
 				<?php
 				$statuses = array(
-					'pending'    => __( 'Pending', 'mail-system' ),
-					'processing' => __( 'Processing', 'mail-system' ),
-					'completed'  => __( 'Completed', 'mail-system' ),
-					'cancelled'  => __( 'Cancelled', 'mail-system' ),
+					'pending'    => _x( 'Pending', 'campaign status', 'mail-system' ),
+					'processing' => _x( 'Processing', 'campaign status', 'mail-system' ),
+					'completed'  => _x( 'Completed', 'campaign status', 'mail-system' ),
+					'cancelled'  => _x( 'Cancelled', 'campaign status', 'mail-system' ),
 				);
 				echo esc_html( $statuses[ $campaign->status ] ?? $campaign->status );
 				?>
 			</span>
 			<?php if ( $campaign->type === 'one_time' ) : ?>
-				<span class="mskd-badge mskd-badge-onetime"><?php _e( 'One-time', 'mail-system' ); ?></span>
+				<span class="mskd-badge mskd-badge-onetime"><?php echo esc_html( _x( 'One-time', 'campaign type', 'mail-system' ) ); ?></span>
 			<?php else : ?>
 				<span class="mskd-badge mskd-badge-campaign"><?php _e( 'Campaign', 'mail-system' ); ?></span>
 			<?php endif; ?>
@@ -413,8 +413,8 @@ $can_cancel = in_array( $campaign->status, array( 'pending', 'processing' ), tru
 				<th scope="col"><?php _e( 'Recipient', 'mail-system' ); ?></th>
 				<th scope="col" style="width: 100px;"><?php _e( 'Status', 'mail-system' ); ?></th>
 				<th scope="col" style="width: 80px;"><?php _e( 'Attempts', 'mail-system' ); ?></th>
-				<th scope="col" style="width: 140px;"><?php _e( 'Sent', 'mail-system' ); ?></th>
-				<th scope="col" style="width: 160px;"><?php _e( 'Opened', 'mail-system' ); ?></th>
+				<th scope="col" style="width: 140px;"><?php echo esc_html( _x( 'Sent', 'table column header', 'mail-system' ) ); ?></th>
+				<th scope="col" style="width: 160px;"><?php echo esc_html( _x( 'Opened', 'table column header', 'mail-system' ) ); ?></th>
 				<th scope="col" style="width: 180px;"><?php _e( 'Clicks', 'mail-system' ); ?></th>
 				<th scope="col"><?php _e( 'Error', 'mail-system' ); ?></th>
 				<th scope="col" style="width: 80px;"><?php _e( 'Actions', 'mail-system' ); ?></th>
@@ -456,11 +456,11 @@ $can_cancel = in_array( $campaign->status, array( 'pending', 'processing' ), tru
 							<span class="mskd-status mskd-status-<?php echo esc_attr( $item->status ); ?>">
 								<?php
 								$item_statuses = array(
-									'pending'    => __( 'Pending', 'mail-system' ),
-									'processing' => __( 'Processing', 'mail-system' ),
-									'sent'       => __( 'Sent', 'mail-system' ),
-									'failed'     => __( 'Failed', 'mail-system' ),
-									'cancelled'  => __( 'Cancelled', 'mail-system' ),
+									'pending'    => _x( 'Pending', 'email status', 'mail-system' ),
+									'processing' => _x( 'Processing', 'email status', 'mail-system' ),
+									'sent'       => _x( 'Sent', 'email status', 'mail-system' ),
+									'failed'     => _x( 'Failed', 'email status', 'mail-system' ),
+									'cancelled'  => _x( 'Cancelled', 'email status', 'mail-system' ),
 								);
 								echo esc_html( $item_statuses[ $item->status ] ?? $item->status );
 								?>

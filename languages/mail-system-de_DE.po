@@ -3037,3 +3037,103 @@ msgstr "Schreibzugriff erfordert den Lese-Geltungsbereich für die entsprechende
 #: admin/partials/api-access.php:74
 msgid "e.g. Newsletter scheduler"
 msgstr "z. B. Newsletter-Planer"
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign status"
+msgid "Pending"
+msgstr "Ausstehend"
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign status"
+msgid "Processing"
+msgstr "In Bearbeitung"
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign status"
+msgid "Completed"
+msgstr "Abgeschlossen"
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign status"
+msgid "Cancelled"
+msgstr "Abgebrochen"
+
+#: admin/partials/queue.php
+msgctxt "campaign status"
+msgid "Scheduled"
+msgstr "Geplant"
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Pending"
+msgstr "Ausstehend"
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Processing"
+msgstr "In Bearbeitung"
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Sent"
+msgstr "Gesendet"
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Failed"
+msgstr "Fehlgeschlagen"
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Cancelled"
+msgstr "Abgebrochen"
+
+#: admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Scheduled"
+msgstr "Geplant"
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign type"
+msgid "One-time"
+msgstr "Einmalig"
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "table column header"
+msgid "Sent"
+msgstr "Gesendet am"
+
+#: admin/partials/queue-detail.php
+msgctxt "table column header"
+msgid "Opened"
+msgstr "Geöffnet am"
+
+#: admin/partials/queue-legacy.php
+msgctxt "table column header"
+msgid "Scheduled"
+msgstr "Geplant für"
+
+#: admin/partials/subscribers.php, includes/Admin/class-admin-assets.php
+msgctxt "subscriber status"
+msgid "Active"
+msgstr "Aktiv"
+
+#: admin/partials/subscribers.php, includes/Admin/class-admin-assets.php
+msgctxt "subscriber status"
+msgid "Inactive"
+msgstr "Inaktiv"
+
+#: admin/partials/subscribers.php
+msgctxt "subscriber status"
+msgid "Unsubscribed"
+msgstr "Abgemeldet"
+
+#: admin/partials/dashboard.php
+msgctxt "cron status"
+msgid "Active"
+msgstr "Aktiv"
+
+#: admin/partials/dashboard.php
+msgctxt "cron status"
+msgid "Inactive"
+msgstr "Inaktiv"
