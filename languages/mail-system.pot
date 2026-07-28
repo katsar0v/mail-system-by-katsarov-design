@@ -1,15 +1,15 @@
-# Copyright (C) 2025 Katsarov Design
+# Copyright (C) 2026 Katsarov Design
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Mail System by Katsarov Design 1.1.0\n"
+"Project-Id-Version: Mail System by Katsarov Design 1.1.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mail-system\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-12-05T14:51:43+00:00\n"
+"POT-Creation-Date: 2026-07-28T08:41:45+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: mail-system\n"
@@ -39,8 +39,142 @@ msgstr ""
 msgid "https://katsarov.design"
 msgstr ""
 
+#: admin/partials/api-access.php:21
+msgid "Read (list lookup, campaign status)"
+msgstr ""
+
+#: admin/partials/api-access.php:22
+msgid "Write (schedule and cancel campaigns)"
+msgstr ""
+
+#: admin/partials/api-access.php:26
+msgid "30 days"
+msgstr ""
+
+#: admin/partials/api-access.php:27
+msgid "90 days"
+msgstr ""
+
+#: admin/partials/api-access.php:28
+msgid "365 days"
+msgstr ""
+
+#: admin/partials/api-access.php:29
+msgid "Never expires"
+msgstr ""
+
+#: admin/partials/api-access.php:35
+#: includes/Admin/class-admin-menu.php:156
+#: includes/Admin/class-admin-menu.php:157
+msgid "API Access"
+msgstr ""
+
+#: admin/partials/api-access.php:40
+msgid "Create JSON Web Tokens (JWT) to authenticate REST API requests, for example to schedule newsletters from an external system."
+msgstr ""
+
+#. translators: %s: REST API base URL
+#: admin/partials/api-access.php:46
+#, php-format
+msgid "Base URL: %s"
+msgstr ""
+
+#: admin/partials/api-access.php:54
+msgid "Token created"
+msgstr ""
+
+#: admin/partials/api-access.php:55
+msgid "Copy this token now. For your security it is shown only once and cannot be retrieved later."
+msgstr ""
+
+#: admin/partials/api-access.php:60
+msgid "Send it as an HTTP header:"
+msgstr ""
+
+#: admin/partials/api-access.php:66
+msgid "Create a new token"
+msgstr ""
+
+#: admin/partials/api-access.php:71
+msgid "Token name"
+msgstr ""
+
+#: admin/partials/api-access.php:74
+msgid "e.g. Newsletter scheduler"
+msgstr ""
+
+#: admin/partials/api-access.php:75
+msgid "A label to help you recognize this token later."
+msgstr ""
+
+#: admin/partials/api-access.php:79
+#: admin/partials/api-access.php:122
+msgid "Scopes"
+msgstr ""
+
+#: admin/partials/api-access.php:91
+msgid "Write access requires the read scope for the corresponding lookups."
+msgstr ""
+
+#: admin/partials/api-access.php:95
+msgid "Expiry"
+msgstr ""
+
+#: admin/partials/api-access.php:109
+msgid "Generate token"
+msgstr ""
+
+#: admin/partials/api-access.php:114
+msgid "Active tokens"
+msgstr ""
+
+#: admin/partials/api-access.php:116
+msgid "No API tokens have been created yet."
+msgstr ""
+
+#: admin/partials/api-access.php:121
+#: admin/partials/lists.php:104
+#: public/partials/subscribe-form.php:24
+msgid "Name"
+msgstr ""
+
+#: admin/partials/api-access.php:123
+msgid "Expires"
+msgstr ""
+
+#: admin/partials/api-access.php:124
+#: admin/partials/queue.php:245
+msgid "Created"
+msgstr ""
+
+#: admin/partials/api-access.php:125
+msgid "Last used"
+msgstr ""
+
+#: admin/partials/api-access.php:126
+#: admin/partials/lists.php:107
+#: admin/partials/queue-detail.php:420
+#: admin/partials/queue-legacy.php:128
+#: admin/partials/queue.php:247
+#: admin/partials/subscribers.php:359
+msgid "Actions"
+msgstr ""
+
+#: admin/partials/api-access.php:134
+#: admin/partials/api-access.php:136
+msgid "Never"
+msgstr ""
+
+#: admin/partials/api-access.php:138
+msgid "Revoke this token? Applications using it will stop working immediately."
+msgstr ""
+
+#: admin/partials/api-access.php:142
+msgid "Revoke"
+msgstr ""
+
 #: admin/partials/compose-wizard.php:81
-#: admin/partials/compose.php:64
+#: admin/partials/compose.php:67
 #: admin/partials/dashboard.php:72
 #: includes/Admin/class-admin-menu.php:116
 #: includes/Admin/class-admin-menu.php:117
@@ -76,7 +210,7 @@ msgid "Create your email using the HTML editor with full control over the code."
 msgstr ""
 
 #: admin/partials/compose-wizard.php:134
-#: admin/partials/templates.php:57
+#: admin/partials/templates.php:60
 #: includes/Admin/class-admin-menu.php:106
 #: includes/Admin/class-admin-menu.php:107
 msgid "Visual Editor"
@@ -87,7 +221,7 @@ msgid "Build your email with our drag-and-drop visual editor. No coding required
 msgstr ""
 
 #: admin/partials/compose-wizard.php:146
-#: admin/partials/compose.php:74
+#: admin/partials/compose.php:77
 msgid "Use a Template"
 msgstr ""
 
@@ -100,12 +234,12 @@ msgid "Select a Template"
 msgstr ""
 
 #: admin/partials/compose-wizard.php:173
-#: admin/partials/templates.php:169
+#: admin/partials/templates.php:172
 msgid "Predefined"
 msgstr ""
 
 #: admin/partials/compose-wizard.php:173
-#: admin/partials/templates.php:205
+#: admin/partials/templates.php:208
 msgid "Custom"
 msgstr ""
 
@@ -114,7 +248,7 @@ msgid "No templates available."
 msgstr ""
 
 #: admin/partials/compose-wizard.php:183
-#: admin/partials/templates.php:236
+#: admin/partials/templates.php:239
 msgid "Create your first template"
 msgstr ""
 
@@ -136,13 +270,13 @@ msgid "The visual editor will open in a new window. When you save your template,
 msgstr ""
 
 #: admin/partials/compose-wizard.php:225
-#: admin/partials/compose.php:78
+#: admin/partials/compose.php:81
 msgid "Open Visual Editor"
 msgstr ""
 
 #: admin/partials/compose-wizard.php:232
 #: admin/partials/compose-wizard.php:288
-#: admin/partials/compose-wizard.php:548
+#: admin/partials/compose-wizard.php:552
 #: includes/Admin/class-admin-visual-editor.php:121
 msgid "Back"
 msgstr ""
@@ -161,25 +295,25 @@ msgstr ""
 
 #: admin/partials/compose-wizard.php:252
 #: admin/partials/compose-wizard.php:330
-#: admin/partials/compose.php:128
+#: admin/partials/compose.php:135
 #: admin/partials/one-time-email.php:71
-#: admin/partials/queue-legacy.php:120
-#: admin/partials/queue.php:221
+#: admin/partials/queue-legacy.php:123
+#: admin/partials/queue.php:238
 msgid "Subject"
 msgstr ""
 
 #: admin/partials/compose-wizard.php:261
 #: admin/partials/compose-wizard.php:341
-#: admin/partials/compose.php:144
+#: admin/partials/compose.php:154
 #: admin/partials/one-time-email.php:79
-#: admin/partials/templates.php:111
+#: admin/partials/templates.php:114
 msgid "Content"
 msgstr ""
 
 #: admin/partials/compose-wizard.php:278
-#: admin/partials/compose.php:161
-#: admin/partials/one-time-email.php:92
-#: admin/partials/templates.php:129
+#: admin/partials/compose.php:171
+#: admin/partials/one-time-email.php:96
+#: admin/partials/templates.php:132
 msgid "Available placeholders:"
 msgstr ""
 
@@ -196,270 +330,269 @@ msgid "Content Preview (with header & footer)"
 msgstr ""
 
 #: admin/partials/compose-wizard.php:351
-#: admin/partials/lists.php:199
-#: admin/partials/subscribers.php:356
+#: admin/partials/lists.php:203
+#: admin/partials/subscribers.php:421
 msgid "Edit"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:360
+#: admin/partials/compose-wizard.php:361
 msgid "Email content preview"
 msgstr ""
 
 #. translators: %s: template name
-#: admin/partials/compose-wizard.php:375
-#: admin/partials/compose.php:136
+#: admin/partials/compose-wizard.php:376
+#: admin/partials/compose.php:144
 #, php-format
 msgid "Using template: %s"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:383
+#: admin/partials/compose-wizard.php:384
 msgid "No content set. Please go back to Step 2 to add content."
 msgstr ""
 
-#: admin/partials/compose-wizard.php:392
-#: admin/partials/compose.php:93
+#: admin/partials/compose-wizard.php:393
+#: admin/partials/compose.php:96
 msgid "Send to lists"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:401
-#: admin/partials/compose.php:103
-#: admin/partials/lists.php:135
+#. translators: %d: number of subscribers in the list
+#: admin/partials/compose-wizard.php:402
+#: admin/partials/compose.php:107
+#: admin/partials/lists.php:139
 msgid "Automated"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:406
-#: admin/partials/compose.php:109
+#. translators: %d: subscriber count
+#: admin/partials/compose-wizard.php:409
+#: admin/partials/compose.php:115
 #, php-format
 msgid "%d subscribers"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:411
-#: admin/partials/compose.php:114
+#: admin/partials/compose-wizard.php:415
+#: admin/partials/compose.php:121
 msgid "Start typing to search. You can select multiple lists."
 msgstr ""
 
-#: admin/partials/compose-wizard.php:415
+#: admin/partials/compose-wizard.php:419
 msgid "No lists available."
 msgstr ""
 
-#: admin/partials/compose-wizard.php:417
+#: admin/partials/compose-wizard.php:421
 #: admin/partials/shortcodes.php:79
 msgid "Create a list"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:427
-#: admin/partials/one-time-email.php:99
+#: admin/partials/compose-wizard.php:431
+#: admin/partials/one-time-email.php:103
 msgid "Bcc (Optional)"
 msgstr ""
 
-#: admin/partials/queue-detail.php:152
-msgid "BCC:"
-msgstr ""
-
-#: admin/partials/compose-wizard.php:430
-#: admin/partials/one-time-email.php:102
+#: admin/partials/compose-wizard.php:434
+#: admin/partials/one-time-email.php:106
 msgid "email1@example.com, email2@example.com"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:432
+#: admin/partials/compose-wizard.php:436
 msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this campaign. Bcc recipients are hidden from other recipients."
 msgstr ""
 
-#: admin/partials/compose-wizard.php:440
-#: admin/partials/compose.php:170
-#: admin/partials/one-time-email.php:112
+#: admin/partials/compose-wizard.php:444
+#: admin/partials/compose.php:180
+#: admin/partials/one-time-email.php:116
 msgid "Sender Email"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:446
-#: admin/partials/compose.php:176
-#: admin/partials/one-time-email.php:118
+#: admin/partials/compose-wizard.php:450
+#: admin/partials/compose.php:186
+#: admin/partials/one-time-email.php:122
 msgid "Use default sender"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:452
-#: admin/partials/compose.php:182
-#: admin/partials/one-time-email.php:124
+#. translators: %s: default email address
+#: admin/partials/compose-wizard.php:457
+#: admin/partials/compose.php:193
+#: admin/partials/one-time-email.php:129
 #, php-format
 msgid "(%s)"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:461
-#: admin/partials/compose.php:191
-#: admin/partials/one-time-email.php:133
+#: admin/partials/compose-wizard.php:466
+#: admin/partials/compose.php:202
+#: admin/partials/one-time-email.php:138
 msgid "Use custom sender"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:469
-#: admin/partials/compose.php:199
-#: admin/partials/one-time-email.php:141
+#: admin/partials/compose-wizard.php:473
+#: admin/partials/compose.php:210
+#: admin/partials/one-time-email.php:145
 msgid "From Email"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:473
-#: admin/partials/compose.php:203
-#: admin/partials/one-time-email.php:145
+#: admin/partials/compose-wizard.php:477
+#: admin/partials/compose.php:214
+#: admin/partials/one-time-email.php:149
 msgid "sender@example.com"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:475
-#: admin/partials/compose.php:205
+#: admin/partials/compose-wizard.php:479
+#: admin/partials/compose.php:216
 msgid "Email address that will appear as the sender of this campaign."
 msgstr ""
 
-#: admin/partials/compose-wizard.php:481
-#: admin/partials/compose.php:211
-#: admin/partials/one-time-email.php:154
+#: admin/partials/compose-wizard.php:485
+#: admin/partials/compose.php:222
+#: admin/partials/one-time-email.php:158
 msgid "From Name"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:485
-#: admin/partials/compose.php:215
-#: admin/partials/one-time-email.php:158
+#: admin/partials/compose-wizard.php:489
+#: admin/partials/compose.php:226
+#: admin/partials/one-time-email.php:162
+#: admin/partials/settings.php:57
 msgid "Sender Name"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:487
-#: admin/partials/compose.php:217
-#: admin/partials/one-time-email.php:161
+#: admin/partials/compose-wizard.php:491
+#: admin/partials/compose.php:228
+#: admin/partials/one-time-email.php:165
 msgid "Display name for the sender (optional)."
 msgstr ""
 
-#: admin/partials/compose-wizard.php:499
-#: admin/partials/compose.php:228
-#: admin/partials/one-time-email.php:172
+#: admin/partials/compose-wizard.php:502
+#: admin/partials/compose.php:239
+#: admin/partials/one-time-email.php:175
 msgid "Scheduling"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:503
-#: admin/partials/compose.php:232
-#: admin/partials/one-time-email.php:176
-#: admin/partials/one-time-email.php:228
-#: admin/partials/one-time-email.php:229
+#: admin/partials/compose-wizard.php:506
+#: admin/partials/compose.php:243
+#: admin/partials/one-time-email.php:179
+#: admin/partials/one-time-email.php:233
+#: admin/partials/one-time-email.php:234
 msgid "Send now"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:504
-#: admin/partials/compose.php:233
-#: admin/partials/one-time-email.php:177
+#: admin/partials/compose-wizard.php:507
+#: admin/partials/compose.php:244
+#: admin/partials/one-time-email.php:180
 msgid "Specific date and time"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:505
-#: admin/partials/compose.php:234
-#: admin/partials/one-time-email.php:178
+#: admin/partials/compose-wizard.php:508
+#: admin/partials/compose.php:245
+#: admin/partials/one-time-email.php:181
 msgid "After a set time"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:519
-#: admin/partials/compose.php:248
-#: admin/partials/one-time-email.php:192
+#. translators: %s: timezone string
+#: admin/partials/compose-wizard.php:523
+#: admin/partials/compose.php:260
+#: admin/partials/one-time-email.php:196
 #, php-format
 msgid "Timezone: %s. Select time in 10-minute intervals."
 msgstr ""
 
-#: admin/partials/compose-wizard.php:535
-#: admin/partials/compose.php:272
-#: admin/partials/one-time-email.php:216
+#: admin/partials/compose-wizard.php:539
+#: admin/partials/compose.php:285
+#: admin/partials/one-time-email.php:221
 msgid "minutes"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:536
-#: admin/partials/compose.php:273
-#: admin/partials/one-time-email.php:217
+#: admin/partials/compose-wizard.php:540
+#: admin/partials/compose.php:286
+#: admin/partials/one-time-email.php:222
 msgid "hours"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:537
-#: admin/partials/compose.php:274
-#: admin/partials/one-time-email.php:218
+#: admin/partials/compose-wizard.php:541
+#: admin/partials/compose.php:287
+#: admin/partials/one-time-email.php:223
 msgid "days"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:539
-#: admin/partials/compose.php:276
+#: admin/partials/compose-wizard.php:543
+#: admin/partials/compose.php:289
 msgid "Emails will be sent after the specified time."
 msgstr ""
 
-#: admin/partials/compose-wizard.php:551
 #: admin/partials/compose-wizard.php:555
+#: admin/partials/compose-wizard.php:559
 msgid "Send Now"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:552
+#: admin/partials/compose-wizard.php:556
 msgid "Schedule Sending"
 msgstr ""
 
-#: admin/partials/compose-wizard.php:1067
+#: admin/partials/compose-wizard.php:1165
+msgid "Please select at least one list."
+msgstr ""
+
+#: admin/partials/compose-wizard.php:1175
+#: admin/partials/compose.php:346
+#: admin/partials/one-time-email.php:434
 msgid "Please enter a valid sender email address."
 msgstr ""
 
-#: admin/partials/compose.php:70
+#: admin/partials/compose.php:73
 msgid "Choose how to compose your email:"
 msgstr ""
 
-#: admin/partials/compose.php:82
+#: admin/partials/compose.php:85
 msgid "Or use the standard editor below to compose your email with HTML."
 msgstr ""
 
-#: admin/partials/compose.php:118
-#: admin/partials/lists.php:211
-#: admin/partials/subscribers.php:140
+#: admin/partials/compose.php:125
+#: admin/partials/lists.php:215
+#: admin/partials/subscribers.php:142
 msgid "No lists created."
 msgstr ""
 
-#: admin/partials/compose.php:120
+#: admin/partials/compose.php:127
 msgid "Create list"
 msgstr ""
 
-#: admin/partials/compose.php:256
-#: admin/partials/one-time-email.php:200
+#. translators: %s: current server time in H:i format
+#. translators: %s: current time
+#: admin/partials/compose.php:269
+#: admin/partials/one-time-email.php:205
 #, php-format
 msgid "Current server time: %s"
 msgstr ""
 
-#: admin/partials/compose.php:284
-#: admin/partials/compose.php:285
+#: admin/partials/compose.php:297
+#: admin/partials/compose.php:298
 msgid "Add to queue"
 msgstr ""
 
-#: admin/partials/compose.php:286
-#: admin/partials/one-time-email.php:230
+#: admin/partials/compose.php:299
+#: admin/partials/one-time-email.php:235
 msgid "Schedule sending"
 msgstr ""
 
 #: admin/partials/dashboard-widget.php:19
 #: admin/partials/dashboard.php:84
-#: admin/partials/queue-detail.php:118
-#: admin/partials/queue-detail.php:241
-#: admin/partials/queue-detail.php:316
-#: admin/partials/queue-legacy.php:88
-#: admin/partials/queue-legacy.php:167
-#: admin/partials/queue.php:162
-#: admin/partials/queue.php:277
-#: admin/partials/queue.php:285
+#: admin/partials/queue-detail.php:334
+#: admin/partials/queue-legacy.php:90
+#: admin/partials/queue.php:176
+#: admin/partials/queue.php:302
 msgid "Pending"
 msgstr ""
 
 #: admin/partials/dashboard-widget.php:23
 #: admin/partials/dashboard.php:88
-#: admin/partials/queue-detail.php:248
-#: admin/partials/queue-detail.php:275
-#: admin/partials/queue-detail.php:318
-#: admin/partials/queue-legacy.php:95
-#: admin/partials/queue-legacy.php:124
-#: admin/partials/queue-legacy.php:169
-#: admin/partials/queue.php:272
+#: admin/partials/queue-detail.php:341
+#: admin/partials/queue-legacy.php:97
+#: admin/partials/queue.php:297
 msgid "Sent"
 msgstr ""
 
 #: admin/partials/dashboard-widget.php:27
 #: admin/partials/dashboard.php:92
-#: admin/partials/queue-detail.php:255
-#: admin/partials/queue-detail.php:319
-#: admin/partials/queue-legacy.php:102
-#: admin/partials/queue-legacy.php:170
-#: admin/partials/queue.php:274
+#: admin/partials/queue-detail.php:362
+#: admin/partials/queue-legacy.php:104
+#: admin/partials/queue.php:299
 msgid "Failed"
 msgstr ""
 
@@ -492,21 +625,21 @@ msgid "Quick Actions"
 msgstr ""
 
 #: admin/partials/dashboard.php:66
-#: admin/partials/subscribers.php:62
-#: admin/partials/subscribers.php:172
+#: admin/partials/subscribers.php:64
+#: admin/partials/subscribers.php:174
 msgid "Add subscriber"
 msgstr ""
 
 #: admin/partials/dashboard.php:69
-#: admin/partials/lists.php:50
-#: admin/partials/lists.php:82
+#: admin/partials/lists.php:54
+#: admin/partials/lists.php:86
 msgid "Add list"
 msgstr ""
 
 #: admin/partials/dashboard.php:75
 #: admin/partials/one-time-email.php:38
-#: admin/partials/queue-detail.php:302
-#: admin/partials/queue-legacy.php:152
+#: admin/partials/queue-detail.php:445
+#: admin/partials/queue-legacy.php:155
 #: includes/Admin/class-admin-menu.php:126
 #: includes/Admin/class-admin-menu.php:127
 msgid "One-time email"
@@ -515,110 +648,114 @@ msgstr ""
 #: admin/partials/dashboard.php:115
 #: admin/partials/import-export.php:59
 #: admin/partials/import-export.php:133
-#: admin/partials/lists.php:101
-#: admin/partials/lists.php:145
-#: admin/partials/subscribers.php:49
+#: admin/partials/lists.php:105
+#: admin/partials/lists.php:149
+#: admin/partials/subscribers.php:51
 #: includes/Admin/class-admin-menu.php:76
 #: includes/Admin/class-admin-menu.php:77
 msgid "Subscribers"
 msgstr ""
 
-#: admin/partials/dashboard.php:118
+#. translators: %d: number of active subscribers
+#: admin/partials/dashboard.php:119
 #, php-format
 msgid "Active: %d"
 msgstr ""
 
-#: admin/partials/dashboard.php:119
+#. translators: %d: number of inactive subscribers
+#: admin/partials/dashboard.php:121
 #, php-format
 msgid "Inactive: %d"
 msgstr ""
 
-#: admin/partials/dashboard.php:120
+#. translators: %d: number of unsubscribed subscribers
+#: admin/partials/dashboard.php:123
 #, php-format
 msgid "Unsubscribed: %d"
 msgstr ""
 
-#: admin/partials/dashboard.php:123
+#: admin/partials/dashboard.php:126
 msgid "View all"
 msgstr ""
 
-#: admin/partials/dashboard.php:129
+#: admin/partials/dashboard.php:132
 #: admin/partials/import-export.php:60
 #: admin/partials/import-export.php:134
-#: admin/partials/lists.php:37
-#: admin/partials/subscribers.php:119
+#: admin/partials/lists.php:41
+#: admin/partials/subscribers.php:121
+#: admin/partials/subscribers.php:358
 #: includes/Admin/class-admin-menu.php:86
 #: includes/Admin/class-admin-menu.php:87
 msgid "Lists"
 msgstr ""
 
-#: admin/partials/dashboard.php:132
+#: admin/partials/dashboard.php:135
 msgid "Manage"
 msgstr ""
 
-#: admin/partials/dashboard.php:138
+#: admin/partials/dashboard.php:141
 #: includes/Admin/class-admin-menu.php:136
 #: includes/Admin/class-admin-menu.php:137
 msgid "Queue"
 msgstr ""
 
-#: admin/partials/dashboard.php:141
+#. translators: %d: number of pending emails
+#: admin/partials/dashboard.php:145
 #, php-format
 msgid "Pending: %d"
 msgstr ""
 
-#: admin/partials/dashboard.php:142
+#. translators: %d: number of sent emails
+#: admin/partials/dashboard.php:147
 #, php-format
 msgid "Sent: %d"
 msgstr ""
 
-#: admin/partials/dashboard.php:143
+#. translators: %d: number of failed emails
+#: admin/partials/dashboard.php:149
 #, php-format
 msgid "Failed: %d"
 msgstr ""
 
-#: admin/partials/dashboard.php:144
+#. translators: %d: number of one-time emails
+#: admin/partials/dashboard.php:151
 #, php-format
 msgid "One-time: %d"
 msgstr ""
 
-#: admin/partials/dashboard.php:147
+#: admin/partials/dashboard.php:154
 msgid "View queue"
 msgstr ""
 
-#: admin/partials/dashboard.php:153
+#: admin/partials/dashboard.php:160
 msgid "Cron status"
 msgstr ""
 
-#: admin/partials/dashboard.php:156
-#: admin/partials/import-export.php:88
-#: admin/partials/subscribers.php:106
-#: admin/partials/subscribers.php:248
-#: admin/partials/subscribers.php:338
+#: admin/partials/dashboard.php:163
+msgctxt "cron status"
 msgid "Active"
 msgstr ""
 
-#: admin/partials/dashboard.php:157
+#. translators: %s: next cron scheduled time
+#: admin/partials/dashboard.php:166
 #, php-format
 msgid "Next run: %s"
 msgstr ""
 
-#: admin/partials/dashboard.php:161
-#: admin/partials/import-export.php:89
-#: admin/partials/subscribers.php:109
-#: admin/partials/subscribers.php:254
-#: admin/partials/subscribers.php:339
+#: admin/partials/dashboard.php:171
+msgctxt "cron status"
 msgid "Inactive"
 msgstr ""
 
-#: admin/partials/dashboard.php:165
+#. translators: %d: number of emails per minute
+#: admin/partials/dashboard.php:177
 #, php-format
 msgid "Sending: %d emails/min"
 msgstr ""
 
 #: admin/partials/import-export.php:22
-#: includes/Admin/class-admin-menu.php:156
-#: includes/Admin/class-admin-menu.php:157
+#: includes/Admin/class-admin-menu.php:166
+#: includes/Admin/class-admin-menu.php:167
 msgid "Import / Export"
 msgstr ""
 
@@ -654,10 +791,21 @@ msgstr ""
 msgid "All statuses"
 msgstr ""
 
+#: admin/partials/import-export.php:88
+#: admin/partials/subscribers.php:269
+#: admin/partials/subscribers.php:293
+msgid "Active"
+msgstr ""
+
+#: admin/partials/import-export.php:89
+#: admin/partials/subscribers.php:273
+#: admin/partials/subscribers.php:299
+msgid "Inactive"
+msgstr ""
+
 #: admin/partials/import-export.php:90
-#: admin/partials/subscribers.php:112
-#: admin/partials/subscribers.php:260
-#: admin/partials/subscribers.php:340
+#: admin/partials/subscribers.php:277
+#: admin/partials/subscribers.php:305
 msgid "Unsubscribed"
 msgstr ""
 
@@ -767,12 +915,12 @@ msgid "Optional"
 msgstr ""
 
 #: admin/partials/import-export.php:261
-#: admin/partials/subscribers.php:83
+#: admin/partials/subscribers.php:85
 msgid "First name"
 msgstr ""
 
 #: admin/partials/import-export.php:266
-#: admin/partials/subscribers.php:92
+#: admin/partials/subscribers.php:94
 msgid "Last name"
 msgstr ""
 
@@ -799,7 +947,7 @@ msgid "The CSV file must contain at minimum a \"name\" column."
 msgstr ""
 
 #: admin/partials/import-export.php:303
-#: admin/partials/lists.php:62
+#: admin/partials/lists.php:66
 msgid "List name"
 msgstr ""
 
@@ -807,78 +955,66 @@ msgstr ""
 msgid "List description"
 msgstr ""
 
-#: admin/partials/lists.php:40
-#: admin/partials/subscribers.php:52
+#: admin/partials/lists.php:44
+#: admin/partials/subscribers.php:54
 msgid "Add new"
 msgstr ""
 
-#: admin/partials/lists.php:50
+#: admin/partials/lists.php:54
 msgid "Edit list"
 msgstr ""
 
-#: admin/partials/lists.php:71
+#: admin/partials/lists.php:75
 #: admin/partials/shortcodes.php:93
 msgid "Description"
 msgstr ""
 
-#: admin/partials/lists.php:82
-#: admin/partials/subscribers.php:172
-#: admin/partials/templates.php:140
+#: admin/partials/lists.php:86
+#: admin/partials/subscribers.php:174
+#: admin/partials/templates.php:143
 msgid "Save changes"
 msgstr ""
 
-#: admin/partials/lists.php:84
-#: admin/partials/queue-detail.php:348
-#: admin/partials/queue-detail.php:349
-#: admin/partials/queue-legacy.php:212
-#: admin/partials/queue.php:330
-#: admin/partials/subscribers.php:174
-#: admin/partials/templates.php:142
+#: admin/partials/lists.php:88
+#: admin/partials/queue-detail.php:524
+#: admin/partials/queue-detail.php:525
+#: admin/partials/queue-legacy.php:219
+#: admin/partials/queue.php:389
+#: admin/partials/subscribers.php:176
+#: admin/partials/templates.php:145
 msgid "Cancel"
 msgstr ""
 
-#: admin/partials/lists.php:100
-#: public/partials/subscribe-form.php:23
-msgid "Name"
-msgstr ""
-
-#: admin/partials/lists.php:102
+#: admin/partials/lists.php:106
 msgid "Shortcode"
 msgstr ""
 
-#: admin/partials/lists.php:103
-#: admin/partials/queue-detail.php:277
-#: admin/partials/queue-legacy.php:125
-#: admin/partials/queue.php:228
-#: admin/partials/subscribers.php:308
-msgid "Actions"
-msgstr ""
-
-#: admin/partials/lists.php:134
+#: admin/partials/lists.php:138
 msgid "Automated list from external plugin"
 msgstr ""
 
 #. translators: %d: number of additional subscribers
-#: admin/partials/lists.php:165
+#: admin/partials/lists.php:169
 #, php-format
 msgid "... and %d more"
 msgstr ""
 
-#: admin/partials/lists.php:185
+#: admin/partials/lists.php:189
 msgid "Copy shortcode"
 msgstr ""
 
-#: admin/partials/lists.php:190
+#: admin/partials/lists.php:194
 msgid "Automated lists do not have subscription forms"
 msgstr ""
 
-#: admin/partials/lists.php:195
+#: admin/partials/lists.php:199
 msgid "Send email"
 msgstr ""
 
-#: admin/partials/lists.php:203
-#: admin/partials/subscribers.php:360
-#: admin/partials/templates.php:223
+#: admin/partials/lists.php:207
+#: admin/partials/subscribers.php:322
+#: admin/partials/subscribers.php:425
+#: admin/partials/templates.php:226
 msgid "Delete"
 msgstr ""
 
@@ -902,658 +1038,871 @@ msgstr ""
 msgid "Recipient name (optional). Can be used in content with {recipient_name}."
 msgstr ""
 
-#: admin/partials/one-time-email.php:104
+#: admin/partials/one-time-email.php:108
 msgid "Enter one or more email addresses separated by commas to receive a blind carbon copy of this email. Bcc recipients are hidden from the main recipient."
 msgstr ""
 
-#: admin/partials/one-time-email.php:148
+#: admin/partials/one-time-email.php:152
 msgid "Email address that will appear as the sender of this email."
 msgstr ""
 
-#: admin/partials/one-time-email.php:220
+#: admin/partials/one-time-email.php:225
 msgid "The email will be sent after the specified time."
 msgstr ""
 
-#: admin/partials/one-time-email.php:236
+#: admin/partials/one-time-email.php:241
 msgid "Information"
 msgstr ""
 
-#: admin/partials/one-time-email.php:238
+#: admin/partials/one-time-email.php:243
 msgid "One-time emails can be sent immediately or scheduled for later."
 msgstr ""
 
-#: admin/partials/one-time-email.php:239
+#: admin/partials/one-time-email.php:244
 msgid "They are not saved as templates and do not repeat."
 msgstr ""
 
-#: admin/partials/one-time-email.php:240
+#: admin/partials/one-time-email.php:245
 msgid "All sent one-time emails are logged in the audit history."
 msgstr ""
 
-#: admin/partials/one-time-email.php:241
+#: admin/partials/one-time-email.php:246
 msgid "Scheduled emails can be cancelled from the Queue page."
 msgstr ""
 
-#: admin/partials/one-time-email.php:242
+#: admin/partials/one-time-email.php:247
 msgid "Suitable for: account activation, notifications, event reminders."
 msgstr ""
 
 #: admin/partials/queue-detail.php:25
-#: includes/Admin/class-admin-queue.php:140
+#: includes/Admin/class-admin-queue.php:168
+#: includes/Api/class-rest-controller.php:306
+#: includes/Api/class-rest-controller.php:323
 msgid "Campaign not found."
 msgstr ""
 
-#: admin/partials/queue-detail.php:104
-#: admin/partials/queue-legacy.php:65
+#: admin/partials/queue-detail.php:158
+#: admin/partials/queue-legacy.php:67
 msgid "Back to Queue"
 msgstr ""
 
-#: admin/partials/queue-detail.php:106
+#: admin/partials/queue-detail.php:160
 #, php-format
 msgid "Campaign #%d"
 msgstr ""
 
-#: admin/partials/queue-detail.php:119
-#: admin/partials/queue-detail.php:317
-#: admin/partials/queue-legacy.php:168
-#: admin/partials/queue.php:169
-#: admin/partials/queue.php:286
+#: admin/partials/queue-detail.php:172
+#: admin/partials/queue.php:340
+msgctxt "campaign status"
+msgid "Pending"
+msgstr ""
+
+#: admin/partials/queue-detail.php:173
+#: admin/partials/queue.php:341
+msgctxt "campaign status"
 msgid "Processing"
 msgstr ""
 
-#: admin/partials/queue-detail.php:120
-#: admin/partials/queue.php:176
-#: admin/partials/queue.php:287
+#: admin/partials/queue-detail.php:174
+#: admin/partials/queue.php:342
+msgctxt "campaign status"
 msgid "Completed"
 msgstr ""
 
-#: admin/partials/queue-detail.php:121
-#: admin/partials/queue-detail.php:262
-#: admin/partials/queue-detail.php:320
-#: admin/partials/queue-legacy.php:109
-#: admin/partials/queue-legacy.php:171
-#: admin/partials/queue.php:183
-#: admin/partials/queue.php:288
+#: admin/partials/queue-detail.php:175
+#: admin/partials/queue.php:343
+msgctxt "campaign status"
 msgid "Cancelled"
 msgstr ""
 
-#: admin/partials/queue-detail.php:127
-#: admin/partials/queue.php:190
-#: admin/partials/queue.php:259
+#: admin/partials/queue-detail.php:181
+#: admin/partials/queue.php:284
+msgctxt "campaign type"
 msgid "One-time"
 msgstr ""
 
-#: admin/partials/queue-detail.php:129
-#: admin/partials/queue.php:261
+#: admin/partials/queue-detail.php:183
+#: admin/partials/queue.php:286
 msgid "Campaign"
 msgstr ""
 
-#: admin/partials/queue-detail.php:135
+#: admin/partials/queue-detail.php:189
 msgid "Created:"
 msgstr ""
 
-#: admin/partials/queue-detail.php:139
+#: admin/partials/queue-detail.php:193
 msgid "Scheduled:"
 msgstr ""
 
-#: admin/partials/queue-detail.php:144
+#: admin/partials/queue-detail.php:198
 msgid "Completed:"
 msgstr ""
 
-#: admin/partials/queue-detail.php:150
+#: admin/partials/queue-detail.php:204
 msgid "Lists:"
 msgstr ""
 
-#: admin/partials/queue-detail.php:162
+#: admin/partials/queue-detail.php:210
+msgid "BCC:"
+msgstr ""
+
+#: admin/partials/queue-detail.php:222
 msgid "total"
 msgstr ""
 
-#: admin/partials/queue-detail.php:165
+#: admin/partials/queue-detail.php:225
 msgid "sent"
 msgstr ""
 
-#: admin/partials/queue-detail.php:169
+#: admin/partials/queue-detail.php:228
+msgid "opened"
+msgstr ""
+
+#. translators: %d: tracking pixel load count
+#: admin/partials/queue-detail.php:234
+#: admin/partials/queue-detail.php:480
+#: admin/partials/queue.php:314
+#, php-format
+msgid "Loads: %d"
+msgstr ""
+
+#: admin/partials/queue-detail.php:242
+msgid "clicked"
+msgstr ""
+
+#. translators: %d: total tracked link clicks
+#: admin/partials/queue-detail.php:249
+#: admin/partials/queue.php:329
+#, php-format
+msgid "Total: %d"
+msgstr ""
+
+#: admin/partials/queue-detail.php:258
 msgid "failed"
 msgstr ""
 
-#: admin/partials/queue-detail.php:174
+#: admin/partials/queue-detail.php:263
 msgid "pending"
 msgstr ""
 
-#: admin/partials/queue-detail.php:179
+#: admin/partials/queue-detail.php:268
 msgid "cancelled"
 msgstr ""
 
-#: admin/partials/queue-detail.php:196
+#: admin/partials/queue-detail.php:275
+msgid "Engagement analytics are approximate. Image privacy proxies can create opens, while security scanners and link prefetching can create clicks before a person interacts with the email. Messages carrying BCC are intentionally untracked to prevent incorrect recipient attribution."
+msgstr ""
+
+#: admin/partials/queue-detail.php:289
 msgid "Are you sure you want to cancel this campaign? All pending emails will be cancelled."
 msgstr ""
 
-#: admin/partials/queue-detail.php:197
+#: admin/partials/queue-detail.php:290
 msgid "Cancel Campaign"
 msgstr ""
 
-#: admin/partials/queue-detail.php:207
+#: admin/partials/queue-detail.php:300
 msgid "Email Content"
 msgstr ""
 
-#: admin/partials/queue-detail.php:213
+#: admin/partials/queue-detail.php:306
 msgid "Subject:"
 msgstr ""
 
-#: admin/partials/queue-detail.php:220
+#: admin/partials/queue-detail.php:313
 msgid "Email Preview (with header & footer)"
 msgstr ""
 
-#: admin/partials/queue-detail.php:223
+#: admin/partials/queue-detail.php:316
 msgid "Email Preview"
 msgstr ""
 
-#: admin/partials/queue-detail.php:234
-#: admin/partials/queue-legacy.php:81
-#: admin/partials/queue.php:148
-#: admin/partials/subscribers.php:242
+#: admin/partials/queue-detail.php:327
+#: admin/partials/queue-legacy.php:83
+#: admin/partials/queue.php:162
+#: admin/partials/subscribers.php:287
 msgid "All"
 msgstr ""
 
-#: admin/partials/queue-detail.php:271
-#: admin/partials/queue-legacy.php:118
-#: admin/partials/queue.php:220
+#: admin/partials/queue-detail.php:348
+msgid "Opened"
+msgstr ""
+
+#: admin/partials/queue-detail.php:355
+msgid "Clicked"
+msgstr ""
+
+#: admin/partials/queue-detail.php:369
+#: admin/partials/queue-legacy.php:111
+#: admin/partials/queue.php:197
+msgid "Cancelled"
+msgstr ""
+
+#: admin/partials/queue-detail.php:377
+msgid "Link performance"
+msgstr ""
+
+#: admin/partials/queue-detail.php:381
+msgid "Link"
+msgstr ""
+
+#: admin/partials/queue-detail.php:382
+msgid "Destination"
+msgstr ""
+
+#: admin/partials/queue-detail.php:383
+msgid "Unique clickers"
+msgstr ""
+
+#: admin/partials/queue-detail.php:384
+msgid "Total clicks"
+msgstr ""
+
+#: admin/partials/queue-detail.php:385
+msgid "Click rate"
+msgstr ""
+
+#: admin/partials/queue-detail.php:386
+msgid "First click"
+msgstr ""
+
+#: admin/partials/queue-detail.php:387
+msgid "Last click"
+msgstr ""
+
+#: admin/partials/queue-detail.php:407
+#: admin/partials/queue.php:240
+msgid "Recipients"
+msgstr ""
+
+#: admin/partials/queue-detail.php:412
+#: admin/partials/queue-legacy.php:121
+#: admin/partials/queue.php:237
 msgid "ID"
 msgstr ""
 
-#: admin/partials/queue-detail.php:272
-#: admin/partials/queue-legacy.php:119
+#: admin/partials/queue-detail.php:413
+#: admin/partials/queue-legacy.php:122
 msgid "Recipient"
 msgstr ""
 
-#: admin/partials/queue-detail.php:273
-#: admin/partials/queue-legacy.php:121
-#: admin/partials/queue.php:225
-#: admin/partials/subscribers.php:101
-#: admin/partials/subscribers.php:306
+#: admin/partials/queue-detail.php:414
+#: admin/partials/queue-legacy.php:124
+#: admin/partials/queue.php:244
+#: admin/partials/subscribers.php:103
+#: admin/partials/subscribers.php:356
 msgid "Status"
 msgstr ""
 
-#: admin/partials/queue-detail.php:274
-#: admin/partials/queue-legacy.php:122
+#: admin/partials/queue-detail.php:415
+#: admin/partials/queue-legacy.php:125
 msgid "Attempts"
 msgstr ""
 
-#: admin/partials/queue-detail.php:276
-#: public/class-public.php:159
-#: public/class-public.php:172
-#: public/class-public.php:192
-#: public/class-public.php:233
-#: public/class-public.php:242
-#: public/class-public.php:253
-#: public/class-public.php:274
+#: admin/partials/queue-detail.php:416
+#: admin/partials/queue-legacy.php:127
+msgctxt "table column header"
+msgid "Sent"
+msgstr ""
+
+#: admin/partials/queue-detail.php:417
+msgctxt "table column header"
+msgid "Opened"
+msgstr ""
+
+#: admin/partials/queue-detail.php:418
+#: admin/partials/queue.php:243
+msgid "Clicks"
+msgstr ""
+
+#: admin/partials/queue-detail.php:419
+#: public/class-mskd-public.php:262
+#: public/class-mskd-public.php:271
+#: public/class-mskd-public.php:282
+#: public/class-mskd-public.php:302
+#: public/class-mskd-public.php:343
+#: public/class-mskd-public.php:352
+#: public/class-mskd-public.php:363
+#: public/class-mskd-public.php:384
 msgid "Error"
 msgstr ""
 
-#: admin/partials/queue-detail.php:300
-#: admin/partials/queue-legacy.php:150
-#: admin/partials/subscribers.php:330
-#: includes/services/class-list-provider.php:153
-#: includes/services/class-list-provider.php:613
+#: admin/partials/queue-detail.php:443
+#: admin/partials/queue-legacy.php:153
+#: admin/partials/subscribers.php:381
+#: includes/services/class-mskd-list-provider.php:154
+#: includes/services/class-mskd-list-provider.php:620
 msgid "External"
 msgstr ""
 
-#: admin/partials/queue-detail.php:309
-#: admin/partials/queue-legacy.php:159
+#: admin/partials/queue-detail.php:452
+#: admin/partials/queue-legacy.php:162
 msgid "Deleted subscriber"
 msgstr ""
 
-#: admin/partials/queue-detail.php:359
+#: admin/partials/queue-detail.php:459
+#: admin/partials/queue-legacy.php:170
+msgctxt "email status"
+msgid "Pending"
+msgstr ""
+
+#: admin/partials/queue-detail.php:460
+#: admin/partials/queue-legacy.php:171
+msgctxt "email status"
+msgid "Processing"
+msgstr ""
+
+#: admin/partials/queue-detail.php:461
+#: admin/partials/queue-legacy.php:172
+msgctxt "email status"
+msgid "Sent"
+msgstr ""
+
+#: admin/partials/queue-detail.php:462
+#: admin/partials/queue-legacy.php:173
+msgctxt "email status"
+msgid "Failed"
+msgstr ""
+
+#: admin/partials/queue-detail.php:463
+#: admin/partials/queue-legacy.php:174
+msgctxt "email status"
+msgid "Cancelled"
+msgstr ""
+
+#. translators: 1: total clicks, 2: last click date
+#: admin/partials/queue-detail.php:496
+#, php-format
+msgid "%1$d total; last %2$s"
+msgstr ""
+
+#: admin/partials/queue-detail.php:535
 msgid "No emails in this campaign."
 msgstr ""
 
-#: admin/partials/queue-detail.php:378
-#: admin/partials/queue-legacy.php:240
-#: admin/partials/queue.php:352
-#: admin/partials/subscribers.php:388
+#: admin/partials/queue-detail.php:560
+#: admin/partials/queue-legacy.php:249
+#: admin/partials/queue.php:413
+#: admin/partials/subscribers.php:453
 msgid "&laquo;"
 msgstr ""
 
-#: admin/partials/queue-detail.php:379
-#: admin/partials/queue-legacy.php:241
-#: admin/partials/queue.php:353
-#: admin/partials/subscribers.php:389
+#: admin/partials/queue-detail.php:561
+#: admin/partials/queue-legacy.php:250
+#: admin/partials/queue.php:414
+#: admin/partials/subscribers.php:454
 msgid "&raquo;"
 msgstr ""
 
-#: admin/partials/queue-legacy.php:67
+#: admin/partials/queue-legacy.php:69
 msgid "Legacy Emails"
 msgstr ""
 
-#: admin/partials/queue-legacy.php:73
+#: admin/partials/queue-legacy.php:75
 msgid "These emails were sent before the campaign system was introduced. They are not grouped by campaign."
 msgstr ""
 
-#: admin/partials/queue-legacy.php:123
-#: admin/partials/queue-legacy.php:177
-#: admin/partials/queue.php:155
-#: admin/partials/queue.php:294
+#: admin/partials/queue-legacy.php:126
+msgctxt "table column header"
 msgid "Scheduled"
 msgstr ""
 
-#: admin/partials/queue-legacy.php:191
-#: admin/partials/queue.php:307
+#: admin/partials/queue-legacy.php:180
+msgctxt "email status"
+msgid "Scheduled"
+msgstr ""
+
+#: admin/partials/queue-legacy.php:194
+#: admin/partials/queue.php:362
 #, php-format
 msgid "in %d min."
 msgstr ""
 
-#: admin/partials/queue-legacy.php:193
-#: admin/partials/queue.php:309
+#: admin/partials/queue-legacy.php:196
+#: admin/partials/queue.php:364
 #, php-format
 msgid "in %d h."
 msgstr ""
 
-#: admin/partials/queue-legacy.php:195
-#: admin/partials/queue.php:311
+#: admin/partials/queue-legacy.php:198
+#: admin/partials/queue.php:366
 #, php-format
 msgid "in %d days"
 msgstr ""
 
-#: admin/partials/queue-legacy.php:211
+#: admin/partials/queue-legacy.php:218
 msgid "Cancel sending"
 msgstr ""
 
-#: admin/partials/queue-legacy.php:222
+#: admin/partials/queue-legacy.php:229
 msgid "No legacy emails."
 msgstr ""
 
-#: admin/partials/queue.php:124
+#: admin/partials/queue.php:138
 msgid "Sending queue"
 msgstr ""
 
-#: admin/partials/queue.php:131
+#: admin/partials/queue.php:145
 msgid "Next run:"
 msgstr ""
 
-#: admin/partials/queue.php:135
-#: admin/partials/settings.php:337
+#: admin/partials/queue.php:149
+#: admin/partials/settings.php:403
 msgid "Not scheduled"
 msgstr ""
 
-#: admin/partials/queue.php:138
+#: admin/partials/queue.php:152
 msgid "Speed:"
 msgstr ""
 
-#: admin/partials/queue.php:139
+#: admin/partials/queue.php:153
 #, php-format
 msgid "%d emails/min"
 msgstr ""
 
-#: admin/partials/queue.php:197
+#: admin/partials/queue.php:169
+msgid "Scheduled"
+msgstr ""
+
+#: admin/partials/queue.php:183
+msgid "Processing"
+msgstr ""
+
+#: admin/partials/queue.php:190
+msgid "Completed"
+msgstr ""
+
+#: admin/partials/queue.php:204
+msgid "One-time"
+msgstr ""
+
+#: admin/partials/queue.php:211
 msgid "Campaigns"
 msgstr ""
 
-#: admin/partials/queue.php:207
+#: admin/partials/queue.php:222
 #, php-format
 msgid "There are %d emails from before the campaign system was introduced."
 msgstr ""
 
-#: admin/partials/queue.php:211
+#: admin/partials/queue.php:227
 msgid "View legacy emails"
 msgstr ""
 
-#: admin/partials/queue.php:222
+#: admin/partials/queue.php:239
 msgid "Type"
 msgstr ""
 
-#: admin/partials/queue.php:223
-msgid "Recipients"
-msgstr ""
-
-#: admin/partials/queue.php:224
+#: admin/partials/queue.php:241
 msgid "Progress"
 msgstr ""
 
-#: admin/partials/queue.php:226
-msgid "Created"
+#: admin/partials/queue.php:242
+msgid "Opens"
 msgstr ""
 
-#: admin/partials/queue.php:227
+#: admin/partials/queue.php:246
 msgid "Scheduled for"
 msgstr ""
 
-#: admin/partials/queue.php:320
+#: admin/partials/queue.php:310
+msgid "Total tracking pixel loads"
+msgstr ""
+
+#: admin/partials/queue.php:349
+msgctxt "campaign status"
+msgid "Scheduled"
+msgstr ""
+
+#: admin/partials/queue.php:375
 msgid "View details"
 msgstr ""
 
-#: admin/partials/queue.php:321
+#: admin/partials/queue.php:376
 msgid "Details"
 msgstr ""
 
-#: admin/partials/queue.php:329
+#: admin/partials/queue.php:388
 msgid "Cancel campaign"
 msgstr ""
 
-#: admin/partials/queue.php:338
+#: admin/partials/queue.php:397
 msgid "No campaigns in queue."
 msgstr ""
 
-#: admin/partials/settings.php:39
+#: admin/partials/settings.php:44
 #: includes/Admin/class-admin-menu.php:146
 #: includes/Admin/class-admin-menu.php:147
 msgid "Settings"
 msgstr ""
 
-#: admin/partials/settings.php:47
+#: admin/partials/settings.php:52
 msgid "Sender settings"
 msgstr ""
 
-#: admin/partials/settings.php:52
-msgid "Sender name"
-msgstr ""
-
-#: admin/partials/settings.php:57
+#: admin/partials/settings.php:62
 msgid "The name that will appear as sender."
 msgstr ""
 
-#: admin/partials/settings.php:62
+#: admin/partials/settings.php:67
 msgid "Sender email"
 msgstr ""
 
-#: admin/partials/settings.php:67
+#: admin/partials/settings.php:72
 msgid "The email from which messages will be sent."
 msgstr ""
 
-#: admin/partials/settings.php:72
+#: admin/partials/settings.php:77
 msgid "Reply to"
 msgstr ""
 
-#: admin/partials/settings.php:77
+#: admin/partials/settings.php:82
 msgid "Email for replies from recipients."
 msgstr ""
 
-#: admin/partials/settings.php:84
+#: admin/partials/settings.php:89
 msgid "Sending settings"
 msgstr ""
 
-#: admin/partials/settings.php:89
+#: admin/partials/settings.php:94
 msgid "Emails per minute"
 msgstr ""
 
-#: admin/partials/settings.php:95
+#: admin/partials/settings.php:100
 msgid "Maximum number of emails to send per minute. Higher values may exceed your hosting provider limits."
 msgstr ""
 
-#: admin/partials/settings.php:102
-msgid "Email Template Settings"
-msgstr ""
-
-#: admin/partials/settings.php:103
-msgid "Configure custom header and footer that will be added to all outgoing emails. Supports HTML and template variables."
-msgstr ""
-
-#: admin/partials/settings.php:108
-msgid "Email Header"
+#: admin/partials/settings.php:107
+msgid "Subscription Form"
 msgstr ""
 
 #: admin/partials/settings.php:112
-msgid "HTML content to prepend to all emails. Leave empty to disable."
+msgid "Show Name Field"
 msgstr ""
 
-#: admin/partials/settings.php:117
-msgid "Email Footer"
+#: admin/partials/settings.php:118
+msgid "Display the \"Name\" field in the subscription form"
 msgstr ""
 
-#: admin/partials/settings.php:121
-msgid "HTML content to append to all emails. Leave empty to disable."
+#: admin/partials/settings.php:120
+msgid "If unchecked, only the email field will be shown."
 msgstr ""
 
-#: admin/partials/settings.php:126
-msgid "Available Variables"
-msgstr ""
-
-#: admin/partials/settings.php:130
-msgid "Subscriber first name"
+#: admin/partials/settings.php:125
+msgid "Enable GA4 Conversion Tracking"
 msgstr ""
 
 #: admin/partials/settings.php:131
-msgid "Subscriber last name"
-msgstr ""
-
-#: admin/partials/settings.php:132
-msgid "Subscriber email address"
+msgid "Fire Google Analytics 4 conversion events on successful subscription"
 msgstr ""
 
 #: admin/partials/settings.php:133
-msgid "Clickable unsubscribe link"
+msgid "When enabled, a \"generate_lead\" event will be sent to Google Analytics when a user successfully subscribes. Make sure you have GA4 or GTM installed on your site."
 msgstr ""
 
-#: admin/partials/settings.php:134
-msgid "Raw unsubscribe URL"
+#: admin/partials/settings.php:140
+msgid "Email Template Settings"
 msgstr ""
 
-#: admin/partials/settings.php:142
-msgid "Styling"
+#: admin/partials/settings.php:141
+msgid "Configure custom header and footer that will be added to all outgoing emails. Supports HTML and template variables."
 msgstr ""
 
-#: admin/partials/settings.php:143
-msgid "Customize the appearance of subscription forms and the unsubscribe page."
+#: admin/partials/settings.php:146
+msgid "Email Header"
 msgstr ""
 
-#: admin/partials/settings.php:148
-msgid "Highlight Color"
+#: admin/partials/settings.php:150
+msgid "HTML content to prepend to all emails. Leave empty to disable."
 msgstr ""
 
 #: admin/partials/settings.php:155
-msgid "Primary color for buttons, links, and focus states."
+msgid "Email Footer"
 msgstr ""
 
-#: admin/partials/settings.php:160
-msgid "Button Text Color"
+#: admin/partials/settings.php:159
+msgid "HTML content to append to all emails. Leave empty to disable."
 msgstr ""
 
-#: admin/partials/settings.php:167
-msgid "Text color for buttons."
+#: admin/partials/settings.php:164
+msgid "Available Variables"
+msgstr ""
+
+#: admin/partials/settings.php:168
+msgid "Subscriber first name"
+msgstr ""
+
+#: admin/partials/settings.php:169
+msgid "Subscriber last name"
+msgstr ""
+
+#: admin/partials/settings.php:170
+msgid "Subscriber email address"
+msgstr ""
+
+#: admin/partials/settings.php:171
+msgid "Clickable unsubscribe link"
 msgstr ""
 
 #: admin/partials/settings.php:172
-msgid "Preview"
+msgid "Raw unsubscribe URL"
 msgstr ""
 
-#: admin/partials/settings.php:177
-msgid "Button preview:"
-msgstr ""
-
-#: admin/partials/settings.php:179
-#: public/class-public.php:317
-#: public/partials/subscribe-form.php:34
-msgid "Subscribe"
+#: admin/partials/settings.php:180
+msgid "Styling"
 msgstr ""
 
 #: admin/partials/settings.php:181
+msgid "Customize the appearance of subscription forms and the unsubscribe page."
+msgstr ""
+
+#: admin/partials/settings.php:186
+msgid "Highlight Color"
+msgstr ""
+
+#: admin/partials/settings.php:193
+msgid "Primary color for buttons, links, and focus states."
+msgstr ""
+
+#: admin/partials/settings.php:198
+msgid "Button Text Color"
+msgstr ""
+
+#: admin/partials/settings.php:205
+msgid "Text color for buttons."
+msgstr ""
+
+#: admin/partials/settings.php:210
+msgid "Preview"
+msgstr ""
+
+#: admin/partials/settings.php:215
+msgid "Button preview:"
+msgstr ""
+
+#: admin/partials/settings.php:217
+#: public/class-mskd-public.php:427
+#: public/partials/subscribe-form.php:36
+msgid "Subscribe"
+msgstr ""
+
+#: admin/partials/settings.php:219
 msgid "Link preview:"
 msgstr ""
 
-#: admin/partials/settings.php:183
+#: admin/partials/settings.php:221
 #: public/partials/opt-in-confirm.php:68
 #: public/partials/unsubscribe.php:72
 msgid "Back to site"
 msgstr ""
 
-#: admin/partials/settings.php:193
+#: admin/partials/settings.php:231
 msgid "SMTP Settings"
 msgstr ""
 
-#: admin/partials/settings.php:194
+#: admin/partials/settings.php:232
 msgid "Configure an SMTP server for more reliable email sending."
 msgstr ""
 
-#: admin/partials/settings.php:199
+#: admin/partials/settings.php:237
 msgid "Enable SMTP"
 msgstr ""
 
-#: admin/partials/settings.php:205
+#: admin/partials/settings.php:243
 msgid "Use SMTP for sending emails"
 msgstr ""
 
-#: admin/partials/settings.php:207
+#: admin/partials/settings.php:245
 msgid "When enabled, emails will be sent via the specified SMTP server instead of wp_mail()."
 msgstr ""
 
-#: admin/partials/settings.php:212
+#: admin/partials/settings.php:250
 msgid "SMTP Host"
 msgstr ""
 
-#: admin/partials/settings.php:218
+#: admin/partials/settings.php:256
 msgid "SMTP server address (e.g. smtp.gmail.com, smtp.mailgun.org)."
 msgstr ""
 
-#: admin/partials/settings.php:223
+#: admin/partials/settings.php:261
 msgid "SMTP Port"
 msgstr ""
 
-#: admin/partials/settings.php:229
+#: admin/partials/settings.php:267
 msgid "Standard ports: 25, 465 (SSL), 587 (TLS/StartTLS)."
 msgstr ""
 
-#: admin/partials/settings.php:234
+#: admin/partials/settings.php:272
 msgid "Encryption"
 msgstr ""
 
-#: admin/partials/settings.php:238
+#: admin/partials/settings.php:276
 msgid "No encryption"
 msgstr ""
 
-#: admin/partials/settings.php:242
+#: admin/partials/settings.php:280
 msgid "It is recommended to use TLS or SSL for a secure connection."
 msgstr ""
 
-#: admin/partials/settings.php:247
+#: admin/partials/settings.php:285
 msgid "SMTP Authentication"
 msgstr ""
 
-#: admin/partials/settings.php:253
+#: admin/partials/settings.php:291
 msgid "Use authentication (username and password)"
 msgstr ""
 
-#: admin/partials/settings.php:259
+#: admin/partials/settings.php:297
 msgid "SMTP Username"
 msgstr ""
 
-#: admin/partials/settings.php:265
+#: admin/partials/settings.php:303
 msgid "Usually this is your email address or username."
 msgstr ""
 
-#: admin/partials/settings.php:270
+#: admin/partials/settings.php:308
 msgid "SMTP Password"
 msgstr ""
 
-#: admin/partials/settings.php:276
+#: admin/partials/settings.php:314
 msgid "For Gmail, use App Password instead of the regular password."
 msgstr ""
 
-#: admin/partials/settings.php:281
+#: admin/partials/settings.php:319
 msgid "Connection test"
 msgstr ""
 
-#: admin/partials/settings.php:285
+#: admin/partials/settings.php:323
 msgid "Send test email"
 msgstr ""
 
-#: admin/partials/settings.php:288
+#: admin/partials/settings.php:326
 msgid "Sends a test email to the administrator email."
 msgstr ""
 
-#: admin/partials/settings.php:295
+#: admin/partials/settings.php:333
 msgid "System information"
 msgstr ""
 
-#: admin/partials/settings.php:299
+#: admin/partials/settings.php:337
 msgid "Plugin version"
 msgstr ""
 
-#: admin/partials/settings.php:303
-msgid "Sending method"
-msgstr ""
-
-#: admin/partials/settings.php:306
-msgid "SMTP"
-msgstr ""
-
-#: admin/partials/settings.php:309
-msgid "wp_mail() (default)"
-msgstr ""
-
-#: admin/partials/settings.php:314
-msgid "Sending speed"
-msgstr ""
-
-#: admin/partials/settings.php:316
-msgid "emails/minute"
-msgstr ""
-
-#: admin/partials/settings.php:320
-msgid "WP-Cron status"
-msgstr ""
-
-#: admin/partials/settings.php:323
-msgid "Disabled (using system cron)"
-msgstr ""
-
-#: admin/partials/settings.php:325
-msgid "Active (visitor-based)"
-msgstr ""
-
-#: admin/partials/settings.php:330
-msgid "Next run"
-msgstr ""
-
-#: admin/partials/settings.php:346
-msgid "Save settings"
+#: admin/partials/settings.php:341
+msgid "Database version"
 msgstr ""
 
 #: admin/partials/settings.php:352
-msgid "Danger Zone"
+msgid "Database is up to date"
 msgstr ""
 
-#: admin/partials/settings.php:353
-msgid "These actions are irreversible. Use with caution."
+#: admin/partials/settings.php:355
+msgid "Database needs update"
 msgstr ""
 
-#: admin/partials/settings.php:358
-msgid "Truncate Subscribers"
+#: admin/partials/settings.php:363
+msgid "Database schema needs update. Please deactivate and reactivate the plugin."
 msgstr ""
 
-#: admin/partials/settings.php:362
-msgid "Delete all subscribers"
+#: admin/partials/settings.php:369
+msgid "Sending method"
 msgstr ""
 
-#: admin/partials/settings.php:365
-msgid "Permanently deletes all subscribers and their list associations."
+#: admin/partials/settings.php:372
+msgid "SMTP"
 msgstr ""
 
-#: admin/partials/settings.php:370
-msgid "Truncate Lists"
+#: admin/partials/settings.php:375
+msgid "wp_mail() (default)"
 msgstr ""
 
-#: admin/partials/settings.php:374
-msgid "Delete all lists"
-msgstr ""
-
-#: admin/partials/settings.php:377
-msgid "Permanently deletes all mailing lists and subscriber associations."
+#: admin/partials/settings.php:380
+msgid "Sending speed"
 msgstr ""
 
 #: admin/partials/settings.php:382
-msgid "Truncate Campaigns"
+msgid "emails/minute"
 msgstr ""
 
 #: admin/partials/settings.php:386
-msgid "Delete all campaigns"
+msgid "WP-Cron status"
 msgstr ""
 
 #: admin/partials/settings.php:389
+msgid "Disabled (using system cron)"
+msgstr ""
+
+#: admin/partials/settings.php:391
+msgid "Active (visitor-based)"
+msgstr ""
+
+#: admin/partials/settings.php:396
+msgid "Next run"
+msgstr ""
+
+#: admin/partials/settings.php:412
+msgid "Save settings"
+msgstr ""
+
+#: admin/partials/settings.php:418
+msgid "Danger Zone"
+msgstr ""
+
+#: admin/partials/settings.php:419
+msgid "These actions are irreversible. Use with caution."
+msgstr ""
+
+#: admin/partials/settings.php:424
+msgid "Delete Inactive Subscribers"
+msgstr ""
+
+#: admin/partials/settings.php:428
+msgid "Delete unconfirmed and inactive subscribers"
+msgstr ""
+
+#: admin/partials/settings.php:431
+msgid "Permanently deletes all subscribers with inactive (unconfirmed) or unsubscribed status and their list associations."
+msgstr ""
+
+#: admin/partials/settings.php:436
+msgid "Truncate Subscribers"
+msgstr ""
+
+#: admin/partials/settings.php:440
+msgid "Delete all subscribers"
+msgstr ""
+
+#: admin/partials/settings.php:443
+msgid "Permanently deletes all subscribers and their list associations."
+msgstr ""
+
+#: admin/partials/settings.php:448
+msgid "Truncate Lists"
+msgstr ""
+
+#: admin/partials/settings.php:452
+msgid "Delete all lists"
+msgstr ""
+
+#: admin/partials/settings.php:455
+msgid "Permanently deletes all mailing lists and subscriber associations."
+msgstr ""
+
+#: admin/partials/settings.php:460
+msgid "Truncate Campaigns"
+msgstr ""
+
+#: admin/partials/settings.php:464
+msgid "Delete all campaigns"
+msgstr ""
+
+#: admin/partials/settings.php:467
 msgid "Permanently deletes all campaigns and their queued emails (pending, processing, sent, and failed)."
 msgstr ""
 
 #: admin/partials/shortcodes.php:26
-#: includes/Admin/class-admin-menu.php:166
-#: includes/Admin/class-admin-menu.php:167
+#: includes/Admin/class-admin-menu.php:176
+#: includes/Admin/class-admin-menu.php:177
 msgid "Shortcodes"
 msgstr ""
 
@@ -1600,187 +1949,225 @@ msgstr ""
 msgid "The title displayed above the form. Defaults to \"Subscribe\"."
 msgstr ""
 
-#: admin/partials/subscribers.php:62
+#: admin/partials/subscribers.php:64
 msgid "Edit subscriber"
 msgstr ""
 
-#: admin/partials/subscribers.php:74
-#: admin/partials/subscribers.php:305
+#: admin/partials/subscribers.php:76
+#: admin/partials/subscribers.php:355
 msgid "Email"
 msgstr ""
 
-#: admin/partials/subscribers.php:153
+#: admin/partials/subscribers.php:108
+#: admin/partials/subscribers.php:389
+#: includes/Admin/class-admin-assets.php:176
+msgctxt "subscriber status"
+msgid "Active"
+msgstr ""
+
+#: admin/partials/subscribers.php:111
+#: admin/partials/subscribers.php:390
+#: includes/Admin/class-admin-assets.php:177
+msgctxt "subscriber status"
+msgid "Inactive"
+msgstr ""
+
+#: admin/partials/subscribers.php:114
+#: admin/partials/subscribers.php:391
+msgctxt "subscriber status"
+msgid "Unsubscribed"
+msgstr ""
+
+#: admin/partials/subscribers.php:155
 msgid "Automated lists (membership managed by external plugins):"
 msgstr ""
 
-#: admin/partials/subscribers.php:270
+#: admin/partials/subscribers.php:265
+msgid "Total Subscribers"
+msgstr ""
+
+#: admin/partials/subscribers.php:315
 msgid "Bulk actions"
 msgstr ""
 
-#: admin/partials/subscribers.php:271
+#: admin/partials/subscribers.php:317
 msgid "Add to lists"
 msgstr ""
 
-#: admin/partials/subscribers.php:272
+#: admin/partials/subscribers.php:318
 msgid "Remove from lists"
 msgstr ""
 
-#: admin/partials/subscribers.php:286
+#: admin/partials/subscribers.php:320
+msgid "Set active"
+msgstr ""
+
+#: admin/partials/subscribers.php:321
+msgid "Set inactive"
+msgstr ""
+
+#: admin/partials/subscribers.php:336
 msgid "Apply"
 msgstr ""
 
-#: admin/partials/subscribers.php:292
+#: admin/partials/subscribers.php:342
 msgid "selected"
 msgstr ""
 
-#: admin/partials/subscribers.php:307
+#: admin/partials/subscribers.php:357
 msgid "Date"
 msgstr ""
 
-#: admin/partials/subscribers.php:329
+#: admin/partials/subscribers.php:380
 msgid "External subscriber from plugin"
 msgstr ""
 
-#: admin/partials/subscribers.php:363
+#: admin/partials/subscribers.php:428
 msgid "External subscribers cannot be edited"
 msgstr ""
 
-#: admin/partials/subscribers.php:364
+#: admin/partials/subscribers.php:429
 msgid "Read-only"
 msgstr ""
 
-#: admin/partials/subscribers.php:372
+#: admin/partials/subscribers.php:437
 msgid "No subscribers found."
 msgstr ""
 
-#: admin/partials/subscribers.php:402
+#: admin/partials/subscribers.php:467
 msgid "External subscribers are managed by third-party plugins and appear as read-only."
 msgstr ""
 
-#: admin/partials/templates.php:50
+#: admin/partials/templates.php:53
 msgid "Email Templates"
 msgstr ""
 
-#: admin/partials/templates.php:53
+#: admin/partials/templates.php:56
 msgid "Add New"
 msgstr ""
 
-#: admin/partials/templates.php:70
+#: admin/partials/templates.php:73
 msgid "Add new template"
 msgstr ""
 
-#: admin/partials/templates.php:72
+#: admin/partials/templates.php:75
 msgid "Edit template"
 msgstr ""
 
-#: admin/partials/templates.php:90
+#: admin/partials/templates.php:93
 msgid "Template name"
 msgstr ""
 
-#: admin/partials/templates.php:99
+#: admin/partials/templates.php:102
 msgid "Default subject"
 msgstr ""
 
-#: admin/partials/templates.php:105
+#: admin/partials/templates.php:108
 msgid "Optional. This subject will be pre-filled when using this template."
 msgstr ""
 
-#: admin/partials/templates.php:138
+#: admin/partials/templates.php:141
 msgid "Add template"
 msgstr ""
 
-#: admin/partials/templates.php:152
+#: admin/partials/templates.php:155
 msgid "Predefined Templates"
 msgstr ""
 
-#: admin/partials/templates.php:153
+#: admin/partials/templates.php:156
 msgid "These templates are provided by the system. You can duplicate them to create custom versions."
 msgstr ""
 
-#: admin/partials/templates.php:172
-#: admin/partials/templates.php:174
-#: admin/partials/templates.php:220
+#: admin/partials/templates.php:175
+#: admin/partials/templates.php:177
+#: admin/partials/templates.php:223
 msgid "Duplicate"
 msgstr ""
 
-#: admin/partials/templates.php:176
-#: admin/partials/templates.php:226
+#: admin/partials/templates.php:179
+#: admin/partials/templates.php:229
 msgid "Use template"
 msgstr ""
 
-#: admin/partials/templates.php:177
-#: admin/partials/templates.php:227
+#: admin/partials/templates.php:180
+#: admin/partials/templates.php:230
 msgid "Use"
 msgstr ""
 
-#: admin/partials/templates.php:187
+#: admin/partials/templates.php:190
 msgid "Custom Templates"
 msgstr ""
 
-#: admin/partials/templates.php:188
+#: admin/partials/templates.php:191
 msgid "Templates you have created. You can edit, duplicate, or delete these."
 msgstr ""
 
 #. translators: %s: date
-#: admin/partials/templates.php:209
+#: admin/partials/templates.php:212
 #, php-format
 msgid "Created: %s"
 msgstr ""
 
-#: admin/partials/templates.php:214
+#: admin/partials/templates.php:217
 msgid "Edit with Visual Editor"
 msgstr ""
 
-#: admin/partials/templates.php:217
+#: admin/partials/templates.php:220
 msgid "Edit HTML"
 msgstr ""
 
-#: admin/partials/templates.php:235
+#: admin/partials/templates.php:238
 msgid "No custom templates yet."
 msgstr ""
 
-#: includes/Admin/class-admin-ajax.php:55
-#: includes/Admin/class-admin-ajax.php:390
+#: includes/Admin/class-admin-ajax.php:58
+#: includes/Admin/class-admin-ajax.php:512
 msgid "Invalid request. Please refresh the page."
 msgstr ""
 
-#: includes/Admin/class-admin-ajax.php:64
-#: includes/Admin/class-admin-ajax.php:101
-#: includes/Admin/class-admin-ajax.php:127
-#: includes/Admin/class-admin-ajax.php:153
-#: includes/Admin/class-admin-ajax.php:195
-#: includes/Admin/class-admin-ajax.php:291
-#: includes/Admin/class-admin-ajax.php:395
+#: includes/Admin/class-admin-ajax.php:67
+#: includes/Admin/class-admin-ajax.php:104
+#: includes/Admin/class-admin-ajax.php:130
+#: includes/Admin/class-admin-ajax.php:156
+#: includes/Admin/class-admin-ajax.php:198
+#: includes/Admin/class-admin-ajax.php:304
+#: includes/Admin/class-admin-ajax.php:410
+#: includes/Admin/class-admin-ajax.php:517
+#: includes/Admin/class-admin-ajax.php:610
+#: includes/Admin/class-admin-ajax.php:700
 msgid "You do not have permission for this operation."
 msgstr ""
 
-#: includes/Admin/class-admin-ajax.php:111
+#: includes/Admin/class-admin-ajax.php:114
 msgid "All subscribers deleted successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-ajax.php:137
+#: includes/Admin/class-admin-ajax.php:140
 msgid "All lists deleted successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-ajax.php:163
+#: includes/Admin/class-admin-ajax.php:166
 msgid "All campaigns deleted successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-ajax.php:220
-#: includes/Admin/class-admin-ajax.php:316
-#: includes/Admin/class-admin-assets.php:173
+#: includes/Admin/class-admin-ajax.php:233
+#: includes/Admin/class-admin-ajax.php:339
+#: includes/Admin/class-admin-ajax.php:435
+#: includes/Admin/class-admin-ajax.php:632
+#: includes/Admin/class-admin-assets.php:174
 msgid "No subscribers selected."
 msgstr ""
 
-#: includes/Admin/class-admin-ajax.php:228
-#: includes/Admin/class-admin-ajax.php:324
-#: includes/Admin/class-admin-assets.php:174
+#: includes/Admin/class-admin-ajax.php:241
+#: includes/Admin/class-admin-ajax.php:347
+#: includes/Admin/class-admin-assets.php:175
 msgid "No lists selected."
 msgstr ""
 
 #. translators: %d: number of subscribers updated
-#: includes/Admin/class-admin-ajax.php:240
-#: includes/Admin/class-admin-ajax.php:336
+#: includes/Admin/class-admin-ajax.php:253
+#: includes/Admin/class-admin-ajax.php:359
+#: includes/Admin/class-admin-ajax.php:456
 #, php-format
 msgid "%d subscriber updated successfully."
 msgid_plural "%d subscribers updated successfully."
@@ -1788,22 +2175,54 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of subscribers that failed
-#: includes/Admin/class-admin-ajax.php:252
-#: includes/Admin/class-admin-ajax.php:348
+#: includes/Admin/class-admin-ajax.php:265
+#: includes/Admin/class-admin-ajax.php:371
+#: includes/Admin/class-admin-ajax.php:468
+#: includes/Admin/class-admin-ajax.php:656
 #, php-format
 msgid "%d subscriber failed."
 msgid_plural "%d subscribers failed."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/Admin/class-admin-ajax.php:273
-#: includes/Admin/class-admin-ajax.php:369
+#: includes/Admin/class-admin-ajax.php:286
+#: includes/Admin/class-admin-ajax.php:392
+#: includes/Admin/class-admin-ajax.php:491
 msgid "No subscribers were updated."
 msgstr ""
 
-#: includes/Admin/class-admin-ajax.php:425
+#: includes/Admin/class-admin-ajax.php:444
+#: includes/services/class-subscriber-service.php:961
+msgid "Invalid status."
+msgstr ""
+
+#: includes/Admin/class-admin-ajax.php:547
 msgid "No content to preview."
 msgstr ""
+
+#. translators: %d: number of subscribers deleted
+#: includes/Admin/class-admin-ajax.php:644
+#, php-format
+msgid "%d subscriber deleted successfully."
+msgid_plural "%d subscribers deleted successfully."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Admin/class-admin-ajax.php:677
+msgid "No subscribers were deleted."
+msgstr ""
+
+#: includes/Admin/class-admin-ajax.php:711
+msgid "No inactive or unsubscribed subscribers found to delete."
+msgstr ""
+
+#. translators: %d: number of subscribers deleted
+#: includes/Admin/class-admin-ajax.php:720
+#, php-format
+msgid "%d inactive or unsubscribed subscriber deleted successfully."
+msgid_plural "%d inactive or unsubscribed subscribers deleted successfully."
+msgstr[0] ""
+msgstr[1] ""
 
 #: includes/Admin/class-admin-assets.php:158
 msgid "Are you sure you want to delete?"
@@ -1846,22 +2265,26 @@ msgid "Are you sure you want to delete ALL campaigns? This action cannot be undo
 msgstr ""
 
 #: includes/Admin/class-admin-assets.php:168
-msgid "Select lists..."
+msgid "Are you sure you want to delete all unconfirmed, inactive, and unsubscribed subscribers? This action cannot be undone!"
 msgstr ""
 
 #: includes/Admin/class-admin-assets.php:169
-msgid "Search..."
+msgid "Select lists..."
 msgstr ""
 
 #: includes/Admin/class-admin-assets.php:170
-msgid "No results found"
+msgid "Search..."
 msgstr ""
 
 #: includes/Admin/class-admin-assets.php:171
-msgid "Copied!"
+msgid "No results found"
 msgstr ""
 
 #: includes/Admin/class-admin-assets.php:172
+msgid "Copied!"
+msgstr ""
+
+#: includes/Admin/class-admin-assets.php:173
 msgid "Copy failed"
 msgstr ""
 
@@ -1869,85 +2292,79 @@ msgstr ""
 msgid "Mail System - Queue Statistics"
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:202
+#: includes/Admin/class-admin-email.php:206
 msgid "Please fill in all fields."
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:222
-#: includes/Admin/class-admin-email.php:365
+#: includes/Admin/class-admin-email.php:229
+#: includes/Admin/class-admin-email.php:344
 msgid "Custom sender email is required when using custom sender option."
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:233
-#: includes/Admin/class-admin-email.php:376
+#: includes/Admin/class-admin-email.php:240
+#: includes/Admin/class-admin-email.php:355
 msgid "Invalid custom sender email address."
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:271
-msgid "No active subscribers in the selected lists."
-msgstr ""
-
-#: includes/Admin/class-admin-email.php:299
-msgid "Error creating campaign."
-msgstr ""
-
-#: includes/Admin/class-admin-email.php:312
+#: includes/Admin/class-admin-email.php:283
 #, php-format
 msgid "%d emails have been added to the sending queue."
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:327
+#: includes/Admin/class-admin-email.php:293
 #, php-format
 msgid "%1$d emails have been scheduled for %2$s."
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:403
+#: includes/Admin/class-admin-email.php:385
 msgid "Please fill in all required fields."
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:414
+#: includes/Admin/class-admin-email.php:396
 msgid "Invalid recipient email address."
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:479
+#: includes/Admin/class-admin-email.php:483
 msgid "wp_mail() failed for one-time email"
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:493
+#: includes/Admin/class-admin-email.php:499
 #, php-format
 msgid "One-time email sent successfully to %s."
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:499
+#: includes/Admin/class-admin-email.php:508
 msgid "Error sending one-time email."
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:502
+#: includes/Admin/class-admin-email.php:511
 #, php-format
 msgid "Reason: %s"
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:506
+#: includes/Admin/class-admin-email.php:515
 msgid "Please try again."
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:539
+#: includes/Admin/class-admin-email.php:549
 #, php-format
 msgid "One-time email to %1$s has been scheduled for %2$s."
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:549
+#: includes/Admin/class-admin-email.php:559
 msgid "Error scheduling email. Please try again."
 msgstr ""
 
 #. translators: %s: Invalid email address
-#: includes/Admin/class-admin-email.php:572
+#: includes/Admin/class-admin-email.php:582
+#: includes/Application/class-campaign-service.php:195
 #, php-format
 msgid "Invalid Bcc email address: %s"
 msgstr ""
 
-#: includes/Admin/class-admin-email.php:620
-#: includes/services/class-cron-handler.php:389
+#: includes/Admin/class-admin-email.php:630
+#: includes/services/class-mskd-cron-handler.php:494
+#: public/class-mskd-public.php:742
 #: public/partials/unsubscribe.php:21
 msgid "Unsubscribe"
 msgstr ""
@@ -2006,24 +2423,24 @@ msgid_plural "%d lists skipped (already exist)."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/Admin/class-admin-lists.php:83
-#: includes/Admin/class-admin-lists.php:129
+#: includes/Admin/class-admin-lists.php:90
+#: includes/Admin/class-admin-lists.php:139
 msgid "List name is required."
 msgstr ""
 
-#: includes/Admin/class-admin-lists.php:101
+#: includes/Admin/class-admin-lists.php:108
 msgid "List added successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-lists.php:108
+#: includes/Admin/class-admin-lists.php:115
 msgid "Error adding list."
 msgstr ""
 
-#: includes/Admin/class-admin-lists.php:147
+#: includes/Admin/class-admin-lists.php:157
 msgid "List updated successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-lists.php:167
+#: includes/Admin/class-admin-lists.php:178
 msgid "List deleted successfully."
 msgstr ""
 
@@ -2040,174 +2457,185 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:60
+#: includes/Admin/class-admin-notices.php:57
+#: includes/Admin/class-admin-notices.php:228
+#: includes/Admin/class-admin-notices.php:248
+msgid "Mail System:"
+msgstr ""
+
+#: includes/Admin/class-admin-notices.php:58
+msgid "Mail System does not send email in local environments. Queued email will remain pending until this site is no longer detected as local."
+msgstr ""
+
+#: includes/Admin/class-admin-notices.php:82
 msgid "Recommendation for Mail System:"
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:61
+#: includes/Admin/class-admin-notices.php:83
 msgid "For more reliable email sending, we recommend using system cron instead of WP-Cron."
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:64
+#: includes/Admin/class-admin-notices.php:86
 msgid "Add to wp-config.php:"
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:68
+#: includes/Admin/class-admin-notices.php:90
 msgid "And set up system cron:"
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:104
+#: includes/Admin/class-admin-notices.php:126
 msgid "Enjoying Mail System by Katsarov Design?"
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:105
+#: includes/Admin/class-admin-notices.php:127
 msgid "If you like this plugin, please share it with your friends!"
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:109
+#: includes/Admin/class-admin-notices.php:131
 msgid "Yes, of course!"
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:112
+#: includes/Admin/class-admin-notices.php:134
 msgid "Nah, I do not like the plugin"
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:170
+#: includes/Admin/class-admin-notices.php:192
 msgid "Mail System Database Update Required"
 msgstr ""
 
 #. translators: 1: Current DB version, 2: Required DB version
-#: includes/Admin/class-admin-notices.php:176
+#: includes/Admin/class-admin-notices.php:198
 #, php-format
 msgid "Your database schema (version %1$s) is outdated. Version %2$s is required for the plugin to work correctly."
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:184
+#: includes/Admin/class-admin-notices.php:206
 msgid "Update Database Now"
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:206
-msgid "Mail System:"
-msgstr ""
-
-#: includes/Admin/class-admin-notices.php:207
+#: includes/Admin/class-admin-notices.php:229
 msgid "Database has been updated successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:225
+#: includes/Admin/class-admin-notices.php:249
+msgid "Database repair failed. One or more required tables or columns could not be created. Please deactivate and reactivate the plugin, or contact your hosting provider if the issue persists."
+msgstr ""
+
+#: includes/Admin/class-admin-notices.php:270
 #: includes/Admin/class-admin-visual-editor.php:237
 #: includes/Admin/class-admin-visual-editor.php:317
 #: includes/Admin/class-admin-visual-editor.php:381
 msgid "Security check failed."
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:253
+#: includes/Admin/class-admin-notices.php:304
 msgid "Mail System Database Repair Required"
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:256
-msgid "Some required database columns are missing. This may cause subscription confirmation links to fail. Click the button below to repair the database."
+#: includes/Admin/class-admin-notices.php:307
+msgid "Some required database tables or columns are missing. This may cause subscription confirmation links to fail. Click the button below to repair the database."
 msgstr ""
 
-#: includes/Admin/class-admin-notices.php:260
+#: includes/Admin/class-admin-notices.php:311
 msgid "Repair Database Now"
 msgstr ""
 
-#: includes/Admin/class-admin-queue.php:79
+#: includes/Admin/class-admin-queue.php:100
 msgid "Record not found."
 msgstr ""
 
-#: includes/Admin/class-admin-queue.php:90
+#: includes/Admin/class-admin-queue.php:112
 msgid "This email cannot be cancelled."
 msgstr ""
 
-#: includes/Admin/class-admin-queue.php:103
+#: includes/Admin/class-admin-queue.php:126
 msgid "Email cancelled successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-queue.php:110
+#: includes/Admin/class-admin-queue.php:133
 msgid "Error cancelling email."
 msgstr ""
 
-#: includes/Admin/class-admin-queue.php:151
+#: includes/Admin/class-admin-queue.php:180
 msgid "This campaign cannot be cancelled."
 msgstr ""
 
-#: includes/Admin/class-admin-queue.php:165
+#. translators: %d: number of emails cancelled
+#: includes/Admin/class-admin-queue.php:196
 #, php-format
 msgid "Campaign cancelled. %d emails were cancelled."
 msgstr ""
 
-#: includes/Admin/class-admin-queue.php:174
+#: includes/Admin/class-admin-queue.php:205
 msgid "Error cancelling campaign."
 msgstr ""
 
-#: includes/Admin/class-admin-settings.php:113
+#: includes/Admin/class-admin-settings.php:176
 msgid "Settings saved successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-subscribers.php:92
-#: includes/Admin/class-admin-subscribers.php:163
+#: includes/Admin/class-admin-subscribers.php:102
+#: includes/Admin/class-admin-subscribers.php:179
 msgid "Invalid email address."
 msgstr ""
 
-#: includes/Admin/class-admin-subscribers.php:103
-#: includes/Admin/class-admin-subscribers.php:174
+#: includes/Admin/class-admin-subscribers.php:113
+#: includes/Admin/class-admin-subscribers.php:190
 msgid "This email already exists."
 msgstr ""
 
-#: includes/Admin/class-admin-subscribers.php:126
+#: includes/Admin/class-admin-subscribers.php:136
 msgid "Subscriber added successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-subscribers.php:133
+#: includes/Admin/class-admin-subscribers.php:143
 msgid "Error adding subscriber."
 msgstr ""
 
-#: includes/Admin/class-admin-subscribers.php:197
+#: includes/Admin/class-admin-subscribers.php:213
 msgid "Subscriber updated successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-subscribers.php:217
+#: includes/Admin/class-admin-subscribers.php:234
 msgid "Subscriber deleted successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-templates.php:95
-#: includes/Admin/class-admin-templates.php:149
+#: includes/Admin/class-admin-templates.php:103
+#: includes/Admin/class-admin-templates.php:160
 msgid "Template name is required."
 msgstr ""
 
-#: includes/Admin/class-admin-templates.php:116
+#: includes/Admin/class-admin-templates.php:124
 msgid "Template added successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-templates.php:125
+#: includes/Admin/class-admin-templates.php:133
 msgid "Error adding template."
 msgstr ""
 
-#: includes/Admin/class-admin-templates.php:161
-#: includes/Admin/class-admin-templates.php:201
+#: includes/Admin/class-admin-templates.php:172
+#: includes/Admin/class-admin-templates.php:212
 #: includes/Admin/class-admin-visual-editor.php:272
 msgid "Template not found."
 msgstr ""
 
-#: includes/Admin/class-admin-templates.php:180
+#: includes/Admin/class-admin-templates.php:191
 msgid "Template updated successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-templates.php:213
+#: includes/Admin/class-admin-templates.php:224
 msgid "Predefined templates cannot be deleted."
 msgstr ""
 
-#: includes/Admin/class-admin-templates.php:225
+#: includes/Admin/class-admin-templates.php:236
 msgid "Template deleted successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-templates.php:246
+#: includes/Admin/class-admin-templates.php:257
 msgid "Template duplicated successfully."
 msgstr ""
 
-#: includes/Admin/class-admin-templates.php:253
+#: includes/Admin/class-admin-templates.php:264
 msgid "Error duplicating template."
 msgstr ""
 
@@ -2299,283 +2727,406 @@ msgstr ""
 msgid "No file uploaded."
 msgstr ""
 
-#: includes/services/class-cron-handler.php:103
-msgid "Invalid or missing email address"
+#: includes/Api/class-rest-controller.php:149
+msgid "This token does not have the required scope."
 msgstr ""
 
-#: includes/services/class-cron-handler.php:212
-msgid "SMTP sending failed"
+#: includes/Api/class-rest-controller.php:178
+msgid "An Idempotency-Key header is required."
 msgstr ""
 
-#. translators: 1: Attempt number, 2: Error details
-#: includes/services/class-cron-handler.php:219
+#: includes/Api/class-rest-controller.php:202
+msgid "Another request with this Idempotency-Key is already being processed."
+msgstr ""
+
+#: includes/Api/class-rest-controller.php:329
+msgid "This campaign can no longer be cancelled."
+msgstr ""
+
+#: includes/Api/class-rest-controller.php:388
+#: includes/Api/class-rest-controller.php:398
+msgid "The scheduled_at value is not a valid ISO-8601 timestamp."
+msgstr ""
+
+#: includes/Api/class-rest-controller.php:408
+msgid "The scheduled_at value is in the past."
+msgstr ""
+
+#: includes/Api/class-token-service.php:131
+msgid "A token name is required."
+msgstr ""
+
+#: includes/Api/class-token-service.php:136
+msgid "At least one valid scope is required."
+msgstr ""
+
+#: includes/Api/class-token-service.php:179
+msgid "The token could not be saved."
+msgstr ""
+
+#: includes/Api/class-token-service.php:200
+msgid "Authentication token is missing."
+msgstr ""
+
+#: includes/Api/class-token-service.php:206
+#: includes/Api/class-token-service.php:211
+#: includes/Api/class-token-service.php:226
+#: includes/Api/class-token-service.php:244
+msgid "The API token is invalid."
+msgstr ""
+
+#: includes/Api/class-token-service.php:218
+msgid "The API token is not yet valid."
+msgstr ""
+
+#: includes/Api/class-token-service.php:221
+#: includes/Api/class-token-service.php:241
+msgid "The API token has expired."
+msgstr ""
+
+#: includes/Api/class-token-service.php:232
+msgid "The API token has been revoked."
+msgstr ""
+
+#: includes/Api/class-token-service.php:250
+msgid "The token owner is no longer allowed to use the API."
+msgstr ""
+
+#: includes/Application/class-campaign-service.php:84
+msgid "A subject is required."
+msgstr ""
+
+#: includes/Application/class-campaign-service.php:87
+msgid "A message body is required."
+msgstr ""
+
+#: includes/Application/class-campaign-service.php:90
+msgid "At least one recipient list is required."
+msgstr ""
+
+#: includes/Application/class-campaign-service.php:95
+msgid "The custom sender email address is invalid."
+msgstr ""
+
+#: includes/Application/class-campaign-service.php:113
+msgid "No active subscribers were found in the selected lists."
+msgstr ""
+
+#: includes/Application/class-campaign-service.php:145
+msgid "The campaign could not be created."
+msgstr ""
+
+#: includes/Application/class-campaign-service.php:154
+msgid "No deliverable recipients remained when the campaign was queued."
+msgstr ""
+
+#. translators: %s: List identifier
+#: includes/Application/class-campaign-service.php:226
 #, php-format
-msgid "Attempt %1$d failed. %2$s Will retry."
+msgid "Unknown list: %s"
 msgstr ""
 
-#. translators: 1: Base error message, 2: Max attempts, 3: Error details
-#: includes/services/class-cron-handler.php:240
-#, php-format
-msgid "%1$s after %2$d attempts. %3$s"
-msgstr ""
-
-#: includes/services/class-cron-handler.php:348
-msgid "Recovered after stuck in processing"
-msgstr ""
-
-#: includes/services/class-cron-handler.php:360
-msgid "Failed after maximum attempts (stuck)"
-msgstr ""
-
-#: includes/services/class-email-service.php:332
+#: includes/services/class-email-service.php:553
 msgid "Cancelled by administrator"
 msgstr ""
 
-#: includes/services/class-email-service.php:371
+#: includes/services/class-email-service.php:596
+#: includes/services/class-mskd-cron-handler.php:200
 msgid "Campaign cancelled by administrator"
 msgstr ""
 
-#: includes/services/class-import-export-service.php:235
+#: includes/services/class-import-export-service.php:247
 msgid "File size exceeds the maximum limit of 5MB."
 msgstr ""
 
 #. translators: %s: expected format
-#: includes/services/class-import-export-service.php:246
+#: includes/services/class-import-export-service.php:258
 #, php-format
 msgid "Invalid file format. Expected %s file."
 msgstr ""
 
-#: includes/services/class-import-export-service.php:263
+#: includes/services/class-import-export-service.php:275
 msgid "Invalid file type. The file content does not match the expected format."
 msgstr ""
 
-#: includes/services/class-import-export-service.php:292
-#: includes/services/class-import-export-service.php:520
+#: includes/services/class-import-export-service.php:304
+#: includes/services/class-import-export-service.php:537
 msgid "Could not read the file."
 msgstr ""
 
-#: includes/services/class-import-export-service.php:309
-#: includes/services/class-import-export-service.php:537
+#: includes/services/class-import-export-service.php:322
+#: includes/services/class-import-export-service.php:557
 msgid "Could not read CSV headers."
 msgstr ""
 
-#: includes/services/class-import-export-service.php:321
+#: includes/services/class-import-export-service.php:335
 msgid "The CSV file must contain an \"email\" column."
 msgstr ""
 
 #. translators: 1: row number, 2: email value
-#: includes/services/class-import-export-service.php:348
+#: includes/services/class-import-export-service.php:363
 #, php-format
 msgid "Row %1$d: Invalid email address \"%2$s\"."
 msgstr ""
 
 #. translators: %s: email address
-#: includes/services/class-import-export-service.php:481
+#: includes/services/class-import-export-service.php:497
 #, php-format
 msgid "Failed to import subscriber: %s"
 msgstr ""
 
-#: includes/services/class-import-export-service.php:549
+#: includes/services/class-import-export-service.php:571
 msgid "The CSV file must contain a \"name\" column."
 msgstr ""
 
 #. translators: %d: row number
-#: includes/services/class-import-export-service.php:576
+#: includes/services/class-import-export-service.php:599
 #, php-format
 msgid "Row %d: List name is required."
 msgstr ""
 
 #. translators: %s: list name
-#: includes/services/class-import-export-service.php:641
+#: includes/services/class-import-export-service.php:664
 #, php-format
 msgid "Failed to import list: %s"
 msgstr ""
 
-#: includes/services/class-import-export-service.php:728
+#: includes/services/class-import-export-service.php:751
 msgid "File exceeds the maximum upload size."
 msgstr ""
 
-#: includes/services/class-import-export-service.php:729
+#: includes/services/class-import-export-service.php:752
 msgid "File exceeds the maximum form size."
 msgstr ""
 
-#: includes/services/class-import-export-service.php:730
+#: includes/services/class-import-export-service.php:753
 msgid "File was only partially uploaded."
 msgstr ""
 
-#: includes/services/class-import-export-service.php:731
+#: includes/services/class-import-export-service.php:754
 msgid "No file was uploaded."
 msgstr ""
 
-#: includes/services/class-import-export-service.php:732
+#: includes/services/class-import-export-service.php:755
 msgid "Missing temporary folder."
 msgstr ""
 
-#: includes/services/class-import-export-service.php:733
+#: includes/services/class-import-export-service.php:756
 msgid "Failed to write file to disk."
 msgstr ""
 
-#: includes/services/class-import-export-service.php:734
+#: includes/services/class-import-export-service.php:757
 msgid "A PHP extension stopped the file upload."
 msgstr ""
 
-#: includes/services/class-import-export-service.php:737
+#: includes/services/class-import-export-service.php:760
 msgid "Unknown upload error."
 msgstr ""
 
-#: includes/services/class-smtp-mailer.php:199
+#: includes/services/class-mskd-cron-handler.php:137
+msgid "Invalid or missing email address"
+msgstr ""
+
+#: includes/services/class-mskd-cron-handler.php:310
+msgid "SMTP sending failed"
+msgstr ""
+
+#. translators: 1: Attempt number, 2: Error details
+#: includes/services/class-mskd-cron-handler.php:317
+#, php-format
+msgid "Attempt %1$d failed. %2$s Will retry."
+msgstr ""
+
+#. translators: 1: Base error message, 2: Max attempts, 3: Error details
+#: includes/services/class-mskd-cron-handler.php:338
+#, php-format
+msgid "%1$s after %2$d attempts. %3$s"
+msgstr ""
+
+#: includes/services/class-mskd-cron-handler.php:453
+msgid "Recovered after stuck in processing"
+msgstr ""
+
+#: includes/services/class-mskd-cron-handler.php:465
+msgid "Failed after maximum attempts (stuck)"
+msgstr ""
+
+#: includes/services/class-mskd-smtp-mailer.php:109
+#: includes/services/class-mskd-smtp-mailer.php:217
+msgid "Email delivery is disabled in local environments."
+msgstr ""
+
+#: includes/services/class-mskd-smtp-mailer.php:228
 msgid "SMTP is not enabled or configured. Please fill in SMTP settings."
 msgstr ""
 
-#: includes/services/class-smtp-mailer.php:209
+#: includes/services/class-mskd-smtp-mailer.php:238
 msgid "Invalid sender email address."
 msgstr ""
 
 #. translators: %s: Site name
-#: includes/services/class-smtp-mailer.php:247
+#: includes/services/class-mskd-smtp-mailer.php:286
 #, php-format
 msgid "[%s] SMTP Test Email"
 msgstr ""
 
 #. translators: %1$s: Current time, %2$s: SMTP host, %3$s: SMTP port
-#: includes/services/class-smtp-mailer.php:252
+#: includes/services/class-mskd-smtp-mailer.php:292
 #, php-format
 msgid "<h2>SMTP Test Email</h2><p>This email confirms that SMTP settings are working correctly.</p><p><strong>Time:</strong> %1$s</p><p><strong>SMTP server:</strong> %2$s:%3$s</p>"
 msgstr ""
 
 #. translators: %s: Admin email address
-#: includes/services/class-smtp-mailer.php:268
+#: includes/services/class-mskd-smtp-mailer.php:310
 #, php-format
 msgid "Test email sent successfully to %s!"
 msgstr ""
 
-#: includes/services/class-smtp-mailer.php:276
+#: includes/services/class-mskd-smtp-mailer.php:318
 msgid "Failed to send test email."
 msgstr ""
 
 #. translators: %s: Error message
-#: includes/services/class-smtp-mailer.php:285
+#: includes/services/class-mskd-smtp-mailer.php:328
 #, php-format
 msgid "SMTP error: %s"
 msgstr ""
 
 #. translators: %s: Error message
-#: includes/services/class-smtp-mailer.php:295
+#: includes/services/class-mskd-smtp-mailer.php:339
 #, php-format
 msgid "Error: %s"
 msgstr ""
 
 #. translators: %d: subscriber ID
-#: includes/services/class-subscriber-service.php:568
-#: includes/services/class-subscriber-service.php:643
+#: includes/services/class-subscriber-service.php:666
+#: includes/services/class-subscriber-service.php:741
+#: includes/services/class-subscriber-service.php:990
 #, php-format
 msgid "Subscriber ID %d not found."
 msgstr ""
 
-#: includes/services/class-template-service.php:283
+#. translators: %d: subscriber ID
+#: includes/services/class-subscriber-service.php:1003
+#, php-format
+msgid "Failed to update subscriber ID %d"
+msgstr ""
+
+#. translators: %d: subscriber ID
+#: includes/services/class-subscriber-service.php:1058
+#, php-format
+msgid "Failed to delete subscriber ID %d"
+msgstr ""
+
+#: includes/services/class-template-service.php:289
 msgid " (Copy)"
 msgstr ""
 
-#: includes/services/class-template-service.php:365
+#: includes/services/class-template-service.php:371
 msgid "Blank Template"
 msgstr ""
 
-#: includes/services/class-template-service.php:374
+#: includes/services/class-template-service.php:380
 msgid "Newsletter"
 msgstr ""
 
-#: includes/services/class-template-service.php:375
+#: includes/services/class-template-service.php:381
 msgid "Your Newsletter Title"
 msgstr ""
 
-#: includes/services/class-template-service.php:383
+#: includes/services/class-template-service.php:389
 msgid "Welcome Email"
 msgstr ""
 
-#: includes/services/class-template-service.php:384
+#: includes/services/class-template-service.php:390
 msgid "Welcome to {site_name}!"
 msgstr ""
 
-#: includes/services/class-template-service.php:392
+#: includes/services/class-template-service.php:398
 msgid "Promotional"
 msgstr ""
 
-#: includes/services/class-template-service.php:393
+#: includes/services/class-template-service.php:399
 msgid "Special Offer Just for You!"
 msgstr ""
 
-#: mail-system.php:178
+#: mail-system.php:193
 msgid "Every minute"
 msgstr ""
 
-#: public/class-public.php:59
+#: public/class-mskd-public.php:81
+msgid "Invalid tracking link."
+msgstr ""
+
+#: public/class-mskd-public.php:160
 msgid "Subscribing..."
 msgstr ""
 
-#: public/class-public.php:60
+#: public/class-mskd-public.php:161
 msgid "Successfully subscribed!"
 msgstr ""
 
-#: public/class-public.php:61
+#: public/class-mskd-public.php:162
 msgid "An error occurred. Please try again."
 msgstr ""
 
-#: public/class-public.php:158
-#: public/class-public.php:191
+#: public/class-mskd-public.php:261
+#: public/class-mskd-public.php:301
 msgid "Invalid unsubscribe link."
 msgstr ""
 
-#: public/class-public.php:171
-#: public/class-public.php:252
-msgid "Too many attempts. Please try again in 5 minutes."
-msgstr ""
-
-#: public/class-public.php:232
-#: public/class-public.php:273
-msgid "Invalid confirmation link."
-msgstr ""
-
-#: public/class-public.php:241
+#: public/class-mskd-public.php:270
+#: public/class-mskd-public.php:351
 msgid "Unable to verify request."
 msgstr ""
 
-#: public/class-public.php:348
+#: public/class-mskd-public.php:281
+#: public/class-mskd-public.php:362
+msgid "Too many attempts. Please try again in 5 minutes."
+msgstr ""
+
+#: public/class-mskd-public.php:342
+#: public/class-mskd-public.php:383
+msgid "Invalid confirmation link."
+msgstr ""
+
+#: public/class-mskd-public.php:461
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: public/class-public.php:387
-#: public/class-public.php:422
-#: public/class-public.php:464
+#: public/class-mskd-public.php:500
+#: public/class-mskd-public.php:537
+#: public/class-mskd-public.php:581
 msgid "An error occurred. Please try again later."
 msgstr ""
 
-#: public/class-public.php:436
-#: public/class-public.php:505
+#: public/class-mskd-public.php:553
+#: public/class-mskd-public.php:622
 msgid "You are already subscribed!"
 msgstr ""
 
-#: public/class-public.php:511
+#: public/class-mskd-public.php:628
 msgid "Please check your email to confirm your subscription."
 msgstr ""
 
 #. translators: %s: Site name
-#: public/class-public.php:536
+#: public/class-mskd-public.php:655
 #, php-format
 msgid "Confirm your subscription to %s"
 msgstr ""
 
 #. translators: %s: Subscriber first name
-#: public/class-public.php:542
+#: public/class-mskd-public.php:688
 #, php-format
 msgid "Hello %s,"
 msgstr ""
 
-#: public/class-public.php:543
+#: public/class-mskd-public.php:689
 msgid "Hello,"
 msgstr ""
 
 #. translators: 1: Greeting, 2: Site name, 3: Confirmation URL, 4: Site name
-#: public/class-public.php:547
+#: public/class-mskd-public.php:693
 #, php-format
 msgid ""
 "%1$s\n"
@@ -2604,7 +3155,7 @@ msgstr ""
 msgid "Thank you for confirming your subscription. You will now receive our emails."
 msgstr ""
 
-#: public/partials/subscribe-form.php:29
+#: public/partials/subscribe-form.php:31
 msgid "Email *"
 msgstr ""
 
@@ -2614,470 +3165,4 @@ msgstr ""
 
 #: public/partials/unsubscribe.php:69
 msgid "You will no longer receive emails from us."
-msgstr ""
-
-#: admin/partials/settings.php
-msgid "Database version"
-msgstr ""
-
-#: admin/partials/settings.php
-msgid "requires update to"
-msgstr ""
-
-#: admin/partials/settings.php
-msgid "Enable GA4 Conversion Tracking"
-msgstr ""
-
-#: admin/partials/settings.php
-msgid "Fire Google Analytics 4 conversion events on successful subscription"
-msgstr ""
-
-#: admin/partials/settings.php
-msgid "When enabled, a \"generate_lead\" event will be sent to Google Analytics when a user successfully subscribes. Make sure you have GA4 or GTM installed on your site."
-msgstr ""
-
-#: admin/partials/settings.php
-msgid "Delete Inactive Subscribers"
-msgstr ""
-
-#: admin/partials/settings.php
-msgid "Delete unconfirmed and inactive subscribers"
-msgstr ""
-
-#: admin/partials/settings.php
-msgid "Permanently deletes all subscribers with inactive (unconfirmed) status and their list associations."
-msgstr ""
-
-#: includes/Admin/class-admin-assets.php
-msgid "Are you sure you want to delete all unconfirmed and inactive subscribers? This action cannot be undone!"
-msgstr ""
-
-#: includes/Admin/class-admin-ajax.php
-msgid "%d inactive subscriber deleted successfully."
-msgid_plural "%d inactive subscribers deleted successfully."
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/Admin/class-admin-ajax.php
-msgid "No inactive subscribers found to delete."
-msgstr ""
-
-#: admin/partials/subscribers.php
-msgid "Set active"
-msgstr ""
-
-#: admin/partials/subscribers.php
-msgid "Set inactive"
-msgstr ""
-
-#: includes/Admin/class-admin-ajax.php
-#: includes/services/class-subscriber-service.php
-msgid "Invalid status."
-msgstr ""
-
-#: includes/services/class-subscriber-service.php
-msgid "Failed to update subscriber ID %d"
-msgstr ""
-
-#: includes/services/class-mskd-smtp-mailer.php
-msgid "Email delivery is disabled in local environments."
-msgstr ""
-
-#: includes/Admin/class-admin-notices.php
-msgid "Mail System does not send email in local environments. Queued email will remain pending until this site is no longer detected as local."
-msgstr ""
-
-#: admin/partials/queue.php
-msgid "Opens"
-msgstr ""
-
-#: admin/partials/queue.php
-msgid "Total tracking pixel loads"
-msgstr ""
-
-#. translators: %d: tracking pixel load count
-#: admin/partials/queue-detail.php admin/partials/queue.php
-#, php-format
-msgid "Loads: %d"
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "opened"
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "Open tracking is approximate: image blocking can miss opens, while email privacy proxies and prefetching can record an open before the recipient reads the message."
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "Opened"
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "clicked"
-msgstr ""
-
-#. translators: %d: total tracked link clicks
-#: admin/partials/queue-detail.php admin/partials/queue.php
-#, php-format
-msgid "Total: %d"
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "Engagement analytics are approximate. Image privacy proxies can create opens, while security scanners and link prefetching can create clicks before a person interacts with the email. Messages carrying BCC are intentionally untracked to prevent incorrect recipient attribution."
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "Clicked"
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "Link performance"
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "Link"
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "Destination"
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "Unique clickers"
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "Total clicks"
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "Click rate"
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "First click"
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgid "Last click"
-msgstr ""
-
-#: admin/partials/queue-detail.php admin/partials/queue.php
-msgid "Clicks"
-msgstr ""
-
-#. translators: 1: total clicks, 2: last click date
-#: admin/partials/queue-detail.php
-#, php-format
-msgid "%1$d total; last %2$s"
-msgstr ""
-
-#: public/class-mskd-public.php
-msgid "Invalid tracking link."
-msgstr ""
-
-#: admin/partials/api-access.php:26
-msgid "30 days"
-msgstr ""
-
-#: admin/partials/api-access.php:28
-msgid "365 days"
-msgstr ""
-
-#: admin/partials/api-access.php:27
-msgid "90 days"
-msgstr ""
-
-#: admin/partials/api-access.php:75
-msgid "A label to help you recognize this token later."
-msgstr ""
-
-#: includes/Application/class-campaign-service.php:87
-msgid "A message body is required."
-msgstr ""
-
-#: includes/Application/class-campaign-service.php:84
-msgid "A subject is required."
-msgstr ""
-
-#: includes/Api/class-token-service.php:131
-msgid "A token name is required."
-msgstr ""
-
-#: admin/partials/api-access.php:35
-msgid "API Access"
-msgstr ""
-
-#: admin/partials/api-access.php:114
-msgid "Active tokens"
-msgstr ""
-
-#: includes/Api/class-rest-controller.php:173
-msgid "An Idempotency-Key header is required."
-msgstr ""
-
-#: includes/Application/class-campaign-service.php:90
-msgid "At least one recipient list is required."
-msgstr ""
-
-#: includes/Api/class-token-service.php:136
-msgid "At least one valid scope is required."
-msgstr ""
-
-#: includes/Api/class-token-service.php:200
-msgid "Authentication token is missing."
-msgstr ""
-
-#. translators: %s: REST API base URL
-#: admin/partials/api-access.php:46
-#, php-format
-msgid "Base URL: %s"
-msgstr ""
-
-#: admin/partials/api-access.php:55
-msgid "Copy this token now. For your security it is shown only once and cannot be retrieved later."
-msgstr ""
-
-#: admin/partials/api-access.php:40
-msgid "Create JSON Web Tokens (JWT) to authenticate REST API requests, for example to schedule newsletters from an external system."
-msgstr ""
-
-#: admin/partials/api-access.php:66
-msgid "Create a new token"
-msgstr ""
-
-#: admin/partials/api-access.php:123
-msgid "Expires"
-msgstr ""
-
-#: admin/partials/api-access.php:95
-msgid "Expiry"
-msgstr ""
-
-#: admin/partials/api-access.php:109
-msgid "Generate token"
-msgstr ""
-
-#: admin/partials/api-access.php:125
-msgid "Last used"
-msgstr ""
-
-#: admin/partials/api-access.php:134
-#: admin/partials/api-access.php:136
-msgid "Never"
-msgstr ""
-
-#: admin/partials/api-access.php:29
-msgid "Never expires"
-msgstr ""
-
-#: admin/partials/api-access.php:116
-msgid "No API tokens have been created yet."
-msgstr ""
-
-#: includes/Application/class-campaign-service.php:113
-msgid "No active subscribers were found in the selected lists."
-msgstr ""
-
-#: includes/Application/class-campaign-service.php:151
-msgid "No deliverable recipients remained when the campaign was queued."
-msgstr ""
-
-#: admin/partials/api-access.php:21
-msgid "Read (list lookup, campaign status)"
-msgstr ""
-
-#: admin/partials/api-access.php:142
-msgid "Revoke"
-msgstr ""
-
-#: admin/partials/api-access.php:138
-msgid "Revoke this token? Applications using it will stop working immediately."
-msgstr ""
-
-#: admin/partials/api-access.php:79
-#: admin/partials/api-access.php:122
-msgid "Scopes"
-msgstr ""
-
-#: admin/partials/api-access.php:60
-msgid "Send it as an HTTP header:"
-msgstr ""
-
-#: includes/Api/class-token-service.php:232
-msgid "The API token has been revoked."
-msgstr ""
-
-#: includes/Api/class-token-service.php:221
-#: includes/Api/class-token-service.php:237
-msgid "The API token has expired."
-msgstr ""
-
-#: includes/Api/class-token-service.php:206
-#: includes/Api/class-token-service.php:211
-#: includes/Api/class-token-service.php:226
-msgid "The API token is invalid."
-msgstr ""
-
-#: includes/Api/class-token-service.php:218
-msgid "The API token is not yet valid."
-msgstr ""
-
-#: includes/Application/class-campaign-service.php:142
-msgid "The campaign could not be created."
-msgstr ""
-
-#: includes/Application/class-campaign-service.php:95
-msgid "The custom sender email address is invalid."
-msgstr ""
-
-#: includes/Api/class-rest-controller.php:335
-msgid "The scheduled_at value is in the past."
-msgstr ""
-
-#: includes/Api/class-rest-controller.php:325
-msgid "The scheduled_at value is not a valid ISO-8601 timestamp."
-msgstr ""
-
-#: includes/Api/class-token-service.php:179
-msgid "The token could not be saved."
-msgstr ""
-
-#: includes/Api/class-token-service.php:242
-msgid "The token owner is no longer allowed to use the API."
-msgstr ""
-
-#: includes/Api/class-rest-controller.php:267
-msgid "This campaign can no longer be cancelled."
-msgstr ""
-
-#: includes/Api/class-rest-controller.php:144
-msgid "This token does not have the required scope."
-msgstr ""
-
-#: admin/partials/api-access.php:54
-msgid "Token created"
-msgstr ""
-
-#: admin/partials/api-access.php:71
-msgid "Token name"
-msgstr ""
-
-#. translators: %s: List identifier
-#: includes/Application/class-campaign-service.php:223
-#, php-format
-msgid "Unknown list: %s"
-msgstr ""
-
-#: admin/partials/api-access.php:22
-msgid "Write (schedule and cancel campaigns)"
-msgstr ""
-
-#: admin/partials/api-access.php:91
-msgid "Write access requires the read scope for the corresponding lookups."
-msgstr ""
-
-#: admin/partials/api-access.php:74
-msgid "e.g. Newsletter scheduler"
-msgstr ""
-
-#: admin/partials/queue.php, admin/partials/queue-detail.php
-msgctxt "campaign status"
-msgid "Pending"
-msgstr ""
-
-#: admin/partials/queue.php, admin/partials/queue-detail.php
-msgctxt "campaign status"
-msgid "Processing"
-msgstr ""
-
-#: admin/partials/queue.php, admin/partials/queue-detail.php
-msgctxt "campaign status"
-msgid "Completed"
-msgstr ""
-
-#: admin/partials/queue.php, admin/partials/queue-detail.php
-msgctxt "campaign status"
-msgid "Cancelled"
-msgstr ""
-
-#: admin/partials/queue.php
-msgctxt "campaign status"
-msgid "Scheduled"
-msgstr ""
-
-#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
-msgctxt "email status"
-msgid "Pending"
-msgstr ""
-
-#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
-msgctxt "email status"
-msgid "Processing"
-msgstr ""
-
-#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
-msgctxt "email status"
-msgid "Sent"
-msgstr ""
-
-#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
-msgctxt "email status"
-msgid "Failed"
-msgstr ""
-
-#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
-msgctxt "email status"
-msgid "Cancelled"
-msgstr ""
-
-#: admin/partials/queue-legacy.php
-msgctxt "email status"
-msgid "Scheduled"
-msgstr ""
-
-#: admin/partials/queue.php, admin/partials/queue-detail.php
-msgctxt "campaign type"
-msgid "One-time"
-msgstr ""
-
-#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
-msgctxt "table column header"
-msgid "Sent"
-msgstr ""
-
-#: admin/partials/queue-detail.php
-msgctxt "table column header"
-msgid "Opened"
-msgstr ""
-
-#: admin/partials/queue-legacy.php
-msgctxt "table column header"
-msgid "Scheduled"
-msgstr ""
-
-#: admin/partials/subscribers.php, includes/Admin/class-admin-assets.php
-msgctxt "subscriber status"
-msgid "Active"
-msgstr ""
-
-#: admin/partials/subscribers.php, includes/Admin/class-admin-assets.php
-msgctxt "subscriber status"
-msgid "Inactive"
-msgstr ""
-
-#: admin/partials/subscribers.php
-msgctxt "subscriber status"
-msgid "Unsubscribed"
-msgstr ""
-
-#: admin/partials/dashboard.php
-msgctxt "cron status"
-msgid "Active"
-msgstr ""
-
-#: admin/partials/dashboard.php
-msgctxt "cron status"
-msgid "Inactive"
 msgstr ""
