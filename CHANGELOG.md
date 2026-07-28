@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+- **Bulgarian status labels no longer mix singular and plural** — the campaign queue showed a single campaign as "Завършена" (feminine singular) next to "Отменени" (plural), because one string served both the status badge of a single item and the filter links that count many. Status, type and subscriber labels that describe a single row now use context-qualified strings (`_x()`), so Bulgarian can render campaign badges as feminine singular ("Завършена", "Отменена", "Насрочена"), email badges as masculine singular ("Изпратен", "Неуспешен", "Отменен") and the filter links as plural ("Завършени", "Отменени", "Насрочени"). German keeps its existing wording, and the date columns "Sent"/"Opened"/"Scheduled" now read as column headers ("Изпратен на", "Gesendet am") instead of as filter labels.
 
 ### Security
 

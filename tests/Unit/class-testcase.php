@@ -75,19 +75,28 @@ abstract class TestCase extends PHPUnitTestCase {
 		// Translation functions.
 		Functions\stubs(
 			array(
-				'__'         => function ( $text, $domain = 'default' ) {
+				'__'          => function ( $text, $domain = 'default' ) {
 					return $text;
 				},
-				'_e'         => function ( $text, $domain = 'default' ) {
+				'_e'          => function ( $text, $domain = 'default' ) {
 					echo $text;
 				},
-				'esc_html_e' => function ( $text, $domain = 'default' ) {
-					echo $text;
-				},
-				'esc_html__' => function ( $text, $domain = 'default' ) {
+				'_x'          => function ( $text, $context, $domain = 'default' ) {
 					return $text;
 				},
-				'esc_attr__' => function ( $text, $domain = 'default' ) {
+				'esc_html_e'  => function ( $text, $domain = 'default' ) {
+					echo $text;
+				},
+				'esc_html__'  => function ( $text, $domain = 'default' ) {
+					return $text;
+				},
+				'esc_html_x'  => function ( $text, $context, $domain = 'default' ) {
+					return $text;
+				},
+				'esc_attr__'  => function ( $text, $domain = 'default' ) {
+					return $text;
+				},
+				'esc_attr_x'  => function ( $text, $context, $domain = 'default' ) {
 					return $text;
 				},
 			)

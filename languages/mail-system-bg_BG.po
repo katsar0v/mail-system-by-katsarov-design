@@ -327,7 +327,7 @@ msgstr "Cron статус"
 
 #: admin/partials/dashboard.php
 msgid "Active"
-msgstr "Активен"
+msgstr "Активни"
 
 #: admin/partials/dashboard.php
 msgid "Next run: %s"
@@ -335,7 +335,7 @@ msgstr "Следващо изпълнение: %s"
 
 #: admin/partials/dashboard.php
 msgid "Inactive"
-msgstr "Неактивен"
+msgstr "Неактивни"
 
 #: admin/partials/dashboard.php
 msgid "Sending: %d emails/min"
@@ -367,7 +367,7 @@ msgstr "Статус"
 
 #: admin/partials/subscribers.php
 msgid "Unsubscribed"
-msgstr "Отписан"
+msgstr "Отписани"
 
 #: admin/partials/subscribers.php
 msgid "No lists created."
@@ -546,11 +546,11 @@ msgstr "%d имейла/мин"
 
 #: admin/partials/queue.php
 msgid "Scheduled"
-msgstr "Насрочен"
+msgstr "Насрочени"
 
 #: admin/partials/queue.php
 msgid "Pending"
-msgstr "Чакащ"
+msgstr "Чакащи"
 
 #: admin/partials/queue.php
 msgid "Processing"
@@ -1154,7 +1154,7 @@ msgstr ""
 
 #: admin/partials/queue.php
 msgid "Completed"
-msgstr "Завършена"
+msgstr "Завършени"
 
 #: admin/partials/queue.php
 msgid "Campaigns"
@@ -2994,3 +2994,103 @@ msgstr "Достъпът за запис изисква обхват за чет
 #: admin/partials/api-access.php:74
 msgid "e.g. Newsletter scheduler"
 msgstr "напр. Планировчик на бюлетини"
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign status"
+msgid "Pending"
+msgstr "Чакаща"
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign status"
+msgid "Processing"
+msgstr "В процес"
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign status"
+msgid "Completed"
+msgstr "Завършена"
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign status"
+msgid "Cancelled"
+msgstr "Отменена"
+
+#: admin/partials/queue.php
+msgctxt "campaign status"
+msgid "Scheduled"
+msgstr "Насрочена"
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Pending"
+msgstr "Чакащ"
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Processing"
+msgstr "В процес"
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Sent"
+msgstr "Изпратен"
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Failed"
+msgstr "Неуспешен"
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Cancelled"
+msgstr "Отменен"
+
+#: admin/partials/queue-legacy.php
+msgctxt "email status"
+msgid "Scheduled"
+msgstr "Насрочен"
+
+#: admin/partials/queue.php, admin/partials/queue-detail.php
+msgctxt "campaign type"
+msgid "One-time"
+msgstr "Еднократна"
+
+#: admin/partials/queue-detail.php, admin/partials/queue-legacy.php
+msgctxt "table column header"
+msgid "Sent"
+msgstr "Изпратен на"
+
+#: admin/partials/queue-detail.php
+msgctxt "table column header"
+msgid "Opened"
+msgstr "Отворен на"
+
+#: admin/partials/queue-legacy.php
+msgctxt "table column header"
+msgid "Scheduled"
+msgstr "Насрочен за"
+
+#: admin/partials/subscribers.php, includes/Admin/class-admin-assets.php
+msgctxt "subscriber status"
+msgid "Active"
+msgstr "Активен"
+
+#: admin/partials/subscribers.php, includes/Admin/class-admin-assets.php
+msgctxt "subscriber status"
+msgid "Inactive"
+msgstr "Неактивен"
+
+#: admin/partials/subscribers.php
+msgctxt "subscriber status"
+msgid "Unsubscribed"
+msgstr "Отписан"
+
+#: admin/partials/dashboard.php
+msgctxt "cron status"
+msgid "Active"
+msgstr "Активен"
+
+#: admin/partials/dashboard.php
+msgctxt "cron status"
+msgid "Inactive"
+msgstr "Неактивен"

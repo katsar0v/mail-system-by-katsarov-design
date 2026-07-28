@@ -123,8 +123,8 @@ $queue_items = $wpdb->get_results(
 				<th scope="col" class="mskd-col-subject"><?php esc_html_e( 'Subject', 'mail-system' ); ?></th>
 				<th scope="col" style="width: 100px;"><?php esc_html_e( 'Status', 'mail-system' ); ?></th>
 				<th scope="col" style="width: 80px;"><?php esc_html_e( 'Attempts', 'mail-system' ); ?></th>
-				<th scope="col"><?php esc_html_e( 'Scheduled', 'mail-system' ); ?></th>
-				<th scope="col"><?php esc_html_e( 'Sent', 'mail-system' ); ?></th>
+				<th scope="col"><?php echo esc_html( _x( 'Scheduled', 'table column header', 'mail-system' ) ); ?></th>
+				<th scope="col"><?php echo esc_html( _x( 'Sent', 'table column header', 'mail-system' ) ); ?></th>
 				<th scope="col" style="width: 100px;"><?php esc_html_e( 'Actions', 'mail-system' ); ?></th>
 			</tr>
 		</thead>
@@ -167,17 +167,17 @@ $queue_items = $wpdb->get_results(
 							<span class="mskd-status mskd-status-<?php echo esc_attr( $item->status ); ?>">
 								<?php
 								$statuses = array(
-									'pending'    => __( 'Pending', 'mail-system' ),
-									'processing' => __( 'Processing', 'mail-system' ),
-									'sent'       => __( 'Sent', 'mail-system' ),
-									'failed'     => __( 'Failed', 'mail-system' ),
-									'cancelled'  => __( 'Cancelled', 'mail-system' ),
+									'pending'    => _x( 'Pending', 'email status', 'mail-system' ),
+									'processing' => _x( 'Processing', 'email status', 'mail-system' ),
+									'sent'       => _x( 'Sent', 'email status', 'mail-system' ),
+									'failed'     => _x( 'Failed', 'email status', 'mail-system' ),
+									'cancelled'  => _x( 'Cancelled', 'email status', 'mail-system' ),
 								);
 								echo esc_html( $statuses[ $item->status ] ?? $item->status );
 								?>
 							</span>
 							<?php if ( $is_future_scheduled && $item->status === 'pending' ) : ?>
-								<br><small class="mskd-scheduled-badge"><?php esc_html_e( 'Scheduled', 'mail-system' ); ?></small>
+								<br><small class="mskd-scheduled-badge"><?php echo esc_html( _x( 'Scheduled', 'email status', 'mail-system' ) ); ?></small>
 							<?php endif; ?>
 							<?php if ( $item->status === 'failed' && $item->error_message ) : ?>
 								<br><small class="mskd-error-msg"><?php echo esc_html( $item->error_message ); ?></small>

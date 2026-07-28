@@ -105,13 +105,13 @@ if ( 'edit' === $current_action && $subscriber_id ) {
 						<td>
 							<select name="status" id="status">
 								<option value="active" <?php selected( $subscriber ? $subscriber->status : 'active', 'active' ); ?>>
-									<?php esc_html_e( 'Active', 'mail-system' ); ?>
+									<?php echo esc_html( _x( 'Active', 'subscriber status', 'mail-system' ) ); ?>
 								</option>
 								<option value="inactive" <?php selected( $subscriber ? $subscriber->status : '', 'inactive' ); ?>>
-									<?php esc_html_e( 'Inactive', 'mail-system' ); ?>
+									<?php echo esc_html( _x( 'Inactive', 'subscriber status', 'mail-system' ) ); ?>
 								</option>
 								<option value="unsubscribed" <?php selected( $subscriber ? $subscriber->status : '', 'unsubscribed' ); ?>>
-									<?php esc_html_e( 'Unsubscribed', 'mail-system' ); ?>
+									<?php echo esc_html( _x( 'Unsubscribed', 'subscriber status', 'mail-system' ) ); ?>
 								</option>
 							</select>
 						</td>
@@ -386,9 +386,9 @@ if ( 'edit' === $current_action && $subscriber_id ) {
 								<span class="mskd-status mskd-status-<?php echo esc_attr( $sub->status ); ?>">
 									<?php
 									$statuses = array(
-										'active'       => esc_html__( 'Active', 'mail-system' ),
-										'inactive'     => esc_html__( 'Inactive', 'mail-system' ),
-										'unsubscribed' => esc_html__( 'Unsubscribed', 'mail-system' ),
+										'active'       => _x( 'Active', 'subscriber status', 'mail-system' ),
+										'inactive'     => _x( 'Inactive', 'subscriber status', 'mail-system' ),
+										'unsubscribed' => _x( 'Unsubscribed', 'subscriber status', 'mail-system' ),
 									);
 									echo esc_html( $statuses[ $sub->status ] ?? $sub->status );
 									?>
