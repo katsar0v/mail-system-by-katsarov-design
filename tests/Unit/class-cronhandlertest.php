@@ -282,6 +282,68 @@ class CronHandlerTest extends TestCase {
 	}
 
 	/**
+	 * The atomic claim rechecks subscriber state so an unsubscribe that races the
+	 * initial queue SELECT cannot still result in a delivery.
+	 */
+	public function test_atomic_claim_requires_subscriber_to_still_be_active(): void {
+		$queue_item = (object) array(
+			'id'                => 91,
+			'campaign_id'       => 40,
+			'subscriber_id'     => 705,
+			'email'             => 'recipient@example.com',
+			'first_name'        => 'Test',
+			'last_name'         => 'Recipient',
+			'subject'           => 'Subject',
+			'body'              => 'Body',
+			'status'            => 'pending',
+			'campaign_status'   => 'processing',
+			'attempts'          => 0,
+			'unsubscribe_token' => 'unsubscribe-token',
+			'from_email'        => null,
+			'from_name'         => null,
+		);
+
+		$wpdb = new class( $queue_item ) {
+			public $prefix = 'wp_';
+			public $claim_queries = array();
+			private $queue_item;
+
+			public function __construct( $queue_item ) {
+				$this->queue_item = $queue_item;
+			}
+
+			public function prepare( $query, ...$args ) {
+				return $query;
+			}
+
+			public function get_col( $query ) {
+				return array();
+			}
+
+			public function get_results( $query ) {
+				if ( false !== strpos( $query, "status = 'processing'" ) ) {
+					return array();
+				}
+
+				return array( $this->queue_item );
+			}
+
+			public function query( $query ) {
+				$this->claim_queries[] = $query;
+				return 0;
+			}
+		};
+
+		$GLOBALS['wpdb'] = $wpdb;
+
+		$this->cron_handler->process_queue();
+
+		$this->assertCount( 1, $wpdb->claim_queries );
+		$this->assertStringContainsString( 'active_subscriber.status', $wpdb->claim_queries[0] );
+		$this->assertStringContainsString( "= 'active'", $wpdb->claim_queries[0] );
+	}
+
+	/**
 	 * Test that successful email is marked as sent.
 	 */
 	public function test_process_queue_marks_sent_on_success(): void {

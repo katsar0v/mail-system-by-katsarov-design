@@ -365,6 +365,51 @@ class UnsubscribeTest extends TestCase {
 	}
 
 	/**
+	 * A successful unsubscribe immediately invokes pending-queue cleanup.
+	 */
+	public function test_unsubscribe_triggers_pending_queue_cleanup(): void {
+		$wpdb = $this->setup_wpdb_mock();
+
+		$_GET['mskd_unsubscribe'] = 'abc123def456abc123def456abc12345';
+
+		Functions\expect( 'get_transient' )->once()->andReturn( false );
+		Functions\expect( 'set_transient' )->once()->andReturn( true );
+
+		$wpdb->shouldReceive( 'get_row' )
+			->once()
+			->andReturn(
+				(object) array(
+					'id'     => 123,
+					'email'  => 'user@example.com',
+					'status' => 'active',
+				)
+			);
+
+		$wpdb->shouldReceive( 'update' )
+			->once()
+			->with(
+				'wp_mskd_subscribers',
+				array( 'status' => 'unsubscribed' ),
+				array( 'id' => 123 ),
+				array( '%s' ),
+				array( '%d' )
+			)
+			->andReturn( 1 );
+
+		$wpdb->shouldReceive( 'get_col' )
+			->once()
+			->with( Mockery::on( fn( $query ) => false !== strpos( $query, 'q.subscriber_id = 123' ) ) )
+			->andThrow( new \RuntimeException( 'queue_cleanup_called' ) );
+
+		try {
+			$this->public->handle_unsubscribe();
+			$this->fail( 'Queue cleanup was not invoked.' );
+		} catch ( \RuntimeException $exception ) {
+			$this->assertSame( 'queue_cleanup_called', $exception->getMessage() );
+		}
+	}
+
+	/**
 	 * Test that no query param does nothing.
 	 */
 	public function test_no_query_param_does_nothing(): void {

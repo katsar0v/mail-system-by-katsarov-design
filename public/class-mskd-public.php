@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once MSKD_PLUGIN_DIR . 'includes/services/class-queue-maintenance.php';
+
 use MSKD\Traits\Email_Header_Footer;
 
 /**
@@ -305,13 +307,18 @@ class MSKD_Public {
 		}
 
 		// Update subscriber status.
-		$wpdb->update(
+		$updated = $wpdb->update(
 			$wpdb->prefix . 'mskd_subscribers',
 			array( 'status' => 'unsubscribed' ),
 			array( 'id' => $subscriber->id ),
 			array( '%s' ),
 			array( '%d' )
 		);
+
+		if ( false !== $updated ) {
+			$queue_maintenance = new \MSKD\Services\Queue_Maintenance();
+			$queue_maintenance->cancel_pending_for_subscriber( (int) $subscriber->id );
+		}
 
 		// Show unsubscribe confirmation page.
 		include MSKD_PLUGIN_DIR . 'public/partials/unsubscribe.php';

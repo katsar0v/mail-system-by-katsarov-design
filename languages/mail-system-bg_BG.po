@@ -3176,3 +3176,11 @@ msgstr ""
 #: includes/Api/class-rest-controller.php:202
 msgid "Another request with this Idempotency-Key is already being processed."
 msgstr ""
+
+#: includes/services/class-queue-maintenance.php:98
+msgid "Recipient is no longer active; delivery cancelled."
+msgstr "Получателят вече не е активен; доставката е отменена."
+
+#: includes/services/class-queue-maintenance.php:152
+msgid "Recipient unsubscribed before delivery; delivery cancelled."
+msgstr "Получателят се отписа преди доставката; доставката е отменена."

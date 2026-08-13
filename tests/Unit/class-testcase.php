@@ -277,6 +277,9 @@ abstract class TestCase extends PHPUnitTestCase {
 					return empty( $flat_args ) ? $query : vsprintf( $query, $flat_args );
 				}
 			);
+		$wpdb->shouldReceive( 'get_col' )
+			->byDefault()
+			->andReturn( array() );
 		return $wpdb;
 	}
 
