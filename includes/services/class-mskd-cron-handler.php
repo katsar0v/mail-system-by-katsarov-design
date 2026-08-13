@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once MSKD_PLUGIN_DIR . 'includes/class-mskd-environment.php';
+require_once MSKD_PLUGIN_DIR . 'includes/services/class-queue-maintenance.php';
 
 use MSKD\Traits\Email_Header_Footer;
 
@@ -45,6 +46,13 @@ class MSKD_Cron_Handler {
 	 * @var \MSKD\Services\Email_Tracking_Service|null
 	 */
 	private $tracking_service = null;
+
+	/**
+	 * Queue maintenance service instance.
+	 *
+	 * @var \MSKD\Services\Queue_Maintenance|null
+	 */
+	private $queue_maintenance = null;
 
 	/**
 	 * Initialize cron hooks
@@ -87,6 +95,10 @@ class MSKD_Cron_Handler {
 		// Record the cron run timestamp at the start of processing.
 		// This indicates when the cron was last triggered, useful for verifying cron health.
 		update_option( 'mskd_last_cron_run', time() );
+
+		// Cancel pending rows that can no longer be delivered and reconcile their
+		// campaigns. This also repairs rows left behind by older plugin versions.
+		$this->get_queue_maintenance()->cancel_pending_for_inactive_subscribers();
 
 		// First, recover stuck emails (processing for too long).
 		$this->recover_stuck_emails();
@@ -147,14 +159,19 @@ class MSKD_Cron_Handler {
 			// to `processing` proceeds. This prevents two overlapping cron runs from
 			// sending the same email twice.
 			if ( method_exists( $wpdb, 'query' ) ) {
-				// Include the campaign state in the guarded claim so a request that
-				// loses the cancellation race cannot claim a newly-cancelled item.
+				// Recheck subscriber and campaign state in the guarded claim so a
+				// request that loses either cancellation race cannot send the item.
 				$claimed = $wpdb->query(
 					$wpdb->prepare(
 						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names are hardcoded and safe.
 						"UPDATE {$wpdb->prefix}mskd_queue q
 						 SET q.status = 'processing', q.attempts = %d, q.processing_started_at = %s
 						 WHERE q.id = %d AND q.status = 'pending'
+						 AND EXISTS (
+							 SELECT 1 FROM {$wpdb->prefix}mskd_subscribers active_subscriber
+							 WHERE active_subscriber.id = q.subscriber_id
+							 AND active_subscriber.status = 'active'
+						 )
 						 AND ( q.campaign_id IS NULL OR NOT EXISTS (
 							 SELECT 1 FROM {$wpdb->prefix}mskd_campaigns c
 							 WHERE c.id = q.campaign_id AND c.status = 'cancelled'
@@ -355,65 +372,22 @@ class MSKD_Cron_Handler {
 
 			// Update campaign status if this item belongs to a campaign.
 			if ( ! empty( $item->campaign_id ) ) {
-				$this->update_campaign_status( $item->campaign_id );
+				$this->get_queue_maintenance()->reconcile_campaign( (int) $item->campaign_id );
 			}
 		}
 	}
 
 	/**
-	 * Update campaign status based on queue item statuses
+	 * Get the queue maintenance service.
 	 *
-	 * @param int $campaign_id The campaign ID to update.
+	 * @return \MSKD\Services\Queue_Maintenance
 	 */
-	private function update_campaign_status( $campaign_id ) {
-		global $wpdb;
-
-		// Get counts of queue items for this campaign.
-		$stats = $wpdb->get_row(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is hardcoded and safe.
-				"SELECT
-		              COUNT(*) as total,
-		              SUM(CASE WHEN status IN ('pending', 'processing') THEN 1 ELSE 0 END) as pending,
-		              SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
-		              SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
-		              SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled
-		          FROM {$wpdb->prefix}mskd_queue
-		          WHERE campaign_id = %d",
-				$campaign_id
-			)
-		);
-
-		if ( ! $stats ) {
-			return;
+	private function get_queue_maintenance() {
+		if ( null === $this->queue_maintenance ) {
+			$this->queue_maintenance = new \MSKD\Services\Queue_Maintenance();
 		}
 
-		// Determine campaign status.
-		$pending = intval( $stats->pending );
-		$total   = intval( $stats->total );
-
-		if ( $pending > 0 ) {
-			// Still has pending emails - mark as processing.
-			$wpdb->update(
-				$wpdb->prefix . 'mskd_campaigns',
-				array( 'status' => 'processing' ),
-				array( 'id' => $campaign_id ),
-				array( '%s' ),
-				array( '%d' )
-			);
-		} else {
-			// All emails are done - mark as completed.
-			$wpdb->update(
-				$wpdb->prefix . 'mskd_campaigns',
-				array(
-					'status'       => 'completed',
-					'completed_at' => current_time( 'mysql' ),
-				),
-				array( 'id' => $campaign_id ),
-				array( '%s', '%s' ),
-				array( '%d' )
-			);
-		}
+		return $this->queue_maintenance;
 	}
 
 	/**

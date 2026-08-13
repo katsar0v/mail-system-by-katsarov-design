@@ -3198,3 +3198,11 @@ msgstr ""
 #: includes/Api/class-rest-controller.php:202
 msgid "Another request with this Idempotency-Key is already being processed."
 msgstr ""
+
+#: includes/services/class-queue-maintenance.php:98
+msgid "Recipient is no longer active; delivery cancelled."
+msgstr "Der Empfänger ist nicht mehr aktiv; die Zustellung wurde abgebrochen."
+
+#: includes/services/class-queue-maintenance.php:152
+msgid "Recipient unsubscribed before delivery; delivery cancelled."
+msgstr "Der Empfänger hat sich vor der Zustellung abgemeldet; die Zustellung wurde abgebrochen."

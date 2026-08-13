@@ -3166,3 +3166,11 @@ msgstr ""
 #: public/partials/unsubscribe.php:69
 msgid "You will no longer receive emails from us."
 msgstr ""
+
+#: includes/services/class-queue-maintenance.php:98
+msgid "Recipient is no longer active; delivery cancelled."
+msgstr ""
+
+#: includes/services/class-queue-maintenance.php:152
+msgid "Recipient unsubscribed before delivery; delivery cancelled."
+msgstr ""
